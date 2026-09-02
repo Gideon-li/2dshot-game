@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://bevnikdas3vut"
+
+[deps]
+
+files=["res://locale/xinglin.zh.translation", "res://locale/xinglin.en.translation", "res://locale/xinglin.ja.translation"]
+
+source_file="res://locale/xinglin.csv"
+dest_files=["res://locale/xinglin.zh.translation", "res://locale/xinglin.en.translation", "res://locale/xinglin.ja.translation"]
+
+[params]
+
+compress=true
+delimiter=0

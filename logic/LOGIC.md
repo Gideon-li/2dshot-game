@@ -29,7 +29,7 @@ clinic_idle
 
 ## 三张病机表
 
-剧本挂人物卡：把 `bind_character_id` 填上，问诊咬 `inquiry_anchor`，禁止说 `never_say`。
+剧本已挂人物卡：`fenghan_biao`→`char_porter`，`ganyu_qizhi`→`char_clerk`，`yinxu_neire`→`char_copyist`。问诊咬 `inquiry_anchor`，禁止说 `never_say`。卡在 `patients/slice_characters.json`。
 
 | id | 内部名（勿上 HUD） | 脉 | 望 | 对证药性 | 对证穴 | 常见误治 |
 | --- | --- | --- | --- | --- | --- | --- |

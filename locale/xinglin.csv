@@ -1,4 +1,113 @@
 keys,zh,en,ja
 GAME_TITLE,杏林墨问,Xinglin Mowen,杏林墨問
+GAME_SUBTITLE,病人不交全症状,The chart is never complete.,望聞問切は、あなたがやる。
 DISCLAIMER,文化学习，不能替代就医。本作为中医文化体验，不是医疗建议。,Cultural learning only. Not medical advice and not a substitute for seeing a doctor.,文化学習です。医療行為ではなく、受診の代わりにはなりません。
+STORE_NOT_MEDICAL,文化体验，不能替代就医。,A cultural game. Not medical advice.,文化体験ゲームです。医療アドバイスではありません。
 START_CLINIC,进入医馆,Enter the clinic,医館に入る
+BOOT_DISCLAIMER_TITLE,声明,Not medical advice,医療アドバイスではありません
+BOOT_DISCLAIMER_BODY,本作是中医文化体验游戏，不是医疗建议，也不能替代执业医师的诊断或治疗。如有身体不适，请及时就医。,"This is a cultural game, not a medical product. It cannot diagnose, treat, or replace a licensed practitioner. If you feel unwell, seek real care.",本作は文化体験ゲームであり、医療アドバイスではありません。医師の診断・治療の代わりにはなりません。体調がすぐれない場合は、医療機関を受診してください。
+BOOT_DISCLAIMER_CHECK,我已阅读,I have read this,内容を確認しました
+BOOT_DISCLAIMER_ACCEPT,进入医馆,Enter the clinic,医館に入る
+BOOT_DISCLAIMER_FOOTER,不能替代就医,Not a substitute for medical care,受診の代わりにはなりません
+LANG_ZH,中文,Chinese,中国語
+LANG_EN,English,English,英語
+LANG_JA,日本語,Japanese,日本語
+SETTINGS_LANGUAGE,语言,Language,言語
+EXAM_LOOK,望,Look,望
+EXAM_LISTEN,闻,Listen,聞
+EXAM_ASK,问,Ask,問
+EXAM_PULSE,切,Pulse,切
+HINT_LOOK,看神色、舌象、形态。病人不会自己报全。,"Watch face, tongue, bearing. They will not volunteer the full chart.",顔色・舌・姿を見る。患者は全部を話さない。
+HINT_LISTEN,听声息，辨气味。,Hear the breath. Catch the scent.,声息を聞き、匂いを読む。
+HINT_ASK,问，但别把诊断名问出来。,Ask. Do not fish for a diagnosis name.,問う。病名を聞き出そうとしない。
+HINT_PULSE,把脉。浮沉迟数、虚实会直接告诉你。,"Feel the pulse. Depth, rate, and strength are readable, not riddles.",脈を取る。浮沈・遅数・虚実は読める手がかりであり、謎かけではない。
+ACTION_PRESCRIBE,开方,Compound,調剤
+ACTION_NEEDLE,扎针,Needle,鍼
+ACTION_SUBMIT,下手,Commit,施術する
+ACTION_NEXT_PATIENT,下一位,Next patient,次の患者
+ACTION_CONTINUE,继续,Continue,つづける
+UI_BACK,返回,Back,戻る
+UI_CLINIC,医馆,Clinic,医館
+UI_PATIENT,病人,Patient,患者
+UI_FORMULA_TRAY,方盘,Formula tray,方剤盆
+UI_HERB,药,Herb,薬
+UI_ACUPOINT,穴位,Point,経穴
+UI_APPRENTICE,学徒,Apprentice,徒弟
+UI_CABINET,药柜,Herb cabinet,薬箪笥
+UI_DESK,坐堂,The desk,坐堂
+UI_TONGUE,舌象,Tongue,舌
+UI_FACE,神色,Look,顔色
+UI_VOICE,声息,Voice,声息
+UI_ASK_SEND,问,Ask,問う
+UI_ASK_PLACEHOLDER,想问什么？,What do you ask?,何を問う？
+UI_TREAT,开治,Treat,施術
+UI_WAITING,候诊,Waiting,待ち
+UI_SEEN,已看过,Seen,診了
+UI_EXAMS,四诊,Four exams,四診
+CLINIC_HINT,点一位坐着的病人。症状不会写在任务栏里。,Click a seated patient. Symptoms are not written on the quest bar.,座っている患者を選ぶ。症状はクエスト欄に出ない。
+DONE_ALL,三位都看过了。,All three have been seen.,三人を診終えた。
+SUGGEST_COLD,近日怕冷还是怕热？,"Lately, more chill or more heat?",このごろ、寒がりか熱がりか？
+SUGGEST_SLEEP,夜里睡得怎么样？,How are the nights?,夜の眠りは？
+SUGGEST_SWEAT,出汗吗？,Any sweating?,汗は出ますか？
+SUGGEST_EAT,饭量如何？,How is the appetite?,食事の量は？
+SUGGEST_CHEST,胸口胁下顺吗？,Does the chest or flank feel stuck?,胸や脇は通りますか？
+SUGGEST_WHY,怎么不舒服，才过来的？,What felt wrong enough to come in?,どう具合が悪くて来たのですか？
+PULSE_TITLE,脉象,Pulse,脈象
+PULSE_FLOAT,浮,Floating,浮
+PULSE_SINK,沉,Sinking,沈
+PULSE_SLOW,迟,Slow,遅
+PULSE_RAPID,数,Rapid,数
+PULSE_VACUOUS,虚,Vacuous,虚
+PULSE_TENSE,紧,Tense,緊
+PULSE_READOUT,浮沉 · 迟数 · 虚实,Float / sink · slow / rapid · vacuous / tense,浮沈・遅数・虚実
+TREAT_FORMULA_HINT,把药拖进方盘。3–8 味。对证即可，没有唯一药方。,Drag herbs onto the plate. 3–8. Matching the pattern is enough — no single formula.,薬を盆へ拖く。3–8 味。証に合えばよい。唯一の方はない。
+TREAT_NEEDLE_HINT,在身上点穴。2–5 个。对证即可，没有唯一穴位组。,Tap points on the body. 2–5. Matching the pattern is enough — no single set.,体の経穴を点つ。2–5。証に合えばよい。唯一の組はない。
+FORMULA_COUNT,方中 {n} 味,{n} herbs on the plate,盆に {n} 味
+NEEDLE_COUNT,已点 {n} 穴,{n} points,{n} 穴
+FORMULA_NEED,请放入 3 到 8 味药。,Place 3 to 8 herbs.,3 から 8 味を入れてください。
+NEEDLE_NEED,请点 2 到 5 个穴。,Tap 2 to 5 points.,2 から 5 穴を点ってください。
+SCORE_TITLE,疗效,Outcome,効き
+SCORE_EFFICACY,对证,Fit,証に合う
+SCORE_SPEED,快慢,Pace,速さ
+SCORE_OVERTREAT,过治,Over-treatment,やりすぎ
+SCORE_MISTREAT,误治,Harm,誤治
+SCORE_PROCESS,过程,Process,過程
+SCORE_INCOMPLETE_EXAM,四诊未齐，评分打折。,The four exams are incomplete. Score is reduced.,四診が揃っていないため、評価は下がる。
+SCORE_FLAG_OVER,过,Over,過
+SCORE_FLAG_MIS,误,Mis,誤
+SCORE_NONE,未效,No effect,効かず
+SCORE_SLIGHT,小效,Slight,わずかに
+SCORE_WORK,见效,Working,効き始め
+SCORE_CLEAR,显效,Clear effect,明らかに
+SCORE_HEAL,向愈,Turning toward health,快方へ
+SPEED_FAST,快,Fast,速い
+SPEED_STEADY,稳,Steady,穏
+SPEED_RUSHED,偏急,A bit rushed,やや急ぎ
+SPEED_SLOW,慢,Slow,遅い
+ASK_THINKING,……,…,……
+BOOT_NEED_CHECK,请先阅读声明。,Read the notice first.,先に声明を読んでください。
+UI_PULSE_CLOSE,松手,Release,手を離す
+UI_TRAY,方剂盘,Formula plate,方剤盆
+UI_HERB_COUNT,已入盘 {n} 味（3–8）,{n} herbs on the plate (3–8),盆に {n} 味（3–8）
+UI_POINT_COUNT,已点 {n} 穴（2–5）,{n} points (2–5),{n} 穴（2–5）
+UI_CLUES,诊记,Notes,診記
+UI_DONE_ALL,今日三位都看过了。,All three have been seen today.,今日は三人を診終えた。
+FORMULA_HINT,把药拖进方盘。3–8 味。对证即可，没有唯一药方。,Drag herbs onto the plate. 3–8. Matching the pattern is enough — no single formula.,薬を盆へ拖く。3–8 味。証に合えばよい。唯一の方はない。
+PATIENT_A,赵阿福 · 码头脚夫,Zhao Afu · Wharf porter,趙阿福 · 波止場の担ぎ手
+PATIENT_B,沈清荷 · 县衙书办,Shen Qinghe · Yamen clerk,沈清荷 · 県衙の書記
+PATIENT_C,周婆婆 · 抄经香铺,Granny Zhou · Incense-shop copyist,周ばあさん · 香舗の写経
+PULSE_CLOSE,松手,Lift the hand,手を上げる
+CLUE_EMPTY,病人不交全症状。,The chart is never complete.,患者は全部を話さない。
+SLICE_DONE,今日坐堂已毕。,The clinic is quiet for today.,今日の坐堂は終わり。
+EXAM_DONE,已诊,Seen,診了
+NEEDLE_HINT,在身上点二到五穴。,Tap two to five points.,二〜五穴を打つ。
+ASK_PROMPT,问一句,Ask a question,問う
+ASK_SEND,问,Ask,問
+ASK_PLACEHOLDER,他们不会一次说完。,They will not tell you everything at once.,一度には話さない。
+TREAT_BACK,返回,Back,戻る
+TRAY_COUNT,台上 {n} 味,{n} on the table,台上 {n} 味
+POINT_COUNT,已点 {n} 穴,{n} points,{n} 穴
+ASK_WAITING,……,……,……
+PULSE_CUN,寸,Cun,寸
+PULSE_GUAN,关,Guan,関
+PULSE_CHI,尺,Chi,尺

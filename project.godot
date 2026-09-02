@@ -16,6 +16,14 @@ config/features=PackedStringArray("4.3", "Forward Plus")
 boot_splash/bg_color=Color(0.93, 0.9, 0.82, 1)
 config/icon="res://icon.svg"
 
+[autoload]
+
+Save="*res://scripts/save.gd"
+UiKit="*res://scripts/ui_kit.gd"
+CaseDB="*res://scripts/case_db.gd"
+GameFlow="*res://scripts/game_flow.gd"
+AudioHub="*res://scripts/audio_hub.gd"
+
 [display]
 
 window/size/viewport_width=1280
@@ -26,15 +34,14 @@ window/stretch/aspect="expand"
 [internationalization]
 
 locale/fallback="zh"
-locale/translations=PackedStringArray("res://other-systems/i18n/ui.csv")
+locale/locale_filter=["zh", "en", "ja"]
+locale/translations=PackedStringArray("res://locale/xinglin.zh.translation", "res://locale/xinglin.en.translation", "res://locale/xinglin.ja.translation")
 
 [rendering]
 
 renderer/rendering_method="forward_plus"
 environment/defaults/default_clear_color=Color(0.93, 0.9, 0.82, 1)
 
+[audio]
 
-[autoload]
-
-GameFlow="*res://scripts/game_flow.gd"
-Save="*res://scripts/save.gd"
+buses/default_bus_layout="res://other-systems/audio/default_bus_layout.tres"

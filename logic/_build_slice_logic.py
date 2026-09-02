@@ -244,7 +244,7 @@ cases = [
     {
         "id": "fenghan_biao",
         "internal_name_zh": "风寒束表",
-        "bind_character_id": None,
+        "bind_character_id": "char_porter",
         "urgency": "medium",
         "zheng_qi": 0.7,
         "primary_exams": ["qie", "wang"],
@@ -322,7 +322,7 @@ cases = [
     {
         "id": "ganyu_qizhi",
         "internal_name_zh": "肝郁气滞",
-        "bind_character_id": None,
+        "bind_character_id": "char_clerk",
         "urgency": "low",
         "zheng_qi": 0.75,
         "primary_exams": ["wen_ask", "qie"],
@@ -401,7 +401,7 @@ cases = [
     {
         "id": "yinxu_neire",
         "internal_name_zh": "阴虚内热",
-        "bind_character_id": None,
+        "bind_character_id": "char_copyist",
         "urgency": "medium",
         "zheng_qi": 0.45,
         "primary_exams": ["qie", "wang"],
@@ -590,7 +590,7 @@ slice_logic = {
     "nature_parent": nature_parent,
     "proficiency": proficiency,
     "contracts": {
-        "script": "fill bind_character_id; keep inquiry_anchor and never_say; do not add diagnosis names to player text",
+        "script": "bind_character_id filled (char_porter / char_clerk / char_copyist); keep inquiry_anchor and never_say; do not add diagnosis names to player text",
         "art": "implement three pulse.visual profiles; formula plate is a drop target; points are on-body",
         "prototype": "load this json; do not replace drag/tap with OptionButton; Qwen uses inquiry_anchor + never_say; API fail uses inquiry_anchor as template lines",
     },

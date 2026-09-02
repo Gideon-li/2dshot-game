@@ -8,7 +8,7 @@
 | `locale/` + `other-systems/i18n` | 其他要素 | 中英日键值 |
 | `other-systems/disclaimer` | 其他要素 | 启动免责 |
 | `other-systems/save` | 其他要素 | 存档 |
-| `other-systems/audio` | 其他要素 | 基础环境音 |
+| `other-systems/audio` | 游戏音乐（雨声底由其他要素先放） | 配乐方向、薄床、交互音、脉象与结算 |
 | `other-systems/steamworks` | 其他要素 | 只预研，不上排行榜 |
 | `scene-slice/` | 游戏场景设计 | 水墨医馆空间 |
 | `ui/` | 美工 / 其他要素 | 水墨 UI、方剂盘 |
