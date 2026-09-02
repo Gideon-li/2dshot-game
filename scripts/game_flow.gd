@@ -178,7 +178,10 @@ func pulse_for_current() -> Dictionary:
 	return CaseDB.case_for_patient(current_patient_id).get("pulse", {})
 
 func is_seen(pid: String) -> bool:
-	return pid in seen
+	if pid in seen:
+		return true
+	var cid := CaseDB.character_id_for(pid)
+	return cid != "" and cid in seen
 
 func slice_complete() -> bool:
 	if CaseDB.patients.is_empty():
@@ -497,8 +500,6 @@ func _slice_smoke() -> void:
 		c1 = CaseDB.case_for_patient("fenghan_biao")
 	var local_a: String = q._template_reply("夜里睡得怎么样？", porter, c1)
 	var local_b: String = q._template_reply("风寒束表是不是？", porter, c1)
-	if porter.get("id", "") not in ["char_porter", ""] and str(porter.get("id", "")) != "char_porter":
-		pass
 	if str(CaseDB.patient_by_id("fenghan_biao").get("id", "")) != "char_porter":
 		fails.append("bind_character_id join failed")
 	var opening := CaseDB.opening_line("char_porter")

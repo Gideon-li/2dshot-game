@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://xinglin_consult"]
+[gd_scene load_steps=3 format=3 uid="uid://xinglin_consult"]
 
 [ext_resource type="Script" path="res://scenes/consult.gd" id="1_consult"]
+[ext_resource type="Texture2D" uid="uid://jtvkbkq2rs16" path="res://ui/ui-clinic.png" id="2_chrome"]
 
 [node name="Consult" type="Control"]
 layout_mode = 3
@@ -10,3 +11,15 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_consult")
+
+[node name="HudChrome" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_chrome")
+expand_mode = 1
+stretch_mode = 6

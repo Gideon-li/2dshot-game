@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://xinglin_clinic"]
+[gd_scene load_steps=32 format=3 uid="uid://xinglin_clinic"]
 
 [ext_resource type="Script" path="res://scenes/clinic.gd" id="1_clinic"]
 [ext_resource type="Texture2D" uid="uid://c4eqejcx101kc" path="res://ui/layers/L0-paper.png" id="2_paper"]
@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://dh385iqv0gqq1" path="res://ui/layers/L2-yard.png" id="4_yard"]
 [ext_resource type="Texture2D" uid="uid://cklm11hbd6ha0" path="res://ui/layers/L3-furniture.png" id="5_furn"]
 [ext_resource type="Texture2D" uid="uid://1y5ueqg78pr" path="res://ui/layers/L4-props.png" id="6_props"]
-[ext_resource type="Texture2D" uid="uid://h42wcbry040o" path="res://ui/layers/L5-patients.png" id="7_patients"]
+[ext_resource type="Texture2D" uid="uid://hq6w6h42n2s2" path="res://ui/patients-three.png" id="7_patients"]
 [ext_resource type="Texture2D" uid="uid://c5j4j7nfrj4ly" path="res://ui/apprentice.png" id="8_apprentice"]
 [ext_resource type="Texture2D" uid="uid://blh66ijvlofdj" path="res://ui/layers/L6-light.png" id="9_light"]
 [ext_resource type="Texture2D" uid="uid://dpndhum4frwdi" path="res://ui/layers/L7-fg.png" id="10_fg"]
@@ -47,6 +47,9 @@ radius = 110.0
 
 [sub_resource type="CircleShape2D" id="Circ_bed"]
 radius = 130.0
+
+[sub_resource type="CircleShape2D" id="Circ_walk"]
+radius = 18.0
 
 [sub_resource type="RectangleShape2D" id="Rect_BlockNorthYard"]
 size = Vector2(2560.0, 360.0)
@@ -230,6 +233,7 @@ position = Vector2(190, 220)
 input_pickable = true
 monitoring = true
 monitorable = true
+metadata/hotspot = "door"
 
 [node name="Collision" type="CollisionShape2D" parent="Areas/Area_南门"]
 shape = SubResource("Circ_gate")
@@ -239,6 +243,7 @@ position = Vector2(405, 255)
 input_pickable = true
 monitoring = true
 monitorable = true
+metadata/hotspot = "stool_a"
 
 [node name="Collision" type="CollisionShape2D" parent="Areas/Area_候诊凳A"]
 shape = SubResource("Circ_bench")
@@ -248,6 +253,7 @@ position = Vector2(545, 255)
 input_pickable = true
 monitoring = true
 monitorable = true
+metadata/hotspot = "stool_b"
 
 [node name="Collision" type="CollisionShape2D" parent="Areas/Area_候诊凳B"]
 shape = SubResource("Circ_bench")
@@ -257,6 +263,7 @@ position = Vector2(1040, 535)
 input_pickable = true
 monitoring = true
 monitorable = true
+metadata/hotspot = "chair"
 
 [node name="Collision" type="CollisionShape2D" parent="Areas/Area_病人椅"]
 shape = SubResource("Circ_chair")
@@ -266,6 +273,7 @@ position = Vector2(990, 620)
 input_pickable = true
 monitoring = true
 monitorable = true
+metadata/hotspot = "pulse"
 
 [node name="Collision" type="CollisionShape2D" parent="Areas/Area_脉枕"]
 shape = SubResource("Circ_pillow")
@@ -275,6 +283,7 @@ position = Vector2(1340, 520)
 input_pickable = true
 monitoring = true
 monitorable = true
+metadata/hotspot = "incense"
 
 [node name="Collision" type="CollisionShape2D" parent="Areas/Area_香炉"]
 shape = SubResource("Circ_censer")
@@ -284,6 +293,7 @@ position = Vector2(1280, 1220)
 input_pickable = true
 monitoring = true
 monitorable = true
+metadata/hotspot = "window2"
 
 [node name="Collision" type="CollisionShape2D" parent="Areas/Area_花窗2"]
 shape = SubResource("Circ_window")
@@ -293,6 +303,7 @@ position = Vector2(1920, 870)
 input_pickable = true
 monitoring = true
 monitorable = true
+metadata/hotspot = "formula"
 
 [node name="Collision" type="CollisionShape2D" parent="Areas/Area_调剂台"]
 shape = SubResource("Circ_table")
@@ -302,6 +313,7 @@ position = Vector2(480, 880)
 input_pickable = true
 monitoring = true
 monitorable = true
+metadata/hotspot = "needle"
 
 [node name="Collision" type="CollisionShape2D" parent="Areas/Area_针灸榻"]
 shape = SubResource("Circ_bed")
@@ -358,6 +370,12 @@ limit_bottom = 1440
 limit_smoothed = true
 position_smoothing_enabled = true
 position_smoothing_speed = 3.0
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
+drag_left_margin = 0.396
+drag_top_margin = 0.315
+drag_right_margin = 0.396
+drag_bottom_margin = 0.315
 
 [node name="CAM_ASK" type="Camera2D" parent="."]
 position = Vector2(1100, 620)

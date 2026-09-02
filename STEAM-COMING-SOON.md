@@ -21,10 +21,10 @@
 | 顺序 | 镜头 | 资产 | 必有 |
 | --- | --- | --- | --- |
 | 胶囊 / 第 1 | CAM_HERO | `ui/layers/CAM_HERO.png` | 厅堂+脉枕，禁止空山水 |
-| 第 2 | CAM_ASK | 问诊截图（待录） | 病人在说话，不报病名 |
+| 第 2 | CAM_ASK | 问诊截图（`ui/store/` 已有） | 病人在说话，不报病名 |
 | 第 3 **前三必有脉象** | CAM_PULSE | `ui/layers/CAM_PULSE-empty.png` + `pulse-overlay.png` | 枕面+窗光+脉纹 |
-| 第 4 | CAM_FORMULA 和/或 CAM_NEEDLE | 待录 | 同一栋里拖药或点穴 |
-| 第 5 | CAM_RESULT | 待录 | 空坐堂，分数 UI |
+| 第 4 | CAM_FORMULA 和/或 CAM_NEEDLE | `ui/store/` 已有 | 同一栋里拖药或点穴 |
+| 第 5 | CAM_RESULT | `ui/store/` 已有 | 空坐堂，分数 UI |
 
 ## 预告
 
@@ -39,3 +39,6 @@
 - 用 Godot 编辑器或导出包跑一遍手操，录 CAM_ASK / FORMULA / NEEDLE / RESULT
 - 胶囊按 CAM_HERO 裁
 - 商店页中英日三套短描述（第一句用上表，不要展开成教材）
+
+
+Updated paths: ui/store CAM_ASK FORMULA NEEDLE RESULT.

@@ -14,11 +14,12 @@ func _ready() -> void:
 
 
 func _build() -> void:
-	var bg := ColorRect.new()
-	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	bg.color = UiKit.PAPER
-	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(bg)
+	var paper := ColorRect.new()
+	paper.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	paper.color = UiKit.PAPER
+	paper.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(paper)
+	move_child(paper, 0)
 	var root := VBoxContainer.new()
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.offset_left = 20
@@ -68,9 +69,22 @@ func _build() -> void:
 	plate_wrap.add_child(UiKit.ink_label(tr("UI_FORMULA_TRAY"), 16, UiKit.INK_MUTED))
 	_plate = PlateDrop.new()
 	_plate.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_plate.add_theme_stylebox_override("panel", UiKit.paper_style(Color(0.82, 0.76, 0.64, 1), UiKit.SEAL, 80))
+	_plate.add_theme_stylebox_override("panel", UiKit.paper_style(Color(0.82, 0.76, 0.64, 0.12), UiKit.SEAL, 16))
 	_plate.herb_dropped.connect(_on_drop)
 	plate_wrap.add_child(_plate)
+	var tray_art := get_node_or_null("TrayArt") as TextureRect
+	if tray_art == null:
+		tray_art = TextureRect.new()
+		tray_art.name = "TrayArt"
+		tray_art.texture = load("res://ui/formula-tray.png") as Texture2D
+	else:
+		remove_child(tray_art)
+	tray_art.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	tray_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	tray_art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	tray_art.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_plate.add_child(tray_art)
+	_plate.move_child(tray_art, 0)
 	_plate_flow = HFlowContainer.new()
 	_plate_flow.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_plate_flow.offset_left = 24

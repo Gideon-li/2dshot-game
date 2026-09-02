@@ -26,11 +26,24 @@ func _ready() -> void:
 
 
 func _build() -> void:
-	var bg := ColorRect.new()
-	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	bg.color = UiKit.PAPER
-	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(bg)
+	var paper := ColorRect.new()
+	paper.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	paper.color = UiKit.PAPER
+	paper.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(paper)
+	move_child(paper, 0)
+	var chrome := get_node_or_null("HudChrome") as TextureRect
+	if chrome == null:
+		chrome = TextureRect.new()
+		chrome.name = "HudChrome"
+		chrome.texture = load("res://ui/ui-clinic.png") as Texture2D
+		add_child(chrome)
+	chrome.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	chrome.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	chrome.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	# Decoration only. Art may include a 师傅 figure — not a character, not clickable.
+	chrome.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	move_child(chrome, 1)
 	var wash := ColorRect.new()
 	wash.set_anchors_preset(Control.PRESET_TOP_WIDE)
 	wash.offset_bottom = 90
