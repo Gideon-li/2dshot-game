@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "disclaimer_accepted": false,
+  "locale": "zh",
+  "audio": {
+    "master": 1.0,
+    "ambient": 0.32,
+    "sfx": 0.8
+  },
+  "slot": 0,
+  "play": {
+    "clinic_id": "clinic_ink_01",
+    "patients_seen": [],
+    "current_patient_id": null,
+    "four_exams": {
+      "look": false,
+      "listen": false,
+      "ask": false,
+      "pulse": false
+    },
+    "last_treatment": null,
+    "scores": []
+  }
+}

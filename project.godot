@@ -1,0 +1,40 @@
+; Engine configuration file.
+; Godot 4.x project for 杏林墨问 / Xinglin Mowen
+config_version=5
+
+[application]
+
+config/name="杏林墨问"
+config/name_localized={
+"en": "Xinglin Mowen",
+"ja": "杏林墨問"
+}
+config/description="Ink-wash TCM clinic sim. Cultural learning, not medical advice."
+config/version="0.1.0-slice"
+run/main_scene="res://scenes/main.tscn"
+config/features=PackedStringArray("4.3", "Forward Plus")
+boot_splash/bg_color=Color(0.93, 0.9, 0.82, 1)
+config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
+[internationalization]
+
+locale/fallback="zh"
+locale/translations=PackedStringArray("res://other-systems/i18n/ui.csv")
+
+[rendering]
+
+renderer/rendering_method="forward_plus"
+environment/defaults/default_clear_color=Color(0.93, 0.9, 0.82, 1)
+
+
+[autoload]
+
+GameFlow="*res://scripts/game_flow.gd"
+Save="*res://scripts/save.gd"

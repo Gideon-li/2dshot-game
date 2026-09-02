@@ -1,0 +1,47 @@
+﻿keys,zh,en,ja
+GAME_TITLE,杏林墨问,Xinglin Mowen,杏林墨問
+GAME_SUBTITLE,病人不交全症状,The chart is never complete.,望聞問切は、あなたがやる。
+STORE_TAGLINE,病人不交全症状。望、闻、问、切，都要你亲手做。,"The patient never hands you a complete chart. Look, listen, ask, then feel the pulse.",患者は症状をすべて話さない。望・聞・問・切は、あなたがやる動詞だ。
+STORE_NOT_MEDICAL,文化体验，不能替代就医。,A cultural game. Not medical advice.,文化体験ゲームです。医療アドバイスではありません。
+BOOT_DISCLAIMER_TITLE,声明,Not medical advice,医療アドバイスではありません
+BOOT_DISCLAIMER_BODY,本作是中医文化体验游戏，不是医疗建议，也不能替代执业医师的诊断或治疗。如有身体不适，请及时就医。,"This is a cultural game, not a medical product. It cannot diagnose, treat, or replace a licensed practitioner. If you feel unwell, seek real care.",本作は文化体験ゲームであり、医療アドバイスではありません。医師の診断・治療の代わりにはなりません。体調がすぐれない場合は、医療機関を受診してください。
+BOOT_DISCLAIMER_CHECK,我已阅读,I have read this,内容を確認しました
+BOOT_DISCLAIMER_ACCEPT,进入医馆,Enter the clinic,医館に入る
+BOOT_DISCLAIMER_FOOTER,不能替代就医,Not a substitute for medical care,受診の代わりにはなりません
+LANG_ZH,中文,Chinese,中国語
+LANG_EN,English,English,英語
+LANG_JA,日本語,Japanese,日本語
+SETTINGS_LANGUAGE,语言,Language,言語
+SETTINGS_VOLUME_MASTER,总音量,Master,マスター音量
+SETTINGS_VOLUME_AMBIENT,环境音,Ambience,環境音
+SETTINGS_VOLUME_SFX,音效,Effects,効果音
+EXAM_LOOK,望,Look,望
+EXAM_LISTEN,闻,Listen,聞
+EXAM_ASK,问,Ask,問
+EXAM_PULSE,切,Pulse,切
+HINT_LOOK,看神色、舌象、形态。病人不会自己报全。,"Watch face, tongue, bearing. They will not volunteer the full chart.",顔色・舌・姿を見る。患者は全部を話さない。
+HINT_LISTEN,听声息，辨气味。,Hear the breath. Catch the scent.,声息を聞き、匂いを読む。
+HINT_ASK,问，但别把诊断名问出来。,Ask. Do not fish for a diagnosis name.,問う。病名を聞き出そうとしない。
+HINT_PULSE,把脉。浮沉迟数、虚实会直接告诉你。,"Feel the pulse. Depth, rate, and strength are readable, not riddles.",脈を取る。浮沈・遅数・虚実は読める手がかりであり、謎かけではない。
+ACTION_PRESCRIBE,开方,Compound,調剤
+ACTION_NEEDLE,扎针,Needle,鍼
+ACTION_SUBMIT,下手,Commit,施術する
+ACTION_NEXT_PATIENT,下一位,Next patient,次の患者
+ACTION_CONTINUE,继续,Continue,つづける
+UI_CLINIC,医馆,Clinic,医館
+UI_PATIENT,病人,Patient,患者
+UI_FORMULA_TRAY,方盘,Formula tray,方剤盆
+UI_HERB,药,Herb,薬
+UI_ACUPOINT,穴位,Point,経穴
+SCORE_TITLE,疗效,Outcome,効き
+SCORE_EFFICACY,对证,Fit,証に合う
+SCORE_SPEED,快慢,Pace,速さ
+SCORE_OVERTREAT,过治,Over-treatment,やりすぎ
+SCORE_MISTREAT,误治,Harm,誤治
+SCORE_INCOMPLETE_EXAM,四诊未齐，评分打折。,The four exams are incomplete. Score is reduced.,四診が揃っていないため、評価は下がる。
+SAVE_SAVE,存档,Save,セーブ
+SAVE_LOAD,读档,Load,ロード
+SAVE_SLOT,档位 {n},Slot {n},スロット {n}
+SAVE_EMPTY,空档,Empty,空き
+SAVE_OVERWRITE,覆盖此档？,Overwrite this slot?,このスロットを上書きしますか？
+SAVE_SAVED,已记下。,Noted.,記した。

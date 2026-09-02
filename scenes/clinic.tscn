@@ -1,0 +1,84 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/clinic.gd" id="1_clinic"]
+
+[node name="Clinic" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_clinic")
+
+[node name="Paper" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.91, 0.87, 0.78, 1)
+
+[node name="InkWash" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 0.18
+offset_bottom = 0.0
+grow_horizontal = 2
+color = Color(0.22, 0.2, 0.18, 0.12)
+
+[node name="DeskLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.42
+anchor_right = 0.5
+anchor_bottom = 0.42
+offset_left = -240.0
+offset_top = -24.0
+offset_right = 240.0
+offset_bottom = 24.0
+theme_override_colors/font_color = Color(0.16, 0.14, 0.12, 1)
+theme_override_font_sizes/font_size = 28
+text = "坐堂"
+horizontal_alignment = 1
+
+[node name="CabinetLabel" type="Label" parent="."]
+layout_mode = 1
+offset_left = 48.0
+offset_top = 96.0
+offset_right = 280.0
+offset_bottom = 140.0
+theme_override_colors/font_color = Color(0.25, 0.2, 0.16, 1)
+theme_override_font_sizes/font_size = 22
+text = "药柜"
+
+[node name="EnterBtn" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -120.0
+offset_top = -96.0
+offset_right = 120.0
+offset_bottom = -48.0
+text = "进入医馆"
+
+[node name="Hint" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 48.0
+offset_top = -40.0
+offset_right = -48.0
+offset_bottom = -12.0
+theme_override_colors/font_color = Color(0.35, 0.3, 0.24, 1)
+theme_override_font_sizes/font_size = 14
+text = "切片占位：一座馆。药圃本期简化。"
+horizontal_alignment = 1

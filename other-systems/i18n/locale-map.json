@@ -1,0 +1,26 @@
+{
+  "godot_locales": [
+    "zh",
+    "en",
+    "ja"
+  ],
+  "steam_to_godot": {
+    "schinese": "zh",
+    "tchinese": "zh",
+    "english": "en",
+    "japanese": "ja"
+  },
+  "os_to_godot": {
+    "zh_CN": "zh",
+    "zh_TW": "zh",
+    "zh_HK": "zh",
+    "zh": "zh",
+    "en": "en",
+    "en_US": "en",
+    "en_GB": "en",
+    "ja": "ja",
+    "ja_JP": "ja"
+  },
+  "default": "zh",
+  "note": "EN/JA copy must never say learn TCM / 中医学を学ぶ. Keep the four exam verbs."
+}

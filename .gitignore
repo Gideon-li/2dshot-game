@@ -1,0 +1,9 @@
+.godot/
+*.uid
+export/
+export_credentials.cfg
+secrets.env
+.env
+*.tmp
+*~
+.DS_Store
