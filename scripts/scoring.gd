@@ -1,10 +1,13 @@
 class_name Scoring
 extends RefCounted
 ## Efficacy scoring from logic/slice_logic.json. No unique correct answer.
+## Slice formula: M = 0.45*C* + 0.20*B + 0.25*A' + 0.10*U with C*=C*J*T (J=T=1.0 default).
 
 
-static func evaluate(case_data: Dictionary, exams_done: Dictionary, path: String, ids: Array) -> Dictionary:
+static func evaluate(case_data: Dictionary, exams_done: Dictionary, path: String, ids: Array, opts: Dictionary = {}) -> Dictionary:
 	var scoring: Dictionary = CaseDB.pack.get("scoring", {})
+	var J := float(opts.get("J", 1.0))
+	var T := float(opts.get("T", 1.0))
 	var process_mult := _process_mult(case_data, exams_done, scoring)
 	var actions := {}
 	var natures: Array = []
@@ -31,11 +34,14 @@ static func evaluate(case_data: Dictionary, exams_done: Dictionary, path: String
 				hit_over = true
 		if hit_over:
 			over_action_hits += 1
-	var pattern := 0.0
-	if path == "formula":
-		pattern = _formula_pattern(case_data, scoring, actions, natures, ids)
-	else:
-		pattern = _acu_pattern(case_data, scoring, actions, ids)
+	# v1.19 slice components (shared with ScoreV119)
+	var C := ScoreV119._coverage(case_data, path, ids)
+	var B := ScoreV119._formula_fit(case_data, path, ids)
+	var A_prime := ScoreV119._adjust(case_data, path, ids)
+	var U := ScoreV119._structure(path, ids)
+	var C_star := clampf(C * J * T, 0.0, 1.0)
+	var pattern: float = ScoreV119.W_C * C_star + ScoreV119.W_B * B + ScoreV119.W_A * A_prime + ScoreV119.W_U * U
+	if path != "formula":
 		onset_vals.append(_acu_onset_num(case_data, ids))
 	var mistreat := false
 	for a in case_data.get("forbidden_actions", []):
@@ -76,6 +82,7 @@ static func evaluate(case_data: Dictionary, exams_done: Dictionary, path: String
 	for e in ["wang", "wen_listen", "wen_ask", "qie"]:
 		if not bool(exams_done.get(e, false)):
 			missing = true
+			break
 	return {
 		"score": score,
 		"rank_id": str(rank.get("id", "none")),
@@ -90,6 +97,14 @@ static func evaluate(case_data: Dictionary, exams_done: Dictionary, path: String
 		"missing_exams": missing,
 		"path": path,
 		"ids": ids.duplicate(),
+		"C": C,
+		"C_star": C_star,
+		"B": B,
+		"A": A_prime,
+		"A_prime": A_prime,
+		"U": U,
+		"J": J,
+		"T": T,
 	}
 
 
@@ -108,37 +123,6 @@ static func _process_mult(case_data: Dictionary, exams_done: Dictionary, scoring
 	return maxf(float(cfg.get("min_multiplier", 0.4)), m)
 
 
-static func _formula_pattern(case_data: Dictionary, scoring: Dictionary, actions: Dictionary, natures: Array, ids: Array) -> float:
-	var cfg: Dictionary = scoring.get("pattern_match", {}).get("formula_path", {})
-	var req := _cover(actions, case_data.get("required_actions", []))
-	var pref := _cover(actions, case_data.get("preferred_actions", []))
-	var nat := _nature_score(case_data, natures)
-	var pattern: float = req * float(cfg.get("required_cover_weight", 0.55)) \
-			+ pref * float(cfg.get("preferred_cover_weight", 0.25)) \
-			+ nat * float(cfg.get("nature_weight", 0.2))
-	if _matches_example(ids, case_data.get("legal_formula_examples", []), "herbs"):
-		pattern = minf(1.0, pattern + float(cfg.get("legal_example_bonus", 0.08)))
-	return clampf(pattern, 0.0, 1.0)
-
-
-static func _acu_pattern(case_data: Dictionary, scoring: Dictionary, actions: Dictionary, ids: Array) -> float:
-	var cfg: Dictionary = scoring.get("pattern_match", {}).get("acupuncture_path", {})
-	var req := _cover(actions, case_data.get("required_actions", []))
-	var pref := _cover(actions, case_data.get("preferred_actions", []))
-	var n := ids.size()
-	var harmony := 0.2
-	if n >= 2 and n <= 5:
-		harmony = 1.0
-	elif n == 1 or n == 6:
-		harmony = 0.5
-	var pattern: float = req * float(cfg.get("required_cover_weight", 0.6)) \
-			+ pref * float(cfg.get("preferred_cover_weight", 0.25)) \
-			+ harmony * float(cfg.get("count_harmony_weight", 0.15))
-	if _matches_example(ids, case_data.get("legal_point_examples", []), "points"):
-		pattern = minf(1.0, pattern + float(cfg.get("legal_example_bonus", 0.08)))
-	return clampf(pattern, 0.0, 1.0)
-
-
 static func _cover(actions: Dictionary, wanted: Array) -> float:
 	if wanted.is_empty():
 		return 1.0
@@ -147,27 +131,6 @@ static func _cover(actions: Dictionary, wanted: Array) -> float:
 		if actions.has(str(a)):
 			hit += 1
 	return float(hit) / float(wanted.size())
-
-
-static func _nature_score(case_data: Dictionary, natures: Array) -> float:
-	if natures.is_empty():
-		return 0.0
-	var preferred: Array = case_data.get("preferred_natures", [])
-	var parents: Dictionary = CaseDB.pack.get("nature_parent", {})
-	var hit := 0
-	for n in natures:
-		var ns := str(n)
-		var parent := str(parents.get(ns, ns))
-		var ok := false
-		for p in preferred:
-			var ps := str(p)
-			var pparent := str(parents.get(ps, ps))
-			if ns == ps or parent == ps or parent == pparent:
-				ok = true
-				break
-		if ok:
-			hit += 1
-	return float(hit) / float(natures.size())
 
 
 static func _matches_example(ids: Array, examples: Array, key: String) -> bool:

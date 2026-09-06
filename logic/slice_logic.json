@@ -1,14 +1,26 @@
 {
   "id": "xinglin-mowen-slice-logic",
-  "version": 1,
-  "project": "杏林墨问",
+  "version": 2,
+  "project": "墨问岐黄 / 杏林墨问",
   "scope": "vertical_slice",
   "notes": {
     "not_quiz": true,
     "no_unique_answer": true,
     "proficiency_this_slice": "interface_only",
     "player_never_shown_diagnosis_name": true,
-    "input": "pulse is visual, herbs are dragged, points are tapped; no menu-select treatment"
+    "input": "pulse is visual, herbs are dragged, points are tapped; no menu-select treatment",
+    "design_pack": "v1.19",
+    "scoring_formula": "M = 0.45*C_star + 0.20*B + 0.25*A_prime + 0.10*U; C_star = C * J * T",
+    "slice_JT": "J=1 T=1 this slice; fields kept for 22/23",
+    "incompat": "hard lock before confirm; not an A penalty",
+    "ten_questions": "ask panel quick bar; no encyclopedia popup",
+    "apprentice_default": "江晚",
+    "mentor": "苏问舟",
+    "yaotong_hook": "小荷",
+    "split_files": [
+      "logic/ten_questions.json",
+      "logic/fanwei_pairs.json"
+    ]
   },
   "exam_ids": [
     "wang",
@@ -132,7 +144,25 @@
         "move_lung_qi"
       ],
       "zheng_cost": 2,
-      "onset": "fast"
+      "onset": "fast",
+      "temp": 1,
+      "funcs": {
+        "解表": 0.7,
+        "止咳": 0.7,
+        "发汗": 0.7
+      },
+      "incompat_group": [],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平"
     },
     {
       "id": "guizhi",
@@ -151,7 +181,24 @@
         "harmonize_ying_wei"
       ],
       "zheng_cost": 1,
-      "onset": "medium"
+      "onset": "medium",
+      "temp": 1,
+      "funcs": {
+        "解表": 0.7,
+        "温里": 0.7
+      },
+      "incompat_group": [],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平"
     },
     {
       "id": "xingren",
@@ -168,7 +215,24 @@
         "stop_cough"
       ],
       "zheng_cost": 0,
-      "onset": "medium"
+      "onset": "medium",
+      "temp": 1,
+      "funcs": {
+        "理气": 0.7,
+        "止咳": 0.7
+      },
+      "incompat_group": [],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平"
     },
     {
       "id": "gancao",
@@ -185,7 +249,25 @@
         "tonify_qi"
       ],
       "zheng_cost": 0,
-      "onset": "slow"
+      "onset": "slow",
+      "temp": 0,
+      "funcs": {
+        "补气": 0.7
+      },
+      "incompat_group": [
+        "cao_fan"
+      ],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平"
     },
     {
       "id": "shengjiang",
@@ -203,7 +285,24 @@
         "stop_vomit"
       ],
       "zheng_cost": 1,
-      "onset": "fast"
+      "onset": "fast",
+      "temp": 1,
+      "funcs": {
+        "解表": 0.7,
+        "温里": 0.7
+      },
+      "incompat_group": [],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平"
     },
     {
       "id": "dazao",
@@ -221,7 +320,24 @@
         "harmonize"
       ],
       "zheng_cost": 0,
-      "onset": "slow"
+      "onset": "slow",
+      "temp": 1,
+      "funcs": {
+        "补气": 0.7,
+        "补血": 0.7
+      },
+      "incompat_group": [],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平"
     },
     {
       "id": "baishao",
@@ -240,7 +356,27 @@
         "astringe_yin"
       ],
       "zheng_cost": 0,
-      "onset": "slow"
+      "onset": "slow",
+      "temp": -1,
+      "funcs": {
+        "补血": 0.7,
+        "平肝": 0.7,
+        "收涩": 0.7
+      },
+      "incompat_group": [
+        "lu_fan"
+      ],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平"
     },
     {
       "id": "chaihu",
@@ -259,7 +395,24 @@
         "release_shaoyang"
       ],
       "zheng_cost": 1,
-      "onset": "medium"
+      "onset": "medium",
+      "temp": -1,
+      "funcs": {
+        "理气": 0.7,
+        "疏风": 0.7
+      },
+      "incompat_group": [],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平"
     },
     {
       "id": "danggui",
@@ -277,7 +430,24 @@
         "move_blood"
       ],
       "zheng_cost": 0,
-      "onset": "medium"
+      "onset": "medium",
+      "temp": 1,
+      "funcs": {
+        "活血": 0.7,
+        "补血": 0.7
+      },
+      "incompat_group": [],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平"
     },
     {
       "id": "baizhu",
@@ -296,7 +466,24 @@
         "tonify_spleen"
       ],
       "zheng_cost": 0,
-      "onset": "slow"
+      "onset": "slow",
+      "temp": 1,
+      "funcs": {
+        "祛湿": 0.7,
+        "补气": 0.7
+      },
+      "incompat_group": [],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平"
     },
     {
       "id": "fuling",
@@ -315,7 +502,25 @@
         "calm_shen"
       ],
       "zheng_cost": 0,
-      "onset": "slow"
+      "onset": "slow",
+      "temp": 0,
+      "funcs": {
+        "补气": 0.7,
+        "安神": 0.7,
+        "利水": 0.7
+      },
+      "incompat_group": [],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平"
     },
     {
       "id": "bohe",
@@ -333,7 +538,25 @@
         "clear_head"
       ],
       "zheng_cost": 0,
-      "onset": "fast"
+      "onset": "fast",
+      "temp": -1,
+      "funcs": {
+        "解表": 0.7,
+        "理气": 0.7,
+        "疏风": 0.7
+      },
+      "incompat_group": [],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平"
     },
     {
       "id": "zhiqiao",
@@ -351,7 +574,23 @@
         "open_chest"
       ],
       "zheng_cost": 1,
-      "onset": "fast"
+      "onset": "fast",
+      "temp": -1,
+      "funcs": {
+        "理气": 0.7
+      },
+      "incompat_group": [],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平"
     },
     {
       "id": "xiangfu",
@@ -370,7 +609,23 @@
         "move_qi"
       ],
       "zheng_cost": 1,
-      "onset": "medium"
+      "onset": "medium",
+      "temp": 0,
+      "funcs": {
+        "理气": 0.7
+      },
+      "incompat_group": [],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平"
     },
     {
       "id": "shudi",
@@ -387,7 +642,24 @@
         "nourish_blood"
       ],
       "zheng_cost": 0,
-      "onset": "slow"
+      "onset": "slow",
+      "temp": 1,
+      "funcs": {
+        "补血": 0.7,
+        "补阴": 0.7
+      },
+      "incompat_group": [],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平"
     },
     {
       "id": "shanyao",
@@ -405,7 +677,24 @@
         "tonify_spleen"
       ],
       "zheng_cost": 0,
-      "onset": "slow"
+      "onset": "slow",
+      "temp": 0,
+      "funcs": {
+        "补气": 0.7,
+        "补阴": 0.7
+      },
+      "incompat_group": [],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平"
     },
     {
       "id": "shanzhuyu",
@@ -423,7 +712,24 @@
         "tonify_kidney"
       ],
       "zheng_cost": 0,
-      "onset": "slow"
+      "onset": "slow",
+      "temp": 1,
+      "funcs": {
+        "补阴": 0.7,
+        "收涩": 0.7
+      },
+      "incompat_group": [],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平"
     },
     {
       "id": "mudanpi",
@@ -441,7 +747,23 @@
         "clear_deficiency_heat"
       ],
       "zheng_cost": 1,
-      "onset": "medium"
+      "onset": "medium",
+      "temp": -1,
+      "funcs": {
+        "清热": 0.7
+      },
+      "incompat_group": [],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平"
     },
     {
       "id": "zexie",
@@ -458,7 +780,23 @@
         "drain_damp"
       ],
       "zheng_cost": 0,
-      "onset": "medium"
+      "onset": "medium",
+      "temp": -2,
+      "funcs": {
+        "利水": 0.7
+      },
+      "incompat_group": [],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平"
     },
     {
       "id": "zhimu",
@@ -477,7 +815,24 @@
         "clear_deficiency_heat"
       ],
       "zheng_cost": 1,
-      "onset": "medium"
+      "onset": "medium",
+      "temp": -2,
+      "funcs": {
+        "清热": 0.7,
+        "补阴": 0.7
+      },
+      "incompat_group": [],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平"
     },
     {
       "id": "huangbai",
@@ -495,7 +850,24 @@
         "dry_damp"
       ],
       "zheng_cost": 2,
-      "onset": "fast"
+      "onset": "fast",
+      "temp": -2,
+      "funcs": {
+        "清热": 0.7,
+        "祛湿": 0.7
+      },
+      "incompat_group": [],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平"
     },
     {
       "id": "jinyinhua",
@@ -513,7 +885,24 @@
         "release_exterior"
       ],
       "zheng_cost": 1,
-      "onset": "fast"
+      "onset": "fast",
+      "temp": -2,
+      "funcs": {
+        "解表": 0.7,
+        "清热": 0.7
+      },
+      "incompat_group": [],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平"
     },
     {
       "id": "lianqiao",
@@ -530,7 +919,23 @@
         "resolve_toxin"
       ],
       "zheng_cost": 1,
-      "onset": "fast"
+      "onset": "fast",
+      "temp": -1,
+      "funcs": {
+        "清热": 0.7
+      },
+      "incompat_group": [],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平"
     },
     {
       "id": "fuzi",
@@ -548,7 +953,26 @@
         "warm_yang"
       ],
       "zheng_cost": 3,
-      "onset": "fast"
+      "onset": "fast",
+      "temp": 2,
+      "funcs": {
+        "补阳": 0.7,
+        "温里": 0.7
+      },
+      "incompat_group": [
+        "wu_fan"
+      ],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平"
     },
     {
       "id": "ganjiang",
@@ -566,7 +990,23 @@
         "warm_yang"
       ],
       "zheng_cost": 2,
-      "onset": "fast"
+      "onset": "fast",
+      "temp": 2,
+      "funcs": {
+        "温里": 0.7
+      },
+      "incompat_group": [],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平"
     }
   ],
   "acupoints": [
@@ -580,7 +1020,13 @@
         "release_exterior",
         "expel_wind",
         "clear_head"
-      ]
+      ],
+      "temp": 0,
+      "funcs": {
+        "解表": 0.7,
+        "疏风": 0.7
+      },
+      "prefer": "针"
     },
     {
       "id": "hegu",
@@ -592,7 +1038,14 @@
         "release_exterior",
         "move_qi",
         "clear_head"
-      ]
+      ],
+      "temp": 0,
+      "funcs": {
+        "解表": 0.7,
+        "理气": 0.7,
+        "疏风": 0.7
+      },
+      "prefer": "针"
     },
     {
       "id": "lieque",
@@ -603,7 +1056,13 @@
       "actions": [
         "release_exterior",
         "move_lung_qi"
-      ]
+      ],
+      "temp": 0,
+      "funcs": {
+        "解表": 0.7,
+        "止咳": 0.7
+      },
+      "prefer": "针"
     },
     {
       "id": "dazhui",
@@ -615,7 +1074,14 @@
         "release_exterior",
         "expel_wind",
         "warm_yang"
-      ]
+      ],
+      "temp": 0,
+      "funcs": {
+        "解表": 0.7,
+        "温里": 0.7,
+        "疏风": 0.7
+      },
+      "prefer": "针"
     },
     {
       "id": "taichong",
@@ -627,7 +1093,13 @@
         "soothe_liver",
         "move_qi",
         "descend_yang"
-      ]
+      ],
+      "temp": 0,
+      "funcs": {
+        "理气": 0.7,
+        "平肝": 0.7
+      },
+      "prefer": "针"
     },
     {
       "id": "qimen",
@@ -638,7 +1110,12 @@
       "actions": [
         "soothe_liver",
         "move_qi"
-      ]
+      ],
+      "temp": 0,
+      "funcs": {
+        "理气": 0.7
+      },
+      "prefer": "针"
     },
     {
       "id": "neiguan",
@@ -650,7 +1127,13 @@
         "open_chest",
         "calm_shen",
         "move_qi"
-      ]
+      ],
+      "temp": 0,
+      "funcs": {
+        "理气": 0.7,
+        "安神": 0.7
+      },
+      "prefer": "针"
     },
     {
       "id": "yanglingquan",
@@ -661,7 +1144,12 @@
       "actions": [
         "soothe_liver",
         "move_qi"
-      ]
+      ],
+      "temp": 0,
+      "funcs": {
+        "理气": 0.7
+      },
+      "prefer": "针"
     },
     {
       "id": "zusanli",
@@ -673,7 +1161,12 @@
         "tonify_qi",
         "tonify_spleen",
         "harmonize"
-      ]
+      ],
+      "temp": 0,
+      "funcs": {
+        "补气": 0.7
+      },
+      "prefer": "针"
     },
     {
       "id": "taixi",
@@ -684,7 +1177,12 @@
       "actions": [
         "nourish_yin",
         "tonify_kidney"
-      ]
+      ],
+      "temp": 0,
+      "funcs": {
+        "补阴": 0.7
+      },
+      "prefer": "针"
     },
     {
       "id": "sanyinjiao",
@@ -696,7 +1194,14 @@
         "nourish_yin",
         "nourish_blood",
         "tonify_spleen"
-      ]
+      ],
+      "temp": 0,
+      "funcs": {
+        "补气": 0.7,
+        "补血": 0.7,
+        "补阴": 0.7
+      },
+      "prefer": "针"
     },
     {
       "id": "shenshu",
@@ -707,7 +1212,12 @@
       "actions": [
         "tonify_kidney",
         "nourish_yin"
-      ]
+      ],
+      "temp": 0,
+      "funcs": {
+        "补阴": 0.7
+      },
+      "prefer": "针"
     },
     {
       "id": "yongquan",
@@ -718,7 +1228,13 @@
       "actions": [
         "nourish_yin",
         "descend_fire"
-      ]
+      ],
+      "temp": 0,
+      "funcs": {
+        "清热": 0.7,
+        "补阴": 0.7
+      },
+      "prefer": "针"
     },
     {
       "id": "zhaohai",
@@ -729,7 +1245,13 @@
       "actions": [
         "nourish_yin",
         "clear_deficiency_heat"
-      ]
+      ],
+      "temp": 0,
+      "funcs": {
+        "清热": 0.7,
+        "补阴": 0.7
+      },
+      "prefer": "针"
     },
     {
       "id": "quchi",
@@ -740,7 +1262,13 @@
       "actions": [
         "clear_heat",
         "release_exterior"
-      ]
+      ],
+      "temp": 0,
+      "funcs": {
+        "解表": 0.7,
+        "清热": 0.7
+      },
+      "prefer": "针"
     },
     {
       "id": "mingmen",
@@ -751,7 +1279,12 @@
       "actions": [
         "warm_yang",
         "warm_interior"
-      ]
+      ],
+      "temp": 0,
+      "funcs": {
+        "温里": 0.7
+      },
+      "prefer": "针"
     }
   ],
   "cases": [
@@ -958,7 +1491,35 @@
           "en": "The herbs ran toward heat; the chills worsened.",
           "ja": "薬が熱に向かい、悪寒が強まった。"
         }
-      }
+      },
+      "engine": {
+        "syndrome_bucket": "风寒表实",
+        "R_need": {
+          "解表": 1.0,
+          "止咳": 0.35,
+          "发汗": 0.7
+        },
+        "R_temp": 1,
+        "B_ok_formula_names": [
+          "麻黄汤",
+          "桂枝汤"
+        ],
+        "B_ok_examples": "legal_formula_examples / legal_point_examples",
+        "master_zang": "肺",
+        "tier": "jing",
+        "ten_q_priority": [
+          "寒热",
+          "汗",
+          "头身",
+          "因"
+        ]
+      },
+      "ten_q_priority": [
+        "寒热",
+        "汗",
+        "头身",
+        "因"
+      ]
     },
     {
       "id": "ganyu_qizhi",
@@ -1172,7 +1733,35 @@
           "en": "The herbs never reached the flanks; the tightness stays.",
           "ja": "薬が脇に届かず、悶えたまま。"
         }
-      }
+      },
+      "engine": {
+        "syndrome_bucket": "肝郁血虚",
+        "R_need": {
+          "理气": 0.9,
+          "补血": 0.7,
+          "平肝": 0.3
+        },
+        "R_temp": 0,
+        "B_ok_formula_names": [
+          "逍遥散",
+          "四关"
+        ],
+        "B_ok_examples": "legal_formula_examples / legal_point_examples",
+        "master_zang": "肝",
+        "tier": "jing",
+        "ten_q_priority": [
+          "胸",
+          "饮食",
+          "旧病",
+          "因"
+        ]
+      },
+      "ten_q_priority": [
+        "胸",
+        "饮食",
+        "旧病",
+        "因"
+      ]
     },
     {
       "id": "yinxu_neire",
@@ -1390,76 +1979,143 @@
           "en": "The more it was warmed, the drier the nights.",
           "ja": "温めるほど燥き、夜が荒れる。"
         }
-      }
+      },
+      "engine": {
+        "syndrome_bucket": "肾阴虚",
+        "R_need": {
+          "补阴": 1.0,
+          "清热": 0.2
+        },
+        "R_temp": -1,
+        "B_ok_formula_names": [
+          "六味地黄丸"
+        ],
+        "B_ok_examples": "legal_formula_examples / legal_point_examples",
+        "master_zang": "肾",
+        "tier": "jing",
+        "ten_q_priority": [
+          "汗",
+          "渴",
+          "寒热",
+          "旧病"
+        ]
+      },
+      "ten_q_priority": [
+        "汗",
+        "渴",
+        "寒热",
+        "旧病"
+      ]
     }
   ],
   "scoring": {
-    "id": "efficacy_scoring",
+    "id": "efficacy_scoring_v119",
+    "version": "1.19-slice",
     "no_unique_answer": true,
-    "player_facing_ranks": [
-      {
-        "id": "none",
-        "min": 0.0,
-        "max": 0.15,
-        "zh": "未效",
-        "en": "No effect",
-        "ja": "効かず"
+    "formula": {
+      "M": "0.45 * C_star + 0.20 * B + 0.25 * A_prime + 0.10 * U",
+      "C_star": "C * J * T",
+      "pass_line": 55,
+      "good_line": 70,
+      "scale": "0..100 then map to player ranks via M/100"
+    },
+    "weights": {
+      "C_star": 0.45,
+      "B": 0.2,
+      "A_prime": 0.25,
+      "U": 0.1
+    },
+    "J": {
+      "enabled": false,
+      "slice_default": 1.0,
+      "note": "节气乘子，见设定包 23；切片固定 1，留接口",
+      "by_master_zang": {}
+    },
+    "T": {
+      "enabled": false,
+      "slice_default": 1.0,
+      "note": "地域乘子，见设定包 22；切片固定 1，留接口"
+    },
+    "C": {
+      "note": "主覆盖。切片简化：仍可用 required_actions/preferred/nature 合成 0..1 再 ×100；完整引擎用 21 维余弦×温度对齐",
+      "slice_bridge": {
+        "from": "pattern_match (required/preferred/nature or acu harmony)",
+        "to_C": "pattern_0_1 * 100"
       },
-      {
-        "id": "slight",
-        "min": 0.15,
-        "max": 0.35,
-        "zh": "小效",
-        "en": "Slight",
-        "ja": "わずかに"
-      },
-      {
-        "id": "work",
-        "min": 0.35,
-        "max": 0.55,
-        "zh": "见效",
-        "en": "Working",
-        "ja": "効き始め"
-      },
-      {
-        "id": "clear",
-        "min": 0.55,
-        "max": 0.75,
-        "zh": "显效",
-        "en": "Clear effect",
-        "ja": "明らかに"
-      },
-      {
-        "id": "toward_heal",
-        "min": 0.75,
-        "max": 1.01,
-        "zh": "向愈",
-        "en": "Turning toward health",
-        "ja": "快方へ"
+      "full_engine": {
+        "funcs_21": [
+          "解表",
+          "清热",
+          "泻下",
+          "祛湿",
+          "化痰",
+          "理气",
+          "活血",
+          "止血",
+          "补气",
+          "补血",
+          "补阴",
+          "补阳",
+          "安神",
+          "平肝",
+          "收涩",
+          "温里",
+          "消食",
+          "利水",
+          "止咳",
+          "疏风",
+          "发汗"
+        ],
+        "role_weights": {
+          "君": 1.0,
+          "臣": 0.6,
+          "佐": 0.35,
+          "使": 0.2,
+          "平": 0.45
+        },
+        "temp_align": "C *= (0.7 + 0.3 * max(0, 1 - abs(tS-tR)/4))"
       }
-    ],
-    "never_show_on_hud": [
-      "internal_name_zh",
-      "case id",
-      "named formula",
-      "textbook diagnosis"
-    ],
+    },
+    "B": {
+      "note": "成方贴合。命中 legal_*_examples 或 B_ok 经典名 → 预设 68..76；乱贴方名 0.12×；纯自拟 0",
+      "hit_example": 72,
+      "wrong_named": 0.12,
+      "freeform": 0,
+      "does_not_multiply_JT": true
+    },
+    "A": {
+      "note": "加减原始 −20..+20，线性映到 A' 0..100：A'=(A_raw+20)/40*100。反畏不进 A",
+      "map": "A_prime = (A_raw + 20) / 40 * 100",
+      "slice_bridge": {
+        "mistreat_forbidden_action": -14,
+        "overtreat": -8,
+        "neutral": 0
+      }
+    },
+    "U": {
+      "note": "结构。有君 +10；味>14 或穴>6 每多 1 −8；底分 80；截断 0..100",
+      "base": 80,
+      "has_jun_bonus": 10,
+      "herb_cap": 14,
+      "acu_cap": 6,
+      "over_cap_penalty": 8,
+      "slice_note": "切片无君臣标注时按「平」0.45 计供给；U 有君项切片可先给满底分 80，味 3–8 / 穴 2–5 不扣"
+    },
     "process": {
       "missing_exam_penalty": 0.12,
       "missing_primary_exam_extra": 0.08,
       "min_multiplier": 0.4,
-      "formula": "process_mult = max(0.40, 1.0 - 0.12 * missing_count - 0.08 * missing_primary_count)"
+      "formula": "process_mult = max(0.40, 1.0 - 0.12 * missing_count - 0.08 * missing_primary_count)",
+      "note": "四诊缺项仍打折。切片：M_display = M * process_mult，或把 process 并进 C；推荐乘在 M 上",
+      "apply": "M_final = clamp(M * process_mult, 0, 100)"
     },
     "pattern_match": {
       "formula_path": {
         "required_cover_weight": 0.55,
         "preferred_cover_weight": 0.25,
         "nature_weight": 0.2,
-        "required_cover": "unique actions in formula ∩ case.required_actions / len(required)",
-        "preferred_cover": "unique actions ∩ preferred / max(1, len(preferred))",
-        "nature_score": "fraction of herbs whose nature is in preferred_natures (slightly_* counts as its parent)",
         "legal_example_bonus": 0.08,
-        "note": "hitting a legal_formula_example is a bonus, not a requirement. any set that covers required actions scores."
+        "note": "slice bridge → C；保留 required_actions 字段"
       },
       "acupuncture_path": {
         "required_cover_weight": 0.6,
@@ -1494,7 +2150,8 @@
       "if_any_forbidden_action_in_treatment": true,
       "penalty": 0.35,
       "cap_rank_at": "slight",
-      "flag": "mistreat"
+      "flag": "mistreat",
+      "note": "forbidden_actions → 误治旗；同时可进 A_raw。反畏走 incompat 硬锁，不走这里"
     },
     "overtreat": {
       "if_sum_zheng_cost_gt_case_over_treat_zheng_cost": true,
@@ -1505,10 +2162,69 @@
       "flag": "overtreat",
       "does_not_by_itself_make_mistreat": true
     },
+    "player_facing_ranks": [
+      {
+        "id": "none",
+        "min_M": 0,
+        "max_M": 15,
+        "min": 0.0,
+        "max": 0.15,
+        "zh": "未效",
+        "en": "No effect",
+        "ja": "効かず"
+      },
+      {
+        "id": "slight",
+        "min_M": 15,
+        "max_M": 35,
+        "min": 0.15,
+        "max": 0.35,
+        "zh": "小效",
+        "en": "Slight",
+        "ja": "わずかに"
+      },
+      {
+        "id": "work",
+        "min_M": 35,
+        "max_M": 55,
+        "min": 0.35,
+        "max": 0.55,
+        "zh": "见效",
+        "en": "Working",
+        "ja": "効き始め"
+      },
+      {
+        "id": "clear",
+        "min_M": 55,
+        "max_M": 70,
+        "min": 0.55,
+        "max": 0.7,
+        "zh": "显效",
+        "en": "Clear effect",
+        "ja": "明らかに"
+      },
+      {
+        "id": "toward_heal",
+        "min_M": 70,
+        "max_M": 101,
+        "min": 0.7,
+        "max": 1.01,
+        "zh": "向愈",
+        "en": "Turning toward health",
+        "ja": "快方へ"
+      }
+    ],
+    "never_show_on_hud": [
+      "internal_name_zh",
+      "case id",
+      "named formula",
+      "textbook diagnosis",
+      "syndrome_bucket"
+    ],
     "final": {
-      "formula": "score = pattern * process_mult; score -= mistreat_penalty; score -= overtreat_penalty; score += speed_mod; clamp 0..1",
+      "formula": "C=pattern*100; C_star=C*J*T; B=…; A_prime=…; U=…; M=0.45C_star+0.20B+0.25A_prime+0.10U; M_final=M*process_mult; score=M_final/100",
       "both_paths_can_reach_toward_heal": true,
-      "two_legal_examples_per_path_must_both_reach_at_least_clear_if_all_exams_done": true
+      "legacy_score_01": "keep returning score in 0..1 for existing UI (= M_final/100)"
     }
   },
   "nature_parent": {
@@ -1540,8 +2256,379 @@
     }
   },
   "contracts": {
-    "script": "bind_character_id filled (char_porter / char_clerk / char_copyist); keep inquiry_anchor and never_say; do not add diagnosis names to player text",
+    "script": "fill bind_character_id; keep inquiry_anchor and never_say; 苏问舟旁白键值另表；ten_q_priority 供催问",
     "art": "implement three pulse.visual profiles; formula plate is a drop target; points are on-body",
-    "prototype": "load this json; do not replace drag/tap with OptionButton; Qwen uses inquiry_anchor + never_say; API fail uses inquiry_anchor as template lines"
+    "prototype": "load this json; drag/tap not OptionButton; Qwen uses inquiry_anchor+never_say; API fail uses inquiry_anchor; BEFORE confirm formula call incompat.check; ask panel shows ten_questions.items quick bar; score via scoring.formula M with J=T=1",
+    "scoring_gd": "prefer M_final/100 as score; keep process_mult; emit M,C,B,A_prime,U,J,T in result for debug HUD off"
+  },
+  "incompat": {
+    "id": "incompat_lock_v114",
+    "when": "before_confirm_formula",
+    "acu_exempt": true,
+    "hard_lock": true,
+    "not_an_A_penalty": true,
+    "ui": {
+      "on_lock": [
+        "bounce_herb",
+        "bowl_rim_cinnabar",
+        "toast_3_to_5s"
+      ],
+      "fields_required": [
+        "herb_a",
+        "herb_b",
+        "kind",
+        "reason_short"
+      ],
+      "reason_short_max_chars": 40,
+      "reason_long_max_chars": 120,
+      "i18n_keys": [
+        "INCOMPAT_LOCK_TITLE",
+        "INCOMPAT_WHY",
+        "INCOMPAT_FAN",
+        "INCOMPAT_WEI"
+      ]
+    },
+    "eighteen_fan": {
+      "mnemonic_zh": "本草明言十八反，半蒌贝蔹及攻乌。藻戟遂芫俱战草，诸参辛芍叛藜芦。",
+      "groups": [
+        {
+          "id": "wu_fan",
+          "side_a": [
+            "chuanwu",
+            "caowu",
+            "fuzi"
+          ],
+          "side_a_zh": [
+            "川乌",
+            "草乌",
+            "附子"
+          ],
+          "side_b": [
+            "banxia",
+            "gualou",
+            "gualoupi",
+            "gualouren",
+            "gualouqiao",
+            "chuanbeimu",
+            "zhebeimu",
+            "bailian",
+            "baiji"
+          ],
+          "side_b_zh": [
+            "半夏",
+            "瓜蒌",
+            "瓜蒌皮",
+            "瓜蒌仁",
+            "瓜蒌壳",
+            "川贝",
+            "浙贝",
+            "白蔹",
+            "白及"
+          ]
+        },
+        {
+          "id": "cao_fan",
+          "side_a": [
+            "gancao"
+          ],
+          "side_a_zh": [
+            "甘草"
+          ],
+          "side_b": [
+            "haizao",
+            "daji",
+            "gansui",
+            "yuanhua"
+          ],
+          "side_b_zh": [
+            "海藻",
+            "大戟",
+            "甘遂",
+            "芫花"
+          ]
+        },
+        {
+          "id": "lu_fan",
+          "side_a": [
+            "lilu"
+          ],
+          "side_a_zh": [
+            "藜芦"
+          ],
+          "side_b": [
+            "renshen",
+            "dangshen",
+            "danshen",
+            "xuanshen",
+            "nanshashen",
+            "beishashen",
+            "kushen",
+            "xixin",
+            "baishao",
+            "chishao"
+          ],
+          "side_b_zh": [
+            "人参",
+            "党参",
+            "丹参",
+            "玄参",
+            "南沙参",
+            "北沙参",
+            "苦参",
+            "细辛",
+            "白芍",
+            "赤芍"
+          ]
+        }
+      ]
+    },
+    "nineteen_wei": {
+      "mnemonic_zh": "硫黄原是火中精，朴硝一见便相争。水银莫与砒霜见，狼毒最怕密陀僧。巴豆性烈最为上，偏与牵牛不顺情。丁香莫与郁金见，牙硝难合京三棱。川乌草乌不顺犀，人参最怕五灵脂。官桂善能调冷气，若逢石脂便相欺。",
+      "pairs": [
+        {
+          "a": "liuhuang",
+          "b": "mangxiao",
+          "a_zh": "硫黄",
+          "b_zh": "芒硝"
+        },
+        {
+          "a": "shuiyin",
+          "b": "pishuang",
+          "a_zh": "水银",
+          "b_zh": "砒霜"
+        },
+        {
+          "a": "langdu",
+          "b": "mituoseng",
+          "a_zh": "狼毒",
+          "b_zh": "密陀僧"
+        },
+        {
+          "a": "badou",
+          "b": "qianniuzi",
+          "a_zh": "巴豆",
+          "b_zh": "牵牛子"
+        },
+        {
+          "a": "dingxiang",
+          "b": "yujin",
+          "a_zh": "丁香",
+          "b_zh": "郁金"
+        },
+        {
+          "a": "mangxiao",
+          "b": "sanleng",
+          "a_zh": "芒硝",
+          "b_zh": "三棱"
+        },
+        {
+          "a": "chuanwu",
+          "b": "shuiniujiao",
+          "a_zh": "川乌",
+          "b_zh": "水牛角"
+        },
+        {
+          "a": "caowu",
+          "b": "shuiniujiao",
+          "a_zh": "草乌",
+          "b_zh": "水牛角"
+        },
+        {
+          "a": "renshen",
+          "b": "wulingzhi",
+          "a_zh": "人参",
+          "b_zh": "五灵脂"
+        },
+        {
+          "a": "rougui",
+          "b": "chishizhi",
+          "a_zh": "肉桂",
+          "b_zh": "赤石脂"
+        }
+      ],
+      "break_exception": {
+        "slice_enabled": false,
+        "note": "卷五后问舟可破十九畏一次；十八反永不破。切片关闭。"
+      }
+    },
+    "reason_short": {
+      "wu_fan|fuzi|banxia": {
+        "zh": "附子与半夏十八反，同盏会相攻。",
+        "en": "Aconite and pinellia are eighteen-incompatibles.",
+        "ja": "附子と半夏は十八反、同剤不可。"
+      },
+      "wu_fan|generic": {
+        "zh": "乌头类与半蒌贝蔹白及相反，不能同盏。",
+        "en": "Aconite group vs pinellia/trichosanthes/fritillaria/ampelopsis/bletilla — locked.",
+        "ja": "烏頭類と半楼貝蔹白及は相反。"
+      },
+      "cao_fan|generic": {
+        "zh": "甘草与藻戟遂芫相反，同用会战。",
+        "en": "Licorice vs algae/euphorbia group — locked.",
+        "ja": "甘草と藻戟遂芫は相反。"
+      },
+      "lu_fan|generic": {
+        "zh": "藜芦与诸参辛芍相反，禁止同盏。",
+        "en": "Veratrum vs ginsengs/asarum/peony — locked.",
+        "ja": "藜芦と諸参辛芍は相反。"
+      },
+      "wei|renshen|wulingzhi": {
+        "zh": "人参最怕五灵脂，补气与破瘀相畏。",
+        "en": "Ginseng fears trogopterus — nineteen fears.",
+        "ja": "人参は五霊脂を畏れる。"
+      },
+      "wei|generic": {
+        "zh": "此二味十九畏，默认不能同盏。",
+        "en": "Nineteen-fears pair — default lock.",
+        "ja": "十九畏の組合せ、同剤不可。"
+      }
+    },
+    "check_api": {
+      "fn": "incompat.check_formula(herb_ids) -> null | {kind, a, b, group_id, reason_short, reason_key}",
+      "call_when": [
+        "herb_dropped_on_tray",
+        "before_confirm_formula"
+      ],
+      "on_hit": "block add/confirm; show reason_short; do not submit to scoring"
+    },
+    "slice_note": "本期药柜未必齐反畏对；表仍要挂上，拖入即检。切片撞锁少见属正常。"
+  },
+  "ten_questions": {
+    "id": "ten_questions_v110",
+    "source": "景岳十问歌",
+    "panel": "ask / wen_ask",
+    "no_encyclopedia_popup": true,
+    "layout": "left_quick_bar_10_plus_2_aux",
+    "order_fixed": true,
+    "items": [
+      {
+        "id": "hanre",
+        "song": "寒热",
+        "zh": "怕冷还是怕热？发热多久？恶风吗？",
+        "en": "Chills or heat? How long? Aversion to wind?",
+        "ja": "悪寒か発熱か。いつから。風を嫌がる？",
+        "blocks": "表里寒热"
+      },
+      {
+        "id": "han",
+        "song": "汗",
+        "zh": "有汗无汗？汗出在何时、何部位？",
+        "en": "Sweat or not? When and where?",
+        "ja": "汗は出る？いつ、どこに？",
+        "blocks": "表虚表实、阴虚盗汗"
+      },
+      {
+        "id": "toushen",
+        "song": "头身",
+        "zh": "头何处痛？身重还是身痛？腰腿如何？",
+        "en": "Where does the head hurt? Heavy or aching body?",
+        "ja": "頭のどこが痛む？体が重い？痛い？",
+        "blocks": "部位、风湿"
+      },
+      {
+        "id": "bian",
+        "song": "便",
+        "zh": "大便干稀次数？小便色次？",
+        "en": "Stool and urine — form, color, frequency?",
+        "ja": "便の状態と回数は？",
+        "blocks": "里证、湿、津"
+      },
+      {
+        "id": "yinshi",
+        "song": "饮食",
+        "zh": "能吃吗？口淡油腻？饭后胀不胀？",
+        "en": "Appetite? Bland/greasy mouth? Bloat after meals?",
+        "ja": "食欲は？口淡？食後に脹る？",
+        "blocks": "脾胃、食积"
+      },
+      {
+        "id": "xiong",
+        "song": "胸",
+        "zh": "胸胁胀痛吗？心悸喘咳？",
+        "en": "Chest or flank tightness? Palpitation, cough, pant?",
+        "ja": "胸脇が脹る？動悸や喘咳は？",
+        "blocks": "肝郁、痰"
+      },
+      {
+        "id": "ermu",
+        "song": "聋",
+        "zh": "耳鸣耳聋？目糊目赤？",
+        "en": "Tinnitus or hearing? Blurry or red eyes?",
+        "ja": "耳鳴りや目の赤みは？",
+        "blocks": "肝肾、风热"
+      },
+      {
+        "id": "ke",
+        "song": "渴",
+        "zh": "口渴吗？想不想饮？喜热喜冷？",
+        "en": "Thirst? Want to drink? Prefer hot or cold?",
+        "ja": "渇く？飲みたい？熱いのと冷たいのどちら？",
+        "blocks": "真热假热、痰湿"
+      },
+      {
+        "id": "jiubing",
+        "song": "旧病",
+        "zh": "以前得过什么？一直吃什么方？",
+        "en": "Old illnesses? Still taking any formula?",
+        "ja": "以前の病は？今も飲んでいる方は？",
+        "blocks": "守方与变证"
+      },
+      {
+        "id": "yin",
+        "song": "因",
+        "zh": "从什么时候、因什么起的？",
+        "en": "When did it start, and after what?",
+        "ja": "いつ、何がきっかけで？",
+        "blocks": "病因、时令、情志"
+      }
+    ],
+    "aux": [
+      {
+        "id": "jingdai",
+        "song": "经带",
+        "zh": "周期准不准？身上困重绵绵？",
+        "optional": true
+      },
+      {
+        "id": "xiaoer",
+        "song": "小儿",
+        "zh": "问乳食、问睡、问是否受惊",
+        "optional": true
+      }
+    ],
+    "hooks": {
+      "on_click_item": "send short question to Qwen / fallback wrapper; mark item asked; do not dump diagnosis",
+      "asked_style": "淡墨勾",
+      "max_per_click_reveal": "1–2 inquiry_anchor lines in character voice",
+      "mentor_cues": {
+        "enabled_interface": true,
+        "slice_default": "off_or_light",
+        "note": "苏问舟旁白由剧本键值提供；逻辑只留缺旗催问接口",
+        "four_exam_flags": [
+          "wang",
+          "wen_listen",
+          "wen_ask",
+          "qie"
+        ],
+        "before_treat_if_missing_flag": "emit mentor_cue_id; do not fail submission"
+      },
+      "coverage": {
+        "wen_ask_flag_when": "asked_count >= 2 OR priority_hits >= 1",
+        "slice_note": "不必凑满 10；乱点无关问会让病人不耐烦（后置）"
+      }
+    },
+    "i18n_keys": [
+      "ASK_TEN_BAR",
+      "ASK_TEN_HANRE",
+      "ASK_TEN_HAN",
+      "ASK_TEN_TOUSHEN",
+      "ASK_TEN_BIAN",
+      "ASK_TEN_YINSHI",
+      "ASK_TEN_XIONG",
+      "ASK_TEN_ERMU",
+      "ASK_TEN_KE",
+      "ASK_TEN_JIUBING",
+      "ASK_TEN_YIN"
+    ]
   }
 }

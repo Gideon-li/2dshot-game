@@ -1,4 +1,4 @@
-keys,zh,en,ja
+﻿keys,zh,en,ja
 GAME_TITLE,杏林墨问,Xinglin Mowen,杏林墨問
 GAME_SUBTITLE,病人不交全症状,The chart is never complete.,望聞問切は、あなたがやる。
 DISCLAIMER,文化学习，不能替代就医。本作为中医文化体验，不是医疗建议。,Cultural learning only. Not medical advice and not a substitute for seeing a doctor.,文化学習です。医療行為ではなく、受診の代わりにはなりません。
@@ -111,3 +111,100 @@ ASK_WAITING,……,……,……
 PULSE_CUN,寸,Cun,寸
 PULSE_GUAN,关,Guan,関
 PULSE_CHI,尺,Chi,尺
+TENQ_BAR_TITLE,十问,Ten Questions,十問
+TENQ_HINT,催你还没做的诊，不是百科。,Nudge what you skipped. Not an encyclopedia.,まだやっていない診を促す。百科ではない。
+TENQ_01_LABEL,寒热,Cold/Heat,寒熱
+TENQ_01_ASK,怕冷还是怕热？发热多久？恶风吗？,Chills or heat? How long feverish? Afraid of wind?,寒がりか、熱っぽいか。熱はどのくらい。風を嫌がるか。
+TENQ_02_LABEL,汗,Sweat,汗
+TENQ_02_ASK,有汗无汗？汗出在何时、何部位？,"Any sweat? When, and where on the body?",汗はあるか。いつ、どこに出るか。
+TENQ_03_LABEL,头身,Head & Body,頭身
+TENQ_03_ASK,头何处痛？身重还是身痛？腰腿如何？,Where does the head hurt? Heavy or aching body? How are the back and legs?,頭のどこが痛む。体が重いか痛いか。腰脚はどうか。
+TENQ_04_LABEL,便,Stool & Urine,二便
+TENQ_04_ASK,大便干稀次数？小便色次？,"Stool: dry or loose, how often? Urine: color and frequency?",大便の硬さ・回数は。小便の色と回数は。
+TENQ_05_LABEL,饮食,Diet,飲食
+TENQ_05_ASK,能吃吗？口淡油腻？饭后胀不胀？,Appetite? Bland or greasy mouth? Bloating after meals?,食欲はあるか。口が淡いか油っこいか。食後に張るか。
+TENQ_06_LABEL,胸,Chest,胸
+TENQ_06_ASK,胸胁胀痛吗？心悸喘咳？,"Chest or flank fullness or pain? Palpitation, wheeze, cough?",胸脇が張って痛むか。動悸・喘・咳は。
+TENQ_07_LABEL,耳目,Ears & Eyes,耳目
+TENQ_07_ASK,耳鸣耳聋？目糊目赤？,Ringing or hearing loss? Blurry or red eyes?,耳鳴りや聞こえにくさは。目のかすみや充血は。
+TENQ_08_LABEL,渴,Thirst,渇
+TENQ_08_ASK,口渴吗？想不想饮？喜热喜冷？,Thirsty? Want to drink? Prefer hot or cold?,喉が渇くか。飲みたいか。熱いのがいいか冷たいのがいいか。
+TENQ_09_LABEL,旧病,Past Illness,旧病
+TENQ_09_ASK,以前得过什么？一直吃什么方？,Any old illness? Still taking a formula?,以前に何を患ったか。ずっと飲んでいる方はあるか。
+TENQ_10_LABEL,因,Onset,因
+TENQ_10_ASK,从什么时候、因什么起的？,"When did it start, and after what?",いつから、何がきっかけか。
+TENQ_EXTRA_MENS_LABEL,经带,Cycle,経帯
+TENQ_EXTRA_MENS_ASK,周期准不准？身上困重绵绵？,"Is the cycle regular? Heavy, dragging fatigue?",周期は安定しているか。体が重く続くか。
+TENQ_EXTRA_CHILD_LABEL,小儿,Child,小児
+TENQ_EXTRA_CHILD_ASK,问乳食、问睡、问是否受惊，问大人核实。,"Ask milk and food, sleep, fright; confirm with the adult.",乳食・睡眠・驚きを聞き、大人にも確かめる。
+TENQ_DONE_MARK,已问,Asked,問了
+FANWEI_LOCK_TITLE,配伍禁忌,Incompatible pairing,配合禁忌
+FANWEI_KIND_FAN,反,Fan,反
+FANWEI_KIND_WEI,畏,Wei,畏
+FANWEI_WHY,为何,Why,なぜ
+FANWEI_BOUNCED,这味进不了盏。,That herb will not enter the bowl.,この薬は盞に入れない。
+FANWEI_GENERIC,这两味教材列为禁忌，不能同盏。,These two are listed as incompatible and cannot share a bowl.,この二味は禁忌で、同じ盞には入れない。
+FANWEI_SHORT_WU_BANXIA,附子、乌头与半夏教材列为十八反，同盏会相攻。,Aconite and pinellia are listed as incompatible; they clash in one bowl.,附子・烏頭と半夏は十八反。同じ盞では相攻する。
+FANWEI_SHORT_WU_GUALOU,瓜蒌与乌头相反，不能放进同一盏。,Trichosanthes and aconite are incompatible; not in the same bowl.,瓜蔞と烏頭は相反。同じ盞には入れない。
+FANWEI_SHORT_WU_BEIMU,贝母与乌头相反，同用会相攻。,Fritillaria and aconite are incompatible; they clash together.,貝母と烏頭は相反。同用すると相攻する。
+FANWEI_SHORT_WU_BAILIAN,白蔹与乌头相反，禁止同方。,Ampelopsis and aconite are incompatible; not in one formula.,白蘞と烏頭は相反。同方を禁じる。
+FANWEI_SHORT_WU_BAIJI,白及与乌头相反，不能同盏。,Bletilla and aconite are incompatible; not in the same bowl.,白及と烏頭は相反。同じ盞には入れない。
+FANWEI_SHORT_GANCAO_HAIZAO,甘草与海藻相反，同用会战。,Licorice and seaweed are incompatible; they fight each other.,甘草と海藻は相反。同用すると戦う。
+FANWEI_SHORT_GANCAO_DAJI,甘草与大戟相反，不能同方。,Licorice and Peking spurge are incompatible; not in one formula.,甘草と大戟は相反。同方にはできない。
+FANWEI_SHORT_GANCAO_GANSUI,甘草与甘遂相反，禁止同盏。,Licorice and kansui are incompatible; not in the same bowl.,甘草と甘遂は相反。同じ盞を禁じる。
+FANWEI_SHORT_GANCAO_YUANHUA,甘草与芫花相反，同盏会相战。,Licorice and genkwa are incompatible; they fight in one bowl.,甘草と芫花は相反。同じ盞では相戦する。
+FANWEI_SHORT_LILU_SHEN,藜芦与参类相反，补药加涌吐会相叛。,Veratrum clashes with ginseng-class tonics; tonify plus emetic rebels.,藜芦と参類は相反。補と湧吐が相叛する。
+FANWEI_SHORT_LILU_ZHUSHEN,藜芦与诸参皆反，这一味参也算。,"Veratrum clashes with all listed shen herbs, including this one.",藜芦は諸参すべてと反する。この一味の参も同じ。
+FANWEI_SHORT_LILU_XIXIN,细辛与藜芦相反，不能同用。,Asarum and veratrum are incompatible; do not combine.,細辛と藜芦は相反。同用できない。
+FANWEI_SHORT_LILU_SHAOYAO,芍药与藜芦相反，禁止同盏。,Peony and veratrum are incompatible; not in the same bowl.,芍薬と藜芦は相反。同じ盞を禁じる。
+FANWEI_SHORT_LIUHUANG_MANGXIAO,硫黄遇朴硝，教材列为十九畏。,Sulfur meets mirabilite: listed among the nineteen cautions.,硫黄と朴硝は十九畏。
+FANWEI_SHORT_SHUIYIN_PISHUANG,二味剧毒相畏，游戏不准同见。,Both are highly toxic and mutually cautioned; never shown together.,二味とも劇毒で相畏。同見を許さない。
+FANWEI_SHORT_LANGDU_MITUOSENG,狼毒畏密陀僧，不能同方。,Langdu cautions against litharge; not in one formula.,狼毒は密陀僧を畏れ、同方できない。
+FANWEI_SHORT_BADUO_QIANNIU,巴豆与牵牛不顺，泻下叠泻下会相畏。,Croton and morning glory both purge hard; they caution each other.,巴豆と牽牛はともに峻下で相畏。
+FANWEI_SHORT_DINGXIANG_YUJIN,丁香畏郁金，一温一凉会相掣。,Clove cautions against turmeric root; warm and cool check each other.,丁香は鬱金を畏れ、温と涼が掣し合う。
+FANWEI_SHORT_MANGXIAO_SANLENG,牙硝难合三棱，破积又润下会相畏。,Mirabilite and sparganium caution each other: purge plus break stasis.,牙硝と三棱は相畏。潤下と破積がぶつかる。
+FANWEI_SHORT_WU_JIAO,乌头畏角类，热毒与寒清相掣。,Aconite cautions against horn-class coolants; heat-toxin meets cold-clear.,烏頭は角類を畏れ、熱毒と寒清が掣し合う。
+FANWEI_SHORT_RENSHEN_WULINGZHI,人参最怕五灵脂，补气与破瘀相畏。,Ginseng most fears flying squirrel dung: tonify meets break-stasis.,人参は五霊脂を最も恐れ、補気と破瘀が相畏。
+FANWEI_SHORT_ROUGUI_CHISHIZHI,官桂遇石脂便相欺，温通与涩收相畏。,Cinnamon meets halloysite: warm-open and astringent caution each other.,官桂と石脂は相欺。温通と渋収が相畏。
+MENTOR_NAME,苏问舟,Su Wenzhou,蘇問舟
+MENTOR_AFFIRM,这一问有了。,That question is asked.,この問いは揃った。
+MENTOR_TEA,你问全了，我就喝茶。,Ask what you need. Then I drink tea.,必要な問いが揃えば、私は茶を飲む。
+MENTOR_MISS_LOOK,人还没进门，你倒先开柜了。,"They are not even seated, and you already opened the cabinet.",人がまだ入っていないのに、もう櫃を開けている。
+MENTOR_MISS_TONGUE,口张过没有。,Has the mouth been opened yet?,口は開けたか。
+MENTOR_MISS_LISTEN,他进门那口气，你听了吗。,Did you hear the breath they came in with?,入ってきたときの息を聞いたか。
+MENTOR_MISS_PULSE,脉枕还空着。,The pulse pillow is still empty.,脈枕がまだ空いている。
+MENTOR_MISS_ASK_SHORT,十问还剩九问在桌上。,Nine of the ten questions are still on the table.,十問のうち九問がまだ机の上だ。
+MENTOR_MISS_QI,眼里看见的，嘴里问过没有？,What your eyes saw—did your mouth ask it?,目で見たことを、口で問うたか。
+MENTOR_TENQ_COLD,他添衣还是减衣，你问了？,Did you ask whether they add layers or shed them?,衣を足すのか脱ぐのか、問うたか。
+MENTOR_TENQ_SWEAT,出汗了没有——这一句能挡掉一半胡开。,Any sweat? That one question blocks half the wild prescriptions.,汗はあるか——この一文で、いい加減な処方が半分止まる。
+MENTOR_TENQ_HEAD,痛在额、在巅、还是在项？,"Pain at the brow, the crown, or the nape?",痛みは額か、頂か、項か。
+MENTOR_TENQ_STOOL,二便不问，方不要下。,"Without stool and urine asked, do not commit a formula.",二便を問わずに、方を下してはならない。
+MENTOR_TENQ_FOOD,不想吃，和吃了就胀，是两件事。,No appetite and bloating after eating are two different things.,食べたくないのと、食べて張るのは別だ。
+MENTOR_TENQ_CHEST,手按胸口的人，不一定是心。你问过胁下没有。,A hand on the chest is not always the heart. Ask under the ribs.,胸に手を当てても、心とは限らない。脇下を問うたか。
+MENTOR_TENQ_EAR,耳里响不响。,Any ringing in the ears?,耳の中で鳴るか。
+MENTOR_TENQ_THIRST,渴不渴，想不想喝，喝热还是喝冷——三个字别并成一个。,"Thirst, desire to drink, hot or cold—do not mash three into one.",渇くか、飲みたいか、熱か冷か——三つを一つにまとめない。
+MENTOR_TENQ_HISTORY,旧方还在喝吗。,Are they still taking the old formula?,古い方はまだ飲んでいるか。
+MENTOR_TENQ_CAUSE,从哪一天开始的。,Which day did it begin?,何日から始まったか。
+MENTOR_TENQ_MENS,若要问周期，先屏退左右。,"If you ask about the cycle, clear the room first.",周期を問うなら、まず左右を下がらせる。
+MENTOR_TENQ_CHILD,问他，也要问抱他的人。,"Ask the child, and ask the one who carries them.",子に問い、抱いている人にも問う。
+MENTOR_FANWEI,半夏和附子，歌诀里是反，不是口味不合。,Pinellia and aconite are listed as incompatible—not a matter of taste.,半夏と附子は歌訣で「反」。好みの問題ではない。
+TEN_ASK_TITLE,十问,Ten asks,十問
+TEN_ASK_HANRE,寒热,Chill/Heat,寒熱
+TEN_ASK_HAN,汗,Sweat,汗
+TEN_ASK_TOUSHEN,头身,Head/Body,頭身
+TEN_ASK_BIAN,二便,Stool/Urine,二便
+TEN_ASK_YINSHI,饮食,Diet,飲食
+TEN_ASK_XIONG,胸,Chest,胸
+TEN_ASK_LONG,耳目,Ears/Eyes,耳目
+TEN_ASK_KE,渴,Thirst,渇
+TEN_ASK_JIU,旧病,Old illness,旧病
+TEN_ASK_YIN,因,Cause,因
+FANWEI_LOCKED,反畏相锁，同盏不可。,Cannot share the tray — incompatibility lock.,反畏のため同盏不可。
+FANWEI_LOCKED_FAN,十八反：同盏不可。,Eighteen incompatibilities — cannot share the tray.,十八反：同盏不可。
+FANWEI_LOCKED_WEI,十九畏：同盏不可。,Nineteen antagonisms — cannot share the tray.,十九畏：同盏不可。
+WENZHOU_MISS_LOOK,人还没进门，你倒先开柜了。,They are not even in the door and you already opened the cabinet.,人が入る前に櫃を開けている。
+WENZHOU_MISS_TONGUE,口张过没有。,Have you asked them to open the mouth?,口を開けてもらったか。
+WENZHOU_MISS_LISTEN,他进门那口气，你听了吗。,Did you hear the breath as they came in?,入ってきた息を聞いたか。
+WENZHOU_MISS_PULSE,脉枕还空着。,The pulse pillow is still empty.,脈枕が空いている。
+WENZHOU_TEN_LEFT,十问还剩几问在桌上。,A few of the ten asks still sit on the table.,十問がまだ残っている。
+WENZHOU_ASK_OK,这一问有了。,That ask is covered.,この問いは揃った。

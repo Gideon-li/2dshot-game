@@ -10,6 +10,7 @@ var _qwen: QwenClient
 var _chat: VBoxContainer
 var _ask_edit: LineEdit
 var _pulse_panel: Control
+var _mentor_l: Label
 
 
 func _ready() -> void:
@@ -88,13 +89,17 @@ func _build() -> void:
 	treat_sp.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	exams.add_child(treat_sp)
 	var formula_b := UiKit.make_button("ACTION_PRESCRIBE", true)
-	formula_b.pressed.connect(func() -> void: GameFlow.open_formula())
+	formula_b.pressed.connect(func() -> void: _try_treat("formula"))
 	exams.add_child(formula_b)
 	var needle_b := UiKit.make_button("ACTION_NEEDLE", true)
-	needle_b.pressed.connect(func() -> void: GameFlow.open_needling())
+	needle_b.pressed.connect(func() -> void: _try_treat("needle"))
 	exams.add_child(needle_b)
 	_hint = UiKit.ink_label("", 14, UiKit.INK_MUTED)
 	root.add_child(_hint)
+	_mentor_l = UiKit.ink_label("", 14, UiKit.SEAL)
+	_mentor_l.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_mentor_l.visible = false
+	root.add_child(_mentor_l)
 	_stage = Panel.new()
 	_stage.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_stage.add_theme_stylebox_override("panel", UiKit.paper_style(UiKit.PAPER_DARK, UiKit.LINE, 4))
@@ -108,6 +113,7 @@ func _refresh() -> void:
 	if _persona_l:
 		_persona_l.text = str(hud.get("personality", ""))
 	_paint_exam_buttons()
+	_refresh_mentor()
 	if GameFlow.exam_focus == "":
 		var opening := CaseDB.opening_line(GameFlow.current_patient_id)
 		_hint.text = opening if opening != "" else tr("CLINIC_HINT")
@@ -151,12 +157,44 @@ func _fill_seated() -> void:
 	col.add_child(UiKit.ink_label(opening, 20))
 	var hud := CaseDB.hud_card(GameFlow.current_patient_id)
 	col.add_child(UiKit.ink_label(str(hud.get("personality", "")), 15, UiKit.INK_MUTED))
+	var an := CaseDB.apprentice_name()
+	if an != "":
+		col.add_child(UiKit.ink_label(an, 13, UiKit.INK_MUTED))
+	_refresh_mentor()
+
+
+
+func _refresh_mentor() -> void:
+	if _mentor_l == null:
+		return
+	# 苏问舟 narration only — never clickable.
+	if CaseDB.mentor_is_clickable():
+		_mentor_l.visible = false
+		return
+	var line := CaseDB.mentor_cue_for_visit()
+	if line == "":
+		_mentor_l.visible = false
+		return
+	var who := CaseDB.mentor_name()
+	if who == "":
+		who = "苏问舟"
+	_mentor_l.text = "%s：%s" % [who, line]
+	_mentor_l.visible = true
+
+
+func _try_treat(path: String) -> void:
+	_refresh_mentor()
+	if path == "formula":
+		GameFlow.open_formula()
+	else:
+		GameFlow.open_needling()
 
 
 func _show_exam(eid: String) -> void:
 	AudioHub.play_one("ui-paper")
 	GameFlow.mark_exam(eid)
 	_paint_exam_buttons()
+	_refresh_mentor()
 	_clear_stage()
 	match eid:
 		"wang":
@@ -263,14 +301,31 @@ func _fill_ask() -> void:
 	scroll.add_child(_chat)
 	for turn in GameFlow.conversation:
 		_append_chat(str(turn.get("q", "")), str(turn.get("a", "")))
-	var sugg := HFlowContainer.new()
-	sugg.add_theme_constant_override("h_separation", 8)
-	sugg.add_theme_constant_override("v_separation", 6)
-	col.add_child(sugg)
-	for key in ["SUGGEST_WHY", "SUGGEST_COLD", "SUGGEST_SLEEP", "SUGGEST_SWEAT", "SUGGEST_EAT", "SUGGEST_CHEST"]:
-		var b := UiKit.make_button(key)
-		b.pressed.connect(func() -> void: _send_ask(tr(key)))
-		sugg.add_child(b)
+	col.add_child(UiKit.ink_label(tr("TENQ_BAR_TITLE"), 13, UiKit.INK_MUTED))
+	var tenq := HFlowContainer.new()
+	tenq.add_theme_constant_override("h_separation", 6)
+	tenq.add_theme_constant_override("v_separation", 6)
+	col.add_child(tenq)
+	var pack := TenQuestions.load_pack()
+	for raw in pack.get("questions", []):
+		if typeof(raw) != TYPE_DICTIONARY:
+			continue
+		var q: Dictionary = raw
+		var qid := str(q.get("id", ""))
+		var song := str(q.get("song", qid))
+		var b := Button.new()
+		var asked := qid in GameFlow.tenq_asked
+		b.text = ("✓" + song) if asked else song
+		b.disabled = asked
+		UiKit.apply_font(b, 13)
+		b.pressed.connect(func() -> void:
+			GameFlow.mark_tenq(qid)
+			var prompt := TenQuestions.prompt_for(qid, GameFlow.loc())
+			if prompt == "":
+				prompt = TenQuestions.prompt_for(qid, "zh")
+			_send_ask(prompt)
+		)
+		tenq.add_child(b)
 	var row := HBoxContainer.new()
 	col.add_child(row)
 	_ask_edit = LineEdit.new()

@@ -123,7 +123,19 @@ func _add_herb(id: String) -> void:
 		return
 	if _on_plate.size() >= 8:
 		return
+	# Keep GameFlow tray in sync for fanwei lock when using standalone formula scene.
+	if GameFlow.fsm_state != "formula_crafting":
+		GameFlow.enter_formula()
+	# Mirror plate into GameFlow so can_add_herb sees current tray.
+	GameFlow.tray_herbs = _on_plate.duplicate()
+	if not GameFlow.can_add_herb(id):
+		AudioHub.play_herb_wrong()
+		_need.visible = true
+		_need.text = GameFlow.last_fanwei_reason if GameFlow.last_fanwei_reason != "" else tr("FANWEI_LOCKED")
+		return
 	_on_plate.append(id)
+	if id not in GameFlow.tray_herbs:
+		GameFlow.tray_herbs.append(id)
 	AudioHub.play_one("herb-drop")
 	_rebuild_plate()
 
@@ -155,6 +167,11 @@ func _rebuild_plate() -> void:
 func _submit() -> void:
 	if _on_plate.size() < 3 or _on_plate.size() > 8:
 		_need.visible = true
+		return
+	# Incompat lock stub (GameFlow.formula_lock_reason); empty until fanwei pairs land.
+	if GameFlow.formula_lock_reason() != "":
+		_need.visible = true
+		_need.text = GameFlow.formula_lock_reason()
 		return
 	GameFlow.settle("formula", _on_plate.duplicate())
 

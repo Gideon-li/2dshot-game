@@ -10,12 +10,19 @@ var cases_by_id: Dictionary = {}
 var patients: Array = []
 var patients_by_id: Dictionary = {}
 var apprentice: Dictionary = {}
+var mentor: Dictionary = {}
+var mentor_line_index: int = 0
+var fanwei_pairs: Array = []
+var fanwei_reasons: Dictionary = {}
+var ten_asks: Array = []
+var wenzhou_narration_keys: PackedStringArray = PackedStringArray()
 
 
 func _ready() -> void:
 	pack = _load_json("res://logic/slice_logic.json")
 	characters = _load_json("res://patients/slice_characters.json")
 	apprentice = characters.get("apprentice", {})
+	mentor = characters.get("mentor", {})  # clickable false → narration only
 	patients = []
 	for raw in characters.get("patients", []):
 		if typeof(raw) == TYPE_DICTIONARY:
@@ -38,7 +45,46 @@ func _ready() -> void:
 	for c in pack.get("cases", []):
 		if typeof(c) == TYPE_DICTIONARY:
 			cases_by_id[str(c.get("id", ""))] = c
+	_load_fanwei_and_ten_asks()
 	_apply_bind_join()
+
+
+
+func _load_fanwei_and_ten_asks() -> void:
+	var fw: Dictionary = _load_json("res://logic/fanwei_pairs.json")
+	fanwei_pairs.clear()
+	fanwei_reasons = fw.get("reason_short", {}) if typeof(fw.get("reason_short", {})) == TYPE_DICTIONARY else {}
+	var pairs: Variant = fw.get("pairs", [])
+	if typeof(pairs) == TYPE_ARRAY:
+		for row in pairs:
+			if typeof(row) != TYPE_DICTIONARY:
+				continue
+			var a := str(row.get("a", "")).strip_edges()
+			var b := str(row.get("b", "")).strip_edges()
+			if a == "" or b == "" or a == b:
+				continue
+			# Keep classic pairs even if one side is not in this slice cabinet (hook still valid).
+			fanwei_pairs.append(row)
+	# Prefer ten_questions.json (canonical); fall back to ten_asks.json stub.
+	var tq: Dictionary = _load_json("res://logic/ten_questions.json")
+	if tq.is_empty():
+		tq = _load_json("res://logic/ten_asks.json")
+	ten_asks.clear()
+	var asks: Variant = tq.get("questions", tq.get("asks", []))
+	if typeof(asks) == TYPE_ARRAY:
+		for row in asks:
+			if typeof(row) == TYPE_DICTIONARY:
+				ten_asks.append(row)
+	wenzhou_narration_keys = PackedStringArray()
+	var cues: Variant = tq.get("mentor_cues", {})
+	if typeof(cues) == TYPE_DICTIONARY:
+		for k in cues.keys():
+			wenzhou_narration_keys.append(str(k))
+	var keys: Variant = tq.get("wenzhou_narration_keys", [])
+	if typeof(keys) == TYPE_ARRAY:
+		for k in keys:
+			if str(k) not in wenzhou_narration_keys:
+				wenzhou_narration_keys.append(str(k))
 
 
 func _apply_bind_join() -> void:
@@ -146,7 +192,60 @@ func opening_line(pid: String) -> String:
 
 
 func apprentice_name() -> String:
-	return UiKit.loc_text(apprentice.get("name", {}), "")
+	# Prefer display name / slice_name (江晚); legacy "name" key still works.
+	var n := UiKit.loc_text(apprentice.get("name", {}), "")
+	if n != "":
+		return n
+	return UiKit.loc_text(apprentice.get("slice_name", {}), "")
+
+
+func mentor_name() -> String:
+	return UiKit.loc_text(mentor.get("name", {}), "")
+
+
+func mentor_is_clickable() -> bool:
+	return bool(mentor.get("clickable", false))
+
+
+func mentor_case_cue(case_id: String = "") -> String:
+	## Non-clickable 苏问舟 line from mentor.case_cues. Never diagnosis names.
+	if case_id == "":
+		case_id = str(case_for_patient(GameFlow.current_patient_id).get("id", ""))
+	var block: Variant = mentor.get("case_cues", {}).get(case_id, {})
+	if typeof(block) != TYPE_DICTIONARY:
+		return ""
+	var lines_v: Variant = block.get("lines", {})
+	if typeof(lines_v) != TYPE_DICTIONARY:
+		return ""
+	var arr: Variant = lines_v.get(_loc_key(), lines_v.get("zh", []))
+	if typeof(arr) != TYPE_ARRAY or (arr as Array).is_empty():
+		return ""
+	var lines: Array = arr
+	var i := mentor_line_index % lines.size()
+	mentor_line_index += 1
+	return str(lines[i])
+
+
+func mentor_exam_missing_cue(exam_id: String) -> String:
+	var block: Variant = mentor.get("exam_missing_cues", {}).get(exam_id, {})
+	if typeof(block) != TYPE_DICTIONARY:
+		return ""
+	var arr: Variant = block.get(_loc_key(), block.get("zh", []))
+	if typeof(arr) != TYPE_ARRAY or (arr as Array).is_empty():
+		return ""
+	var lines: Array = arr
+	return str(lines[randi() % lines.size()])
+
+
+func mentor_cue_for_visit() -> String:
+	## Prefer missing-exam nudge (望/闻/切); else rotate a case boundary line.
+	if typeof(GameFlow.exams) == TYPE_DICTIONARY:
+		for exam in ["qie", "wang", "wen_listen"]:
+			if not bool(GameFlow.exams.get(exam, false)):
+				var m := mentor_exam_missing_cue(exam)
+				if m != "":
+					return m
+	return mentor_case_cue()
 
 
 func herb(id: String) -> Dictionary:

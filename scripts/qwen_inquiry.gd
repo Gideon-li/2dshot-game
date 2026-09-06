@@ -7,7 +7,7 @@ const _KEY_NAMES := ["QWEN_API_KEY", "DASHSCOPE_API_KEY", "QWEN_KEY", "API_KEY",
 const _MODEL_NAMES := ["QWEN_MODEL", "DASHSCOPE_MODEL", "MODEL"]
 const _URL_NAMES := ["QWEN_BASE_URL", "DASHSCOPE_BASE_URL", "OPENAI_BASE_URL"]
 const _DEFAULT_URL := "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
-const _DEFAULT_MODEL := "qwen-flash"
+const _DEFAULT_MODEL := "qwen3.8-flash"
 
 var _http: HTTPRequest
 var _busy := false

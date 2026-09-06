@@ -3,8 +3,8 @@ extends Node
 ## Runtime ask-path. Key from secrets.env on disk. Never logs the value.
 ## Timeouts / missing key / HTTP errors fall back to local symptom templates.
 
-const MODEL := "qwen3.8-flash"
-const ENDPOINT := "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
+const DEFAULT_MODEL := "qwen3.8-flash"
+const DEFAULT_ENDPOINT := "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
 const TIMEOUT_SEC := 8.0
 
 signal replied(text: String, from_api: bool)
@@ -38,8 +38,10 @@ func ask(question: String, character: Dictionary, case_data: Dictionary) -> void
 		_finish(template_reply(question, character, case_data), false)
 		return
 	_busy = true
+	var endpoint := _read_endpoint()
+	var model := _read_model()
 	var body := {
-		"model": MODEL,
+		"model": model,
 		"temperature": 0.9,
 		"max_tokens": 180,
 		"enable_thinking": false,
@@ -52,7 +54,7 @@ func ask(question: String, character: Dictionary, case_data: Dictionary) -> void
 		"Content-Type: application/json",
 		"Authorization: Bearer " + key,
 	])
-	var err := _http.request(ENDPOINT, headers, HTTPClient.METHOD_POST, JSON.stringify(body))
+	var err := _http.request(endpoint, headers, HTTPClient.METHOD_POST, JSON.stringify(body))
 	if err != OK:
 		_busy = false
 		_finish(template_reply(question, character, case_data), false)
@@ -220,6 +222,16 @@ func _system_prompt(character: Dictionary, case_data: Dictionary) -> String:
 
 
 func _read_api_key() -> String:
+	var bag := _read_secrets_bag()
+	for k in ["QWEN_API_KEY", "DASHSCOPE_API_KEY", "KEY"]:
+		var v := str(bag.get(k, "")).strip_edges()
+		if v != "":
+			return v
+	return ""
+
+
+func _read_secrets_bag() -> Dictionary:
+	var out := {}
 	var paths: PackedStringArray = [
 		ProjectSettings.globalize_path("res://secrets.env"),
 		OS.get_executable_path().get_base_dir().path_join("secrets.env"),
@@ -243,6 +255,24 @@ func _read_api_key() -> String:
 			var v := line.substr(eq + 1).strip_edges()
 			if (v.begins_with("\"") and v.ends_with("\"")) or (v.begins_with("'") and v.ends_with("'")):
 				v = v.substr(1, v.length() - 2)
-			if k == "KEY" or k == "QWEN_API_KEY" or k == "DASHSCOPE_API_KEY":
-				return v
-	return ""
+			out[k] = v
+		break
+	return out
+
+
+func _read_model() -> String:
+	var bag := _read_secrets_bag()
+	var m := str(bag.get("QWEN_MODEL", bag.get("MODEL", DEFAULT_MODEL))).strip_edges()
+	return m if m != "" else DEFAULT_MODEL
+
+
+func _read_endpoint() -> String:
+	var bag := _read_secrets_bag()
+	var u := str(bag.get("QWEN_BASE_URL", bag.get("OPENAI_BASE_URL", ""))).strip_edges()
+	if u == "":
+		return DEFAULT_ENDPOINT
+	if u.ends_with("/chat/completions"):
+		return u
+	if u.ends_with("/v1") or u.ends_with("/compatible-mode/v1"):
+		return u + "/chat/completions"
+	return u.rstrip("/") + "/chat/completions"

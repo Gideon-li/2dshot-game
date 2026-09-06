@@ -39,7 +39,7 @@ func _ready() -> void:
 	_extras.z_index = 9
 	_clinic.add_child(_extras)
 	await _warm()
-	await _capture_ask()
+	# Keep existing CAM_ASK.png (赵阿福 matching). Recapture formula/needle/result only.
 	await _capture_formula()
 	await _capture_needle()
 	await _capture_result()

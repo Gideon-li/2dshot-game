@@ -19,7 +19,10 @@ var _hall: Sprite2D
 
 func _ready() -> void:
 	await _boot()
-	await _shot_ask()
+	# Keep fixed CAM_ASK.png; recapture formula / needle / result into ui/store/.
+	await _shot_formula()
+	await _shot_needle()
+	await _shot_result()
 	print("CAPTURE_DONE dir=", ProjectSettings.globalize_path(OUT_DIR))
 	get_tree().quit(0)
 
@@ -225,7 +228,25 @@ func _shot_formula() -> void:
 		_paper(pos, Vector2(230, 80), UiKit.nature_ink(str(CaseDB.herb(id).get("nature", "neutral"))).lerp(UiKit.PAPER, 0.78))
 		_label(CaseDB.herb_name(id), 24, UiKit.INK, pos + Vector2(16, 22), Vector2(198, 40), true)
 	_label(tr("FORMULA_COUNT").format({"n": 4}), 18, UiKit.INK, Vector2(820, 990), Vector2(280, 36), true)
-	await _dump("04-CAM_FORMULA.png", cam)
+	await _dump("CAM_FORMULA.png", cam)
+
+
+
+func _shot_needle() -> void:
+	await _clear_hud()
+	GameFlow.current_patient_id = "char_porter"
+	GameFlow.fsm_state = "needling"
+	var cam := _cam("CAM_NEEDLE")
+	_show_art("res://ui/layers/L3-furniture.png")
+	_paper(Vector2(24, 24), Vector2(280, 56))
+	_label(tr("ACTION_NEEDLE"), 22, UiKit.INK, Vector2(40, 34), Vector2(248, 36))
+	_paper(Vector2(320, 780), Vector2(420, 160), Color(0.28, 0.24, 0.2, 0.35))
+	var selected: Array = ["fengchi", "hegu", "lieque"]
+	var origin := Vector2(360, 820)
+	for i in selected.size():
+		var pos := origin + Vector2(i * 90.0, (i % 2) * 40.0)
+		_paper(pos, Vector2(28, 28), Color(0.55, 0.18, 0.16, 0.9))
+	await _dump("CAM_NEEDLE.png", cam)
 
 
 func _shot_result() -> void:
@@ -250,7 +271,7 @@ func _shot_result() -> void:
 	_label(tr("SCORE_TITLE"), 18, UiKit.INK_MUTED, Vector2(760, 64), Vector2(400, 32), true)
 	_label(rank, 52, UiKit.SEAL, Vector2(760, 100), Vector2(400, 72), true)
 	_label(tr("BOOT_DISCLAIMER_FOOTER"), 14, UiKit.INK_MUTED, Vector2(660, 1010), Vector2(600, 28), true)
-	await _dump("05-CAM_RESULT.png", cam)
+	await _dump("CAM_RESULT.png", cam)
 
 
 func _shot_pulse() -> void:

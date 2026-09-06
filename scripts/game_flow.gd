@@ -23,6 +23,10 @@ var case_order: Array[String] = []
 var tray_herbs: Array[String] = []
 var selected_points: Array[String] = []
 var inquiry_used: Array[String] = []
+var tenq_asked: Array[String] = []
+var ten_asks_asked: Array[String] = []
+var last_fanwei_reason: String = ""
+signal fanwei_locked(reason: String)
 
 var cases_by_id: Dictionary:
 	get:
@@ -70,6 +74,9 @@ func start_patient(patient_id: String) -> void:
 	tray_herbs.clear()
 	selected_points.clear()
 	inquiry_used.clear()
+	tenq_asked.clear()
+	ten_asks_asked.clear()
+	last_fanwei_reason = ""
 	var opening := CaseDB.opening_line(current_patient_id)
 	if opening != "":
 		conversation.append({"q": "", "a": opening})
@@ -170,6 +177,9 @@ func next_patient() -> void:
 	tray_herbs.clear()
 	selected_points.clear()
 	inquiry_used.clear()
+	tenq_asked.clear()
+	ten_asks_asked.clear()
+	last_fanwei_reason = ""
 	fsm_state = "clinic_idle"
 	_write_play()
 	fsm_changed.emit(fsm_state)
@@ -274,6 +284,30 @@ func _write_settlement() -> void:
 
 
 
+func mark_tenq(qid: String) -> void:
+	if qid == "":
+		return
+	if qid not in tenq_asked:
+		tenq_asked.append(qid)
+
+
+# Hard-lock reason for confirm UI; pairs in logic/fanwei_pairs.json (slice tray may miss both sides).
+func formula_lock_reason() -> String:
+	if last_fanwei_reason != "":
+		return last_fanwei_reason
+	for i in tray_herbs.size():
+		var hid := str(tray_herbs[i])
+		var others: Array = []
+		for j in tray_herbs.size():
+			if i == j:
+				continue
+			others.append(tray_herbs[j])
+		var hit := fanwei_conflict(hid, others)
+		if not hit.is_empty():
+			return str(hit.get("reason", ""))
+	return ""
+
+
 func select_patient(pid: String) -> bool:
 	if fsm_state != "clinic_idle":
 		return false
@@ -311,17 +345,85 @@ func enter_needling() -> void:
 	fsm_state = "needling"
 	fsm_changed.emit(fsm_state)
 
-func add_herb_to_tray(herb_id: String) -> bool:
-	if fsm_state != "formula_crafting":
-		return false
-	if not CaseDB.herbs_by_id.has(herb_id):
+func can_add_herb(herb_id: String) -> bool:
+	last_fanwei_reason = ""
+	if herb_id == "" or not CaseDB.herbs_by_id.has(herb_id):
 		return false
 	if herb_id in tray_herbs:
 		return false
 	if tray_herbs.size() >= 8:
 		return false
-	tray_herbs.append(herb_id)
+	var hit := fanwei_conflict(herb_id, tray_herbs)
+	if not hit.is_empty():
+		last_fanwei_reason = str(hit.get("reason", tr("FANWEI_LOCKED")))
+		fanwei_locked.emit(last_fanwei_reason)
+		return false
 	return true
+
+
+func fanwei_conflict(herb_id: String, tray: Array) -> Dictionary:
+	## Returns {other, kind, reason} if locked, else {}.
+	for row in CaseDB.fanwei_pairs:
+		if typeof(row) != TYPE_DICTIONARY:
+			continue
+		var a := str(row.get("a", ""))
+		var b := str(row.get("b", ""))
+		var other := ""
+		if herb_id == a and b in tray:
+			other = b
+		elif herb_id == b and a in tray:
+			other = a
+		else:
+			continue
+		var kind := str(row.get("kind", "fan"))
+		var reason := _fanwei_reason_text(row, kind)
+		return {"other": other, "kind": kind, "reason": reason}
+	return {}
+
+
+func _fanwei_reason_text(row: Dictionary, kind: String) -> String:
+	var rk := str(row.get("reason_key", "")).strip_edges()
+	if rk != "" and typeof(CaseDB.fanwei_reasons) == TYPE_DICTIONARY and CaseDB.fanwei_reasons.has(rk):
+		var bag: Variant = CaseDB.fanwei_reasons[rk]
+		if typeof(bag) == TYPE_DICTIONARY:
+			var L := loc()
+			var s := str(bag.get(L, bag.get("zh", ""))).strip_edges()
+			if s != "":
+				return s
+	var key := "FANWEI_LOCKED_WEI" if kind == "wei" else "FANWEI_LOCKED_FAN"
+	var reason := tr(key)
+	if reason == key or reason == "":
+		reason = tr("FANWEI_LOCKED")
+	return reason
+
+
+func add_herb_to_tray(herb_id: String) -> bool:
+	if fsm_state != "formula_crafting":
+		return false
+	if not can_add_herb(herb_id):
+		return false
+	tray_herbs.append(herb_id)
+	last_fanwei_reason = ""
+	return true
+
+
+func mark_ten_ask(ask_id: String) -> void:
+	mark_tenq(ask_id)
+	if ask_id != "" and ask_id not in ten_asks_asked:
+		ten_asks_asked.append(ask_id)
+
+
+func ten_ask_prompt(ask: Dictionary) -> String:
+	var prompts: Variant = ask.get("prompt", {})
+	if typeof(prompts) == TYPE_DICTIONARY:
+		var L := loc()
+		var s := str(prompts.get(L, prompts.get("zh", ""))).strip_edges()
+		if s != "":
+			return s
+	var key := str(ask.get("label_key", ""))
+	if key != "":
+		return tr(key)
+	return ""
 
 func remove_herb_from_tray(herb_id: String) -> void:
 	tray_herbs.erase(herb_id)
@@ -347,6 +449,8 @@ func can_confirm_needling() -> bool:
 
 func confirm_formula() -> Dictionary:
 	if not can_confirm_formula():
+		return {}
+	if formula_lock_reason() != "":
 		return {}
 	return _settle_inplace("formula", tray_herbs.duplicate())
 
@@ -556,6 +660,41 @@ func run_slice_smoke() -> int:
 		var r2: Dictionary = Scoring.evaluate(case_data, exams_none, path, ids)
 		if float(r2.get("process_mult", 1.0)) >= float(r.get("process_mult", 1.0)):
 			fails.append("%s missing-exam should discount" % pid)
+	var tq := TenQuestions.load_pack()
+	var tq_n := 0
+	for q in tq.get("questions", []):
+		if typeof(q) == TYPE_DICTIONARY:
+			tq_n += 1
+	print("ten_questions_count=", tq_n)
+	if tq_n != 10:
+		fails.append("TenQuestions.load_pack expected 10, got %d" % tq_n)
+	var sample: Dictionary = Scoring.evaluate(
+		CaseDB.case_for_patient("char_porter"),
+		exams_all,
+		"formula",
+		["mahuang", "guizhi", "xingren", "gancao"]
+	)
+	for k in ["C_star", "B", "A_prime", "U", "J", "T"]:
+		if not sample.has(k):
+			fails.append("Scoring.evaluate missing key " + k)
+	if abs(float(sample.get("J", -1.0)) - 1.0) > 0.001 or abs(float(sample.get("T", -1.0)) - 1.0) > 0.001:
+		fails.append("J/T should default to 1.0")
+	print("score_components C_star=%.2f B=%.2f A_prime=%.2f U=%.2f J=%.1f T=%.1f" % [
+		float(sample.get("C_star", 0.0)), float(sample.get("B", 0.0)),
+		float(sample.get("A_prime", sample.get("A", 0.0))), float(sample.get("U", 0.0)),
+		float(sample.get("J", 0.0)), float(sample.get("T", 0.0))
+	])
+	var mis: Dictionary = Scoring.evaluate(
+		CaseDB.case_for_patient("char_porter"),
+		exams_all,
+		"formula",
+		["jinyinhua", "lianqiao", "gancao"]
+	)
+	if not bool(mis.get("mistreat", false)):
+		fails.append("cold herbs on wind-cold should mistreat")
+	var q := QwenClient.new()
+	add_child(q)
+	print("api_key_present=", not q._read_api_key().is_empty())
 	if fails.is_empty():
 		print("SMOKE PASS")
 		return 0

@@ -1,3 +1,4 @@
+class_name HerbChip
 extends Panel
 ## Draggable herb tile. Drop onto the formula plate.
 

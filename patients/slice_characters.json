@@ -1,9 +1,19 @@
 {
-  "id": "xinglin-mowen-slice-characters",
-  "version": 2,
+  "id": "mo-wen-qi-huang-slice-characters",
+  "project": "墨问岐黄",
+  "version": 5,
+  "based_on": [
+    "design-pack 03 人物志 v1.1",
+    "15 十问与问舟 v1.10",
+    "DEV-TASKS-V119",
+    "DEV-TASKS-V119 (江晚/苏问舟/小荷/三病人)"
+  ],
   "notes": {
     "not_quiz": true,
     "player_never_shown_diagnosis_name": true,
+    "apprentice_slice_name": "江晚",
+    "apprentice_design_default": "江晚",
+    "mentor_clickable": false,
     "qwen_uses": [
       "name",
       "age",
@@ -11,6 +21,8 @@
       "region",
       "personality",
       "motive",
+      "taboos",
+      "voice",
       "pathogenesis_notes"
     ],
     "fallback_uses": [
@@ -19,7 +31,11 @@
       "opening"
     ],
     "anchors_live_in": "logic/slice_logic.json clues.wen_ask.inquiry_anchor",
-    "never_say_live_in": "logic/slice_logic.json clues.wen_ask.never_say"
+    "never_say_live_in": "logic/slice_logic.json clues.wen_ask.never_say",
+    "mentor_cues_live_in": "mentor.case_cues + mentor.exam_missing_cues",
+    "pharmacy_kid_clickable": false,
+    "product_copy": "Default apprentice 江晚 (apprentice_jiang). 林晚/apprentice_lin = legacy alias in notes only. Never primary.",
+    "art_brief": "立绘/锚点学徒一律画江晚，不要画回林晚。"
   },
   "inquiry_rules": {
     "zh": [
@@ -27,29 +43,43 @@
       "每次只答所问，最多再带一个生活细节，不交全症状。",
       "同一病机每次措辞不同，必须咬住 inquiry_anchor。",
       "玩家若追问病名/方名，用 dodge，把话题拉回身上的感觉。",
-      "求医动机是人设，不是题干。不要说「来考你」。"
+      "求医动机是人设，不是题干。不要说「来考你」。",
+      "苏问舟旁白只提问、不报方不报证；本期不可点。"
     ],
     "en": [
       "Never volunteer the textbook diagnosis, formula name, or pattern name.",
       "Answer only what was asked, plus at most one lived detail. Never dump the full chart.",
       "Wording varies each time; keep biting the inquiry anchors.",
       "If the player hunts for a disease/formula name, dodge back to bodily feeling.",
-      "The visit motive is character, not a quiz stem."
+      "The visit motive is character, not a quiz stem.",
+      "Mentor Su only asks questions — never names a pattern or formula. Not clickable this slice."
     ],
     "ja": [
       "標準の病名、方剤名、証名を自ら言わない。",
       "問われたことだけ答え、生活の細部はせいぜい一つ。全症状は渡さない。",
       "言い回しは毎回変えるが、inquiry_anchor は外さない。",
       "病名や処方名を追われたら dodge し、体の感覚に戻す。",
-      "来院動機は人となりであり、試験問題ではない。"
+      "来院動機は人となりであり、試験問題ではない。",
+      "蘇問舟の傍白は質問のみ。証も方も言わない。今期はクリック不可。"
     ]
   },
   "apprentice": {
-    "id": "apprentice_lin",
-    "name": {
-      "zh": "林晚",
-      "en": "Lin Wan",
-      "ja": "林晩"
+    "id": "apprentice_jiang",
+    "slice_name": {
+      "zh": "江晚",
+      "en": "Jiang Wan",
+      "ja": "江晩"
+    },
+    "design_default_name": {
+      "zh": "江晚",
+      "en": "Jiang Wan",
+      "ja": "江晩"
+    },
+    "renameable": true,
+    "rename_note": {
+      "zh": "产品默认学徒为江晚。玩家可改名。旧稿「林晚」/ apprentice_lin 仅兼容别名，不上屏、不进立绘需求。",
+      "en": "Default apprentice is Jiang Wan. Renameable. Legacy Lin Wan / apprentice_lin is alias-only — never on screen, never in art briefs.",
+      "ja": "既定の徒弟は江晩。改名可。旧稿の林晩 / apprentice_lin は互換別名のみ。画面にも立絵要件にも出さない。"
     },
     "age": 16,
     "gender": "female",
@@ -59,20 +89,449 @@
       "ja": "坐堂の徒弟"
     },
     "region": {
-      "zh": "江南水乡医馆",
-      "en": "A Jiangnan canal clinic",
-      "ja": "江南の水郷の医館"
+      "zh": "江南水乡 · 杏林小筑",
+      "en": "Jiangnan canals · Xinglin cottage",
+      "ja": "江南の水郷 · 杏林小築"
+    },
+    "look": {
+      "zh": "十六七。月白直裰，蓝布带，半髻。指节因研药微粗。眼神先看人的手，再看人的脸。浅墨，不抢病人。",
+      "en": "Sixteen-ish. Moon-white robe, blue sash, half-bun. Knuckles rough from grinding herbs. Looks at hands before faces. Pale ink — never steals the patient scene.",
+      "ja": "十六前後。月白の直裰、青い帯、半髻。薬を碾いて節が少し粗い。まず手を見て、次に顔。薄い墨。患者を奪わない。"
+    },
+    "voice": {
+      "zh": "低而清楚，问诊时放慢。不抢病人的话。",
+      "en": "Low and clear; slows down for intake. Never talks over a patient.",
+      "ja": "低くはっきり。問診では遅める。患者の話を奪わない。"
+    },
+    "habits": {
+      "zh": [
+        "进门先看药柜落尘",
+        "诊脉前拂净脉枕",
+        "夜读用残烛"
+      ],
+      "en": [
+        "checks dust on the herb cabinet first",
+        "wipes the pulse pillow before taking a pulse",
+        "reads by a stub of candle at night"
+      ],
+      "ja": [
+        "入室でまず薬棚の埃を見る",
+        "診脈前に脈枕を払う",
+        "夜読は残り蝋燭"
+      ]
+    },
+    "motive": {
+      "zh": "故里春瘟。带着缺页《汤液歌诀》与一封荐书。想救所有人，主线是学会救眼前这个人。",
+      "en": "A spring plague back home. Carries a torn Tangye jingle and a letter of introduction. Wants to save everyone — the arc is learning to save the one in front of her.",
+      "ja": "故里の春瘟。欠けた『湯液歌訣』と推薦の書。皆を救いたいが、主線は眼前の一人を救うことを学ぶこと。"
     },
     "personality": {
-      "zh": "话不多，认药时认真，问诊会跟着听，不抢病人的话。",
-      "en": "Quiet, careful with herbs, listens during intake, never talks over a patient.",
-      "ja": "寡黙。薬は丁寧。問診では聞き役に徹し、患者の話を奪わない。"
+      "zh": "话不多，认药认真，问诊跟着听。仁则软，慎则多停顿，敏则句短（切片默认偏慎）。",
+      "en": "Quiet, careful with herbs, listens during intake. Soft if Ren, pauses if Shen, short lines if Min (slice default: Shen).",
+      "ja": "寡黙。薬は丁寧。問診は聞き役。仁なら柔らかく、慎なら間が多く、敏なら短文（今期既定は慎）。"
     },
+    "taboos": {
+      "zh": [
+        "不当着病人炫耀认药",
+        "不抢报诊断名",
+        "不催师父快开药"
+      ],
+      "en": [
+        "no showing off herb names in front of patients",
+        "never blurts a diagnosis",
+        "does not rush the mentor to prescribe"
+      ],
+      "ja": [
+        "患者の前で薬名をひけらかさない",
+        "診断名を先に言わない",
+        "師匠に急開方を急かさない"
+      ]
+    },
+    "private_props": [
+      "缺页汤液歌诀",
+      "木梳",
+      "空药葫芦"
+    ],
     "note": {
-      "zh": "跟师坐堂，认药、看脉。切片里不成长。",
-      "en": "Watches the desk, herbs, and pulse. No leveling in this slice.",
-      "ja": "師について坐堂し、薬と脈を見る。今期は成長しない。"
+      "zh": "跟师坐堂，认药、看脉。切片不成长。产品默认主角学徒。",
+      "en": "Watches the desk, herbs, and pulse. No leveling in this slice. Default player apprentice.",
+      "ja": "師について坐堂。今期は成長しない。製品既定の主人公徒弟。"
+    },
+    "clickable": true,
+    "legacy_ids": [
+      "apprentice_lin"
+    ],
+    "name": {
+      "zh": "江晚",
+      "en": "Jiang Wan",
+      "ja": "江晩"
+    },
+    "legacy_ids_note": {
+      "zh": "仅工程读旧存档/旧键时兼容。产品文案、立绘、UI 一律江晚。",
+      "en": "Loader alias for old saves/keys only. Product copy, art, and UI always Jiang Wan.",
+      "ja": "旧セーブ/旧キー互換のみ。製品文案・立絵・UI は常に江晩。"
     }
+  },
+  "mentor": {
+    "id": "mentor_su",
+    "name": {
+      "zh": "苏问舟",
+      "en": "Su Wenzhou",
+      "ja": "蘇問舟"
+    },
+    "age": 52,
+    "gender": "male",
+    "identity": {
+      "zh": "杏林小筑主人 / 导师",
+      "en": "Master of Xinglin cottage / mentor",
+      "ja": "杏林小築の主 / 導師"
+    },
+    "region": {
+      "zh": "江南 · 杏林小筑",
+      "en": "Jiangnan · Xinglin cottage",
+      "ja": "江南 · 杏林小築"
+    },
+    "clickable": false,
+    "role": "narration_only",
+    "slice_note": {
+      "zh": "本期只旁白/UI 键值，不做可点师傅 HUD，不进病人席。",
+      "en": "Narration / UI keys only this slice. No clickable mentor HUD. Not a seated patient.",
+      "ja": "今期は傍白/UI キーのみ。クリック可能な師匠 HUD なし。患者席に入らない。"
+    },
+    "look": {
+      "zh": "五十二。瘦，肩不塌。青灰旧直裰，领口补过。短须整齐。左手中指有旧艾疤。",
+      "en": "Fifty-two. Lean, shoulders unbowed. Faded blue-gray robe, mended collar. Neat short beard. Old moxa scar on left middle finger.",
+      "ja": "五十二。痩せ、肩は落ちない。青灰の古い直裰、襟を継いである。短鬚は整っている。左手中指に旧い艾の痕。"
+    },
+    "voice": {
+      "zh": "不高。提问多，判断少。生气时更轻，不拍桌子。吴语底子说官话，句尾不拖。",
+      "en": "Not loud. More questions than verdicts. Quieter when angry — never slams the table. Brief questions, never lectures.",
+      "ja": "声は高くない。質問が多く、断定は少ない。怒るとむしろ静か。講義しない。"
+    },
+    "personality": {
+      "zh": "把「慢」当医德。曾误判真寒假热，失一至交。收学徒是还愿也是赎。",
+      "en": "Treats slowness as medical virtue. Once misread true-cold false-heat and lost a close friend. Taking an apprentice is both a vow and atonement.",
+      "ja": "『遅いこと』を医徳とする。真寒假熱を誤って親友を失った。弟子を取るのは願ほどきであり贖い。"
+    },
+    "habits": {
+      "zh": [
+        "自己不先把脉，看学徒把",
+        "夜里把荐书烘平又收起",
+        "喝茶偏温，从不烫"
+      ],
+      "en": [
+        "lets the apprentice take the pulse first",
+        "flattens the recommendation letter by the brazier at night, then puts it away",
+        "tea warm, never scalding"
+      ],
+      "ja": [
+        "自分は先に脈を取らず、弟子に取らせる",
+        "夜に推薦書を乾かしてまたしまう",
+        "茶は温かめ、熱くしない"
+      ]
+    },
+    "taboos": {
+      "zh": [
+        "不报方名、证型名、标准诊断名",
+        "不把气机图上的「滞」说破成证",
+        "同一诊最多两句旁白",
+        "不问私事打趣（情缘对象在场时）",
+        "小荷代诊时不插旁白"
+      ],
+      "en": [
+        "never names a formula, pattern, or textbook diagnosis",
+        "never turns a qi-diagram 'stagnation' mark into a spoken pattern name",
+        "at most two mentor lines per visit",
+        "no private teasing when a romance interest is present",
+        "silent when Xiaohe covers the desk"
+      ],
+      "ja": [
+        "方名・証名・標準病名を言わない",
+        "気機図の『滞』を証として口にしない",
+        "一診あたり傍白は最大二句",
+        "情縁対象がいるとき私事でからかわない",
+        "小荷の代診中は黙る"
+      ]
+    },
+    "never_say": {
+      "zh": [
+        "风寒",
+        "风寒束表",
+        "肝郁",
+        "肝郁气滞",
+        "阴虚",
+        "阴虚内热",
+        "麻黄汤",
+        "桂枝汤",
+        "逍遥散",
+        "六味地黄",
+        "这是…证",
+        "开…汤"
+      ],
+      "en": [
+        "wind-cold exterior",
+        "liver qi stagnation",
+        "yin deficiency heat",
+        "Ma Huang Tang",
+        "Gui Zhi Tang",
+        "Xiao Yao San",
+        "Liu Wei Di Huang",
+        "this is a … pattern",
+        "prescribe …"
+      ],
+      "ja": [
+        "風寒束表",
+        "肝郁気滞",
+        "陰虚内熱",
+        "麻黄湯",
+        "桂枝湯",
+        "逍遥散",
+        "六味地黄",
+        "これは…証",
+        "…湯を出せ"
+      ]
+    },
+    "rules": {
+      "zh": [
+        "旁白是疑问句，不是答案。",
+        "他只问你没问的；问全了就喝茶。",
+        "缺望/闻/切旗或与本案锚点相关的十问未点，才催。",
+        "玩家补上被催的那一问后，下一句只用短肯定：「这一问有了。」",
+        "禁止「这是风寒，开桂枝」一类陈述。"
+      ],
+      "en": [
+        "Lines are questions, never answers.",
+        "He only asks what you have not asked; if the chart is enough, he drinks tea.",
+        "Cue only on missing look/listen/pulse flags or an unasked ten-question tied to this case's anchors.",
+        "After the player fills the prompted question, next line is only: 'That question is in.'",
+        "Ban statements like 'this is wind-cold — open Gui Zhi.'"
+      ],
+      "ja": [
+        "傍白は疑問文であり答えではない。",
+        "まだ聞いていないことだけ聞く。揃えば茶を飲む。",
+        "望聞切の欠旗、または本案アンカーに関わる未問の十問だけ催す。",
+        "催された問いを補ったら次は短い肯定のみ：「この問いは揃った。」",
+        "『これは風寒、桂枝を出せ』のような断定は禁止。"
+      ]
+    },
+    "affirm_short": {
+      "zh": [
+        "这一问有了。",
+        "嗯。",
+        "可以往下。"
+      ],
+      "en": [
+        "That question is in.",
+        "Mm.",
+        "You may go on."
+      ],
+      "ja": [
+        "この問いは揃った。",
+        "うん。",
+        "先へどうぞ。"
+      ]
+    },
+    "exam_missing_cues": {
+      "wang": {
+        "zh": [
+          "人还没进门，你倒先开柜了。",
+          "先看他眼睛愿不愿看你。",
+          "口张过没有。舌上的苔，比他自己说的老实。"
+        ],
+        "en": [
+          "They are not even seated, and you already opened the cabinet.",
+          "See whether their eyes will meet yours.",
+          "Has the mouth opened? The tongue coat is more honest than their story."
+        ],
+        "ja": [
+          "まだ入ってもいないのに、棚を開けた。",
+          "まず目があなたを見るか見よ。",
+          "口を開けたか。舌苔は本人の話より正直だ。"
+        ]
+      },
+      "wen_listen": {
+        "zh": [
+          "他进门那口气，你听了吗。",
+          "咳在喉还是在胸，隔着门也能辨。",
+          "声闷还是清，先听再问。"
+        ],
+        "en": [
+          "Did you hear the breath they came in on?",
+          "Cough in the throat or the chest — you can tell from the door.",
+          "Is the voice muffed or clear? Listen before you ask."
+        ],
+        "ja": [
+          "入ってきた息を聞いたか。",
+          "咳が喉か胸か、戸越しでも分かる。",
+          "声がこもるか澄むか。聞いてから問え。"
+        ]
+      },
+      "qie": {
+        "zh": [
+          "脉枕还空着。",
+          "三指放下去，比猜有用。",
+          "浮中沉，你只按了哪一层？"
+        ],
+        "en": [
+          "The pulse pillow is still empty.",
+          "Three fingers down beat guessing.",
+          "Floating, middle, deep — which layer did you actually press?"
+        ],
+        "ja": [
+          "脈枕がまだ空だ。",
+          "三指を置く方が当て推量より役に立つ。",
+          "浮・中・沈、どの層を押した？"
+        ]
+      }
+    },
+    "case_cues": {
+      "fenghan_biao": {
+        "priority_ten_ask": [
+          "寒热",
+          "汗",
+          "因",
+          "头身"
+        ],
+        "lines": {
+          "zh": [
+            "他添衣还是减衣，你问了？",
+            "出汗了没有——这一句能挡掉一半胡开。",
+            "汗出不来，还是身上根本没有热气往外走？",
+            "怕风的人，和真正发热的人，不是一种坐姿。",
+            "从哪一天开始的——雨后、风后，还是扛货之后。",
+            "身酸和头项紧，他用的是同一个词吗？",
+            "鼻涕清还是浊，问清楚再谈「上火」。",
+            "进门那口气闷不闷，你听了吗。",
+            "脉枕还空着。三指放下去，比猜有用。",
+            "十问还剩几问在桌上——寒热和汗，学徒期我不许你走过。"
+          ],
+          "en": [
+            "Did you ask whether they added a coat or took one off?",
+            "Any sweat? That one question blocks half the wild prescriptions.",
+            "No sweat coming — or no heat moving outward at all?",
+            "Someone who fears wind does not sit like someone truly febrile.",
+            "From which day — after rain, after wind, or after hauling cargo?",
+            "Aching body and tight nape — are they using the same word?",
+            "Is the snot clear or thick? Ask before anyone says 'heat rising.'",
+            "Did you hear the breath they came in on?",
+            "The pulse pillow is still empty. Three fingers beat guessing.",
+            "How many of the ten questions still sit on the desk — cold/heat and sweat, I will not let an apprentice walk past."
+          ],
+          "ja": [
+            "衣を足したか減らしたか、聞いたか。",
+            "汗は出たか——この一句で乱暴な処方が半分止まる。",
+            "汗が出ないのか、熱が外へ向かっていないのか。",
+            "風を嫌がる人と、本当に熱のある人は、座り方が違う。",
+            "いつからか——雨のあと、風のあと、荷を担いだあと。",
+            "体の痛みと項のつっぱり、同じ言葉で言っているか。",
+            "鼻水は透明か濁っているか。「上火」の前に聞け。",
+            "入ってきた息を聞いたか。",
+            "脈枕が空だ。三指を置く方が当て推量よりいい。",
+            "十問がいくつ机に残っている——寒熱と汗は、徒弟のあいだ私は通さない。"
+          ]
+        }
+      },
+      "ganyu_qizhi": {
+        "priority_ten_ask": [
+          "胸",
+          "饮食",
+          "因",
+          "旧病"
+        ],
+        "lines": {
+          "zh": [
+            "手按胸口的人，不一定是心。你问过胁下没有。",
+            "胀会不会随叹气、随生气加重。",
+            "不想吃，和吃了就胀，是两件事。",
+            "早饭还是案牍——从什么时候、因什么起的。",
+            "睡不实，是睡不着，还是睡着易醒。",
+            "旧方还在喝吗。去年那碗，还对得上今天吗。",
+            "他把心事绕开时，你仍要问胸口和饭量。",
+            "脉枕还空着。弦不弦，手指比猜有用。",
+            "眼里看见肩往里含，嘴里问过没有。",
+            "这一问若补上了，我喝茶。补不上，我再问一句。"
+          ],
+          "en": [
+            "A hand on the chest is not always the heart. Have you asked under the flanks?",
+            "Does the fullness worsen with a sigh, or with anger?",
+            "No appetite, and fullness after eating, are two different things.",
+            "Breakfast or paperwork — from when, and after what, did it start?",
+            "Light sleep: cannot fall in, or wakes easily once in?",
+            "Still drinking an old formula? Does last year's bowl still match today?",
+            "When they steer off the heart of the matter, still ask about chest and appetite.",
+            "The pulse pillow is empty. Wiry or not — fingers beat guessing.",
+            "You saw the shoulders drawn in. Have the mouth asked what the eyes saw?",
+            "If that question is in, I drink tea. If not, I ask once more."
+          ],
+          "ja": [
+            "胸に手を当てる人が、必ずしも心ではない。脇の下を聞いたか。",
+            "張りは溜息や怒りで強くなるか。",
+            "食べたくないのと、食べて張るのは別事だ。",
+            "朝食か書類か——いつから、何のあとか。",
+            "眠りが浅いのは、入れないのか、入ってすぐ覚めるのか。",
+            "古い方はまだ飲んでいるか。去年の碗は今日に合うか。",
+            "心事を避けても、胸と食欲は聞け。",
+            "脈枕が空だ。弦かどうかは指の方が当て推量よりいい。",
+            "肩が内側へ入るのを見た。目で見たことを口で問うたか。",
+            "その問いが揃えば茶を飲む。揃わねば、もう一句だけ。"
+          ]
+        }
+      },
+      "yinxu_neire": {
+        "priority_ten_ask": [
+          "汗",
+          "渴",
+          "寒热",
+          "旧病"
+        ],
+        "lines": {
+          "zh": [
+            "睡着才汗，还是动一下就汗？",
+            "汗在头还是在身、在后背？",
+            "口干和欲饮，不是同义词。想不想喝，喜热喜冷。",
+            "手心脚心热，下午更烦——你问到时刻了吗。",
+            "夜里不安，是抄经过久，还是不抄也醒。",
+            "旧方还在喝吗。他把邻人的病也讲进来了，先把旧事问清。",
+            "人老了爱往年纪上推，你仍要问手脚心里的热。",
+            "脉枕还空着。细与数，要手指告诉你，不是猜。",
+            "颧上那一点红，嘴里问过没有。",
+            "寒热和汗这两扇门，学徒期我不许你走过。"
+          ],
+          "en": [
+            "Sweat only in sleep, or with the slightest move?",
+            "Sweat on the head, the body, or the back?",
+            "Dry mouth and wanting to drink are not the same. Want drink? Prefer hot or cold?",
+            "Hot palms and soles, worse after noon — did you ask the hour?",
+            "Restless nights: from copying too long, or waking even without copying?",
+            "Still on an old formula? They may mix in a neighbor's illness — clear the history first.",
+            "Age is an easy excuse. Still ask about heat in the palms and soles.",
+            "The pulse pillow is empty. Thin and rapid need fingers, not guesses.",
+            "That flush on the cheekbones — has the mouth asked what the eyes saw?",
+            "Cold/heat and sweat: I will not let an apprentice walk past those two doors."
+          ],
+          "ja": [
+            "寝てから汗か、動いただけでも汗か。",
+            "汗は頭か、身か、背か。",
+            "口の渇きと飲みたさは別だ。飲みたいか。熱いか冷たいか。",
+            "手足の裏が熱い、午後に煩い——時刻を聞いたか。",
+            "夜の不安は写経が長いからか、書かなくても覚めるのか。",
+            "古い方はまだか。隣人の病まで話し出す前に、旧事を聞け。",
+            "年のせいにしがちでも、手足の裏の熱は聞け。",
+            "脈枕が空だ。細と数は指が教える。当て推量ではない。",
+            "頬骨の赤みを見た。口で問うたか。",
+            "寒熱と汗——徒弟のあいだ、私はこの二扇を通さない。"
+          ]
+        }
+      }
+    },
+    "i18n_keys_hint": [
+      "MENTOR_SU_LINE",
+      "MENTOR_SU_AFFIRM",
+      "MENTOR_SU_MISS_WANG",
+      "MENTOR_SU_MISS_WEN",
+      "MENTOR_SU_MISS_QIE",
+      "TEN_ASK_BAR"
+    ]
   },
   "patients": [
     {
@@ -95,15 +554,48 @@
         "en": "Jiangnan canals",
         "ja": "江南の水郷"
       },
+      "prototype_tone": "樵夫脚夫",
+      "address_player": {
+        "zh": "小先生 / 大夫",
+        "en": "young doc / doctor",
+        "ja": "小先生 / 大夫"
+      },
       "personality": {
-        "zh": "爽快、怕麻烦、话少。问急了才多说一句，不爱讲家里事。",
-        "en": "Blunt, hates fuss, few words. Extra sentences only if pressed. Keeps home talk off the table.",
-        "ja": "気さく、面倒嫌い、寡黙。急かされてようやく一言足す。家の話はしない。"
+        "zh": "爽快、怕麻烦、话少。问急了才多说一句，不爱讲家里事。忍着，怕误工。",
+        "en": "Blunt, hates fuss, few words. Extra sentences only if pressed. Keeps home talk off the table. Endures — afraid of missing work.",
+        "ja": "気さく、面倒嫌い、寡黙。急かされてようやく一言。家の話はしない。我慢する。仕事を休むのが怖い。"
+      },
+      "voice": {
+        "zh": "短句，身体比喻（江风、扛货、被子）。被戳穿时干笑，说「能走」。",
+        "en": "Short lines, body metaphors (river wind, hauling, blankets). When cornered, a dry laugh: 'I can still walk.'",
+        "ja": "短文。体の比喩（川風、荷、布団）。突かれると乾いた笑い『歩ける』。"
       },
       "motive": {
         "zh": "夜里江风灌进来，肩背发紧。明天还要扛货，只想快点能干活，不是来对题。",
-        "en": "River wind got in last night; the shoulders locked. Cargo to haul tomorrow — he just wants to work, not sit an exam.",
-        "ja": "夜の川風が入って肩が固い。明日も荷を担ぐ。早く体を動かしたいだけで、答え合わせではない。"
+        "en": "River wind got in last night; the shoulders locked. Cargo tomorrow — he just wants to work, not sit an exam.",
+        "ja": "夜の川風で肩が固い。明日も荷を担ぐ。早く体を動かしたい。答え合わせではない。"
+      },
+      "taboos": {
+        "zh": [
+          "不主动报病名/方名",
+          "不问太细的家事",
+          "怕被说「歇几天」耽误工钱"
+        ],
+        "en": [
+          "never volunteers disease/formula names",
+          "keeps family matters off-limits",
+          "fears being told to rest a few days and lose wages"
+        ],
+        "ja": [
+          "病名/方名を自ら言わない",
+          "家庭の話は不可",
+          "『数日休め』と言われて日当を失うのを恐れる"
+        ]
+      },
+      "conceal": {
+        "zh": "忍，怕误工。症状说一半，留一半给「能扛」。",
+        "en": "Endures; fears lost work. Gives half the chart, keeps the rest behind 'I can haul.'",
+        "ja": "我慢。仕事を休むのが怖い。症状は半分だけ。『担げる』の奥に残す。"
       },
       "pathogenesis_notes": {
         "internal_only": true,
@@ -127,14 +619,14 @@
             "悪寒の方が熱より強い",
             "肩背が痛く、荷が重い",
             "汗が出ない",
-            "鼻水は透明で黄色くない",
+            "鼻水は透明",
             "ここ二晩、川風を受けた"
           ]
         },
         "how_they_talk_about_it": {
           "zh": "用江风、扛货、被子、鼻涕来说，不说医书。",
           "en": "Speaks in river wind, hauling, blankets, snot — never textbook words.",
-          "ja": "川風、荷、布団、鼻水で話す。医書の言葉は使わない。"
+          "ja": "川風、荷、布団、鼻水。医書の言葉は使わない。"
         }
       },
       "opening": {
@@ -175,7 +667,12 @@
         0.42,
         0.36,
         0.3
-      ]
+      ],
+      "art_hint": {
+        "zh": "短褐、肩宽、肤色偏风吹，坐不住，墨色偏暖灰。Q 版圆头身。",
+        "en": "Short brown coat, broad shoulders, wind-burned, won't sit still, warm-gray ink. Q-cute round proportions.",
+        "ja": "短い褐、肩幅、風焼け、じっとしていられない。暖灰の墨。Q版。"
+      }
     },
     {
       "id": "char_clerk",
@@ -197,15 +694,48 @@
         "en": "A Jiangnan county seat",
         "ja": "江南の県城"
       },
+      "prototype_tone": "书生账房",
+      "address_player": {
+        "zh": "郎中先生",
+        "en": "physician",
+        "ja": "郎中先生"
+      },
       "personality": {
-        "zh": "体面、含蓄。说话前先叹气，把心事绕开，只肯说胸口和睡眠。",
-        "en": "Composed, reserved. Sighs first. Steers off the heart of the matter; will talk chest and sleep.",
-        "ja": "体裁を気にし、含蓄がある。話す前に溜息。心事は避け、胸と睡眠だけなら言う。"
+        "zh": "体面、含蓄。说话前先叹气，把心事绕开，只肯说胸口和睡眠。文言偶夹杂。",
+        "en": "Composed, reserved. Sighs first. Steers off the heart of the matter; will talk chest and sleep. Occasional bookish phrasing.",
+        "ja": "体裁を気にし、含蓄。話す前に溜息。心事は避け、胸と睡眠だけ。ときどき文語が混じる。"
+      },
+      "voice": {
+        "zh": "细，绕。被戳穿时改谈天气与案牍。",
+        "en": "Fine, circuitous. When cornered, switches to weather and paperwork.",
+        "ja": "細く、遠回し。突かれると天気と書類の話に逃げる。"
       },
       "motive": {
         "zh": "案牍堆着，夜里睡不实。来求一口气顺下去，好把卷宗写完，不是来对题。",
-        "en": "The papers pile up; nights stay light. She wants the chest to move so the files can be finished — not a test answer.",
+        "en": "Papers pile up; nights stay light. She wants the chest to move so the files can be finished — not a test answer.",
         "ja": "書類が積もり、夜が浅い。気を通して公文書を書き終えたい。答え合わせではない。"
+      },
+      "taboos": {
+        "zh": [
+          "不主动报「郁」类病名",
+          "不在下属/外人面前露弱",
+          "讳谈过深的私情与肾/泄一类"
+        ],
+        "en": [
+          "never volunteers 'stagnation'/depression-as-diagnosis names",
+          "will not look weak before juniors or strangers",
+          "avoids deep private affairs and indelicate topics"
+        ],
+        "ja": [
+          "『鬱』系の病名を自ら言わない",
+          "部下や他人の前で弱さを見せない",
+          "深い私事や下品な話題を避ける"
+        ]
+      },
+      "conceal": {
+        "zh": "先说案牍与睡眠，心事留一半。信任够了才多说「我」。",
+        "en": "Leads with paperwork and sleep; keeps half the heart back. Says more 'I' only when trust is enough.",
+        "ja": "まず書類と睡眠。心事は半分残す。信頼が足りてから『私』が増える。"
       },
       "pathogenesis_notes": {
         "internal_only": true,
@@ -235,8 +765,8 @@
         },
         "how_they_talk_about_it": {
           "zh": "用案牍、叹气、饭量、夜醒来说，不说「郁」。",
-          "en": "Speaks in files, sighs, appetite, waking — never 'stagnation' or 'depression' as a diagnosis.",
-          "ja": "書類、溜息、食欲、夜の目覚め。病名の「鬱」は言わない。"
+          "en": "Speaks in files, sighs, appetite, waking — never 'stagnation' as a diagnosis.",
+          "ja": "書類、溜息、食欲、夜の目覚め。病名の『鬱』は言わない。"
         }
       },
       "opening": {
@@ -277,7 +807,12 @@
         0.28,
         0.3,
         0.34
-      ]
+      ],
+      "art_hint": {
+        "zh": "青灰衙役常服、束发，肩往里含，墨色偏冷青灰。Q 版。",
+        "en": "Blue-gray clerk robe, tied hair, shoulders drawn in, cool blue-gray ink. Q-cute.",
+        "ja": "青灰の書記服、束ね髪、肩が内側。冷たい青灰。Q版。"
+      }
     },
     {
       "id": "char_copyist",
@@ -299,15 +834,48 @@
         "en": "An inland market town",
         "ja": "内陸の町"
       },
+      "prototype_tone": "老人",
+      "address_player": {
+        "zh": "小大夫",
+        "en": "young doctor",
+        "ja": "小大夫"
+      },
       "personality": {
-        "zh": "软声、客气，怕添麻烦。问到了才承认夜里不安，喜欢把事往年纪上推。",
-        "en": "Soft-spoken, polite, hates to impose. Admits restless nights only when asked; blames age first.",
-        "ja": "声が柔らかく、遠慮深い。問われてようやく夜の不安を認める。まず年のせいにする。"
+        "zh": "软声、客气，怕添麻烦。问到了才承认夜里不安，喜欢把事往年纪上推。今昔对比多。",
+        "en": "Soft-spoken, polite, hates to impose. Admits restless nights only when asked; blames age first. Often compares then and now.",
+        "ja": "声が柔らかく、遠慮深い。問われてようやく夜の不安を認める。まず年のせいにする。今昔比べが多い。"
+      },
+      "voice": {
+        "zh": "软，带今昔。被戳穿时掏出旧方或说「人老了」。",
+        "en": "Soft, then-and-now. When cornered, produces an old formula scrap or says 'at my age.'",
+        "ja": "柔らかく、今昔。突かれると古い方を出すか『年のせいで』。"
       },
       "motive": {
         "zh": "夜里抄经抄到眼干喉干，想睡得安一点，好继续给庙里写字。不是来讨一个病名。",
         "en": "Copying sutras late dries the eyes and throat. She wants quieter nights so the temple writing can go on — not a disease name.",
         "ja": "夜の写経で目も喉も乾く。夜を静かにしたい。寺の字を続けたい。病名が欲しいのではない。"
+      },
+      "taboos": {
+        "zh": [
+          "不主动报「虚火」等名",
+          "怕添麻烦，不主动留长",
+          "多病时抓不住主证，需问舟/玩家收束"
+        ],
+        "en": [
+          "never volunteers 'deficiency fire' names",
+          "hates to impose; will not linger unasked",
+          "many complaints — may lose the main thread without guidance"
+        ],
+        "ja": [
+          "『虚火』などの名を自ら言わない",
+          "迷惑をかけたくない。長居しない",
+          "病が多いと主証を見失いやすい"
+        ]
+      },
+      "conceal": {
+        "zh": "多病抓不住主证；先说年纪与抄经，热与盗汗要问到才承认。",
+        "en": "Many ailments blur the main thread; leads with age and copying. Heat and night sweat only when asked.",
+        "ja": "病が多く主証が掴めない。まず年齢と写経。熱と盗汗は問われてから。"
       },
       "pathogenesis_notes": {
         "internal_only": true,
@@ -379,7 +947,202 @@
         0.38,
         0.26,
         0.24
-      ]
+      ],
+      "art_hint": {
+        "zh": "深褐宽袖、白发髻、手瘦，墨色偏赭。Q 版。",
+        "en": "Deep brown wide sleeves, white bun, thin hands, ochre ink. Q-cute.",
+        "ja": "深褐の広い袖、白い髻、細い手。赭めの墨。Q版。"
+      }
     }
-  ]
+  ],
+  "pharmacy_kid": {
+    "id": "pharmacy_kid_xiaohe",
+    "name": {
+      "zh": "小荷",
+      "en": "Xiaohe",
+      "ja": "小荷"
+    },
+    "age": 12,
+    "gender": "female",
+    "identity": {
+      "zh": "药童（日后第一学徒）",
+      "en": "Pharmacy kid (later first apprentice)",
+      "ja": "薬童（のちの第一徒弟）"
+    },
+    "region": {
+      "zh": "杏林小筑药圃",
+      "en": "Xinglin cottage herb plot",
+      "ja": "杏林小築の薬圃"
+    },
+    "clickable": false,
+    "role": "ui_voice_only",
+    "slice_note": {
+      "zh": "切片不做收徒经营。小荷只作日常 UI 口吻占位（候诊/药柜提示），不进病人席，不代诊，不触发问舟旁白替换。",
+      "en": "No apprentice-management this slice. Xiaohe is UI-voice placeholder only (waiting board / cabinet alerts). Not a patient seat, no cover desk, does not replace mentor cues.",
+      "ja": "今期は収徒経営なし。小荷は日常UIの声のプレースホルダのみ。患者席に入らず、代診せず、問舟傍白の代わりにもならない。"
+    },
+    "look": {
+      "zh": "十二三。浅褐短打，裤脚常湿。辫子或剃圈均可。膝上永远有土。Q 版圆头身。",
+      "en": "Twelve-ish. Light-brown short tunic, wet cuffs. Braid or shaved ring. Knees always muddy. Q-cute.",
+      "ja": "十二前後。浅褐の短打、裾が湿りがち。辮か剃り輪。膝に土。Q版。"
+    },
+    "voice": {
+      "zh": "快，像炒豆。认药时突然变准、变慢。认字时会恼。",
+      "en": "Fast, like popping beans. Slows and sharpens when naming herbs. Gets cross when reading characters.",
+      "ja": "早く、炒り豆のよう。薬を言うとき急に正確で遅くなる。字を読むとむっとする。"
+    },
+    "personality": {
+      "zh": "活络、嘴快，心善。喜欢先报「今日几号」。不是功能按钮——可以拒绝、出门、生病。",
+      "en": "Lively, quick-tongued, kind. Likes to announce today's number first. Not a UI button — may refuse, leave, or fall ill.",
+      "ja": "きびきび、口が早い、根は優しい。まず『今日何人目』と報じたがる。機能ボタンではない——拒む・出る・病むこともある。"
+    },
+    "motive": {
+      "zh": "走方医遗孤。苏问舟留她，怕她跟着别人走江湖。想把药认全，好站得住。",
+      "en": "Orphan of an itinerant healer. Su kept her so she would not drift with others. Wants to know every herb so she can stand on her own.",
+      "ja": "走方医の遺児。蘇問舟が置いたのは、ほかの江湖に流れないため。薬を全部覚えて立ちたい。"
+    },
+    "habits": {
+      "zh": [
+        "偷尝甘草",
+        "把难找的苗画在纸上塞给江晚",
+        "接待时先报今日几号",
+        "裤脚总湿"
+      ],
+      "en": [
+        "sneaks tastes of licorice",
+        "sketches hard-to-find sprouts for Jiang Wan",
+        "announces today's waiting number first",
+        "cuffs always damp"
+      ],
+      "ja": [
+        "甘草をこっそり嘗める",
+        "見つかりにくい苗を描いて江晩に渡す",
+        "受付でまず今日の番号",
+        "裾がいつも湿る"
+      ]
+    },
+    "taboos": {
+      "zh": [
+        "不当众连续纠正她读音超过一次",
+        "不把她写成纯系统音/功能按钮",
+        "切片不让她代诊（代诊会关掉问舟旁白，本期不做）",
+        "不报诊断名、方名"
+      ],
+      "en": [
+        "do not correct her reading aloud more than once in public",
+        "do not cast her as pure system voice / a button",
+        "no cover-desk this slice (cover desk would mute mentor cues; out of scope)",
+        "never names diagnoses or formulas"
+      ],
+      "ja": [
+        "人前で読みを二度以上続けて直さない",
+        "純システム音/ボタンにしない",
+        "今期は代診させない（代診は問舟傍白を止める。範囲外）",
+        "病名も方名も言わない"
+      ]
+    },
+    "likes": {
+      "zh": [
+        "话本",
+        "甜的药茶",
+        "新的小锄"
+      ],
+      "en": [
+        "storybooks",
+        "sweet medicinal tea",
+        "a new small hoe"
+      ],
+      "ja": [
+        "話本",
+        "甘い薬茶",
+        "新しい小锄"
+      ]
+    },
+    "ui_lines": {
+      "waiting": {
+        "zh": [
+          "今日候诊——第{n}号！",
+          "还有人在门口跺脚呢。",
+          "阿福大哥站不住，先让他？"
+        ],
+        "en": [
+          "Waiting — number {n}!",
+          "Someone's still tapping at the door.",
+          "Brother Afu can't stand still — let him first?"
+        ],
+        "ja": [
+          "今日の待ち——{n}番！",
+          "まだ戸口で足踏みしてる。",
+          "阿福の兄ちゃんじっとしてない。先に通す？"
+        ]
+      },
+      "cabinet": {
+        "zh": [
+          "药柜那格空了。",
+          "甘草又少了……不是我偷的！大概。",
+          "鲜药根朝下，阿桂说的。"
+        ],
+        "en": [
+          "That cabinet slot is empty.",
+          "Licorice's low again… not me! Probably.",
+          "Fresh roots point down — A'gui said so."
+        ],
+        "ja": [
+          "あの棚が空だ。",
+          "甘草また減った……私じゃない！たぶん。",
+          "鮮薬は根を下に。阿桂が言った。"
+        ]
+      },
+      "idle": {
+        "zh": [
+          "认药？我可以念。",
+          "裤脚湿了没事，药圃的。",
+          "师父喝茶，你问诊。"
+        ],
+        "en": [
+          "Herb names? I can recite.",
+          "Wet cuffs are fine — that's the plot.",
+          "Master drinks tea; you ask."
+        ],
+        "ja": [
+          "薬の名？言えるよ。",
+          "裾が湿ってもいい、薬圃のだから。",
+          "師匠は茶、問診はあなた。"
+        ]
+      }
+    },
+    "never_say": {
+      "zh": [
+        "风寒束表",
+        "肝郁气滞",
+        "阴虚内热",
+        "麻黄汤",
+        "逍遥散",
+        "六味地黄"
+      ],
+      "en": [
+        "wind-cold exterior",
+        "liver qi stagnation",
+        "yin deficiency heat",
+        "Ma Huang Tang",
+        "Xiao Yao San",
+        "Liu Wei Di Huang"
+      ],
+      "ja": [
+        "風寒束表",
+        "肝郁気滞",
+        "陰虚内熱",
+        "麻黄湯",
+        "逍遥散",
+        "六味地黄"
+      ]
+    },
+    "art_hint": {
+      "zh": "浅褐短打、裤脚湿、膝有土、辫或剃圈。不抢江晚与三病人。",
+      "en": "Light-brown short tunic, wet cuffs, muddy knees, braid or ring-shave. Must not steal Jiang Wan or the three patients.",
+      "ja": "浅褐短打、湿った裾、土の膝。江晩と三人の患者を奪わない。"
+    }
+  },
+  "apprentice_slice_name": "江晚",
+  "apprentice_design_default": "江晚"
 }

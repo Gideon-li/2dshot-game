@@ -106,6 +106,23 @@ func play_settle(rank_id: String) -> void:
 	var fname: String = SETTLE_FILE.get(rank_id, "settle-0.ogg")
 	var stem := fname.replace(".ogg", "")
 	play_one(stem)
+	# v1.19 slice SFX from music pack
+	if rank_id in ["clear", "toward_heal", "work"]:
+		play_one("stamp-ok")
+	elif rank_id in ["none", "slight"]:
+		play_one("ink-bleed")
+
+
+func play_ui_ink() -> void:
+	play_one("ui-ink")
+
+
+func play_chime() -> void:
+	play_one("chime")
+
+
+func play_herb_wrong() -> void:
+	play_one("herb-wrong")
 
 func _make_loop(file_name: String, bus: String, linear: float) -> AudioStreamPlayer:
 	var stream: AudioStream = load(DIR + file_name)

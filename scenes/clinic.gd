@@ -72,6 +72,8 @@ func _ready() -> void:
 	_qwen.replied.connect(_on_qwen)
 	GameFlow.locale_changed.connect(_refresh)
 	GameFlow.fsm_changed.connect(_on_fsm)
+	if GameFlow.has_signal("fanwei_locked") and not GameFlow.fanwei_locked.is_connected(_on_fanwei_locked):
+		GameFlow.fanwei_locked.connect(_on_fanwei_locked)
 	if GameFlow.has_signal("settled") and not GameFlow.settled.is_connected(_on_settled):
 		GameFlow.settled.connect(_on_settled)
 	_refresh()
@@ -242,7 +244,7 @@ func _pick_at(index: int) -> void:
 func _on_pick(pid: String) -> void:
 	if pid == "" or GameFlow.is_seen(pid):
 		return
-	AudioHub.play_one("ui-paper")
+	AudioHub.play_chime()
 	_seat_patient(pid)
 	GameFlow.start_patient(pid)
 
@@ -377,14 +379,22 @@ func _tick_drag() -> void:
 	var near := mp.distance_to(TABLE_CENTER) <= HERB_SNAP or FORMULA_RECT.grow(HERB_SNAP).has_point(mp)
 	if not near:
 		return
-	AudioHub.play_one("herb-drop")
 	if GameFlow.current_patient_id != "" and GameFlow.fsm_state != "formula_crafting":
 		if GameFlow.has_method("enter_formula"):
 			GameFlow.enter_formula()
 		else:
 			GameFlow.open_formula()
+	var added := false
 	if GameFlow.has_method("add_herb_to_tray"):
-		GameFlow.add_herb_to_tray(hid)
+		added = GameFlow.add_herb_to_tray(hid)
+		if not added and GameFlow.last_fanwei_reason != "":
+			AudioHub.play_one("ui-paper")
+		elif added:
+			AudioHub.play_one("herb-drop")
+		else:
+			AudioHub.play_one("herb-drop")
+	else:
+		AudioHub.play_one("herb-drop")
 	_rebuild_dock()
 
 
@@ -580,13 +590,26 @@ func _fill_ask_dock(col: VBoxContainer) -> void:
 			continue
 		var d: Dictionary = turn
 		_append_chat(str(d.get("q", "")), str(d.get("a", "")))
-	var sugg := HFlowContainer.new()
-	sugg.add_theme_constant_override("h_separation", 6)
-	col.add_child(sugg)
-	for key in ["SUGGEST_WHY", "SUGGEST_COLD", "SUGGEST_SLEEP", "SUGGEST_SWEAT"]:
-		var b := UiKit.make_button(key)
-		b.pressed.connect(func() -> void: _send_ask(tr(key)))
-		sugg.add_child(b)
+	# 「十问」shortcut bar — song labels from ten_questions.json; no encyclopedia.
+	col.add_child(UiKit.ink_label(tr("TENQ_BAR_TITLE"), 12, UiKit.INK_MUTED))
+	var tenq := HFlowContainer.new()
+	tenq.add_theme_constant_override("h_separation", 4)
+	tenq.add_theme_constant_override("v_separation", 4)
+	col.add_child(tenq)
+	var pack := TenQuestions.load_pack()
+	for raw in pack.get("questions", []):
+		if typeof(raw) != TYPE_DICTIONARY:
+			continue
+		var q: Dictionary = raw
+		var qid := str(q.get("id", ""))
+		var song := str(q.get("song", qid))
+		var b := Button.new()
+		var asked := qid in GameFlow.tenq_asked
+		b.text = ("✓" + song) if asked else song
+		b.disabled = asked
+		UiKit.apply_font(b, 12)
+		b.pressed.connect(_make_tenq_sender(qid))
+		tenq.add_child(b)
 	var row := HBoxContainer.new()
 	col.add_child(row)
 	_ask_edit = LineEdit.new()
@@ -598,6 +621,15 @@ func _fill_ask_dock(col: VBoxContainer) -> void:
 	var send := UiKit.make_button("UI_ASK_SEND", true)
 	send.pressed.connect(func() -> void: _send_ask(_ask_edit.text if _ask_edit else ""))
 	row.add_child(send)
+
+
+func _make_tenq_sender(qid: String) -> Callable:
+	return func() -> void:
+		GameFlow.mark_tenq(qid)
+		var prompt := TenQuestions.prompt_for(qid, GameFlow.loc())
+		if prompt == "":
+			prompt = TenQuestions.prompt_for(qid, "zh")
+		_send_ask(prompt)
 
 
 func _append_chat(q: String, a: String) -> void:
@@ -615,6 +647,7 @@ func _send_ask(text: String) -> void:
 		return
 	if _ask_edit:
 		_ask_edit.text = ""
+	AudioHub.play_ui_ink()
 	GameFlow.do_exam("wen_ask")
 	_append_chat(q, tr("ASK_THINKING"))
 	_pending_q = q
@@ -626,8 +659,18 @@ func _on_qwen(text: String, _from_api: bool) -> void:
 	_rebuild_dock()
 
 
+
+func _on_fanwei_locked(reason: String) -> void:
+	AudioHub.play_herb_wrong()
+	if _hint:
+		_hint.text = reason
+	_rebuild_dock()
+
+
 func _fill_formula_dock(col: VBoxContainer) -> void:
 	col.add_child(UiKit.ink_label(tr("FORMULA_HINT"), 13, UiKit.INK_MUTED))
+	if GameFlow.last_fanwei_reason != "":
+		col.add_child(UiKit.ink_label(GameFlow.last_fanwei_reason, 13, UiKit.SEAL))
 	var names: Array[String] = []
 	for hid in GameFlow.tray_herbs:
 		names.append(CaseDB.herb_name(str(hid)))
@@ -635,8 +678,12 @@ func _fill_formula_dock(col: VBoxContainer) -> void:
 	var row := HBoxContainer.new()
 	col.add_child(row)
 	var ok := UiKit.make_button("ACTION_PRESCRIBE", true)
-	ok.disabled = not GameFlow.can_confirm_formula()
-	ok.pressed.connect(func() -> void: GameFlow.confirm_formula())
+	ok.disabled = not GameFlow.can_confirm_formula() or GameFlow.formula_lock_reason() != ""
+	ok.pressed.connect(func() -> void:
+		if GameFlow.formula_lock_reason() != "":
+			return
+		GameFlow.confirm_formula()
+	)
 	row.add_child(ok)
 	var back := UiKit.make_button("TREAT_BACK")
 	back.pressed.connect(func() -> void:

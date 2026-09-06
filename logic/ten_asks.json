@@ -1,0 +1,116 @@
+{
+  "version": "v119",
+  "source": "logic/_v119_extract/15_十问与问舟_v1.10.txt",
+  "asks": [
+    {
+      "id": "hanre",
+      "label_key": "TENQ_01_LABEL",
+      "prompt": {
+        "zh": "怕冷还是怕热？发热多久？恶风吗？",
+        "en": "More chill or heat? How long fever? Afraid of wind?",
+        "ja": "寒がりか熱がりか？発熱はどれくらい？悪風は？"
+      },
+      "ask_key": "TENQ_01_ASK"
+    },
+    {
+      "id": "han",
+      "label_key": "TENQ_02_LABEL",
+      "prompt": {
+        "zh": "有汗无汗？汗出在何时、何部位？",
+        "en": "Any sweat? When and where?",
+        "ja": "汗はありますか？いつ、どこに？"
+      },
+      "ask_key": "TENQ_02_ASK"
+    },
+    {
+      "id": "toushen",
+      "label_key": "TENQ_03_LABEL",
+      "prompt": {
+        "zh": "头何处痛？身重还是身痛？腰腿如何？",
+        "en": "Where does the head hurt? Body heavy or sore? Low back and legs?",
+        "ja": "頭のどこが痛い？身重か身痛か？腰脚は？"
+      },
+      "ask_key": "TENQ_03_ASK"
+    },
+    {
+      "id": "bian",
+      "label_key": "TENQ_04_LABEL",
+      "prompt": {
+        "zh": "大便干稀次数？小便色次？",
+        "en": "Stool dry or loose, how often? Urine color and frequency?",
+        "ja": "便の乾稀と回数は？小便の色と回数は？"
+      },
+      "ask_key": "TENQ_04_ASK"
+    },
+    {
+      "id": "yinshi",
+      "label_key": "TENQ_05_LABEL",
+      "prompt": {
+        "zh": "能吃吗？口淡油腻？饭后胀不胀？",
+        "en": "Appetite? Bland or greasy mouth? Full after meals?",
+        "ja": "食事は取れますか？口は淡いか膩るか？食後に脹りますか？"
+      },
+      "ask_key": "TENQ_05_ASK"
+    },
+    {
+      "id": "xiong",
+      "label_key": "TENQ_06_LABEL",
+      "prompt": {
+        "zh": "胸胁胀痛吗？心悸喘咳？",
+        "en": "Chest or flank tight? Palpitations, wheeze, cough?",
+        "ja": "胸脇が脹って痛い？動悸・喘・咳は？"
+      },
+      "ask_key": "TENQ_06_ASK"
+    },
+    {
+      "id": "long",
+      "label_key": "TENQ_07_LABEL",
+      "prompt": {
+        "zh": "耳鸣耳聋？目糊目赤？",
+        "en": "Ringing or deafness? Blurry or red eyes?",
+        "ja": "耳鳴りや難聴は？目がかすむ・赤い？"
+      },
+      "ask_key": "TENQ_07_ASK"
+    },
+    {
+      "id": "ke",
+      "label_key": "TENQ_08_LABEL",
+      "prompt": {
+        "zh": "口渴吗？想不想饮？喜热喜冷？",
+        "en": "Thirsty? Want drinks? Prefer hot or cold?",
+        "ja": "喉が渇く？飲みたい？熱いのと冷たいのどちらがいい？"
+      },
+      "ask_key": "TENQ_08_ASK"
+    },
+    {
+      "id": "jiu",
+      "label_key": "TENQ_09_LABEL",
+      "prompt": {
+        "zh": "以前得过什么？一直吃什么方？",
+        "en": "Old illnesses? Any formulas you keep taking?",
+        "ja": "以前に患ったことは？ずっと飲んでいる方は？"
+      },
+      "ask_key": "TENQ_09_ASK"
+    },
+    {
+      "id": "yin",
+      "label_key": "TENQ_10_LABEL",
+      "prompt": {
+        "zh": "从什么时候、因什么起的？",
+        "en": "When did this start, and after what?",
+        "ja": "いつから、何がきっかけで？"
+      },
+      "ask_key": "TENQ_10_ASK"
+    }
+  ],
+  "wenzhou_narration_keys": [
+    "WENZHOU_MISS_LOOK",
+    "WENZHOU_MISS_TONGUE",
+    "WENZHOU_MISS_LISTEN",
+    "WENZHOU_MISS_PULSE",
+    "WENZHOU_TEN_LEFT",
+    "WENZHOU_ASK_OK"
+  ],
+  "note": "Stub alias; UI prefers ten_questions.json via TenQuestions. label_key aligned to TENQ_* from other-systems i18n.",
+  "canonical": "logic/ten_questions.json"
+}

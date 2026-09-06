@@ -37,6 +37,32 @@ func _ready() -> void:
 		var r2: Dictionary = Scoring.evaluate(case_data, exams_none, path, ids)
 		if float(r2.get("process_mult", 1.0)) >= float(r.get("process_mult", 1.0)):
 			fails.append("%s missing-exam process should discount" % pid)
+
+	var tq := TenQuestions.load_pack()
+	var tq_n := 0
+	for q in tq.get("questions", []):
+		if typeof(q) == TYPE_DICTIONARY:
+			tq_n += 1
+	print("ten_questions_count=", tq_n)
+	if tq_n != 10:
+		fails.append("TenQuestions.load_pack expected 10, got %d" % tq_n)
+	var sample: Dictionary = Scoring.evaluate(
+		CaseDB.case_for_patient("char_porter"),
+		exams_all,
+		"formula",
+		["mahuang", "guizhi", "xingren", "gancao"]
+	)
+	for k in ["C_star", "B", "A_prime", "U", "J", "T"]:
+		if not sample.has(k):
+			fails.append("Scoring.evaluate missing key " + k)
+	if abs(float(sample.get("J", -1.0)) - 1.0) > 0.001 or abs(float(sample.get("T", -1.0)) - 1.0) > 0.001:
+		fails.append("J/T should default to 1.0")
+	print("score_components C_star=%.2f B=%.2f A_prime=%.2f U=%.2f J=%.1f T=%.1f" % [
+		float(sample.get("C_star", 0.0)), float(sample.get("B", 0.0)),
+		float(sample.get("A_prime", sample.get("A", 0.0))), float(sample.get("U", 0.0)),
+		float(sample.get("J", 0.0)), float(sample.get("T", 0.0))
+	])
+
 	var mis: Dictionary = Scoring.evaluate(
 		CaseDB.case_for_patient("char_porter"),
 		exams_all,

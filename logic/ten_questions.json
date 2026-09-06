@@ -1,0 +1,146 @@
+{
+  "version": "1.10-slice",
+  "source": "墨问岐黄_十问与问舟旁白_v1.10",
+  "note": "Buttons only. Mentor cues ask what you missed; never name a diagnosis.",
+  "questions": [
+    {
+      "id": "hanre",
+      "order": 1,
+      "song": "寒热",
+      "zh": "怕冷还是怕热？发热多久？恶风吗？",
+      "en": "Chills or heat? How long? Afraid of wind?",
+      "ja": "寒け？熱っぽい？いつから？風を嫌う？",
+      "blocks": "表里寒热"
+    },
+    {
+      "id": "han",
+      "order": 2,
+      "song": "汗",
+      "zh": "有汗无汗？汗出在何时、何部位？",
+      "en": "Sweating? When and where?",
+      "ja": "汗は？いつ、どこに？",
+      "blocks": "表虚表实、阴虚盗汗"
+    },
+    {
+      "id": "toushen",
+      "order": 3,
+      "song": "头身",
+      "zh": "头何处痛？身重还是身痛？腰腿如何？",
+      "en": "Where does the head hurt? Heavy or aching body?",
+      "ja": "頭のどこが痛む？体は重い？腰脚は？",
+      "blocks": "部位、风湿"
+    },
+    {
+      "id": "bian",
+      "order": 4,
+      "song": "便",
+      "zh": "大便干稀次数？小便色次？",
+      "en": "Stool dry or loose? How often? Urine color?",
+      "ja": "便の状態と回数は？尿の色と回数は？",
+      "blocks": "里证、湿、津"
+    },
+    {
+      "id": "yinshi",
+      "order": 5,
+      "song": "饮食",
+      "zh": "能吃吗？口淡油腻？饭后胀不胀？",
+      "en": "Appetite? Bland or greasy mouth? Bloat after meals?",
+      "ja": "食欲は？口は淡い？食後に脹る？",
+      "blocks": "脾胃、食积"
+    },
+    {
+      "id": "xiong",
+      "order": 6,
+      "song": "胸",
+      "zh": "胸胁胀痛吗？心悸喘咳？",
+      "en": "Chest or flank distension? Palpitation, wheeze, cough?",
+      "ja": "胸脇が張る？動悸・喘・咳は？",
+      "blocks": "肝郁、痰、胸痹轻"
+    },
+    {
+      "id": "long",
+      "order": 7,
+      "song": "聋",
+      "zh": "耳鸣耳聋？目糊目赤？",
+      "en": "Tinnitus or deafness? Blurry or red eyes?",
+      "ja": "耳鳴り？目のかすみ・充血は？",
+      "blocks": "肝肾、风热"
+    },
+    {
+      "id": "ke",
+      "order": 8,
+      "song": "渴",
+      "zh": "口渴吗？想不想饮？喜热喜冷？",
+      "en": "Thirsty? Want drinks? Prefer hot or cold?",
+      "ja": "渇きは？飲みたい？熱いの／冷たいの？",
+      "blocks": "真热假热、痰湿"
+    },
+    {
+      "id": "jiu",
+      "order": 9,
+      "song": "旧病",
+      "zh": "以前得过什么？一直吃什么方？",
+      "en": "Past illnesses? Any formulas you keep taking?",
+      "ja": "以前の病は？常用している方は？",
+      "blocks": "守方与变证"
+    },
+    {
+      "id": "yin",
+      "order": 10,
+      "song": "因",
+      "zh": "从什么时候、因什么起的？",
+      "en": "Since when, and what started it?",
+      "ja": "いつから、何がきっかけ？",
+      "blocks": "病因、时令、情志"
+    }
+  ],
+  "extra": [
+    {
+      "id": "jingdai",
+      "song": "经带",
+      "zh": "周期准不准？身上困重绵绵？",
+      "en": "Cycle regular? Heavy or lingering fatigue?",
+      "ja": "周期は安定？体が重だるい？",
+      "optional": true
+    },
+    {
+      "id": "xiaoer",
+      "song": "小儿",
+      "zh": "问乳食、问睡、问是否受惊，问大人核实",
+      "en": "Ask milk/food, sleep, fright; verify with an adult.",
+      "ja": "乳食・睡眠・驚きを問い、大人に確認",
+      "optional": true
+    }
+  ],
+  "mentor_cues": {
+    "missing_look": [
+      "人还没进门，你倒先开柜了。",
+      "先看他眼睛愿不愿看你。"
+    ],
+    "missing_tongue": [
+      "口张过没有。",
+      "舌上的苔，比他自己说的老实。"
+    ],
+    "missing_listen": [
+      "他进门那口气，你听了吗。",
+      "咳在喉还是在胸，隔着门也能辨。"
+    ],
+    "missing_ask": [
+      "十问还空着几格。",
+      "因从何起，你还没问。"
+    ],
+    "missing_pulse": [
+      "脉枕擦过了，手还没按下。",
+      "寸关尺，至少探一层。"
+    ],
+    "never_say": [
+      "禁止报方",
+      "禁止报证",
+      "禁止把气机图上的滞说破"
+    ]
+  },
+  "canonical_also_in": "logic/slice_logic.json → ten_questions",
+  "apprentice_default": "江晚",
+  "mentor": "苏问舟",
+  "yaotong_hook": "小荷"
+}

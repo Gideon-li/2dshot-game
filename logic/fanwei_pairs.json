@@ -1,0 +1,422 @@
+{
+  "version": "v1.14-slice",
+  "source": "slice_logic.json incompat + docs 18/19",
+  "note": "Hard lock before confirm. Slice cabinet may not contain both sides of a pair; still check on drop. Reasons in reason_short.",
+  "hard_lock": true,
+  "acu_exempt": true,
+  "break_wei_slice_enabled": false,
+  "reason_short": {
+    "wu_fan|fuzi|banxia": {
+      "zh": "附子与半夏十八反，同盏会相攻。",
+      "en": "Aconite and pinellia are eighteen-incompatibles.",
+      "ja": "附子と半夏は十八反、同剤不可。"
+    },
+    "wu_fan|generic": {
+      "zh": "乌头类与半蒌贝蔹白及相反，不能同盏。",
+      "en": "Aconite group vs pinellia/trichosanthes/fritillaria/ampelopsis/bletilla — locked.",
+      "ja": "烏頭類と半楼貝蔹白及は相反。"
+    },
+    "cao_fan|generic": {
+      "zh": "甘草与藻戟遂芫相反，同用会战。",
+      "en": "Licorice vs algae/euphorbia group — locked.",
+      "ja": "甘草と藻戟遂芫は相反。"
+    },
+    "lu_fan|generic": {
+      "zh": "藜芦与诸参辛芍相反，禁止同盏。",
+      "en": "Veratrum vs ginsengs/asarum/peony — locked.",
+      "ja": "藜芦と諸参辛芍は相反。"
+    },
+    "wei|renshen|wulingzhi": {
+      "zh": "人参最怕五灵脂，补气与破瘀相畏。",
+      "en": "Ginseng fears trogopterus — nineteen fears.",
+      "ja": "人参は五霊脂を畏れる。"
+    },
+    "wei|generic": {
+      "zh": "此二味十九畏，默认不能同盏。",
+      "en": "Nineteen-fears pair — default lock.",
+      "ja": "十九畏の組合せ、同剤不可。"
+    }
+  },
+  "mnemonic_fan_zh": "本草明言十八反，半蒌贝蔹及攻乌。藻戟遂芫俱战草，诸参辛芍叛藜芦。",
+  "mnemonic_wei_zh": "硫黄原是火中精，朴硝一见便相争。水银莫与砒霜见，狼毒最怕密陀僧。巴豆性烈最为上，偏与牵牛不顺情。丁香莫与郁金见，牙硝难合京三棱。川乌草乌不顺犀，人参最怕五灵脂。官桂善能调冷气，若逢石脂便相欺。",
+  "pairs": [
+    {
+      "kind": "fan",
+      "group_id": "wu_fan",
+      "a": "chuanwu",
+      "b": "banxia",
+      "reason_key": "wu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "wu_fan",
+      "a": "chuanwu",
+      "b": "gualou",
+      "reason_key": "wu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "wu_fan",
+      "a": "chuanwu",
+      "b": "gualoupi",
+      "reason_key": "wu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "wu_fan",
+      "a": "chuanwu",
+      "b": "gualouren",
+      "reason_key": "wu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "wu_fan",
+      "a": "chuanwu",
+      "b": "gualouqiao",
+      "reason_key": "wu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "wu_fan",
+      "a": "chuanwu",
+      "b": "chuanbeimu",
+      "reason_key": "wu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "wu_fan",
+      "a": "chuanwu",
+      "b": "zhebeimu",
+      "reason_key": "wu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "wu_fan",
+      "a": "chuanwu",
+      "b": "bailian",
+      "reason_key": "wu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "wu_fan",
+      "a": "chuanwu",
+      "b": "baiji",
+      "reason_key": "wu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "wu_fan",
+      "a": "caowu",
+      "b": "banxia",
+      "reason_key": "wu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "wu_fan",
+      "a": "caowu",
+      "b": "gualou",
+      "reason_key": "wu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "wu_fan",
+      "a": "caowu",
+      "b": "gualoupi",
+      "reason_key": "wu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "wu_fan",
+      "a": "caowu",
+      "b": "gualouren",
+      "reason_key": "wu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "wu_fan",
+      "a": "caowu",
+      "b": "gualouqiao",
+      "reason_key": "wu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "wu_fan",
+      "a": "caowu",
+      "b": "chuanbeimu",
+      "reason_key": "wu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "wu_fan",
+      "a": "caowu",
+      "b": "zhebeimu",
+      "reason_key": "wu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "wu_fan",
+      "a": "caowu",
+      "b": "bailian",
+      "reason_key": "wu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "wu_fan",
+      "a": "caowu",
+      "b": "baiji",
+      "reason_key": "wu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "wu_fan",
+      "a": "fuzi",
+      "b": "banxia",
+      "reason_key": "wu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "wu_fan",
+      "a": "fuzi",
+      "b": "gualou",
+      "reason_key": "wu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "wu_fan",
+      "a": "fuzi",
+      "b": "gualoupi",
+      "reason_key": "wu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "wu_fan",
+      "a": "fuzi",
+      "b": "gualouren",
+      "reason_key": "wu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "wu_fan",
+      "a": "fuzi",
+      "b": "gualouqiao",
+      "reason_key": "wu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "wu_fan",
+      "a": "fuzi",
+      "b": "chuanbeimu",
+      "reason_key": "wu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "wu_fan",
+      "a": "fuzi",
+      "b": "zhebeimu",
+      "reason_key": "wu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "wu_fan",
+      "a": "fuzi",
+      "b": "bailian",
+      "reason_key": "wu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "wu_fan",
+      "a": "fuzi",
+      "b": "baiji",
+      "reason_key": "wu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "cao_fan",
+      "a": "gancao",
+      "b": "haizao",
+      "reason_key": "cao_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "cao_fan",
+      "a": "gancao",
+      "b": "daji",
+      "reason_key": "cao_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "cao_fan",
+      "a": "gancao",
+      "b": "gansui",
+      "reason_key": "cao_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "cao_fan",
+      "a": "gancao",
+      "b": "yuanhua",
+      "reason_key": "cao_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "lu_fan",
+      "a": "lilu",
+      "b": "renshen",
+      "reason_key": "lu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "lu_fan",
+      "a": "lilu",
+      "b": "dangshen",
+      "reason_key": "lu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "lu_fan",
+      "a": "lilu",
+      "b": "danshen",
+      "reason_key": "lu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "lu_fan",
+      "a": "lilu",
+      "b": "xuanshen",
+      "reason_key": "lu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "lu_fan",
+      "a": "lilu",
+      "b": "nanshashen",
+      "reason_key": "lu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "lu_fan",
+      "a": "lilu",
+      "b": "beishashen",
+      "reason_key": "lu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "lu_fan",
+      "a": "lilu",
+      "b": "kushen",
+      "reason_key": "lu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "lu_fan",
+      "a": "lilu",
+      "b": "xixin",
+      "reason_key": "lu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "lu_fan",
+      "a": "lilu",
+      "b": "baishao",
+      "reason_key": "lu_fan|generic"
+    },
+    {
+      "kind": "fan",
+      "group_id": "lu_fan",
+      "a": "lilu",
+      "b": "chishao",
+      "reason_key": "lu_fan|generic"
+    },
+    {
+      "kind": "wei",
+      "group_id": "nineteen_wei",
+      "a": "liuhuang",
+      "b": "mangxiao",
+      "a_zh": "硫黄",
+      "b_zh": "芒硝",
+      "reason_key": "wei|generic"
+    },
+    {
+      "kind": "wei",
+      "group_id": "nineteen_wei",
+      "a": "shuiyin",
+      "b": "pishuang",
+      "a_zh": "水银",
+      "b_zh": "砒霜",
+      "reason_key": "wei|generic"
+    },
+    {
+      "kind": "wei",
+      "group_id": "nineteen_wei",
+      "a": "langdu",
+      "b": "mituoseng",
+      "a_zh": "狼毒",
+      "b_zh": "密陀僧",
+      "reason_key": "wei|generic"
+    },
+    {
+      "kind": "wei",
+      "group_id": "nineteen_wei",
+      "a": "badou",
+      "b": "qianniuzi",
+      "a_zh": "巴豆",
+      "b_zh": "牵牛子",
+      "reason_key": "wei|generic"
+    },
+    {
+      "kind": "wei",
+      "group_id": "nineteen_wei",
+      "a": "dingxiang",
+      "b": "yujin",
+      "a_zh": "丁香",
+      "b_zh": "郁金",
+      "reason_key": "wei|generic"
+    },
+    {
+      "kind": "wei",
+      "group_id": "nineteen_wei",
+      "a": "mangxiao",
+      "b": "sanleng",
+      "a_zh": "芒硝",
+      "b_zh": "三棱",
+      "reason_key": "wei|generic"
+    },
+    {
+      "kind": "wei",
+      "group_id": "nineteen_wei",
+      "a": "chuanwu",
+      "b": "shuiniujiao",
+      "a_zh": "川乌",
+      "b_zh": "水牛角",
+      "reason_key": "wei|generic"
+    },
+    {
+      "kind": "wei",
+      "group_id": "nineteen_wei",
+      "a": "caowu",
+      "b": "shuiniujiao",
+      "a_zh": "草乌",
+      "b_zh": "水牛角",
+      "reason_key": "wei|generic"
+    },
+    {
+      "kind": "wei",
+      "group_id": "nineteen_wei",
+      "a": "renshen",
+      "b": "wulingzhi",
+      "a_zh": "人参",
+      "b_zh": "五灵脂",
+      "reason_key": "wei|renshen|wulingzhi"
+    },
+    {
+      "kind": "wei",
+      "group_id": "nineteen_wei",
+      "a": "rougui",
+      "b": "chishizhi",
+      "a_zh": "肉桂",
+      "b_zh": "赤石脂",
+      "reason_key": "wei|generic"
+    }
+  ],
+  "canonical": "logic/slice_logic.json → incompat"
+}

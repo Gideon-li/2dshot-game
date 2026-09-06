@@ -1,20 +1,16 @@
-# 切片分层（Q 版可爱水墨）
+# 切片分层（明快 Q 版 · 风格锚点）
 
-头身比偏圆、表情清楚、淡彩。不是写意文人画，不是工笔，不是像素。
-目录：`ui/layers/`（副本 `scene-slice/layers/`）。场景层不画脉纹。脉纹只在 `pulse-overlay.png`。
+风格锚点：`ui/art-anchor-clinic.png`（**江晚**女学徒切赵阿福）。商店第 1 张 = 此图。不要再画「女孩被切脉」。
+人设：江晚（女）+ 赵阿福 / 沈清荷 / 周婆婆。产品文案禁止「林晚」。HUD 不要师傅。水墨不再硬约束。
+建筑 L1–L4 / L6 / L7 归场景。**不覆盖** CAM / L5。相机名与热区不动。
 
 | 层 | 文件 | 说明 |
 | --- | --- | --- |
-| L0 | `L0-paper.png` | 宣纸底（可沿用） |
-| L1 | `L1-arch.png` | **已换 Q 版** 圆角柱梁门洞，北墙三樘花窗，中樘半开 |
-| L2 | `L2-yard.png` | **已换 Q 版** 窗后药圈条：三盆，不是第二张地图 |
-| L3 | `L3-furniture.png` | **已换 Q 版** 坐堂圆桌、东柜、西榻，按相机摆，不是等距关卡 |
-| L4 | `L4-props.png` | **已换 Q 版** 脉枕+炉+研+戥+壶。枕面留白，不画脉纹 |
-| L5 | `L5-apprentice.png` `L5-patients.png` | **已换 Q 版**（美工）：林晚；赵阿福 / 沈清荷 / 周婆婆 |
-| L6 | `L6-light.png` | **已换 Q 版** 窗2→脉枕一束花青极淡光 |
-| L7 | `L7-fg.png` | **已换 Q 版** 悬药+前景洗，中下空出枕面 |
-| CAM_HERO | `CAM_HERO.png` | **已换 Q 版**（美工）商店第 1 张 |
-| CAM_PULSE | `CAM_PULSE-empty.png` | **已换 Q 版**（美工）枕在下 1/3，寸关尺空位 |
-| 脉纹 | `pulse-overlay.png` | **已换 Q 版**（美工）叠在空镜上 |
+| L0 | `L0-paper.png` | 宣纸底 |
+| L1–L4 / L6 / L7 | 同名 | 场景；暖木、药柜、窗光落脉枕 |
+| L5 | `L5-apprentice.png` `L5-patients.png` | 美工；江晚 + 三病人 |
+| CAM_HERO | `CAM_HERO.png` | = 锚点；江晚切阿福 |
+| CAM_PULSE | `CAM_PULSE-empty.png` | 枕面空镜，无脉纹 |
+| 脉纹 | `pulse-overlay.png` | 只波形：上浮紧 / 中弦 / 右细数 |
 
-角色/UI 源文件仍在 `ui/`。人设锁：只用林晚 + 赵阿福 / 沈清荷 / 周婆婆。HUD 不要师傅。经络图只装饰不可点。
+角色/UI：`ui/apprentice.png`（江晚）、`patients-three.png`、`formula-tray.png`、`ui-clinic.png`。

@@ -4,7 +4,7 @@
 
 | 文件 | 内容 |
 | --- | --- |
-| `apprentice.png` | 林晚，浅墨学徒袍 |
+| `apprentice.png` | 江晚，浅墨学徒袍 |
 | `patients-three.png` | 左赵阿福短褐；中沈清荷青灰书办；右周婆婆深褐白发 |
 | `formula-tray.png` | 药拖进盘 |
 | `ui-clinic.png` | 望闻问切基础 HUD |
