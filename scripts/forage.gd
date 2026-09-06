@@ -98,8 +98,17 @@ func forage_pack(herb_id: String) -> Dictionary:
 
 
 func spots() -> PackedStringArray:
+	## Prefer spot ids actually stored on herb entries (CaseDB may remap spot_* → SPOT_*).
 	var out := PackedStringArray()
 	var seen := {}
+	for hid in forage_enabled_ids():
+		var f: Dictionary = forage_pack(hid)
+		var spot := str(f.get("spot_id", f.get("scene_spot", "")))
+		if spot != "" and not seen.has(spot):
+			seen[spot] = true
+			out.append(spot)
+	if not out.is_empty():
+		return out
 	var pack_spots: Variant = CaseDB.forage_pack.get("spots", [])
 	if typeof(pack_spots) == TYPE_ARRAY:
 		for s in pack_spots:
@@ -108,28 +117,40 @@ func spots() -> PackedStringArray:
 				if sid != "" and not seen.has(sid):
 					seen[sid] = true
 					out.append(sid)
-	if not out.is_empty():
-		return out
-	for hid in forage_enabled_ids():
-		var f: Dictionary = forage_pack(hid)
-		var spot := str(f.get("spot_id", f.get("scene_spot", "")))
-		if spot != "" and not seen.has(spot):
-			seen[spot] = true
-			out.append(spot)
 	return out
 
 
 func spot_label(spot: String) -> String:
+	if CaseDB.has_method("_forage_spot_label_dict"):
+		var d: Dictionary = CaseDB._forage_spot_label_dict(spot)
+		var s := UiKit.loc_text(d, "")
+		if s != "" and s != spot:
+			return s
 	var pack_spots: Variant = CaseDB.forage_pack.get("spots", [])
 	if typeof(pack_spots) == TYPE_ARRAY:
 		for s in pack_spots:
-			if typeof(s) == TYPE_DICTIONARY and str((s as Dictionary).get("id", "")) == spot:
+			if typeof(s) != TYPE_DICTIONARY:
+				continue
+			var sid := str((s as Dictionary).get("id", ""))
+			if sid == spot:
+				return UiKit.loc_text(s, spot)
+			# legacy map
+			var map := {"spot_trellis": "SPOT_A", "spot_bed": "SPOT_B", "spot_ditch": "SPOT_C"}
+			if str(map.get(sid, "")) == spot:
 				return UiKit.loc_text(s, spot)
 	for hid in forage_enabled_ids():
 		var f: Dictionary = forage_pack(hid)
 		if str(f.get("spot_id", f.get("scene_spot", ""))) == spot:
 			return UiKit.loc_text(f.get("spot_label", {}), spot)
-	return spot
+	match spot:
+		"SPOT_A", "spot_trellis":
+			return UiKit.loc_text({"zh": "棚架边", "en": "By the trellis", "ja": "棚のそば"}, spot)
+		"SPOT_B", "spot_bed":
+			return UiKit.loc_text({"zh": "畦心", "en": "Bed center", "ja": "畝の中央"}, spot)
+		"SPOT_C", "spot_ditch":
+			return UiKit.loc_text({"zh": "水沟旁", "en": "By the ditch", "ja": "溝のそば"}, spot)
+		_:
+			return spot
 
 
 func herbs_at_spot(spot: String) -> PackedStringArray:
