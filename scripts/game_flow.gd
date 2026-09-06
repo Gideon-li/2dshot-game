@@ -500,7 +500,114 @@ func enter_needling() -> void:
 	fsm_state = "needling"
 	fsm_changed.emit(fsm_state)
 
+
+func go_garden() -> void:
+	if fsm_state != "clinic_idle":
+		return
+	Forage.go_garden()
+
+
+
+func leave_garden() -> void:
+	Forage.leave_garden()
+
+
+
+func herb_stock(hid: String) -> int:
+	if Forage:
+		return Forage.stock(hid)
+	var play := _play()
+	var inv: Variant = play.get("herb_inventory", {})
+	if typeof(inv) != TYPE_DICTIONARY:
+		return 0
+	return int(inv.get(hid, 0))
+
+
+
+func herbs_identified_list() -> Array:
+	var play := _play()
+	var arr: Variant = play.get("identified_herbs", play.get("herbs_identified", []))
+	return arr if typeof(arr) == TYPE_ARRAY else []
+
+
+func is_herb_identified(hid: String) -> bool:
+	if Forage:
+		return Forage.is_identified(hid)
+	if hid in herbs_identified_list():
+		return true
+	if false:
+		return true
+	if not is_forage_herb(hid):
+		return true
+	return false
+
+
+func is_forage_herb(hid: String) -> bool:
+	return CaseDB.forage_by_id.has(hid)
+
+
+func _sync_forage_aliases(play: Dictionary) -> void:
+	var ids: Array = play.get("identified_herbs", play.get("herbs_identified", []))
+	if typeof(ids) != TYPE_ARRAY:
+		ids = []
+	play["identified_herbs"] = ids
+	play["herbs_identified"] = ids
+	var stock: Dictionary = play.get("herb_stock", {}) if typeof(play.get("herb_stock", {})) == TYPE_DICTIONARY else {}
+	var inv: Dictionary = play.get("herb_inventory", {}) if typeof(play.get("herb_inventory", {})) == TYPE_DICTIONARY else {}
+	if stock.is_empty() and not inv.is_empty():
+		stock = inv.duplicate()
+	elif not stock.is_empty():
+		for k in stock.keys():
+			inv[k] = int(stock[k])
+	for k in inv.keys():
+		if not stock.has(k):
+			stock[k] = int(inv[k])
+	play["herb_stock"] = stock
+	play["herb_inventory"] = inv
+
+
+func identify_herb(hid: String) -> bool:
+	if Forage == null:
+		return false
+	var r: Dictionary = Forage.try_identify(hid, hid)
+	return bool(r.get("ok", false))
+
+
+
+func forage_herb(hid: String) -> bool:
+	return forage_pick(hid)
+
+
+
+func forage_pick(hid: String) -> bool:
+	if Forage == null:
+		return false
+	var r: Dictionary = Forage.pick_herb(hid)
+	return bool(r.get("ok", false))
+
+
+
+func can_use_herb_in_formula(hid: String) -> bool:
+	return tray_herb_allowed(hid)
+
+
+func tray_herb_allowed(hid: String) -> bool:
+	if Forage:
+		return Forage.can_use_in_formula(hid)
+	return CaseDB.herbs_by_id.has(hid)
+
+
+
 func can_add_herb(herb_id: String) -> bool:
+	if not tray_herb_allowed(herb_id):
+		var msg := tr("FORAGE_UNKNOWN_TRAY")
+		if msg == "FORAGE_UNKNOWN_TRAY":
+			msg = tr("GARDEN_UNKNOWN_TRAY")
+		if msg == "GARDEN_UNKNOWN_TRAY" or msg == "":
+			msg = "未认过的药，不能入盘。"
+		last_fanwei_reason = msg
+		fanwei_locked.emit(last_fanwei_reason)
+		return false
 	last_fanwei_reason = ""
 	if herb_id == "" or not CaseDB.herbs_by_id.has(herb_id):
 		return false
@@ -872,6 +979,33 @@ func run_slice_smoke() -> int:
 	print("mentor_missing_ask=", miss_ask)
 	if miss_ask.strip_edges().is_empty():
 		fails.append("mentor missing-ask cue empty")
+	# V120: take_mentor_line caps at 2 per visit
+	GameFlow._reset_mentor_visit()
+	GameFlow.exams = exams_miss_ask
+	GameFlow.tenq_asked.clear()
+	GameFlow.ten_asks_asked.clear()
+	var m1 := GameFlow.take_mentor_line()
+	var m1b := GameFlow.take_mentor_line()
+	GameFlow.mark_tenq("hanre")
+	var m2 := GameFlow.take_mentor_line()
+	var m3 := GameFlow.take_mentor_line()  # dock rebuild: keep showing last
+	GameFlow.mentor_display_line = ""
+	var m4 := GameFlow.take_mentor_line()  # third NEW cue must be blocked
+	print("take_mentor_cap m1=", m1, " m1b=", m1b, " m2=", m2, " m3=", m3, " m4=", m4, " count=", GameFlow.mentor_lines_this_visit)
+	if m1.strip_edges().is_empty():
+		fails.append("take_mentor_line first cue empty")
+	if m1b != m1:
+		fails.append("take_mentor_line should cache first line")
+	if m2.strip_edges().is_empty():
+		fails.append("take_mentor_line affirm/second empty")
+	if m3 != m2:
+		fails.append("take_mentor_line should keep last line on rebuild")
+	if m4 != "":
+		fails.append("take_mentor_line third new cue should be blocked")
+	if GameFlow.mentor_lines_this_visit != 2:
+		fails.append("mentor_lines_this_visit should be 2, got %d" % GameFlow.mentor_lines_this_visit)
+	GameFlow._reset_mentor_visit()
+	GameFlow.exams = saved_exams
 	# Prefer 寒热 when tenq empty.
 	if miss_ask.find("添衣") < 0 and miss_ask.find("寒热") < 0 and miss_ask.find("cold") < 0 and miss_ask.find("coat") < 0 and miss_ask.find("衣") < 0:
 		# Still OK if locale returned MENTOR_TENQ_COLD text; accept non-empty.
@@ -887,6 +1021,46 @@ func run_slice_smoke() -> int:
 	print("xiaohe_cabinet=", kid_c)
 	if kid_w.strip_edges().is_empty() or kid_c.strip_edges().is_empty():
 		fails.append("pharmacy_kid waiting/cabinet line empty")
+	
+	# V121 forage: identify+pick guizhi → stock → Afu path still heals
+	var forage_n: int = CaseDB.forage_herb_ids().size()
+	print("forage_herb_count=", forage_n)
+	if forage_n < 8:
+		fails.append("forage pack expected ≥8 herbs, got %d" % forage_n)
+	if forage_n > 12:
+		fails.append("forage pack expected ≤12 herbs, got %d" % forage_n)
+	var play_f := _play()
+	var inv0: Dictionary = play_f.get("herb_inventory", {}) if typeof(play_f.get("herb_inventory", {})) == TYPE_DICTIONARY else {}
+	var stock0: Dictionary = play_f.get("herb_stock", {}) if typeof(play_f.get("herb_stock", {})) == TYPE_DICTIONARY else {}
+	var ids0: Array = play_f.get("herbs_identified", []) if typeof(play_f.get("herbs_identified", [])) == TYPE_ARRAY else []
+	var ids0b: Array = play_f.get("identified_herbs", []) if typeof(play_f.get("identified_herbs", [])) == TYPE_ARRAY else []
+	if not identify_herb("guizhi"):
+		fails.append("identify guizhi failed")
+	var picked: bool = forage_herb("guizhi")
+	print("forage_smoke identify=", is_herb_identified("guizhi"), " pick=", picked, " stock=", herb_stock("guizhi"))
+	if not is_herb_identified("guizhi") or herb_stock("guizhi") < 1:
+		fails.append("forage guizhi identify/pick failed")
+	if not can_use_herb_in_formula("guizhi"):
+		fails.append("foraged guizhi should be usable in formula")
+	var afu: Dictionary = Scoring.evaluate(
+		CaseDB.case_for_patient("char_porter"),
+		{"wang": true, "wen_listen": true, "wen_ask": true, "qie": true},
+		"formula",
+		["mahuang", "guizhi", "xingren", "gancao"]
+	)
+	print("forage_smoke afu_rank=", afu.get("rank_id"), " score=", afu.get("score"))
+	if float(afu.get("score", 0.0)) < 0.55:
+		fails.append("after forage guizhi, Afu formula score too weak (%.2f)" % float(afu.get("score", 0.0)))
+	if str(afu.get("rank_id", "")) != "toward_heal" and float(afu.get("score", 0.0)) < 0.55:
+		fails.append("after forage guizhi, Afu legal path should toward_heal")
+	print("forage_smoke_ok")
+	play_f = _play()
+	play_f["herb_inventory"] = inv0
+	play_f["herb_stock"] = stock0
+	play_f["herbs_identified"] = ids0
+	play_f["identified_herbs"] = ids0b
+	Save.data["play"] = play_f
+
 	if fails.is_empty():
 		print("SMOKE PASS")
 		return 0

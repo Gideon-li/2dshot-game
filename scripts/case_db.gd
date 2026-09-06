@@ -16,6 +16,9 @@ var fanwei_pairs: Array = []
 var fanwei_reasons: Dictionary = {}
 var ten_asks: Array = []
 var wenzhou_narration_keys: PackedStringArray = PackedStringArray()
+var forage_pack: Dictionary = {}
+var forage_by_id: Dictionary = {}
+var forage_starter: PackedStringArray = PackedStringArray()
 
 
 func _ready() -> void:
@@ -47,6 +50,7 @@ func _ready() -> void:
 			cases_by_id[str(c.get("id", ""))] = c
 	_load_fanwei_and_ten_asks()
 	_apply_bind_join()
+	_load_forage()
 
 
 
@@ -462,3 +466,96 @@ func _builtin_patients() -> Array:
 			"ink": [0.38, 0.26, 0.24],
 		},
 	]
+
+
+func _load_forage() -> void:
+	## Load logic/forage_herbs.json (script text already merged). Cap 12.
+	forage_pack = _load_json("res://logic/forage_herbs.json")
+	if forage_pack.is_empty():
+		forage_pack = _load_json("res://patients/forage_script.json")
+	forage_by_id.clear()
+	forage_starter = PackedStringArray()
+	var known: Variant = forage_pack.get("starter_known", [])
+	if typeof(known) == TYPE_ARRAY:
+		for k in known:
+			var kid := str(k)
+			if kid != "" and kid not in forage_starter:
+				forage_starter.append(kid)
+	var rows: Variant = forage_pack.get("herbs", [])
+	if typeof(rows) != TYPE_ARRAY:
+		return
+	for row in rows:
+		if typeof(row) != TYPE_DICTIONARY:
+			continue
+		var hid := str(row.get("id", "")).strip_edges()
+		if hid == "":
+			continue
+		if forage_by_id.size() >= 12:
+			break
+		var entry: Dictionary = (row as Dictionary).duplicate(true)
+		entry["enabled"] = bool(entry.get("enabled", true))
+		var spot := str(entry.get("scene_spot", entry.get("spot_id", "")))
+		if spot == "":
+			spot = "SPOT_A"
+		# Accept legacy spot_* aliases
+		if spot.begins_with("spot_"):
+			var map := {"spot_trellis": "SPOT_A", "spot_bed": "SPOT_B", "spot_ditch": "SPOT_C"}
+			spot = str(map.get(spot, "SPOT_A"))
+		entry["scene_spot"] = spot
+		entry["spot_id"] = spot
+		if not entry.has("identify_correct") or str(entry.get("identify_correct", "")) == "":
+			entry["identify_correct"] = hid
+		forage_by_id[hid] = entry
+		# Mirror forage block onto slice herb row when present (tray / Forage helpers).
+		if herbs_by_id.has(hid):
+			var h: Dictionary = herbs_by_id[hid]
+			var block: Dictionary = {
+				"enabled": true,
+				"scene_spot": spot,
+				"spot_id": spot,
+				"spot_label": _forage_spot_label_dict(spot),
+				"clues": entry.get("clues", []),
+				"identify_options": entry.get("identify_options", [hid]),
+				"identify_correct": hid,
+				"yield": entry.get("yield", 1),
+			}
+			h["forage"] = block
+
+
+func _forage_spot_label_dict(spot: String) -> Dictionary:
+	for s in forage_pack.get("spots", []):
+		if typeof(s) == TYPE_DICTIONARY and str(s.get("id", "")) == spot:
+			return {"zh": str(s.get("zh", spot)), "en": str(s.get("en", spot)), "ja": str(s.get("ja", spot))}
+	return {"zh": spot, "en": spot, "ja": spot}
+
+
+func forage_starter_known() -> PackedStringArray:
+	return forage_starter
+
+
+func forage_herb_ids() -> PackedStringArray:
+	var out := PackedStringArray()
+	for k in forage_by_id.keys():
+		out.append(str(k))
+	return out
+
+
+func forage_entry(hid: String) -> Dictionary:
+	if forage_by_id.has(hid):
+		return forage_by_id[hid]
+	return {}
+
+
+func forage_yield(hid: String) -> int:
+	var e := forage_entry(hid)
+	var y: Variant = e.get("yield", 1)
+	if typeof(y) == TYPE_DICTIONARY:
+		return maxi(1, int(y.get("min", 1)))
+	return maxi(1, int(y))
+
+
+func mentor_forage_line() -> String:
+	var line: Variant = forage_pack.get("mentor_line", forage_pack.get("mentor_su_line", {}))
+	if typeof(line) == TYPE_DICTIONARY:
+		return UiKit.loc_text(line, "")
+	return str(line)

@@ -104,3 +104,7 @@
 ## V120（2026-09-06）
 
 旁白轻音复用 chime / stamp-ok / ui-ink，不新开整曲。见 `V120-MENTOR-SFX.md`。
+
+## V121（2026-09-06）
+
+采药两声互动短音：`forage-pull`（拔起）、`forage-bag`（入布袋）。辨认可选复用 `ui-ink`；入配方盏仍用 `herb-drop`。无新 M 轨、无 per-patient BGM；雨/薄床/duck 不动。见 `V121-FORAGE-SFX.md`。

@@ -59,9 +59,15 @@ func _build() -> void:
 	grid.add_theme_constant_override("v_separation", 8)
 	scroll.add_child(grid)
 	for h in CaseDB.pack.get("herbs", []):
+		var hid := str(h["id"])
 		var chip := HerbChip.new()
-		chip.setup(str(h["id"]), false)
-		chip.chip_clicked.connect(_add_herb)
+		var locked := GameFlow.has_method("tray_herb_allowed") and not GameFlow.tray_herb_allowed(hid)
+		chip.setup(hid, false)
+		if locked:
+			chip.modulate = Color(1, 1, 1, 0.35)
+			chip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		else:
+			chip.chip_clicked.connect(_add_herb)
 		grid.add_child(chip)
 	var plate_wrap := VBoxContainer.new()
 	plate_wrap.size_flags_horizontal = Control.SIZE_EXPAND_FILL

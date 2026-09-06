@@ -11,6 +11,7 @@ var _chat: VBoxContainer
 var _ask_edit: LineEdit
 var _pulse_panel: Control
 var _mentor_l: Label
+var _mentor_panel: Panel
 
 
 func _ready() -> void:
@@ -96,10 +97,24 @@ func _build() -> void:
 	exams.add_child(needle_b)
 	_hint = UiKit.ink_label("", 14, UiKit.INK_MUTED)
 	root.add_child(_hint)
+	_mentor_panel = Panel.new()
+	_mentor_panel.name = "MentorBubble"
+	_mentor_panel.visible = false
+	_mentor_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_mentor_panel.add_theme_stylebox_override("panel", UiKit.paper_style(Color(0.94, 0.9, 0.82, 0.98), UiKit.SEAL, 6))
+	_mentor_panel.custom_minimum_size = Vector2(0, 36)
+	var mentor_pad := MarginContainer.new()
+	mentor_pad.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	mentor_pad.add_theme_constant_override("margin_left", 10)
+	mentor_pad.add_theme_constant_override("margin_right", 10)
+	mentor_pad.add_theme_constant_override("margin_top", 6)
+	mentor_pad.add_theme_constant_override("margin_bottom", 6)
+	_mentor_panel.add_child(mentor_pad)
 	_mentor_l = UiKit.ink_label("", 14, UiKit.SEAL)
 	_mentor_l.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_mentor_l.visible = false
-	root.add_child(_mentor_l)
+	_mentor_l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	mentor_pad.add_child(_mentor_l)
+	root.add_child(_mentor_panel)
 	_stage = Panel.new()
 	_stage.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_stage.add_theme_stylebox_override("panel", UiKit.paper_style(UiKit.PAPER_DARK, UiKit.LINE, 4))
@@ -170,6 +185,8 @@ func _refresh_mentor() -> void:
 	# 苏问舟 narration only — never clickable.
 	if CaseDB.mentor_is_clickable():
 		_mentor_l.visible = false
+		if _mentor_panel:
+			_mentor_panel.visible = false
 		return
 	var line := ""
 	if GameFlow.has_method("take_mentor_line"):
@@ -178,6 +195,8 @@ func _refresh_mentor() -> void:
 		line = CaseDB.mentor_cue_for_visit()
 	if line == "":
 		_mentor_l.visible = false
+		if _mentor_panel:
+			_mentor_panel.visible = false
 		return
 	if GameFlow.has_method("consume_mentor_chime") and GameFlow.consume_mentor_chime():
 		AudioHub.play_chime()
@@ -186,6 +205,8 @@ func _refresh_mentor() -> void:
 		who = "苏问舟"
 	_mentor_l.text = "%s：%s" % [who, line]
 	_mentor_l.visible = true
+	if _mentor_panel:
+		_mentor_panel.visible = true
 
 
 func _try_treat(path: String) -> void:
@@ -326,6 +347,7 @@ func _fill_ask() -> void:
 		UiKit.apply_font(b, 13)
 		b.pressed.connect(func() -> void:
 			GameFlow.mark_tenq(qid)
+			_refresh_mentor()
 			var prompt := TenQuestions.prompt_for(qid, GameFlow.loc())
 			if prompt == "":
 				prompt = TenQuestions.prompt_for(qid, "zh")
@@ -363,6 +385,7 @@ func _send_ask(text: String) -> void:
 		return
 	if _ask_edit:
 		_ask_edit.text = ""
+	GameFlow.do_exam("wen_ask")
 	_append_chat(q, tr("ASK_THINKING"))
 	_qwen.ask(q, CaseDB.patient_by_id(GameFlow.current_patient_id), CaseDB.case_for_patient(GameFlow.current_patient_id))
 	_pending_q = q

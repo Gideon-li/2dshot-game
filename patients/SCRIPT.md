@@ -62,3 +62,13 @@ API 失败：`ask_wrappers` 套锚。`{sym}` 只填锚，不填诊断名。
 - 问舟 `exam_missing_cues` / `case_cues`：**中英日每条皆疑问句**，不报诊断名/方名。
 - 小荷 `ui_lines.waiting` / `cabinet` 各 ≥3 句短口吻（仍不可点、不代诊）。
 - 回访：每人/每案一句，见 `patients[].followup` 与 `followup_by_case`（本地模板，不必接 LLM）。
+
+## V121 认药 / 采药文案
+
+路径：`patients/forage_script.json`
+
+- 12 味生活观察线索（中英日，每味 3 条）：桂枝、麻黄、生姜、白芍、甘草、大枣、柴胡、当归、白术、茯苓、熟地、牡丹皮。
+- 认错反馈：总表 `wrong_identify_feedback` + 每味 `wrong_feedback`。
+- 阿桂含糊提示 3 句：`agui.hints`（门槛旁白，不可点）。
+- 苏问舟可复用一句：`mentor_su_line`——「药还认不准，先别碰人……」
+- 线索写形色气味触感，**不写标准诊断/方名**。

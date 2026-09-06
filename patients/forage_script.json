@@ -1,0 +1,465 @@
+{
+  "id": "mo-wen-qi-huang-forage-script",
+  "project": "墨问岐黄",
+  "version": 1,
+  "task": "DEV-TASKS-V121",
+  "notes": {
+    "max_herbs": 12,
+    "clue_style": "life observation — shape, color, scent, touch; never standard diagnosis or formula names",
+    "identify_not_quiz": true,
+    "agui_role": "vague spoken hint only; not companion AI",
+    "mentor_clickable": false
+  },
+  "mentor_su_line": {
+    "id": "mentor_forage_before_patients",
+    "reusable": true,
+    "zh": "药还认不准，先别碰人。去后院把这几味看明白。",
+    "en": "If you cannot tell the herbs apart yet, do not touch patients. Go to the backyard and see these clearly.",
+    "ja": "薬がまだ見極められないなら、人に触れるな。裏庭でこの数味を見定めよ。"
+  },
+  "agui": {
+    "id": "farmer_agui",
+    "name": {
+      "zh": "阿桂",
+      "en": "A'gui",
+      "ja": "阿桂"
+    },
+    "clickable": false,
+    "voice_note": {
+      "zh": "慢，比喻全来自地和天气。站在门槛说话。",
+      "en": "Slow speech; metaphors from soil and weather. Speaks from the threshold.",
+      "ja": "遅い話し方。たとえは土と天気から。敷居で話す。"
+    },
+    "hints": {
+      "zh": [
+        "今年雨斜着下，根都往潮处躲——你低头找。",
+        "闻对了再拔。像了还不等于是。",
+        "鲜药根朝下交给小荷，别暴晒。"
+      ],
+      "en": [
+        "Rain came in sideways this year — roots hide where it stays damp. Look low.",
+        "Smell it right before you pull. Looking alike is not being alike.",
+        "Hand fresh roots to Xiaohe tip-down. Do not leave them in the sun."
+      ],
+      "ja": [
+        "今年は雨が斜めに落ちた。根は湿った方へ逃げる——下を見ろ。",
+        "香りが合ってから抜け。似ていても同じではない。",
+        "鮮薬は根を下にして小荷に渡せ。日に当てるな。"
+      ]
+    }
+  },
+  "wrong_identify_feedback": {
+    "zh": [
+      "不对。再看叶形和气味，别急着叫名字。",
+      "差一截。这味闻着不是那个。",
+      "认错了。放下，重新看色与折香。",
+      "不是这一味。阿桂说：像了还不等于是。"
+    ],
+    "en": [
+      "Not that one. Check leaf and scent again — do not rush the name.",
+      "Close, but the smell is wrong.",
+      "Wrong. Set it down; look at color and the snap-scent again.",
+      "Not this herb. A'gui says: looking alike is not being alike."
+    ],
+    "ja": [
+      "違う。葉と香りをもう一度。名を急ぐな。",
+      "近いが、香りが違う。",
+      "間違い。置け。色と折った香りを見直せ。",
+      "この味ではない。阿桂曰く——似ていても同じではない。"
+    ]
+  },
+  "success_feedback": {
+    "zh": [
+      "认清了。可以采。",
+      "对，是这味。",
+      "叶形气味都对上了。"
+    ],
+    "en": [
+      "You have it. You may pick.",
+      "Yes — this herb.",
+      "Leaf and scent both match."
+    ],
+    "ja": [
+      "見極められた。採ってよい。",
+      "そう、この味だ。",
+      "葉も香りも合った。"
+    ]
+  },
+  "herbs": [
+    {
+      "id": "guizhi",
+      "zh": "桂枝",
+      "en": "Cinnamon twig",
+      "ja": "桂枝",
+      "cases": [
+        "fenghan_biao"
+      ],
+      "clues": {
+        "zh": [
+          "细枝带皮，折开有暖香",
+          "色褐红，像晒过的树皮",
+          "闻着像厨房里的桂，却更冲鼻"
+        ],
+        "en": [
+          "Thin twig with bark; a warm scent when snapped",
+          "Reddish-brown, like sun-dried bark",
+          "Smells like kitchen cinnamon, but sharper"
+        ],
+        "ja": [
+          "細い枝に皮、折ると温かい香り",
+          "赤褐色、乾いた樹皮のよう",
+          "台所の桂に似て、鼻にくる"
+        ]
+      },
+      "wrong_feedback": {
+        "zh": "不是桂枝。再看那几条线索。",
+        "en": "Not Cinnamon twig. Read the clues again.",
+        "ja": "桂枝ではない。手がかりを見直せ。"
+      }
+    },
+    {
+      "id": "mahuang",
+      "zh": "麻黄",
+      "en": "Ephedra",
+      "ja": "麻黄",
+      "cases": [
+        "fenghan_biao"
+      ],
+      "clues": {
+        "zh": [
+          "茎节分明，像小竹节",
+          "揉叶有清辛气，鼻翼一紧",
+          "摸着干而韧，不像软草"
+        ],
+        "en": [
+          "Clear nodes on the stem, like tiny bamboo",
+          "Crushing a leaf gives a sharp, clear bite in the nose",
+          "Dry and tough to the touch — not a soft herb"
+        ],
+        "ja": [
+          "節がはっきり、小さな竹のよう",
+          "葉を揉むと清い辛さで鼻が締まる",
+          "触ると乾いて靭い、柔らかい草ではない"
+        ]
+      },
+      "wrong_feedback": {
+        "zh": "不是麻黄。再看那几条线索。",
+        "en": "Not Ephedra. Read the clues again.",
+        "ja": "麻黄ではない。手がかりを見直せ。"
+      }
+    },
+    {
+      "id": "shengjiang",
+      "zh": "生姜",
+      "en": "Fresh ginger",
+      "ja": "生姜",
+      "cases": [
+        "fenghan_biao"
+      ],
+      "clues": {
+        "zh": [
+          "块茎黄白，掰开汁辣",
+          "叶窄长，雨后更翠绿",
+          "暖香往上冲，像刚出锅"
+        ],
+        "en": [
+          "Yellow-white rhizome; juice bites when broken",
+          "Narrow long leaves, greener after rain",
+          "Warm scent rises, like something just off the stove"
+        ],
+        "ja": [
+          "塊茎は黄白、割ると汁が辛い",
+          "葉は細長く、雨後さらに緑",
+          "温かい香りが上へ、揚げたてのよう"
+        ]
+      },
+      "wrong_feedback": {
+        "zh": "不是生姜。再看那几条线索。",
+        "en": "Not Fresh ginger. Read the clues again.",
+        "ja": "生姜ではない。手がかりを見直せ。"
+      }
+    },
+    {
+      "id": "baishao",
+      "zh": "白芍",
+      "en": "White peony root",
+      "ja": "白芍",
+      "cases": [
+        "fenghan_biao",
+        "ganyu_qizhi"
+      ],
+      "clues": {
+        "zh": [
+          "根皮白净，切面细腻",
+          "花若开着偏粉白，瓣软",
+          "气味淡，带一点苦涩"
+        ],
+        "en": [
+          "Clean white root bark; fine cut surface",
+          "If flowering, pale pink-white soft petals",
+          "Mild scent with a faint bitter edge"
+        ],
+        "ja": [
+          "根皮は白く清い、切面は細かい",
+          "花があれば淡いピンク白、瓣が柔らかい",
+          "香りは淡く、少し苦い"
+        ]
+      },
+      "wrong_feedback": {
+        "zh": "不是白芍。再看那几条线索。",
+        "en": "Not White peony root. Read the clues again.",
+        "ja": "白芍ではない。手がかりを見直せ。"
+      }
+    },
+    {
+      "id": "gancao",
+      "zh": "甘草",
+      "en": "Licorice",
+      "ja": "甘草",
+      "cases": [
+        "fenghan_biao",
+        "ganyu_qizhi"
+      ],
+      "clues": {
+        "zh": [
+          "根味先甜后淡",
+          "茎有细毛，叶小而密",
+          "干了仍有甜气，小荷常偷尝"
+        ],
+        "en": [
+          "Root tastes sweet first, then mild",
+          "Fine hairs on the stem; small dense leaves",
+          "Still smells sweet when dry — Xiaohe sneaks tastes"
+        ],
+        "ja": [
+          "根はまず甘く、あと淡い",
+          "茎に細毛、葉は小さく密",
+          "乾いても甘い気。小荷がよく嘗める"
+        ]
+      },
+      "wrong_feedback": {
+        "zh": "不是甘草。再看那几条线索。",
+        "en": "Not Licorice. Read the clues again.",
+        "ja": "甘草ではない。手がかりを見直せ。"
+      }
+    },
+    {
+      "id": "dazao",
+      "zh": "大枣",
+      "en": "Jujube",
+      "ja": "大棗",
+      "cases": [
+        "fenghan_biao"
+      ],
+      "clues": {
+        "zh": [
+          "果皮皱红，捏着软韧",
+          "核尖，甜里带一点酸",
+          "晒台上最显眼的一串红"
+        ],
+        "en": [
+          "Wrinkled red skin, soft but tough when pinched",
+          "Pointed pit; sweet with a touch of sour",
+          "The reddest string on the drying rack"
+        ],
+        "ja": [
+          "皮は皺の赤、摘むと柔らかく靭い",
+          "核は尖り、甘さに酸が少し",
+          "干し台でいちばん目立つ赤"
+        ]
+      },
+      "wrong_feedback": {
+        "zh": "不是大枣。再看那几条线索。",
+        "en": "Not Jujube. Read the clues again.",
+        "ja": "大棗ではない。手がかりを見直せ。"
+      }
+    },
+    {
+      "id": "chaihu",
+      "zh": "柴胡",
+      "en": "Bupleurum",
+      "ja": "柴胡",
+      "cases": [
+        "ganyu_qizhi"
+      ],
+      "clues": {
+        "zh": [
+          "根细长，色偏褐",
+          "叶细窄，像一把小刀片",
+          "气清而散，闻着胸口想叹气"
+        ],
+        "en": [
+          "Slender brownish root",
+          "Narrow leaves like small blades",
+          "A clear, dispersing scent that makes the chest want to sigh"
+        ],
+        "ja": [
+          "根は細長く褐",
+          "葉は細く、小さな刃のよう",
+          "清く散る香りで、胸が溜息したくなる"
+        ]
+      },
+      "wrong_feedback": {
+        "zh": "不是柴胡。再看那几条线索。",
+        "en": "Not Bupleurum. Read the clues again.",
+        "ja": "柴胡ではない。手がかりを見直せ。"
+      }
+    },
+    {
+      "id": "danggui",
+      "zh": "当归",
+      "en": "Angelica",
+      "ja": "当帰",
+      "cases": [
+        "ganyu_qizhi"
+      ],
+      "clues": {
+        "zh": [
+          "根头油润，香甜厚",
+          "断面有菊花纹",
+          "闻久了像药柜最里那格"
+        ],
+        "en": [
+          "Oily fragrant root crown, sweet and thick",
+          "Cut face shows a chrysanthemum pattern",
+          "After a long sniff it smells like the deepest cabinet slot"
+        ],
+        "ja": [
+          "根頭は油っぽく甘く厚い香り",
+          "切面に菊の紋",
+          "長く嗅ぐと薬棚の奥の匂い"
+        ]
+      },
+      "wrong_feedback": {
+        "zh": "不是当归。再看那几条线索。",
+        "en": "Not Angelica. Read the clues again.",
+        "ja": "当帰ではない。手がかりを見直せ。"
+      }
+    },
+    {
+      "id": "baizhu",
+      "zh": "白术",
+      "en": "Atractylodes",
+      "ja": "白朮",
+      "cases": [
+        "ganyu_qizhi"
+      ],
+      "clues": {
+        "zh": [
+          "根疙瘩状，香燥",
+          "叶羽裂，雨后土气更重",
+          "闻着像晒干的田埂草"
+        ],
+        "en": [
+          "Knobbly root, dry-fragrant",
+          "Pinnate leaves; earthier after rain",
+          "Smells like dried grass along a field path"
+        ],
+        "ja": [
+          "根はこぶ状、乾いた香り",
+          "羽状の葉、雨後は土の気が強い",
+          "乾いた畦の草の匂い"
+        ]
+      },
+      "wrong_feedback": {
+        "zh": "不是白术。再看那几条线索。",
+        "en": "Not Atractylodes. Read the clues again.",
+        "ja": "白朮ではない。手がかりを見直せ。"
+      }
+    },
+    {
+      "id": "fuling",
+      "zh": "茯苓",
+      "en": "Poria",
+      "ja": "茯苓",
+      "cases": [
+        "ganyu_qizhi",
+        "yinxu_neire"
+      ],
+      "clues": {
+        "zh": [
+          "块白松软，像菌核",
+          "贴着松根附近更常见",
+          "气淡，咬一口粉粉的"
+        ],
+        "en": [
+          "Soft white lump, like a sclerotium",
+          "Often near pine roots",
+          "Mild scent; a bite turns powdery"
+        ],
+        "ja": [
+          "白く柔らかい塊、菌核のよう",
+          "松の根の近くに多い",
+          "香りは淡く、噛むと粉っぽい"
+        ]
+      },
+      "wrong_feedback": {
+        "zh": "不是茯苓。再看那几条线索。",
+        "en": "Not Poria. Read the clues again.",
+        "ja": "茯苓ではない。手がかりを見直せ。"
+      }
+    },
+    {
+      "id": "shudi",
+      "zh": "熟地",
+      "en": "Prepared rehmannia",
+      "ja": "熟地",
+      "cases": [
+        "yinxu_neire"
+      ],
+      "clues": {
+        "zh": [
+          "色黑润，软黏手",
+          "甜浊气，像熬过的糖膏",
+          "晒过后仍发亮，不像生地干硬"
+        ],
+        "en": [
+          "Black and glossy, soft and sticky",
+          "A thick sweet scent, like boiled sugar paste",
+          "Still shiny after drying — not brittle like the raw root"
+        ],
+        "ja": [
+          "黒く潤み、柔らかく手がねばる",
+          "甘い濁った香り、煮詰めた糖のよう",
+          "干しても光る。生地のように硬くない"
+        ]
+      },
+      "wrong_feedback": {
+        "zh": "不是熟地。再看那几条线索。",
+        "en": "Not Prepared rehmannia. Read the clues again.",
+        "ja": "熟地ではない。手がかりを見直せ。"
+      }
+    },
+    {
+      "id": "mudanpi",
+      "zh": "牡丹皮",
+      "en": "Moutan bark",
+      "ja": "牡丹皮",
+      "cases": [
+        "yinxu_neire"
+      ],
+      "clues": {
+        "zh": [
+          "皮卷筒状，内白外褐",
+          "气清带辛，闻着脸热一点",
+          "摸着薄脆，易碎成片"
+        ],
+        "en": [
+          "Rolled bark tube, white inside, brown outside",
+          "Clear spicy scent that warms the face a little",
+          "Thin and brittle, breaks into flakes"
+        ],
+        "ja": [
+          "筒状の皮、内側白・外側褐",
+          "清い辛さで顔が少し熱い",
+          "薄く脆く、片になりやすい"
+        ]
+      },
+      "wrong_feedback": {
+        "zh": "不是牡丹皮。再看那几条线索。",
+        "en": "Not Moutan bark. Read the clues again.",
+        "ja": "牡丹皮ではない。手がかりを見直せ。"
+      }
+    }
+  ]
+}

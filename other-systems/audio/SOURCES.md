@@ -21,3 +21,5 @@
 | pulse-xian.ogg | original | 本目录合成 | 弦 |
 | pulse-xi.ogg | original | 本目录合成 | 细数 |
 | settle-0.ogg … settle-4.ogg | original | 本目录合成 | 未效→向愈五笔 |
+| forage-pull.ogg | original | 本目录合成 | 采药拔起（茎折+土砂） |
+| forage-bag.ogg | original | 本目录合成 | 入布袋（窸窣+轻落；比 herb-drop 更轻） |

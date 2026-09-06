@@ -247,3 +247,116 @@ SCORE_AXIS_UNSTEADY,不稳,Unsteady,不穏
 SCORE_AXIS_OVERHEAT,过,Harsh,過
 REVISIT_STUB,过几日再看一眼病程。,Look in on the course in a few days.,数日後に経過を見よう。
 XIAOHE_BUBBLE_TAG,小荷,Xiaohe,小荷
+FORAGE_TITLE,药圃,Herb plot,薬圃
+FORAGE_SUBTITLE,先认，再采。,Identify first. Then pick.,まず認めて、それから採る。
+FORAGE_ENTER,去后院药圃,To the backyard plot,裏庭の薬圃へ
+FORAGE_EXIT,回诊室,Back to the clinic,診察室へ戻る
+FORAGE_PATH_HINT,门外山径也可认几味。,A short path outside holds a few more.,門外の山道でも数味わかる。
+FORAGE_SPOT,采集点,Forage spot,採取ポイント
+FORAGE_IDENTIFY,认药,Identify,薬を認める
+FORAGE_PICK,采入袋中,Pick into the bag,袋に入れる
+FORAGE_PICK_LOCKED,先认准，再采。,Identify it before you pick.,認めてから採れ。
+FORAGE_BAG,药袋,Herb bag,薬袋
+FORAGE_BAG_COUNT,已采 {n} 味,{n} in the bag,採った薬 {n} 味
+FORAGE_TIME_COST,耗去一个午后。,Costs one afternoon slot.,午後のひとコマを使う。
+FORAGE_CLUE_TITLE,你看见的,What you notice,目に入ったこと
+FORAGE_CHOOSE,这是哪一味？,Which herb is this?,これはどれ？
+FORAGE_OK,认对了。,Identified.,合っている。
+FORAGE_WRONG,不像。再看形色气味。,"Not that. Look again at form, color, scent.",違う。形・色・香りをもう一度。
+FORAGE_RETRY,再认一次,Try again,もう一度
+FORAGE_UNKNOWN_TRAY,未认过的药，不能入盘。,Unidentified herbs cannot enter the tray.,認めていない薬は盆に入れない。
+FORAGE_DONE_HINT,采好的药，回药房就能入托盘。,Picked herbs can go on the tray back in the pharmacy.,採った薬は薬局に戻れば盆に入れられる。
+AGUI_NAME,阿桂,A'gui,阿桂
+AGUI_HINT_1,叶背白粉那丛，别跟旁边搞混。,The ones with pale powder under the leaves — don't mix them with the neighbors.,葉裏が白い粉の株は、隣と混ぜるな。
+AGUI_HINT_2,闻，比只看名字有用。,Smell it. Beats staring at a name.,匂え。名前を見るより役に立つ。
+AGUI_HINT_3,根朝下码齐，鲜的才不烂。,"Roots down, lined up — fresh ones keep.",根を下に揃える。鮮ものは腐りにくい。
+MENTOR_FORAGE,先认药，再碰人。,Know the herb before you touch a patient.,まず薬を認め、それから人に触れよ。
+HERB_GUIZHI_NAME,桂枝,Cinnamon twig,桂枝
+HERB_GUIZHI_CLUE_1,枝细皮红褐，折开一股辛香。,"Thin twigs, reddish-brown bark, a sharp-sweet scent when snapped.",細い枝、赤褐の皮。折ると甘い辛さ。
+HERB_GUIZHI_CLUE_2,摸着像嫩树枝，不带叶也能闻出甜辛。,Feels like young wood; the sweet-pungent smell holds even without leaves.,若木の感触。葉がなくても甘い辛さが残る。
+HERB_GUIZHI_CLUE_3,性印象：温，走上表那一路。,"Felt nature: warm, rides the surface.",印象：温。表のほうへ行く。
+HERB_BAISHAO_NAME,白芍,White peony,白芍
+HERB_BAISHAO_CLUE_1,根段白里透粉，断面细腻。,"Root pieces pale pink-white, fine cross-section.",根は白に淡い紅。断面が細かい。
+HERB_BAISHAO_CLUE_2,气味清、微酸，不像烈香。,"Clean, faintly sour smell — not a fierce aroma.",香りは清く、かすかに酸。烈香ではない。
+HERB_BAISHAO_CLUE_3,性印象：微寒，走血里柔那一路。,Felt nature: slightly cool; softens in the blood aspect.,印象：やや寒。血の柔に寄る。
+HERB_SHENGJIANG_NAME,生姜,Fresh ginger,生姜
+HERB_SHENGJIANG_CLUE_1,鲜根黄白，皮薄，掰开汁多。,"Fresh root yellow-white, thin skin, juicy when broken.",新鮮な根は黄白、皮が薄い。折ると汁が多い。
+HERB_SHENGJIANG_CLUE_2,冲鼻的辛辣，搓手还留味。,Nose-biting pungency; stays on the hands.,鼻を突く辛さ。手に残る。
+HERB_SHENGJIANG_CLUE_3,性印象：温，散得快。,"Felt nature: warm, spreads fast.",印象：温。散りが早い。
+HERB_GANCAO_NAME,甘草,Licorice,甘草
+HERB_GANCAO_CLUE_1,根条黄褐，嚼一角先苦后甜。,Yellow-brown root sticks; chew a corner — bitter then sweet.,根は黄褐。端を噛むと苦→甘。
+HERB_GANCAO_CLUE_2,小荷说这味常被偷尝。,Xiaohe says this one gets snuck often.,小荷いわく、よく盗食される。
+HERB_GANCAO_CLUE_3,性印象：平，能把方里各味拢住。,Felt nature: neutral; holds a formula together.,印象：平。方の味をまとめる。
+HERB_CHAIHU_NAME,柴胡,Bupleurum,柴胡
+HERB_CHAIHU_CLUE_1,茎细、叶瘦长，根条硬。,"Thin stems, slender leaves, firm roots.",茎は細く葉は細い。根が硬い。
+HERB_CHAIHU_CLUE_2,气味清苦，不像花香。,"Clear-bitter smell, not floral.",香りは清苦。花香ではない。
+HERB_CHAIHU_CLUE_3,性印象：微寒，爱往胁上走。,Felt nature: slightly cool; likes the flanks.,印象：やや寒。脇へ行きやすい。
+HERB_DANGGUI_NAME,当归,Angelica,当帰
+HERB_DANGGUI_CLUE_1,根头粗、须多，切开油润。,"Thick crown, many rootlets, oily when cut.",根頭が太く鬚が多い。切ると油っぽい。
+HERB_DANGGUI_CLUE_2,甜里带浊香，像药柜深处那味。,Sweet with a heavy perfume — the deep-cabinet smell.,甘さに濁った香。棚の奥の匂い。
+HERB_DANGGUI_CLUE_3,性印象：温，走血。,Felt nature: warm; moves with blood.,印象：温。血を行く。
+HERB_BAIZHU_NAME,白术,Atractylodes,白朮
+HERB_BAIZHU_CLUE_1,根块不规则，断面有朱砂点。,Irregular root lumps; cinnabar-like dots on the cut.,いびつな根塊。断面に朱砂のような点。
+HERB_BAIZHU_CLUE_2,气味芳香而燥。,Aromatic and drying smell.,香りは芳香で燥。
+HERB_BAIZHU_CLUE_3,性印象：温，偏脾胃那一路。,Felt nature: warm; leans spleen-stomach.,印象：温。脾胃寄り。
+HERB_FULING_NAME,茯苓,Poria,茯苓
+HERB_FULING_CLUE_1,块白或淡褐，轻，像菌核。,"White or pale-brown lumps, light, like a sclerotium.",白〜淡褐の塊。軽い菌核のよう。
+HERB_FULING_CLUE_2,几乎无气味，咬着粉。,Almost no smell; powdery bite.,ほとんど無臭。噛むと粉っぽい。
+HERB_FULING_CLUE_3,性印象：平，利水那路。,Felt nature: neutral; drains damp paths.,印象：平。水を利する路。
+HERB_MAIDONG_NAME,麦冬,Ophiopogon,麦門冬
+HERB_MAIDONG_CLUE_1,纺锤形小块，半透明。,"Small spindle pieces, translucent.",紡錘の小片。半透明。
+HERB_MAIDONG_CLUE_2,嚼着甘润，不像燥根。,Chewy-sweet and moist — not a dry root.,甘く潤う。燥根ではない。
+HERB_MAIDONG_CLUE_3,性印象：微寒，润。,Felt nature: slightly cool; moistens.,印象：やや寒。潤す。
+HERB_SHENGDI_NAME,生地,Raw rehmannia,生地
+HERB_SHENGDI_CLUE_1,块根黑褐，断面油润发黏。,"Dark root chunks, oily and sticky when cut.",黒褐の根塊。断面は油っぽく粘る。
+HERB_SHENGDI_CLUE_2,气味浊甜，带一点土腥。,Heavy-sweet smell with a bit of earth.,濁った甘さに土の匂い。
+HERB_SHENGDI_CLUE_3,性印象：寒，偏清里热那路。,Felt nature: cold; cools interior heat paths.,印象：寒。裏の熱を清する路。
+HERB_SUANZAOREN_NAME,酸枣仁,Ziziphus seed,酸棗仁
+HERB_SUANZAOREN_CLUE_1,扁圆核仁，一端有尖。,"Flat round kernels, pointed at one end.",扁平な仁。一端が尖る。
+HERB_SUANZAOREN_CLUE_2,气味淡，嚼着微油。,Mild smell; faintly oily when chewed.,香りは淡い。噛むと少し油。
+HERB_SUANZAOREN_CLUE_3,性印象：平，安那夜不安的。,Felt nature: neutral; settles restless nights.,印象：平。夜の不安を安んずる。
+HERB_JUHUA_NAME,菊花,Chrysanthemum,菊花
+HERB_JUHUA_CLUE_1,干花瓣黄白，心细。,"Dried petals yellow-white, fine centers.",乾いた花弁は黄白。芯が細い。
+HERB_JUHUA_CLUE_2,清香，搓碎更明显。,Clear scent — stronger when crushed.,清香。揉むと強い。
+HERB_JUHUA_CLUE_3,性印象：微寒，清头目。,Felt nature: slightly cool; clears head and eyes.,印象：やや寒。頭目を清す。
+GARDEN_TITLE,药圃,Herb plot,薬圃
+GARDEN_SUBTITLE,先认，再采。,Identify first. Then pick.,まず認めて、それから採る。
+GARDEN_ENTER,去后院药圃,To the backyard plot,裏庭の薬圃へ
+GARDEN_EXIT,回诊室,Back to the clinic,診察室へ戻る
+GARDEN_SPOT,采集点,Forage spot,採取ポイント
+GARDEN_IDENTIFY,认药,Identify,薬を認める
+GARDEN_PICK,采入袋中,Pick into the bag,袋に入れる
+GARDEN_PICK_LOCKED,先认准，再采。,Identify it before you pick.,認めてから採れ。
+GARDEN_BAG,药袋,Herb bag,薬袋
+GARDEN_BAG_COUNT,已采 {n} 味,{n} in the bag,採った薬 {n} 味
+GARDEN_CLUE_TITLE,你看见的,What you notice,目に入ったこと
+GARDEN_CHOOSE,这是哪一味？,Which herb is this?,これはどれ？
+GARDEN_OK,认对了。,Identified.,合っている。
+GARDEN_WRONG,不像。再看形色气味。,"Not that. Look again at form, color, scent.",違う。形・色・香りをもう一度。
+GARDEN_RETRY,再认一次,Try again,もう一度
+GARDEN_UNKNOWN_TRAY,未认过的药，不能入盘。,Unidentified herbs cannot enter the tray.,認めていない薬は盆に入れない。
+GARDEN_DONE_HINT,采好的药，回药房就能入托盘。,Picked herbs can go on the tray back in the pharmacy.,採った薬は薬局に戻れば盆に入れられる。
+GARDEN_HINT,看形色气味再认，认对才能采。,"See shape, color, scent — then name it. Only then pick.",形・色・香りを見てから名を言え。合ってから採れ。
+GARDEN_BACK,回诊室,Back to clinic,診察室へ戻る
+GARDEN_PICKED,已入袋,In the bag,袋に入れた
+GARDEN_NEED_ID,先认准再采。,Identify first.,先に見極めよ。
+GARDEN_STOCK,药袋,Herb bag,薬袋
+GARDEN_AGUI,阿桂,A'gui,阿桂
+GARDEN_OPEN,去药圃,To the herb plot,薬圃へ
+FORAGE_SMOKE_OK,forage smoke ok,forage smoke ok,forage smoke ok
+HERB_MAHUANG_NAME,麻黄,Ephedra,麻黄
+HERB_MAHUANG_CLUE_1,茎节对生，摸着干韧。,"Jointed stems, dry and tough to the touch.",節のある茎。触ると乾いて韌い。
+HERB_MAHUANG_CLUE_2,气味辛、冲一点鼻。,"Pungent smell, a bit nose-stinging.",香りは辛く、少し鼻を突く。
+HERB_MAHUANG_CLUE_3,性印象：温，走上表发汗那一路。,Felt nature: warm; rides the surface to open sweat.,印象：温。表に出て汗を開く路。
+HERB_DAZAO_NAME,大枣,Jujube,大棗
+HERB_DAZAO_CLUE_1,干果皱红，捏着韧甜。,"Dried fruit wrinkled red, chewy-sweet when pinched.",乾果は赤く皺。摘むと甘く韌い。
+HERB_DAZAO_CLUE_2,气味甜香，像灶上那罐。,Sweet kitchen-jar smell.,甘い竈の壺のような香。
+HERB_DAZAO_CLUE_3,性印象：温，能把方里各味和住。,Felt nature: warm; rounds a formula together.,印象：温。方の味を和える。
+HERB_MUDANPI_NAME,牡丹皮,Moutan bark,牡丹皮
+HERB_MUDANPI_CLUE_1,皮卷薄片，断面粉白带粉。,Thin rolled bark pieces; cut face pale and powdery.,薄い巻き皮。断面は粉白。
+HERB_MUDANPI_CLUE_2,气味清、微辛。,"Clear, faintly pungent smell.",香りは清く、かすかに辛。
+HERB_MUDANPI_CLUE_3,性印象：微寒，走血里清那一路。,Felt nature: slightly cool; clears in the blood aspect.,印象：やや寒。血の清に寄る。
+HERB_SHUDI_NAME,熟地,Prepared rehmannia,熟地
+HERB_SHUDI_CLUE_1,块根黑亮，软而油润。,"Dark glossy root chunks, soft and oily.",根塊は黒く艶。柔らかく油っぽい。
+HERB_SHUDI_CLUE_2,气味浊甜，比生地更厚。,"Heavy-sweet smell, denser than raw rehmannia.",濁った甘さ。生地より厚い。
+HERB_SHUDI_CLUE_3,性印象：微温，补里那路。,Felt nature: slightly warm; tonifies the interior path.,印象：やや温。裏を補う路。

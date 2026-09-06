@@ -1,6 +1,6 @@
 {
   "id": "xinglin-mowen-slice-logic",
-  "version": 3,
+  "version": 4,
   "project": "墨问岐黄 / 杏林墨问",
   "scope": "vertical_slice",
   "notes": {
@@ -22,7 +22,8 @@
       "logic/fanwei_pairs.json"
     ],
     "v120": "mentor_cue wiring ≤2/visit; settlement_display; revisit save hook; xiaohe proxy off",
-    "JT": "J=T=1 keep"
+    "JT": "J=T=1 keep",
+    "v121": "forage identify+pick; max 12; unidentified cannot enter formula; afternoon slot -1"
   },
   "exam_ids": [
     "wang",
@@ -164,7 +165,58 @@
       },
       "region_tags": [],
       "climate_fit": [],
-      "role_default": "平"
+      "role_default": "平",
+      "forage": {
+        "enabled": true,
+        "scene": "herb_garden",
+        "scene_spot": "path_dry",
+        "spot_label": {
+          "zh": "门外山径干坡",
+          "en": "门外山径干坡",
+          "ja": "门外山径干坡"
+        },
+        "clues": [
+          {
+            "id": "c0",
+            "zh": "茎节分明，像小竹节",
+            "en": "Clear nodes on the stem, like tiny bamboo",
+            "ja": "節がはっきり、小さな竹のよう"
+          },
+          {
+            "id": "c1",
+            "zh": "揉叶有清辛气，鼻翼一紧",
+            "en": "Crushing a leaf gives a sharp, clear bite in the nose",
+            "ja": "葉を揉むと清い辛さで鼻が締まる"
+          },
+          {
+            "id": "c2",
+            "zh": "摸着干而韧，不像软草",
+            "en": "Dry and tough to the touch — not a soft herb",
+            "ja": "触ると乾いて靭い、柔らかい草ではない"
+          }
+        ],
+        "identify_options": [
+          "mahuang",
+          "bohe",
+          "jinyinhua"
+        ],
+        "identify_correct": "mahuang",
+        "yield": {
+          "min": 1,
+          "max": 1,
+          "unit": "bundle"
+        },
+        "requires_identify": true,
+        "cases_hint": [
+          "fenghan_biao"
+        ],
+        "wrong_feedback": {
+          "zh": "不是麻黄。再看那几条线索。",
+          "en": "Not Ephedra. Read the clues again.",
+          "ja": "麻黄ではない。手がかりを見直せ。"
+        },
+        "script_ref": "patients/forage_script.json"
+      }
     },
     {
       "id": "guizhi",
@@ -200,7 +252,58 @@
       },
       "region_tags": [],
       "climate_fit": [],
-      "role_default": "平"
+      "role_default": "平",
+      "forage": {
+        "enabled": true,
+        "scene": "herb_garden",
+        "scene_spot": "yard_trellis",
+        "spot_label": {
+          "zh": "后院棚架",
+          "en": "后院棚架",
+          "ja": "后院棚架"
+        },
+        "clues": [
+          {
+            "id": "c0",
+            "zh": "细枝带皮，折开有暖香",
+            "en": "Thin twig with bark; a warm scent when snapped",
+            "ja": "細い枝に皮、折ると温かい香り"
+          },
+          {
+            "id": "c1",
+            "zh": "色褐红，像晒过的树皮",
+            "en": "Reddish-brown, like sun-dried bark",
+            "ja": "赤褐色、乾いた樹皮のよう"
+          },
+          {
+            "id": "c2",
+            "zh": "闻着像厨房里的桂，却更冲鼻",
+            "en": "Smells like kitchen cinnamon, but sharper",
+            "ja": "台所の桂に似て、鼻にくる"
+          }
+        ],
+        "identify_options": [
+          "guizhi",
+          "danggui",
+          "rougui"
+        ],
+        "identify_correct": "guizhi",
+        "yield": {
+          "min": 1,
+          "max": 2,
+          "unit": "bundle"
+        },
+        "requires_identify": true,
+        "cases_hint": [
+          "fenghan_biao"
+        ],
+        "wrong_feedback": {
+          "zh": "不是桂枝。再看那几条线索。",
+          "en": "Not Cinnamon twig. Read the clues again.",
+          "ja": "桂枝ではない。手がかりを見直せ。"
+        },
+        "script_ref": "patients/forage_script.json"
+      }
     },
     {
       "id": "xingren",
@@ -234,7 +337,10 @@
       },
       "region_tags": [],
       "climate_fit": [],
-      "role_default": "平"
+      "role_default": "平",
+      "forage": {
+        "enabled": false
+      }
     },
     {
       "id": "gancao",
@@ -269,7 +375,59 @@
       },
       "region_tags": [],
       "climate_fit": [],
-      "role_default": "平"
+      "role_default": "平",
+      "forage": {
+        "enabled": true,
+        "scene": "herb_garden",
+        "scene_spot": "yard_bed_b",
+        "spot_label": {
+          "zh": "药圃中畦",
+          "en": "药圃中畦",
+          "ja": "药圃中畦"
+        },
+        "clues": [
+          {
+            "id": "c0",
+            "zh": "根味先甜后淡",
+            "en": "Root tastes sweet first, then mild",
+            "ja": "根はまず甘く、あと淡い"
+          },
+          {
+            "id": "c1",
+            "zh": "茎有细毛，叶小而密",
+            "en": "Fine hairs on the stem; small dense leaves",
+            "ja": "茎に細毛、葉は小さく密"
+          },
+          {
+            "id": "c2",
+            "zh": "干了仍有甜气，小荷常偷尝",
+            "en": "Still smells sweet when dry — Xiaohe sneaks tastes",
+            "ja": "乾いても甘い気。小荷がよく嘗める"
+          }
+        ],
+        "identify_options": [
+          "gancao",
+          "huangqi",
+          "shanyao"
+        ],
+        "identify_correct": "gancao",
+        "yield": {
+          "min": 1,
+          "max": 2,
+          "unit": "root"
+        },
+        "requires_identify": true,
+        "cases_hint": [
+          "fenghan_biao",
+          "ganyu_qizhi"
+        ],
+        "wrong_feedback": {
+          "zh": "不是甘草。再看那几条线索。",
+          "en": "Not Licorice. Read the clues again.",
+          "ja": "甘草ではない。手がかりを見直せ。"
+        },
+        "script_ref": "patients/forage_script.json"
+      }
     },
     {
       "id": "shengjiang",
@@ -304,7 +462,58 @@
       },
       "region_tags": [],
       "climate_fit": [],
-      "role_default": "平"
+      "role_default": "平",
+      "forage": {
+        "enabled": true,
+        "scene": "herb_garden",
+        "scene_spot": "yard_edge",
+        "spot_label": {
+          "zh": "圃边湿土",
+          "en": "圃边湿土",
+          "ja": "圃边湿土"
+        },
+        "clues": [
+          {
+            "id": "c0",
+            "zh": "块茎黄白，掰开汁辣",
+            "en": "Yellow-white rhizome; juice bites when broken",
+            "ja": "塊茎は黄白、割ると汁が辛い"
+          },
+          {
+            "id": "c1",
+            "zh": "叶窄长，雨后更翠绿",
+            "en": "Narrow long leaves, greener after rain",
+            "ja": "葉は細長く、雨後さらに緑"
+          },
+          {
+            "id": "c2",
+            "zh": "暖香往上冲，像刚出锅",
+            "en": "Warm scent rises, like something just off the stove",
+            "ja": "温かい香りが上へ、揚げたてのよう"
+          }
+        ],
+        "identify_options": [
+          "shengjiang",
+          "ganjiang",
+          "banxia"
+        ],
+        "identify_correct": "shengjiang",
+        "yield": {
+          "min": 2,
+          "max": 3,
+          "unit": "knob"
+        },
+        "requires_identify": true,
+        "cases_hint": [
+          "fenghan_biao"
+        ],
+        "wrong_feedback": {
+          "zh": "不是生姜。再看那几条线索。",
+          "en": "Not Fresh ginger. Read the clues again.",
+          "ja": "生姜ではない。手がかりを見直せ。"
+        },
+        "script_ref": "patients/forage_script.json"
+      }
     },
     {
       "id": "dazao",
@@ -339,7 +548,58 @@
       },
       "region_tags": [],
       "climate_fit": [],
-      "role_default": "平"
+      "role_default": "平",
+      "forage": {
+        "enabled": true,
+        "scene": "herb_garden",
+        "scene_spot": "yard_tree",
+        "spot_label": {
+          "zh": "后院枣树下",
+          "en": "后院枣树下",
+          "ja": "后院枣树下"
+        },
+        "clues": [
+          {
+            "id": "c0",
+            "zh": "果皮皱红，捏着软韧",
+            "en": "Wrinkled red skin, soft but tough when pinched",
+            "ja": "皮は皺の赤、摘むと柔らかく靭い"
+          },
+          {
+            "id": "c1",
+            "zh": "核尖，甜里带一点酸",
+            "en": "Pointed pit; sweet with a touch of sour",
+            "ja": "核は尖り、甘さに酸が少し"
+          },
+          {
+            "id": "c2",
+            "zh": "晒台上最显眼的一串红",
+            "en": "The reddest string on the drying rack",
+            "ja": "干し台でいちばん目立つ赤"
+          }
+        ],
+        "identify_options": [
+          "dazao",
+          "gancao",
+          "danggui"
+        ],
+        "identify_correct": "dazao",
+        "yield": {
+          "min": 2,
+          "max": 4,
+          "unit": "fruit"
+        },
+        "requires_identify": true,
+        "cases_hint": [
+          "fenghan_biao"
+        ],
+        "wrong_feedback": {
+          "zh": "不是大枣。再看那几条线索。",
+          "en": "Not Jujube. Read the clues again.",
+          "ja": "大棗ではない。手がかりを見直せ。"
+        },
+        "script_ref": "patients/forage_script.json"
+      }
     },
     {
       "id": "baishao",
@@ -378,7 +638,59 @@
       },
       "region_tags": [],
       "climate_fit": [],
-      "role_default": "平"
+      "role_default": "平",
+      "forage": {
+        "enabled": true,
+        "scene": "herb_garden",
+        "scene_spot": "yard_bed_a",
+        "spot_label": {
+          "zh": "药圃东畦",
+          "en": "药圃东畦",
+          "ja": "药圃东畦"
+        },
+        "clues": [
+          {
+            "id": "c0",
+            "zh": "根皮白净，切面细腻",
+            "en": "Clean white root bark; fine cut surface",
+            "ja": "根皮は白く清い、切面は細かい"
+          },
+          {
+            "id": "c1",
+            "zh": "花若开着偏粉白，瓣软",
+            "en": "If flowering, pale pink-white soft petals",
+            "ja": "花があれば淡いピンク白、瓣が柔らかい"
+          },
+          {
+            "id": "c2",
+            "zh": "气味淡，带一点苦涩",
+            "en": "Mild scent with a faint bitter edge",
+            "ja": "香りは淡く、少し苦い"
+          }
+        ],
+        "identify_options": [
+          "baishao",
+          "chishao",
+          "shanyao"
+        ],
+        "identify_correct": "baishao",
+        "yield": {
+          "min": 1,
+          "max": 2,
+          "unit": "root"
+        },
+        "requires_identify": true,
+        "cases_hint": [
+          "fenghan_biao",
+          "ganyu_qizhi"
+        ],
+        "wrong_feedback": {
+          "zh": "不是白芍。再看那几条线索。",
+          "en": "Not White peony root. Read the clues again.",
+          "ja": "白芍ではない。手がかりを見直せ。"
+        },
+        "script_ref": "patients/forage_script.json"
+      }
     },
     {
       "id": "chaihu",
@@ -414,7 +726,58 @@
       },
       "region_tags": [],
       "climate_fit": [],
-      "role_default": "平"
+      "role_default": "平",
+      "forage": {
+        "enabled": true,
+        "scene": "herb_garden",
+        "scene_spot": "path_slope",
+        "spot_label": {
+          "zh": "山径半坡",
+          "en": "山径半坡",
+          "ja": "山径半坡"
+        },
+        "clues": [
+          {
+            "id": "c0",
+            "zh": "根细长，色偏褐",
+            "en": "Slender brownish root",
+            "ja": "根は細長く褐"
+          },
+          {
+            "id": "c1",
+            "zh": "叶细窄，像一把小刀片",
+            "en": "Narrow leaves like small blades",
+            "ja": "葉は細く、小さな刃のよう"
+          },
+          {
+            "id": "c2",
+            "zh": "气清而散，闻着胸口想叹气",
+            "en": "A clear, dispersing scent that makes the chest want to sigh",
+            "ja": "清く散る香りで、胸が溜息したくなる"
+          }
+        ],
+        "identify_options": [
+          "chaihu",
+          "huangqin",
+          "bohe"
+        ],
+        "identify_correct": "chaihu",
+        "yield": {
+          "min": 1,
+          "max": 2,
+          "unit": "root"
+        },
+        "requires_identify": true,
+        "cases_hint": [
+          "ganyu_qizhi"
+        ],
+        "wrong_feedback": {
+          "zh": "不是柴胡。再看那几条线索。",
+          "en": "Not Bupleurum. Read the clues again.",
+          "ja": "柴胡ではない。手がかりを見直せ。"
+        },
+        "script_ref": "patients/forage_script.json"
+      }
     },
     {
       "id": "danggui",
@@ -449,7 +812,58 @@
       },
       "region_tags": [],
       "climate_fit": [],
-      "role_default": "平"
+      "role_default": "平",
+      "forage": {
+        "enabled": true,
+        "scene": "herb_garden",
+        "scene_spot": "yard_bed_a",
+        "spot_label": {
+          "zh": "药圃东畦",
+          "en": "药圃东畦",
+          "ja": "药圃东畦"
+        },
+        "clues": [
+          {
+            "id": "c0",
+            "zh": "根头油润，香甜厚",
+            "en": "Oily fragrant root crown, sweet and thick",
+            "ja": "根頭は油っぽく甘く厚い香り"
+          },
+          {
+            "id": "c1",
+            "zh": "断面有菊花纹",
+            "en": "Cut face shows a chrysanthemum pattern",
+            "ja": "切面に菊の紋"
+          },
+          {
+            "id": "c2",
+            "zh": "闻久了像药柜最里那格",
+            "en": "After a long sniff it smells like the deepest cabinet slot",
+            "ja": "長く嗅ぐと薬棚の奥の匂い"
+          }
+        ],
+        "identify_options": [
+          "danggui",
+          "chuanxiong",
+          "baishao"
+        ],
+        "identify_correct": "danggui",
+        "yield": {
+          "min": 1,
+          "max": 1,
+          "unit": "root"
+        },
+        "requires_identify": true,
+        "cases_hint": [
+          "ganyu_qizhi"
+        ],
+        "wrong_feedback": {
+          "zh": "不是当归。再看那几条线索。",
+          "en": "Not Angelica. Read the clues again.",
+          "ja": "当帰ではない。手がかりを見直せ。"
+        },
+        "script_ref": "patients/forage_script.json"
+      }
     },
     {
       "id": "baizhu",
@@ -485,7 +899,58 @@
       },
       "region_tags": [],
       "climate_fit": [],
-      "role_default": "平"
+      "role_default": "平",
+      "forage": {
+        "enabled": true,
+        "scene": "herb_garden",
+        "scene_spot": "yard_bed_b",
+        "spot_label": {
+          "zh": "药圃中畦",
+          "en": "药圃中畦",
+          "ja": "药圃中畦"
+        },
+        "clues": [
+          {
+            "id": "c0",
+            "zh": "根疙瘩状，香燥",
+            "en": "Knobbly root, dry-fragrant",
+            "ja": "根はこぶ状、乾いた香り"
+          },
+          {
+            "id": "c1",
+            "zh": "叶羽裂，雨后土气更重",
+            "en": "Pinnate leaves; earthier after rain",
+            "ja": "羽状の葉、雨後は土の気が強い"
+          },
+          {
+            "id": "c2",
+            "zh": "闻着像晒干的田埂草",
+            "en": "Smells like dried grass along a field path",
+            "ja": "乾いた畦の草の匂い"
+          }
+        ],
+        "identify_options": [
+          "baizhu",
+          "cangzhu",
+          "fuling"
+        ],
+        "identify_correct": "baizhu",
+        "yield": {
+          "min": 1,
+          "max": 2,
+          "unit": "rhizome"
+        },
+        "requires_identify": true,
+        "cases_hint": [
+          "ganyu_qizhi"
+        ],
+        "wrong_feedback": {
+          "zh": "不是白术。再看那几条线索。",
+          "en": "Not Atractylodes. Read the clues again.",
+          "ja": "白朮ではない。手がかりを見直せ。"
+        },
+        "script_ref": "patients/forage_script.json"
+      }
     },
     {
       "id": "fuling",
@@ -522,7 +987,59 @@
       },
       "region_tags": [],
       "climate_fit": [],
-      "role_default": "平"
+      "role_default": "平",
+      "forage": {
+        "enabled": true,
+        "scene": "herb_garden",
+        "scene_spot": "path_pine",
+        "spot_label": {
+          "zh": "山径松根旁",
+          "en": "山径松根旁",
+          "ja": "山径松根旁"
+        },
+        "clues": [
+          {
+            "id": "c0",
+            "zh": "块白松软，像菌核",
+            "en": "Soft white lump, like a sclerotium",
+            "ja": "白く柔らかい塊、菌核のよう"
+          },
+          {
+            "id": "c1",
+            "zh": "贴着松根附近更常见",
+            "en": "Often near pine roots",
+            "ja": "松の根の近くに多い"
+          },
+          {
+            "id": "c2",
+            "zh": "气淡，咬一口粉粉的",
+            "en": "Mild scent; a bite turns powdery",
+            "ja": "香りは淡く、噛むと粉っぽい"
+          }
+        ],
+        "identify_options": [
+          "fuling",
+          "zexie",
+          "shanyao"
+        ],
+        "identify_correct": "fuling",
+        "yield": {
+          "min": 1,
+          "max": 2,
+          "unit": "chunk"
+        },
+        "requires_identify": true,
+        "cases_hint": [
+          "ganyu_qizhi",
+          "yinxu_neire"
+        ],
+        "wrong_feedback": {
+          "zh": "不是茯苓。再看那几条线索。",
+          "en": "Not Poria. Read the clues again.",
+          "ja": "茯苓ではない。手がかりを見直せ。"
+        },
+        "script_ref": "patients/forage_script.json"
+      }
     },
     {
       "id": "bohe",
@@ -558,7 +1075,10 @@
       },
       "region_tags": [],
       "climate_fit": [],
-      "role_default": "平"
+      "role_default": "平",
+      "forage": {
+        "enabled": false
+      }
     },
     {
       "id": "zhiqiao",
@@ -592,7 +1112,10 @@
       },
       "region_tags": [],
       "climate_fit": [],
-      "role_default": "平"
+      "role_default": "平",
+      "forage": {
+        "enabled": false
+      }
     },
     {
       "id": "xiangfu",
@@ -627,7 +1150,10 @@
       },
       "region_tags": [],
       "climate_fit": [],
-      "role_default": "平"
+      "role_default": "平",
+      "forage": {
+        "enabled": false
+      }
     },
     {
       "id": "shudi",
@@ -661,7 +1187,58 @@
       },
       "region_tags": [],
       "climate_fit": [],
-      "role_default": "平"
+      "role_default": "平",
+      "forage": {
+        "enabled": true,
+        "scene": "herb_garden",
+        "scene_spot": "yard_shade",
+        "spot_label": {
+          "zh": "药圃荫棚",
+          "en": "药圃荫棚",
+          "ja": "药圃荫棚"
+        },
+        "clues": [
+          {
+            "id": "c0",
+            "zh": "色黑润，软黏手",
+            "en": "Black and glossy, soft and sticky",
+            "ja": "黒く潤み、柔らかく手がねばる"
+          },
+          {
+            "id": "c1",
+            "zh": "甜浊气，像熬过的糖膏",
+            "en": "A thick sweet scent, like boiled sugar paste",
+            "ja": "甘い濁った香り、煮詰めた糖のよう"
+          },
+          {
+            "id": "c2",
+            "zh": "晒过后仍发亮，不像生地干硬",
+            "en": "Still shiny after drying — not brittle like the raw root",
+            "ja": "干しても光る。生地のように硬くない"
+          }
+        ],
+        "identify_options": [
+          "shudi",
+          "shengdi",
+          "danggui"
+        ],
+        "identify_correct": "shudi",
+        "yield": {
+          "min": 1,
+          "max": 1,
+          "unit": "root"
+        },
+        "requires_identify": true,
+        "cases_hint": [
+          "yinxu_neire"
+        ],
+        "wrong_feedback": {
+          "zh": "不是熟地。再看那几条线索。",
+          "en": "Not Prepared rehmannia. Read the clues again.",
+          "ja": "熟地ではない。手がかりを見直せ。"
+        },
+        "script_ref": "patients/forage_script.json"
+      }
     },
     {
       "id": "shanyao",
@@ -696,7 +1273,10 @@
       },
       "region_tags": [],
       "climate_fit": [],
-      "role_default": "平"
+      "role_default": "平",
+      "forage": {
+        "enabled": false
+      }
     },
     {
       "id": "shanzhuyu",
@@ -731,7 +1311,10 @@
       },
       "region_tags": [],
       "climate_fit": [],
-      "role_default": "平"
+      "role_default": "平",
+      "forage": {
+        "enabled": false
+      }
     },
     {
       "id": "mudanpi",
@@ -765,7 +1348,58 @@
       },
       "region_tags": [],
       "climate_fit": [],
-      "role_default": "平"
+      "role_default": "平",
+      "forage": {
+        "enabled": true,
+        "scene": "herb_garden",
+        "scene_spot": "yard_shade",
+        "spot_label": {
+          "zh": "药圃荫棚",
+          "en": "药圃荫棚",
+          "ja": "药圃荫棚"
+        },
+        "clues": [
+          {
+            "id": "c0",
+            "zh": "皮卷筒状，内白外褐",
+            "en": "Rolled bark tube, white inside, brown outside",
+            "ja": "筒状の皮、内側白・外側褐"
+          },
+          {
+            "id": "c1",
+            "zh": "气清带辛，闻着脸热一点",
+            "en": "Clear spicy scent that warms the face a little",
+            "ja": "清い辛さで顔が少し熱い"
+          },
+          {
+            "id": "c2",
+            "zh": "摸着薄脆，易碎成片",
+            "en": "Thin and brittle, breaks into flakes",
+            "ja": "薄く脆く、片になりやすい"
+          }
+        ],
+        "identify_options": [
+          "mudanpi",
+          "baishao",
+          "huangbai"
+        ],
+        "identify_correct": "mudanpi",
+        "yield": {
+          "min": 1,
+          "max": 2,
+          "unit": "bark"
+        },
+        "requires_identify": true,
+        "cases_hint": [
+          "yinxu_neire"
+        ],
+        "wrong_feedback": {
+          "zh": "不是牡丹皮。再看那几条线索。",
+          "en": "Not Moutan bark. Read the clues again.",
+          "ja": "牡丹皮ではない。手がかりを見直せ。"
+        },
+        "script_ref": "patients/forage_script.json"
+      }
     },
     {
       "id": "zexie",
@@ -798,7 +1432,10 @@
       },
       "region_tags": [],
       "climate_fit": [],
-      "role_default": "平"
+      "role_default": "平",
+      "forage": {
+        "enabled": false
+      }
     },
     {
       "id": "zhimu",
@@ -834,7 +1471,10 @@
       },
       "region_tags": [],
       "climate_fit": [],
-      "role_default": "平"
+      "role_default": "平",
+      "forage": {
+        "enabled": false
+      }
     },
     {
       "id": "huangbai",
@@ -869,7 +1509,10 @@
       },
       "region_tags": [],
       "climate_fit": [],
-      "role_default": "平"
+      "role_default": "平",
+      "forage": {
+        "enabled": false
+      }
     },
     {
       "id": "jinyinhua",
@@ -904,7 +1547,10 @@
       },
       "region_tags": [],
       "climate_fit": [],
-      "role_default": "平"
+      "role_default": "平",
+      "forage": {
+        "enabled": false
+      }
     },
     {
       "id": "lianqiao",
@@ -937,7 +1583,10 @@
       },
       "region_tags": [],
       "climate_fit": [],
-      "role_default": "平"
+      "role_default": "平",
+      "forage": {
+        "enabled": false
+      }
     },
     {
       "id": "fuzi",
@@ -974,7 +1623,10 @@
       },
       "region_tags": [],
       "climate_fit": [],
-      "role_default": "平"
+      "role_default": "平",
+      "forage": {
+        "enabled": false
+      }
     },
     {
       "id": "ganjiang",
@@ -1008,7 +1660,10 @@
       },
       "region_tags": [],
       "climate_fit": [],
-      "role_default": "平"
+      "role_default": "平",
+      "forage": {
+        "enabled": false
+      }
     }
   ],
   "acupoints": [
@@ -2984,5 +3639,122 @@
       "min_lines_per_slot": 3,
       "lines_live_in": "patients/slice_characters.json → pharmacy_kid.lines (剧本补)"
     }
+  },
+  "forage_rules": {
+    "id": "forage_rules_v121",
+    "max_forage_herbs": 12,
+    "min_playable": 8,
+    "scenes": {
+      "herb_garden": {
+        "zh": "杏林小筑后院药圃",
+        "en": "Xinglin cottage back garden",
+        "ja": "杏林小築の裏庭薬圃",
+        "spots": [
+          "yard_trellis",
+          "yard_bed_a",
+          "yard_bed_b",
+          "yard_bed_c",
+          "yard_edge",
+          "yard_wet",
+          "yard_shade",
+          "path_dry",
+          "path_slope",
+          "path_pine",
+          "yard_tree"
+        ],
+        "enter_from": "clinic",
+        "return_to": "clinic"
+      }
+    },
+    "identify": {
+      "clues_shown": 2,
+      "clues_available": 3,
+      "input": "pick_option_or_drag_to_codex_slot",
+      "not_quiz_encyclopedia": true,
+      "on_success": [
+        "mark_identified",
+        "allow_forage_pick"
+      ],
+      "on_fail": {
+        "retry": true,
+        "game_over": false,
+        "penalties": [
+          {
+            "type": "time_slot",
+            "amount": 0
+          },
+          {
+            "type": "stability_chip",
+            "amount": 1,
+            "optional": true,
+            "note": "可扣一点『稳』；切片可先只记 fail_count"
+          }
+        ]
+      },
+      "agi_hint": {
+        "character": "阿桂",
+        "lines_live_in": "patients or forage_npc hints (剧本补 ≥3)",
+        "vague_only": true
+      }
+    },
+    "pick": {
+      "requires_identified": true,
+      "add_to_inventory": true,
+      "yield_from": "herb.forage.yield"
+    },
+    "inventory": {
+      "save_path": "play.herb_inventory",
+      "shape": {
+        "herb_id": "count"
+      },
+      "identified_path": "play.herbs_identified",
+      "shape_identified": [
+        "herb_id",
+        "..."
+      ],
+      "tray_pool": "only herbs in inventory with count>0 AND id in herbs_identified"
+    },
+    "formula_gate": {
+      "unidentified_cannot_drag": true,
+      "not_in_inventory_cannot_drag": true,
+      "check_api": "Forage.can_use_in_formula(herb_id) -> bool",
+      "on_block": "toast short; do not add to plate"
+    },
+    "time": {
+      "enter_forage_costs": {
+        "slot": "afternoon",
+        "amount": 1
+      },
+      "note": "切片先固定：进药圃耗 1 个午后格；识别失败本切片可不另耗时",
+      "save_path": "play.time_slots.afternoon"
+    },
+    "smoke": {
+      "pick": [
+        "guizhi",
+        "baishao",
+        "shengjiang",
+        "gancao",
+        "dazao"
+      ],
+      "expect": "fenghan_biao formula path can still reach toward_heal / clear"
+    },
+    "contracts_prototype": "load forage.enabled herbs; show clues then options; success → inventory++; tray filters by identified+stock; afternoon -= 1 on enter; max 12 forage herbs",
+    "slice_whitelist": [
+      "guizhi",
+      "mahuang",
+      "shengjiang",
+      "baishao",
+      "gancao",
+      "dazao",
+      "chaihu",
+      "danggui",
+      "baizhu",
+      "fuling",
+      "shudi",
+      "mudanpi"
+    ],
+    "runtime_cap": 12,
+    "note_cap": "切片白名单与 forage_script.json 12 味对齐；其余 forage.enabled=false。含 mahuang/dazao/mudanpi；bohe/shanyao 不在白名单。",
+    "script_ref": "patients/forage_script.json"
   }
 }

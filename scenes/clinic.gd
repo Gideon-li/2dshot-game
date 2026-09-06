@@ -58,6 +58,8 @@ var _dock: Panel
 var _chat: VBoxContainer
 var _ask_edit: LineEdit
 var _xiaohe_idle_line: String = ""
+var _revisit_idle_line: String = ""
+var _revisit_taken: bool = false
 var _last_mentor_shown: String = ""
 
 
@@ -525,17 +527,31 @@ func _rebuild_dock() -> void:
 	var st := str(GameFlow.fsm_state)
 	if st == "clinic_idle":
 		col.add_child(UiKit.ink_label(tr("CLINIC_HINT"), 14, UiKit.INK_MUTED))
+		var garden_b := UiKit.make_button("GARDEN_OPEN", true)
+		garden_b.pressed.connect(func() -> void: GameFlow.go_garden())
+		col.add_child(garden_b)
 		# 小荷候诊口吻（不可点、不代诊）
-		if _xiaohe_idle_line == "":
-			_xiaohe_idle_line = CaseDB.pharmacy_kid_line("waiting")
-		if _xiaohe_idle_line != "":
-			var xname := tr("XIAOHE_NAME")
-			if xname == "" or xname == "XIAOHE_NAME":
-				xname = "小荷"
-			col.add_child(UiKit.ink_label("%s：%s" % [xname, _xiaohe_idle_line], 13, UiKit.INK_MUTED))
-		var fu := GameFlow.pending_followup_line() if GameFlow.has_method("pending_followup_line") else ""
-		if fu != "":
-			col.add_child(UiKit.ink_label("%s：%s" % [tr("FOLLOWUP_TITLE"), fu], 13, UiKit.SEAL))
+		if not CaseDB.pharmacy_kid_is_clickable():
+			if _xiaohe_idle_line == "":
+				_xiaohe_idle_line = CaseDB.pharmacy_kid_line("waiting")
+			if _xiaohe_idle_line != "":
+				var xname := tr("XIAOHE_NAME")
+				if xname == "" or xname == "XIAOHE_NAME":
+					xname = "小荷"
+				if has_method("_chrome_row"):
+					col.add_child(_chrome_row("res://ui/chrome/xiahe-badge.png", "%s：%s" % [xname, _xiaohe_idle_line], UiKit.INK_MUTED))
+				else:
+					var bubble := UiKit.ink_label("%s：%s" % [xname, _xiaohe_idle_line], 13, UiKit.INK_MUTED)
+					bubble.mouse_filter = Control.MOUSE_FILTER_IGNORE
+					col.add_child(bubble)
+		if not _revisit_taken:
+			_revisit_taken = true
+			if GameFlow.has_method("consume_revisit_line"):
+				_revisit_idle_line = GameFlow.consume_revisit_line()
+			elif GameFlow.has_method("pending_followup_line"):
+				_revisit_idle_line = GameFlow.pending_followup_line()
+		if _revisit_idle_line != "":
+			col.add_child(UiKit.ink_label("%s：%s" % [tr("FOLLOWUP_TITLE"), _revisit_idle_line], 13, UiKit.SEAL))
 		_dock.visible = true
 		return
 	_dock.visible = true
@@ -555,6 +571,25 @@ func _clue_lines(exam_id: String) -> PackedStringArray:
 	return PackedStringArray()
 
 
+
+func _chrome_row(tex_path: String, text: String, color: Color) -> HBoxContainer:
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 6)
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if ResourceLoader.exists(tex_path):
+		var tr := TextureRect.new()
+		tr.texture = load(tex_path)
+		tr.custom_minimum_size = Vector2(28, 28)
+		tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		row.add_child(tr)
+	var lab := UiKit.ink_label(text, 13, color)
+	lab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	lab.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	row.add_child(lab)
+	return row
+
 func _fill_exam_dock(col: VBoxContainer) -> void:
 	var hud := CaseDB.hud_card(GameFlow.current_patient_id)
 	col.add_child(UiKit.ink_label(str(hud.get("name", "")), 16))
@@ -571,7 +606,7 @@ func _fill_exam_dock(col: VBoxContainer) -> void:
 		var who := CaseDB.mentor_name()
 		if who == "":
 			who = "苏问舟"
-		col.add_child(UiKit.ink_label("%s：%s" % [who, mentor_line], 13, UiKit.SEAL))
+		col.add_child(_chrome_row("res://ui/chrome/mentor-bubbles.png", "%s：%s" % [who, mentor_line], UiKit.SEAL))
 		if GameFlow.has_method("consume_mentor_chime") and GameFlow.consume_mentor_chime():
 			if "这一问有了" in mentor_line:
 				AudioHub.play_one("stamp-ok")
@@ -654,10 +689,7 @@ func _fill_ask_dock(col: VBoxContainer) -> void:
 
 func _make_tenq_sender(qid: String) -> Callable:
 	return func() -> void:
-		if GameFlow.has_method("mark_ten_ask"):
-			GameFlow.mark_ten_ask(qid)
-		else:
-			GameFlow.mark_tenq(qid)
+		GameFlow.mark_tenq(qid)
 		var prompt := TenQuestions.prompt_for(qid, GameFlow.loc())
 		if prompt == "":
 			prompt = TenQuestions.prompt_for(qid, "zh")
@@ -711,6 +743,13 @@ func _on_fanwei_locked(reason: String) -> void:
 
 func _fill_formula_dock(col: VBoxContainer) -> void:
 	col.add_child(UiKit.ink_label(tr("FORMULA_HINT"), 13, UiKit.INK_MUTED))
+	if GameFlow.has_method("take_mentor_line"):
+		var mline := GameFlow.take_mentor_line()
+		if mline != "" and not CaseDB.mentor_is_clickable():
+			var mwho := CaseDB.mentor_name()
+			if mwho == "":
+				mwho = "苏问舟"
+			col.add_child(UiKit.ink_label("%s：%s" % [mwho, mline], 12, UiKit.SEAL))
 	if GameFlow.last_fanwei_reason != "":
 		col.add_child(UiKit.ink_label(GameFlow.last_fanwei_reason, 13, UiKit.SEAL))
 	var names: Array[String] = []
@@ -767,12 +806,10 @@ func _fill_score_dock(col: VBoxContainer) -> void:
 	var flav: Variant = r.get("flavor", "")
 	var flav_s := GameFlow.loc_text(flav, "") if typeof(flav) == TYPE_DICTIONARY else str(flav)
 	col.add_child(UiKit.ink_label(flav_s, 14, UiKit.INK_MUTED))
-	# M + C*/B/A'/U briefly readable
-	var m_pct := int(round(float(r.get("score", 0.0)) * 100.0))
-	var lab_m := tr("SCORE_M")
-	if lab_m == "SCORE_M":
-		lab_m = "对证分"
-	col.add_child(UiKit.ink_label("%s  %d" % [lab_m, m_pct], 15, UiKit.SEAL))
+	# Explicit M  xx
+	var m_raw := float(r.get("M", r.get("score", 0.0)))
+	var m_pct := int(round(m_raw * 100.0)) if m_raw <= 1.0001 else int(round(m_raw))
+	col.add_child(UiKit.ink_label("M  %d" % m_pct, 15, UiKit.SEAL))
 	if Scoring.has_method("axis_chips"):
 		var chips := Scoring.axis_chips(r)
 		if chips != "":
@@ -796,8 +833,8 @@ func _fill_score_dock(col: VBoxContainer) -> void:
 		lab_u, float(r.get("U", 0.0)),
 	]
 	col.add_child(UiKit.ink_label(comps, 12, UiKit.INK_MUTED))
-	var fu := ""
-	if GameFlow.has_method("pending_followup_line"):
+	var fu := str(r.get("followup", "")).strip_edges()
+	if fu == "" and GameFlow.has_method("pending_followup_line"):
 		fu = GameFlow.pending_followup_line()
 	if fu == "" and GameFlow.current_patient_id != "":
 		fu = CaseDB.followup_template(GameFlow.current_patient_id)
@@ -806,6 +843,8 @@ func _fill_score_dock(col: VBoxContainer) -> void:
 	var nxt := UiKit.make_button("SLICE_DONE" if GameFlow.slice_complete() else "UI_BACK", true)
 	nxt.pressed.connect(func() -> void:
 		_xiaohe_idle_line = ""
+		_revisit_idle_line = ""
+		_revisit_taken = false
 		GameFlow.next_patient()
 		_switch_camera("CAM_HERO")
 		_rebuild_dock()
@@ -836,6 +875,13 @@ func _build_hud() -> void:
 	sp.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	top.add_child(sp)
 	top.add_child(UiKit.locale_bar())
+	var garden_hud := UiKit.make_button("GARDEN_OPEN", false)
+	garden_hud.name = "GardenOpen"
+	garden_hud.pressed.connect(func() -> void:
+		if str(GameFlow.fsm_state) == "clinic_idle":
+			GameFlow.go_garden()
+	)
+	top.add_child(garden_hud)
 	var row := HBoxContainer.new()
 	row.name = "Patients"
 	row.position = Vector2(24, 50)

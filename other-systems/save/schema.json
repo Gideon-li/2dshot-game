@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "disclaimer_accepted": false,
   "locale": "zh",
   "audio": {
@@ -29,6 +29,17 @@
     "pending_revisits": [],
     "clinic_day": 1,
     "pharmacy_kid_proxy_enabled": false,
-    "followups": {}
+    "followups": {},
+    "revisit": {},
+    "identified_herbs": [],
+    "herbs_identified": [],
+    "herb_stock": {},
+    "herb_inventory": {},
+    "time_slot": "morning",
+    "time_slots": {
+      "morning": 1,
+      "afternoon": 1,
+      "evening": 1
+    }
   }
 }

@@ -84,6 +84,64 @@ func _ready() -> void:
 		fails.append("template leaked diagnosis name")
 	var key_on := not q._read_api_key().is_empty()
 	print("api_key_present=", key_on)
+	# V120 mentor cue when exams / tenq incomplete
+	var saved_exams = GameFlow.exams
+	var saved_tenq = GameFlow.tenq_asked.duplicate()
+	var saved_asks = GameFlow.ten_asks_asked.duplicate()
+	var saved_aff = GameFlow.mentor_pending_affirm
+	GameFlow.exams = {"wang": true, "wen_listen": true, "wen_ask": false, "qie": true}
+	GameFlow.tenq_asked.clear()
+	GameFlow.ten_asks_asked.clear()
+	GameFlow.mentor_pending_affirm = false
+	var miss_ask := CaseDB.mentor_cue_for_visit()
+	GameFlow.exams = saved_exams
+	GameFlow.tenq_asked = saved_tenq
+	GameFlow.ten_asks_asked = saved_asks
+	GameFlow.mentor_pending_affirm = saved_aff
+	print("mentor_missing_ask=", miss_ask)
+	if miss_ask.strip_edges().is_empty():
+		fails.append("mentor cue empty when exams/tenq incomplete")
+	for pid in ["char_porter", "char_clerk", "char_copyist"]:
+		var fu := CaseDB.followup_template(pid)
+		if fu.strip_edges().is_empty():
+			fails.append("followup missing for " + pid)
+	var kid_w := CaseDB.pharmacy_kid_line("waiting")
+	var kid_c := CaseDB.pharmacy_kid_line("cabinet")
+	print("xiaohe_waiting=", kid_w)
+	print("xiaohe_cabinet=", kid_c)
+	if kid_w.strip_edges().is_empty() or kid_c.strip_edges().is_empty():
+		fails.append("pharmacy_kid waiting/cabinet line empty")
+	var sample_m: Dictionary = Scoring.evaluate(
+		CaseDB.case_for_patient("char_porter"),
+		{"wang": true, "wen_listen": true, "wen_ask": true, "qie": true},
+		"formula",
+		["mahuang", "guizhi", "xingren", "gancao"]
+	)
+	if not sample_m.has("M"):
+		fails.append("Scoring.evaluate missing M")
+	# V121 forage: identify+pick guizhi → Afu wind-cold still toward_heal
+	var forage_n: int = CaseDB.forage_herb_ids().size()
+	print("forage_herbs=", forage_n)
+	if forage_n < 8:
+		fails.append("forage pack expected ≥8 herbs, got %d" % forage_n)
+	if not GameFlow.identify_herb("guizhi"):
+		fails.append("identify_herb guizhi failed")
+	var picked := GameFlow.forage_herb("guizhi")
+	print("forage_smoke identify=", GameFlow.is_herb_identified("guizhi"), " pick=", picked, " stock=", GameFlow.herb_stock("guizhi"))
+	if not GameFlow.is_herb_identified("guizhi") or GameFlow.herb_stock("guizhi") < 1:
+		fails.append("forage guizhi identify/pick failed")
+	if not GameFlow.can_use_herb_in_formula("guizhi"):
+		fails.append("foraged guizhi should be usable in formula")
+	var afu := Scoring.evaluate(
+		CaseDB.case_for_patient("char_porter"),
+		{"wang": true, "wen_listen": true, "wen_ask": true, "qie": true},
+		"formula",
+		["mahuang", "guizhi", "xingren", "gancao"]
+	)
+	print("forage_smoke afu_rank=", afu.get("rank_id"), " score=", afu.get("score"))
+	if float(afu.get("score", 0.0)) < 0.55:
+		fails.append("after forage guizhi, Afu formula score too weak (%.2f)" % float(afu.get("score", 0.0)))
+	print("forage_smoke_ok")
 	if fails.is_empty():
 		print("SMOKE PASS")
 		get_tree().quit(0)

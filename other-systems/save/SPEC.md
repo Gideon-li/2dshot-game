@@ -30,3 +30,10 @@
 - `pending_revisits[]`: 结算写入；下次进馆可读一句病程/回访（本地模板，不接 LLM）。字段见 `logic/slice_logic.json` → `revisit_save.record_shape`。
 - `pharmacy_kid_proxy_enabled`: 小荷代诊开关，**默认 false**。切片不做代诊。
 - `four_exams` 可用 `wang/wen_listen/wen_ask/qie`（与逻辑一致）；旧 look/listen/ask/pulse 仍可读。
+
+
+## V121 增补
+
+- `herb_inventory`: `{ herb_id: count }` 药圃采入。
+- `herbs_identified`: 已辨认 id 列表；未在此列的药不能进方。
+- `time_slots.afternoon`: 进药圃先耗 1；切片无大地图时辰系统时可只做此格。

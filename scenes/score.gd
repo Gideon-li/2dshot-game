@@ -78,8 +78,9 @@ func _refresh() -> void:
 		_flavor.text = UiKit.loc_text(flav, "")
 	else:
 		_flavor.text = str(flav)
-	var fit_pct := int(round(float(r.get("score", r.get("M", r.get("pattern", 0.0)))) * 100.0))
-	_fit.text = "M  %d · %s" % [fit_pct, tr("SCORE_M")]
+	var m_raw := float(r.get("M", r.get("score", r.get("pattern", 0.0))))
+	var fit_pct := int(round(m_raw * 100.0)) if m_raw <= 1.0001 else int(round(m_raw))
+	_fit.text = "M  %d" % fit_pct
 	var chips := Scoring.axis_chips(r) if Scoring.has_method("axis_chips") else ""
 	if chips != "":
 		_fit.text = "%s\n%s" % [_fit.text, chips]
@@ -88,7 +89,7 @@ func _refresh() -> void:
 		tr("SCORE_B_DIM"), float(r.get("B", 0.0)),
 		tr("SCORE_A_PRIME"), float(r.get("A_prime", r.get("A", 0.0))),
 		tr("SCORE_U_DIM"), float(r.get("U", 0.0)),
-		tr("SCORE_SPEED"), tr(_speed_key(str(r.get("speed_key", r.get("speed", "steady"))))),
+		tr("SCORE_SPEED"), tr(_speed_key(str(r.get("speed_id", r.get("speed", "steady"))))),
 	]
 	var flags := PackedStringArray()
 	if bool(r.get("overtreat", false)):

@@ -21,3 +21,6 @@
 | `ui/store/CAM_ASK.png` | 江晚问诊阿福（已换，非旧写意单人） |
 | `ui/chrome/mentor-bubbles.png` | 苏问舟旁白气泡（大/小），无人物立绘 |
 | `ui/chrome/xiahe-badge.png` | 小荷角标极简，不抢戏 |
+
+## V121 药圃
+见 `ui/forage/`。

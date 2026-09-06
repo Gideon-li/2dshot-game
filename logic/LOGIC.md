@@ -76,3 +76,18 @@ API：`MentorCues.next(case, exams, asked_ten_q_ids, cues_emitted)`。
 
 ### 小荷
 `pharmacy_kid_rules.proxy_diagnosis.enabled = false`。只做候诊/药柜 UI 口吻，不代诊。
+
+
+## V121 认药 · 采药
+
+`herbs[].forage`（**最多 12 味** `enabled:true`，白名单对齐 `patients/forage_script.json`）：麻黄/桂枝/生姜/白芍/甘草/大枣/柴胡/当归/白术/茯苓/熟地/牡丹皮。`scene_spot`、`clues`、`identify_options`、`yield`。bohe/山药不在切片可采。
+
+规则见 `forage_rules`：
+
+1. 进药圃耗 **1 午后格**（`play.time_slots.afternoon`）。
+2. 先认后采；认错可再试，不 Game Over。
+3. 成功 → `play.herbs_identified` + `play.herb_inventory[id] += yield`。
+4. **未识别 / 无库存** 不能拖进方（`Forage.can_use_in_formula`）。
+5. 冒烟：采桂枝+白芍+生姜+甘草 → 阿福风寒路径仍可向愈。
+
+线索文案剧本可覆写；逻辑已给可跑草稿。阿桂含糊提示 ≥3 句归剧本。
