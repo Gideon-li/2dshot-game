@@ -194,6 +194,40 @@ func clues_for(herb_id: String, count: int = 2) -> PackedStringArray:
 	return out
 
 
+
+
+func clue_cards(herb_id: String, count: int = 3) -> Array:
+	## Visual identify cards: [{text, color}, ...]
+	var out: Array = []
+	var f: Dictionary = forage_pack(herb_id)
+	var clues: Variant = f.get("clues", [])
+	var meta: Dictionary = shape_meta(herb_id)
+	var base_col: Color = meta.get("color", Color(0.5, 0.55, 0.4))
+	var L := "zh"
+	if GameFlow:
+		L = str(GameFlow.loc())
+	if typeof(clues) == TYPE_ARRAY:
+		for c in clues:
+			if typeof(c) != TYPE_DICTIONARY:
+				continue
+			var text := str(c.get(L, c.get("zh", ""))).strip_edges()
+			if text == "":
+				text = UiKit.loc_text(c, "")
+			if text == "":
+				continue
+			var col := base_col
+			var sw: Variant = c.get("swatch", [])
+			if typeof(sw) == TYPE_ARRAY and (sw as Array).size() >= 3:
+				col = Color(float(sw[0]), float(sw[1]), float(sw[2]))
+			out.append({"text": text, "color": col})
+			if out.size() >= count:
+				return out
+	for line in clues_for(herb_id, count):
+		out.append({"text": line, "color": base_col})
+		if out.size() >= count:
+			break
+	return out
+
 func identify_options(herb_id: String) -> PackedStringArray:
 	var out := PackedStringArray()
 	if CaseDB.has_method("forage_identify_options"):

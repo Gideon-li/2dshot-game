@@ -554,6 +554,54 @@ func forage_yield(hid: String) -> int:
 	return maxi(1, int(y))
 
 
+
+
+func forage_clues(hid: String) -> PackedStringArray:
+	var out := PackedStringArray()
+	var e := forage_entry(hid)
+	var block: Variant = e.get("clues", [])
+	var L := _loc_key()
+	if typeof(block) == TYPE_ARRAY:
+		for item in block:
+			if typeof(item) == TYPE_DICTIONARY:
+				var s := str(item.get(L, item.get("zh", ""))).strip_edges()
+				if s != "":
+					out.append(s)
+			elif typeof(item) == TYPE_STRING:
+				out.append(str(item))
+		return out
+	if typeof(block) == TYPE_DICTIONARY:
+		var arr: Variant = block.get(L, block.get("zh", []))
+		if typeof(arr) == TYPE_ARRAY:
+			for x in arr:
+				out.append(str(x))
+	return out
+
+
+func forage_identify_options(hid: String) -> Array:
+	var e := forage_entry(hid)
+	var opts: Variant = e.get("identify_options", [])
+	if typeof(opts) == TYPE_ARRAY and not (opts as Array).is_empty():
+		return opts
+	return [hid]
+
+
+func agui_hint() -> String:
+	var tips: Variant = forage_pack.get("agui_tips", [])
+	if typeof(tips) == TYPE_ARRAY and not (tips as Array).is_empty():
+		var item = tips[randi() % tips.size()]
+		if typeof(item) == TYPE_DICTIONARY:
+			return UiKit.loc_text(item, "")
+		return str(item)
+	var ag: Variant = forage_pack.get("agui", {})
+	if typeof(ag) == TYPE_DICTIONARY:
+		var hints: Variant = ag.get("hints", {})
+		if typeof(hints) == TYPE_DICTIONARY:
+			var arr: Variant = hints.get(_loc_key(), hints.get("zh", []))
+			if typeof(arr) == TYPE_ARRAY and not (arr as Array).is_empty():
+				return str(arr[randi() % arr.size()])
+	return ""
+
 func mentor_forage_line() -> String:
 	var line: Variant = forage_pack.get("mentor_line", forage_pack.get("mentor_su_line", {}))
 	if typeof(line) == TYPE_DICTIONARY:
