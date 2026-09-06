@@ -1,7 +1,7 @@
 # 《墨问岐黄》切片剧本（v1.19）
 
 工作名：墨问岐黄（旧称杏林墨问）。  
-给角色开发直接读：`slice_characters.json`（v5）  
+给角色开发直接读：`slice_characters.json`（v6 / V120）  
 病机表仍以 `logic/slice_logic.json` 为准。
 
 不是题库。病人不交全症状。HUD 上不出现诊断名。苏问舟、小荷本期 **不可点**。问舟只旁白；小荷只作 UI 口吻占位。
@@ -56,3 +56,9 @@ API 失败：`ask_wrappers` 套锚。`{sym}` 只填锚，不填诊断名。
 - **角色开发**：病人仍读 `patients`；问舟旁白读 `mentor.case_cues` / `exam_missing_cues`；`mentor.clickable == false`；学徒 id `apprentice_jiang`。
 - **其他要素**：i18n 占位键见 `mentor.i18n_keys_hint`（十问条、反畏锁定、苏问舟旁白）。
 - **美工**：外形见各卡 `art_hint`；学徒立绘/锚点画 **江晚**，不要画回林晚；苏问舟本期可不进立绘热区；小荷不可点。
+
+## V120 增补
+
+- 问舟 `exam_missing_cues` / `case_cues`：**中英日每条皆疑问句**，不报诊断名/方名。
+- 小荷 `ui_lines.waiting` / `cabinet` 各 ≥3 句短口吻（仍不可点、不代诊）。
+- 回访：每人/每案一句，见 `patients[].followup` 与 `followup_by_case`（本地模板，不必接 LLM）。

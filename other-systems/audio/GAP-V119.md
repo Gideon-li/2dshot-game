@@ -31,3 +31,7 @@
 - 结算成功可加一记 `stamp-ok`；失败可加 `ink-bleed`（或继续只用 settle-0…4）
 - 切诊 duck、不按病人切 BGM：保持现状
 - 雨/薄床文件未改
+
+## V120 旁白
+
+见 `V120-MENTOR-SFX.md`：问舟/小荷冒出复用 chime/stamp，无新文件。

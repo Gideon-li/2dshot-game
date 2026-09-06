@@ -125,3 +125,31 @@ MENTOR_FANWEI,半夏和附子，歌诀里是反，不是口味不合。,Pinellia
 FANWEI_LOCKED,反畏相锁，同盏不可。,Cannot share the tray — incompatibility lock.,反畏のため同盏不可。
 FANWEI_LOCKED_FAN,十八反：同盏不可。,Eighteen incompatibilities — cannot share the tray.,十八反：同盏不可。
 FANWEI_LOCKED_WEI,十九畏：同盏不可。,Nineteen antagonisms — cannot share the tray.,十九畏：同盏不可。
+MENTOR_SU_LINE,苏问舟,Su Wenzhou,蘇問舟
+MENTOR_SU_AFFIRM,这一问有了。,That question is asked.,この問いは揃った。
+MENTOR_SU_MISS_WANG,先看他眼睛愿不愿看你。,See whether their eyes will meet yours.,まず目があなたを見るか見よ。
+MENTOR_SU_MISS_WEN,他进门那口气，你听了吗。,Did you hear the breath they came in on?,入ってきた息を聞いたか。
+MENTOR_SU_MISS_QIE,脉枕还空着。,The pulse pillow is still empty.,脈枕がまだ空いている。
+MENTOR_SU_MISS_ASK,寒热和汗——这两扇，你走过了吗？,Cold/heat and sweat — did you pass those two doors?,寒熱と汗——この二扇を通ったか。
+MENTOR_BUBBLE_HINT,同诊最多两句。不报方，不报证。,At most two lines per visit. No formula. No pattern name.,一診は最大二句。方も証名も言わない。
+TEN_ASK_BAR,十问,Ten Questions,十問
+XIAOHE_NAME,小荷,Xiaohe,小荷
+XIAOHE_WAIT_1,今日候诊——第{n}号！,Waiting — number {n}!,今日の待ち——{n}番！
+XIAOHE_WAIT_2,还有人在门口跺脚呢。,Someone's still tapping at the door.,まだ戸口で足踏みしてる。
+XIAOHE_WAIT_3,阿福大哥站不住，先让他？,Brother Afu can't stand still — let him first?,阿福の兄ちゃんじっとしてない。先に通す？
+XIAOHE_CABINET_1,药柜那格空了。,That cabinet slot is empty.,あの棚が空だ。
+XIAOHE_CABINET_2,甘草又少了……不是我偷的！大概。,Licorice's low again… not me! Probably.,甘草また減った……私じゃない！たぶん。
+XIAOHE_CABINET_3,鲜药根朝下，阿桂说的。,Fresh roots point down — A'gui said so.,鮮薬は根を下に。阿桂が言った。
+XIAOHE_IDLE_1,认药？我可以念。,Herb names? I can recite.,薬の名？言えるよ。
+XIAOHE_IDLE_2,裤脚湿了没事，药圃的。,Wet cuffs are fine — that's the plot.,裾が湿ってもいい、薬圃のだから。
+XIAOHE_IDLE_3,师父喝茶，你问诊。,Master drinks tea; you ask.,師匠は茶、問診はあなた。
+XIAOHE_FANWEI_ALERT,这味进不了盏！歌诀里写过的。,That herb won't enter the bowl! The rhyme says so.,この薬は盞に入れない！歌訣にある。
+FOLLOWUP_TITLE,回访,Follow-up,再診の気配
+FOLLOWUP_HINT,过几日再看一眼。,Look in again in a few days.,数日後にもう一度見よう。
+FOLLOWUP_FENGHAN_BIAO,阿福说肩背松些了。江风再灌，让他早点回来。,"Afu says the shoulders eased. If the river wind returns, have him come early.",阿福は肩が少し楽だと言う。川風がまた入ったら、早めに来させる。
+FOLLOWUP_GANYU_QIZHI,清荷夜里少翻几次。胁下还闷，记着让她再来坐坐。,"Qinghe turns less at night. If the flank still feels full, have her sit again.",清荷は夜の寝返りが減った。脇下がまだ悶なら、また坐らせて。
+FOLLOWUP_YINXU_NEIRE,周婆婆手足心还热不热，过两日问问。别让她只喝邻人的旧方。,"In two days, ask if Granny Zhou's palms and soles still run hot. Don't let her keep only a neighbor's old brew.",周婆婆の手足の裏がまだ熱いか、二日後に聞け。隣人の古い方だけにさせない。
+FOLLOWUP_NEXT,可接下一位。,Ready for the next patient.,次の患者を呼べる。
+SCORE_M,对证分,Pattern fit M,対証点 M
+SCORE_M_HINT,对证程度。不是有没有点中唯一答案。,How well the treatment fits. Not a single correct answer.,証に合う度合い。唯一解を当てたかではない。
+XIAOHE_BUBBLE_TAG,小荷,Xiaohe,小荷

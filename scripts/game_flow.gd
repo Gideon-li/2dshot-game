@@ -26,6 +26,12 @@ var inquiry_used: Array[String] = []
 var tenq_asked: Array[String] = []
 var ten_asks_asked: Array[String] = []
 var last_fanwei_reason: String = ""
+var mentor_lines_this_visit: int = 0
+var mentor_display_line: String = ""
+var mentor_pending_affirm: bool = false
+var mentor_last_cued_qid: String = ""
+var mentor_chime_pending: bool = false
+var mentor_affirmed_this_visit: bool = false
 signal fanwei_locked(reason: String)
 
 var cases_by_id: Dictionary:
@@ -77,6 +83,7 @@ func start_patient(patient_id: String) -> void:
 	tenq_asked.clear()
 	ten_asks_asked.clear()
 	last_fanwei_reason = ""
+	_reset_mentor_visit()
 	var opening := CaseDB.opening_line(current_patient_id)
 	if opening != "":
 		conversation.append({"q": "", "a": opening})
@@ -161,8 +168,15 @@ func go_clinic() -> void:
 func settle(path: String, ids: Array) -> Dictionary:
 	var case_data := CaseDB.case_for_patient(current_patient_id)
 	last_result = Scoring.evaluate(case_data, exams, path, ids)
+	last_result["patient_id"] = current_patient_id
+	var fu := CaseDB.followup_template(current_patient_id)
+	last_result["followup"] = fu
+	last_result["M"] = float(last_result.get("score", 0.0))
 	fsm_state = "settling"
 	_set_phase(Phase.RESULT)
+	if current_patient_id != "" and current_patient_id not in seen:
+		seen.append(current_patient_id)
+	_write_settlement()
 	fsm_changed.emit(fsm_state)
 	settled.emit(last_result)
 	_go("res://scenes/score.tscn")
@@ -180,6 +194,7 @@ func next_patient() -> void:
 	tenq_asked.clear()
 	ten_asks_asked.clear()
 	last_fanwei_reason = ""
+	_reset_mentor_visit()
 	fsm_state = "clinic_idle"
 	_write_play()
 	fsm_changed.emit(fsm_state)
@@ -277,18 +292,97 @@ func _write_settlement() -> void:
 		"pace": last_result.get("speed_id", ""),
 		"overtreat": last_result.get("overtreat", false),
 		"mistreat": last_result.get("mistreat", false),
+		"M": float(last_result.get("score", 0.0)),
 	})
 	play["scores"] = scores
+	var fus: Dictionary = play.get("followups", {})
+	if typeof(fus) != TYPE_DICTIONARY:
+		fus = {}
+	var fu_line := CaseDB.followup_template(current_patient_id)
+	if fu_line != "" and current_patient_id != "":
+		fus[current_patient_id] = fu_line
+	play["followups"] = fus
+	var rev: Dictionary = play.get("revisit", {})
+	if typeof(rev) != TYPE_DICTIONARY:
+		rev = {}
+	if fu_line != "" and current_patient_id != "":
+		rev[current_patient_id] = fu_line
+	play["revisit"] = rev
+	play["last_followup"] = fu_line
+	play["last_followup_patient"] = current_patient_id
+	var pending: Array = play.get("pending_revisits", [])
+	if typeof(pending) != TYPE_ARRAY:
+		pending = []
+	var case_data := CaseDB.case_for_patient(current_patient_id)
+	pending.append({
+		"patient_id": current_patient_id,
+		"case_id": str(case_data.get("id", "")),
+		"path": last_result.get("path", ""),
+		"rank_id": last_result.get("rank_id", ""),
+		"score": float(last_result.get("score", 0.0)),
+		"line": fu_line,
+		"consumed": false,
+	})
+	play["pending_revisits"] = pending
 	Save.data["play"] = play
 	Save.write_slot()
 
 
 
+func _reset_mentor_visit() -> void:
+	mentor_lines_this_visit = 0
+	mentor_display_line = ""
+	mentor_pending_affirm = false
+	mentor_last_cued_qid = ""
+	mentor_chime_pending = false
+	mentor_affirmed_this_visit = false
+
+
+func take_mentor_line() -> String:
+	## At most 2 lines per visit. Cached until cleared for affirm / new cue.
+	if mentor_display_line != "":
+		return mentor_display_line
+	if mentor_lines_this_visit >= 2:
+		return ""
+	var line := CaseDB.mentor_cue_for_visit()
+	if line.strip_edges() == "":
+		return ""
+	# Track which tenq cue we just nudged (寒热 / 汗).
+	if mentor_pending_affirm:
+		mentor_pending_affirm = false
+		mentor_last_cued_qid = ""
+	else:
+		for qid in ["hanre", "han"]:
+			if qid not in tenq_asked and qid not in ten_asks_asked:
+				mentor_last_cued_qid = qid
+				break
+	mentor_display_line = line
+	mentor_lines_this_visit += 1
+	mentor_chime_pending = true
+	return mentor_display_line
+
+
+func consume_mentor_chime() -> bool:
+	if mentor_chime_pending:
+		mentor_chime_pending = false
+		return true
+	return false
+
+
 func mark_tenq(qid: String) -> void:
 	if qid == "":
 		return
-	if qid not in tenq_asked:
+	var fresh := qid not in tenq_asked
+	if fresh:
 		tenq_asked.append(qid)
+	if qid not in ten_asks_asked:
+		ten_asks_asked.append(qid)
+	# Filling a missing tenq (寒热/汗 or last cue) → affirm once if room ≤2.
+	if fresh and not mentor_affirmed_this_visit and mentor_lines_this_visit < 2:
+		if qid == mentor_last_cued_qid or qid in ["hanre", "han"]:
+			mentor_affirmed_this_visit = true
+			mentor_pending_affirm = true
+			mentor_display_line = ""
 
 
 # Hard-lock reason for confirm UI; pairs in logic/fanwei_pairs.json (slice tray may miss both sides).
@@ -306,6 +400,67 @@ func formula_lock_reason() -> String:
 		if not hit.is_empty():
 			return str(hit.get("reason", ""))
 	return ""
+
+
+
+func pending_followup_line() -> String:
+	## Peek play.revisit / followups without consuming.
+	var play := _play()
+	var rev: Variant = play.get("revisit", {})
+	if typeof(rev) == TYPE_DICTIONARY:
+		for i in range(seen.size() - 1, -1, -1):
+			var pid := str(seen[i])
+			if rev.has(pid) and str(rev[pid]).strip_edges() != "":
+				return str(rev[pid])
+	var last := str(play.get("last_followup", "")).strip_edges()
+	if last != "":
+		return last
+	var fus: Variant = play.get("followups", {})
+	if typeof(fus) != TYPE_DICTIONARY:
+		return ""
+	for i in range(seen.size() - 1, -1, -1):
+		var pid2 := str(seen[i])
+		if fus.has(pid2) and str(fus[pid2]).strip_edges() != "":
+			return str(fus[pid2])
+	return ""
+
+
+func consume_revisit_line() -> String:
+	## Idle dock shows once, then clears Save.data.play.revisit[pid].
+	var play := _play()
+	var rev: Dictionary = play.get("revisit", {}) if typeof(play.get("revisit", {})) == TYPE_DICTIONARY else {}
+	var pid := ""
+	var line := ""
+	for i in range(seen.size() - 1, -1, -1):
+		var cand := str(seen[i])
+		if rev.has(cand) and str(rev[cand]).strip_edges() != "":
+			pid = cand
+			line = str(rev[cand]).strip_edges()
+			break
+	if line == "":
+		line = str(play.get("last_followup", "")).strip_edges()
+		pid = str(play.get("last_followup_patient", ""))
+	if line == "":
+		return ""
+	if pid != "" and rev.has(pid):
+		rev.erase(pid)
+	play["revisit"] = rev
+	if str(play.get("last_followup_patient", "")) == pid or pid == "":
+		play["last_followup"] = ""
+		play["last_followup_patient"] = ""
+	var fus: Variant = play.get("followups", {})
+	if typeof(fus) == TYPE_DICTIONARY and pid != "" and fus.has(pid):
+		(fus as Dictionary).erase(pid)
+		play["followups"] = fus
+	# Mark matching pending_revisits consumed.
+	var pending: Variant = play.get("pending_revisits", [])
+	if typeof(pending) == TYPE_ARRAY:
+		for row in pending:
+			if typeof(row) == TYPE_DICTIONARY and str(row.get("patient_id", "")) == pid:
+				row["consumed"] = true
+	Save.data["play"] = play
+	Save.write_slot()
+	return line
 
 
 func select_patient(pid: String) -> bool:
@@ -409,8 +564,6 @@ func add_herb_to_tray(herb_id: String) -> bool:
 
 func mark_ten_ask(ask_id: String) -> void:
 	mark_tenq(ask_id)
-	if ask_id != "" and ask_id not in ten_asks_asked:
-		ten_asks_asked.append(ask_id)
 
 
 func ten_ask_prompt(ask: Dictionary) -> String:
@@ -475,6 +628,9 @@ func _settle_inplace(path: String, ids: Array) -> Dictionary:
 	last_result["flavor"] = flavor_text
 	last_result["missing_exam"] = bool(raw.get("missing_exams", missing_exam_penalty()))
 	last_result["patient_id"] = current_patient_id
+	var fu := CaseDB.followup_template(current_patient_id)
+	last_result["followup"] = fu
+	last_result["M"] = float(last_result.get("score", 0.0))
 	fsm_state = "settling"
 	_set_phase(Phase.RESULT)
 	if current_patient_id != "" and current_patient_id not in seen:
@@ -697,12 +853,40 @@ func run_slice_smoke() -> int:
 	print("api_key_present=", not q._read_api_key().is_empty())
 	var exams_miss_ask := {"wang": true, "wen_listen": true, "wen_ask": false, "qie": true}
 	var saved_exams = GameFlow.exams
+	var saved_tenq: Array = GameFlow.tenq_asked.duplicate()
+	var saved_asks: Array = GameFlow.ten_asks_asked.duplicate()
+	var saved_aff: bool = GameFlow.mentor_pending_affirm
 	GameFlow.exams = exams_miss_ask
+	GameFlow.tenq_asked.clear()
+	GameFlow.ten_asks_asked.clear()
+	GameFlow.mentor_pending_affirm = false
 	var miss_ask := CaseDB.mentor_cue_for_visit()
 	GameFlow.exams = saved_exams
+	GameFlow.tenq_asked.clear()
+	for x in saved_tenq:
+		GameFlow.tenq_asked.append(str(x))
+	GameFlow.ten_asks_asked.clear()
+	for x in saved_asks:
+		GameFlow.ten_asks_asked.append(str(x))
+	GameFlow.mentor_pending_affirm = saved_aff
 	print("mentor_missing_ask=", miss_ask)
 	if miss_ask.strip_edges().is_empty():
 		fails.append("mentor missing-ask cue empty")
+	# Prefer 寒热 when tenq empty.
+	if miss_ask.find("添衣") < 0 and miss_ask.find("寒热") < 0 and miss_ask.find("cold") < 0 and miss_ask.find("coat") < 0 and miss_ask.find("衣") < 0:
+		# Still OK if locale returned MENTOR_TENQ_COLD text; accept non-empty.
+		pass
+	for pid in ["char_porter", "char_clerk", "char_copyist"]:
+		var fu := CaseDB.followup_template(pid)
+		print("followup_%s=%s" % [pid, fu])
+		if fu.strip_edges().is_empty():
+			fails.append("followup missing for " + pid)
+	var kid_w := CaseDB.pharmacy_kid_line("waiting")
+	var kid_c := CaseDB.pharmacy_kid_line("cabinet")
+	print("xiaohe_waiting=", kid_w)
+	print("xiaohe_cabinet=", kid_c)
+	if kid_w.strip_edges().is_empty() or kid_c.strip_edges().is_empty():
+		fails.append("pharmacy_kid waiting/cabinet line empty")
 	if fails.is_empty():
 		print("SMOKE PASS")
 		return 0

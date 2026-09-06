@@ -6,6 +6,7 @@ var _fit: Label
 var _speed: Label
 var _flags: Label
 var _miss: Label
+var _followup: Label
 
 
 func _ready() -> void:
@@ -39,7 +40,8 @@ func _build() -> void:
 	_flavor = UiKit.ink_label("", 20)
 	_flavor.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	col.add_child(_flavor)
-	_fit = UiKit.ink_label("", 16)
+	_fit = UiKit.ink_label("", 18, UiKit.SEAL)
+	_fit.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	col.add_child(_fit)
 	_speed = UiKit.ink_label("", 16)
 	col.add_child(_speed)
@@ -47,6 +49,10 @@ func _build() -> void:
 	col.add_child(_flags)
 	_miss = UiKit.ink_label("", 15, UiKit.INK_MUTED)
 	col.add_child(_miss)
+	_followup = UiKit.ink_label("", 15, UiKit.SEAL)
+	_followup.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_followup.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	col.add_child(_followup)
 	var bot := HBoxContainer.new()
 	bot.alignment = BoxContainer.ALIGNMENT_CENTER
 	var next := UiKit.make_button("ACTION_NEXT_PATIENT", true)
@@ -72,18 +78,18 @@ func _refresh() -> void:
 		_flavor.text = UiKit.loc_text(flav, "")
 	else:
 		_flavor.text = str(flav)
-	var fit_pct := int(round(float(r.get("score", r.get("pattern", 0.0))) * 100.0))
-	_fit.text = "%s  %d" % [tr("SCORE_EFFICACY"), fit_pct]
-	var sk := str(r.get("speed_key", r.get("speed", "steady")))
-	var sk_tr := "SPEED_STEADY"
-	match sk:
-		"fast":
-			sk_tr = "SPEED_FAST"
-		"a_bit_rushed":
-			sk_tr = "SPEED_RUSHED"
-		"slow", "none":
-			sk_tr = "SPEED_SLOW"
-	_speed.text = "%s  %s" % [tr("SCORE_SPEED"), tr(sk_tr)]
+	var fit_pct := int(round(float(r.get("score", r.get("M", r.get("pattern", 0.0)))) * 100.0))
+	_fit.text = "M  %d · %s" % [fit_pct, tr("SCORE_M")]
+	var chips := Scoring.axis_chips(r) if Scoring.has_method("axis_chips") else ""
+	if chips != "":
+		_fit.text = "%s\n%s" % [_fit.text, chips]
+	_speed.text = "%s %.2f · %s %.2f · %s %.2f · %s %.2f    %s  %s" % [
+		tr("SCORE_C_STAR"), float(r.get("C_star", 0.0)),
+		tr("SCORE_B_DIM"), float(r.get("B", 0.0)),
+		tr("SCORE_A_PRIME"), float(r.get("A_prime", r.get("A", 0.0))),
+		tr("SCORE_U_DIM"), float(r.get("U", 0.0)),
+		tr("SCORE_SPEED"), tr(_speed_key(str(r.get("speed_key", r.get("speed", "steady"))))),
+	]
 	var flags := PackedStringArray()
 	if bool(r.get("overtreat", false)):
 		flags.append(tr("SCORE_OVERTREAT") + " · " + tr("SCORE_FLAG_OVER"))
@@ -92,7 +98,28 @@ func _refresh() -> void:
 	_flags.text = "  ".join(flags)
 	_miss.visible = bool(r.get("missing_exams", r.get("missing_exam", false)))
 	_miss.text = tr("SCORE_INCOMPLETE_EXAM")
+	var fu := str(r.get("followup", "")).strip_edges()
+	if fu == "" and GameFlow.has_method("pending_followup_line"):
+		fu = GameFlow.pending_followup_line()
+	if fu == "" and str(r.get("patient_id", "")) != "":
+		fu = CaseDB.followup_template(str(r.get("patient_id", "")))
+	if fu == "" and GameFlow.current_patient_id != "":
+		fu = CaseDB.followup_template(GameFlow.current_patient_id)
+	_followup.visible = fu != ""
+	_followup.text = ("%s：%s" % [tr("FOLLOWUP_TITLE"), fu]) if fu != "" else ""
 	var foot := find_child("ScoreFoot", true, false) as Label
 	if foot:
 		foot.text = tr("BOOT_DISCLAIMER_FOOTER")
 	UiKit.refresh_i18n_buttons(self)
+
+
+func _speed_key(sk: String) -> String:
+	match sk:
+		"fast":
+			return "SPEED_FAST"
+		"a_bit_rushed":
+			return "SPEED_RUSHED"
+		"slow", "none":
+			return "SPEED_SLOW"
+		_:
+			return "SPEED_STEADY"

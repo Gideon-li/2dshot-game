@@ -57,6 +57,8 @@ var _pending_q := ""
 var _dock: Panel
 var _chat: VBoxContainer
 var _ask_edit: LineEdit
+var _xiaohe_idle_line: String = ""
+var _last_mentor_shown: String = ""
 
 
 func _ready() -> void:
@@ -523,7 +525,18 @@ func _rebuild_dock() -> void:
 	var st := str(GameFlow.fsm_state)
 	if st == "clinic_idle":
 		col.add_child(UiKit.ink_label(tr("CLINIC_HINT"), 14, UiKit.INK_MUTED))
-		_dock.visible = GameFlow.current_patient_id != ""
+		# 小荷候诊口吻（不可点、不代诊）
+		if _xiaohe_idle_line == "":
+			_xiaohe_idle_line = CaseDB.pharmacy_kid_line("waiting")
+		if _xiaohe_idle_line != "":
+			var xname := tr("XIAOHE_NAME")
+			if xname == "" or xname == "XIAOHE_NAME":
+				xname = "小荷"
+			col.add_child(UiKit.ink_label("%s：%s" % [xname, _xiaohe_idle_line], 13, UiKit.INK_MUTED))
+		var fu := GameFlow.pending_followup_line() if GameFlow.has_method("pending_followup_line") else ""
+		if fu != "":
+			col.add_child(UiKit.ink_label("%s：%s" % [tr("FOLLOWUP_TITLE"), fu], 13, UiKit.SEAL))
+		_dock.visible = true
 		return
 	_dock.visible = true
 	if st in ["patient_selected", "examining", "treatment_choice"]:
@@ -549,12 +562,22 @@ func _fill_exam_dock(col: VBoxContainer) -> void:
 	for eid in ["wang", "wen_listen", "wen_ask", "qie"]:
 		marks.append("●" if GameFlow.exam_done(eid) else "○")
 	col.add_child(UiKit.ink_label("望%s 闻%s 问%s 切%s" % marks, 13, UiKit.INK_MUTED))
-	var mentor_line := CaseDB.mentor_cue_for_visit()
+	var mentor_line := ""
+	if GameFlow.has_method("take_mentor_line"):
+		mentor_line = GameFlow.take_mentor_line()
+	else:
+		mentor_line = CaseDB.mentor_cue_for_visit()
 	if mentor_line != "" and not CaseDB.mentor_is_clickable():
 		var who := CaseDB.mentor_name()
 		if who == "":
 			who = "苏问舟"
 		col.add_child(UiKit.ink_label("%s：%s" % [who, mentor_line], 13, UiKit.SEAL))
+		if GameFlow.has_method("consume_mentor_chime") and GameFlow.consume_mentor_chime():
+			if "这一问有了" in mentor_line:
+				AudioHub.play_one("stamp-ok")
+			else:
+				AudioHub.play_chime()
+		_last_mentor_shown = mentor_line
 	var focus := str(GameFlow.exam_focus)
 	if focus == "qie":
 		# Text clues only. Art team owns 脉纹 on the pillow; no pulse.tscn / encyclopedia.
@@ -631,7 +654,10 @@ func _fill_ask_dock(col: VBoxContainer) -> void:
 
 func _make_tenq_sender(qid: String) -> Callable:
 	return func() -> void:
-		GameFlow.mark_tenq(qid)
+		if GameFlow.has_method("mark_ten_ask"):
+			GameFlow.mark_ten_ask(qid)
+		else:
+			GameFlow.mark_tenq(qid)
 		var prompt := TenQuestions.prompt_for(qid, GameFlow.loc())
 		if prompt == "":
 			prompt = TenQuestions.prompt_for(qid, "zh")
@@ -668,8 +694,18 @@ func _on_qwen(text: String, _from_api: bool) -> void:
 
 func _on_fanwei_locked(reason: String) -> void:
 	AudioHub.play_herb_wrong()
+	var kid := CaseDB.pharmacy_kid_line("cabinet")
+	var xname := tr("XIAOHE_NAME")
+	if xname == "" or xname == "XIAOHE_NAME":
+		xname = "小荷"
+	var alert := tr("XIAOHE_FANWEI_ALERT")
+	if alert == "XIAOHE_FANWEI_ALERT":
+		alert = kid
 	if _hint:
-		_hint.text = reason
+		if kid != "":
+			_hint.text = "%s  %s：%s" % [reason, xname, kid]
+		else:
+			_hint.text = reason
 	_rebuild_dock()
 
 
@@ -728,9 +764,48 @@ func _fill_score_dock(col: VBoxContainer) -> void:
 	if typeof(rank_v) == TYPE_DICTIONARY:
 		rank = GameFlow.loc_text(rank_v, rank)
 	col.add_child(UiKit.ink_label(rank, 18))
-	col.add_child(UiKit.ink_label(str(r.get("flavor", "")), 14, UiKit.INK_MUTED))
+	var flav: Variant = r.get("flavor", "")
+	var flav_s := GameFlow.loc_text(flav, "") if typeof(flav) == TYPE_DICTIONARY else str(flav)
+	col.add_child(UiKit.ink_label(flav_s, 14, UiKit.INK_MUTED))
+	# M + C*/B/A'/U briefly readable
+	var m_pct := int(round(float(r.get("score", 0.0)) * 100.0))
+	var lab_m := tr("SCORE_M")
+	if lab_m == "SCORE_M":
+		lab_m = "对证分"
+	col.add_child(UiKit.ink_label("%s  %d" % [lab_m, m_pct], 15, UiKit.SEAL))
+	if Scoring.has_method("axis_chips"):
+		var chips := Scoring.axis_chips(r)
+		if chips != "":
+			col.add_child(UiKit.ink_label(chips, 12, UiKit.INK_MUTED))
+	var lab_c := tr("SCORE_C_STAR")
+	if lab_c == "SCORE_C_STAR":
+		lab_c = "覆盖 C*"
+	var lab_b := tr("SCORE_B_DIM")
+	if lab_b == "SCORE_B_DIM":
+		lab_b = "方证 B"
+	var lab_a := tr("SCORE_A_PRIME")
+	if lab_a == "SCORE_A_PRIME":
+		lab_a = "加减 A'"
+	var lab_u := tr("SCORE_U_DIM")
+	if lab_u == "SCORE_U_DIM":
+		lab_u = "结构 U"
+	var comps := "%s %.2f · %s %.2f · %s %.2f · %s %.2f" % [
+		lab_c, float(r.get("C_star", 0.0)),
+		lab_b, float(r.get("B", 0.0)),
+		lab_a, float(r.get("A_prime", r.get("A", 0.0))),
+		lab_u, float(r.get("U", 0.0)),
+	]
+	col.add_child(UiKit.ink_label(comps, 12, UiKit.INK_MUTED))
+	var fu := ""
+	if GameFlow.has_method("pending_followup_line"):
+		fu = GameFlow.pending_followup_line()
+	if fu == "" and GameFlow.current_patient_id != "":
+		fu = CaseDB.followup_template(GameFlow.current_patient_id)
+	if fu != "":
+		col.add_child(UiKit.ink_label("%s：%s" % [tr("FOLLOWUP_TITLE"), fu], 13, UiKit.SEAL))
 	var nxt := UiKit.make_button("SLICE_DONE" if GameFlow.slice_complete() else "UI_BACK", true)
 	nxt.pressed.connect(func() -> void:
+		_xiaohe_idle_line = ""
 		GameFlow.next_patient()
 		_switch_camera("CAM_HERO")
 		_rebuild_dock()
@@ -832,7 +907,16 @@ func _paint_hint() -> void:
 		"needle", "acupoint":
 			_hint.text = tr("TREAT_NEEDLE_HINT")
 		_:
-			_hint.text = tr("CLINIC_HINT")
+			if str(GameFlow.fsm_state) == "clinic_idle":
+				var fu2 := GameFlow.pending_followup_line() if GameFlow.has_method("pending_followup_line") else ""
+				if fu2 != "":
+					_hint.text = "%s：%s" % [tr("FOLLOWUP_TITLE"), fu2]
+				elif _xiaohe_idle_line != "":
+					_hint.text = "%s：%s" % [tr("XIAOHE_NAME"), _xiaohe_idle_line]
+				else:
+					_hint.text = tr("CLINIC_HINT")
+			else:
+				_hint.text = tr("CLINIC_HINT")
 
 
 func _refresh() -> void:

@@ -85,6 +85,7 @@ static func evaluate(case_data: Dictionary, exams_done: Dictionary, path: String
 			break
 	return {
 		"score": score,
+		"M": score,
 		"rank_id": str(rank.get("id", "none")),
 		"rank_key": _rank_key(str(rank.get("id", "none"))),
 		"pattern": pattern,
@@ -244,3 +245,30 @@ static func _rank_key(rid: String) -> String:
 			return "SCORE_HEAL"
 		_:
 			return "SCORE_NONE"
+
+
+static func axis_chips(result: Dictionary) -> String:
+	## 快/稳/准/温 aligned with evaluate() / settlement_display.alias_chips.
+	## Use TranslationServer from static context (tr() is instance-only).
+	var m_pct := int(round(float(result.get("M", result.get("score", 0.0))) * 100.0))
+	var zhun := "%s %d" % [_tx("SCORE_AXIS_ZHUN", "准"), m_pct]
+	var sk := str(result.get("speed_id", result.get("speed_key", "steady")))
+	var kuai_key := "SPEED_STEADY"
+	match sk:
+		"fast":
+			kuai_key = "SPEED_FAST"
+		"a_bit_rushed":
+			kuai_key = "SPEED_RUSHED"
+		"slow", "none":
+			kuai_key = "SPEED_SLOW"
+	var kuai := "%s·%s" % [_tx("SCORE_AXIS_KUAI", "快"), _tx(kuai_key, kuai_key)]
+	var wen := _tx("SCORE_AXIS_WEN", "稳") if (not bool(result.get("mistreat", false)) and not bool(result.get("overtreat", false))) else _tx("SCORE_AXIS_UNSTEADY", "不稳")
+	var warm := _tx("SCORE_AXIS_WARM", "温") if not bool(result.get("overtreat", false)) else _tx("SCORE_AXIS_OVERHEAT", "偏猛")
+	return "%s   %s   %s   %s" % [zhun, kuai, wen, warm]
+
+
+static func _tx(key: String, fallback: String) -> String:
+	var s := TranslationServer.translate(key)
+	if s == "" or s == key:
+		return fallback
+	return s

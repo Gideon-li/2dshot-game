@@ -142,5 +142,12 @@
   "canonical_also_in": "logic/slice_logic.json → ten_questions",
   "apprentice_default": "江晚",
   "mentor": "苏问舟",
-  "yaotong_hook": "小荷"
+  "yaotong_hook": "小荷",
+  "mentor_cue_rules_ref": "slice_logic.json → mentor_cue_rules",
+  "max_cues_per_visit": 2,
+  "slice_force_nudge": [
+    "hanre",
+    "han"
+  ],
+  "affirm_short_ref": "patients.mentor.affirm_short"
 }

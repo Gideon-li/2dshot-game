@@ -237,15 +237,135 @@ func mentor_exam_missing_cue(exam_id: String) -> String:
 	return str(lines[randi() % lines.size()])
 
 
+func mentor_affirm_line() -> String:
+	var arr: Variant = mentor.get("affirm_short", {}).get(_loc_key(), mentor.get("affirm_short", {}).get("zh", []))
+	if typeof(arr) == TYPE_ARRAY and not (arr as Array).is_empty():
+		return str((arr as Array)[0])
+	for key in ["MENTOR_AFFIRM", "MENTOR_SU_AFFIRM"]:
+		var t := tr(key)
+		if t != "" and t != key:
+			return t
+	return "这一问有了。"
+
+
+func _song_to_tenq_id(song: String) -> String:
+	var map := {
+		"寒热": "hanre", "汗": "han", "头身": "toushen", "便": "bian",
+		"饮食": "yinshi", "胸": "xiong", "聋": "ermu", "渴": "ke",
+		"旧病": "jiubing", "因": "yin",
+	}
+	return str(map.get(song, song))
+
+
+func mentor_tenq_missing_cue(qid: String, case_id: String = "") -> String:
+	## Prefer case_cues when ask is in priority_ten_ask; else locale. Never diagnosis names.
+	if case_id == "":
+		case_id = str(case_for_patient(GameFlow.current_patient_id).get("id", ""))
+	var block: Variant = mentor.get("case_cues", {}).get(case_id, {})
+	if typeof(block) == TYPE_DICTIONARY:
+		var pri: Variant = block.get("priority_ten_ask", [])
+		var hit := false
+		if typeof(pri) == TYPE_ARRAY:
+			for song in pri:
+				if _song_to_tenq_id(str(song)) == qid:
+					hit = true
+					break
+		if hit:
+			var lines_v: Variant = block.get("lines", {})
+			if typeof(lines_v) == TYPE_DICTIONARY:
+				var arr: Variant = lines_v.get(_loc_key(), lines_v.get("zh", []))
+				if typeof(arr) == TYPE_ARRAY and not (arr as Array).is_empty():
+					return str((arr as Array)[0])
+	var key := ""
+	match qid:
+		"hanre":
+			key = "MENTOR_TENQ_COLD"
+		"han":
+			key = "MENTOR_TENQ_SWEAT"
+		_:
+			key = ""
+	if key != "":
+		var t := tr(key)
+		if t != "" and t != key:
+			return t
+	match qid:
+		"hanre":
+			return "他添衣还是减衣，你问了？"
+		"han":
+			return "出汗了没有——这一句能挡掉一半胡开。"
+	return ""
+
+
+func _tenq_was_asked(qid: String) -> bool:
+	if typeof(GameFlow.tenq_asked) == TYPE_ARRAY and qid in GameFlow.tenq_asked:
+		return true
+	if typeof(GameFlow.ten_asks_asked) == TYPE_ARRAY and qid in GameFlow.ten_asks_asked:
+		return true
+	return false
+
+
 func mentor_cue_for_visit() -> String:
-	## Prefer missing-exam nudge; 缺问 (wen_ask) first per V119; else 望/闻/切; else case line.
+	## V120: pending affirm → missing 寒热/汗 → 缺望/闻/问/切 → else silent (喝茶).
+	if GameFlow.mentor_pending_affirm:
+		return mentor_affirm_line()
+	var case_id := str(case_for_patient(GameFlow.current_patient_id).get("id", ""))
+	for qid in ["hanre", "han"]:
+		if not _tenq_was_asked(qid):
+			var tenq_cue := mentor_tenq_missing_cue(qid, case_id)
+			if tenq_cue != "":
+				return tenq_cue
+	var exams_incomplete := false
 	if typeof(GameFlow.exams) == TYPE_DICTIONARY:
 		for exam in ["wen_ask", "qie", "wang", "wen_listen"]:
 			if not bool(GameFlow.exams.get(exam, false)):
+				exams_incomplete = true
 				var m := mentor_exam_missing_cue(exam)
 				if m != "":
 					return m
-	return mentor_case_cue()
+	if not exams_incomplete and _tenq_was_asked("hanre") and _tenq_was_asked("han"):
+		return ""
+	return mentor_case_cue(case_id)
+
+
+func pharmacy_kid() -> Dictionary:
+	var kid: Variant = characters.get("pharmacy_kid", {})
+	return kid if typeof(kid) == TYPE_DICTIONARY else {}
+
+
+func pharmacy_kid_is_clickable() -> bool:
+	## Slice: always false (UI voice only, no 代诊).
+	return bool(pharmacy_kid().get("clickable", false))
+
+
+func pharmacy_kid_line(kind: String = "waiting") -> String:
+	## UI voice only. Not clickable, never 代诊.
+	var kid := pharmacy_kid()
+	var ui: Variant = kid.get("ui_lines", {})
+	if typeof(ui) != TYPE_DICTIONARY:
+		return ""
+	var block: Variant = ui.get(kind, {})
+	if typeof(block) != TYPE_DICTIONARY:
+		return ""
+	var arr: Variant = block.get(_loc_key(), block.get("zh", []))
+	if typeof(arr) != TYPE_ARRAY or (arr as Array).is_empty():
+		return ""
+	var lines: Array = arr
+	var line := str(lines[randi() % lines.size()])
+	var waiting_n := 0
+	for p in patients:
+		if typeof(p) == TYPE_DICTIONARY and not GameFlow.is_seen(str(p.get("id", ""))):
+			waiting_n += 1
+	return line.replace("{n}", str(maxi(waiting_n, 1)))
+
+
+func followup_template(pid: String) -> String:
+	var p := patient_by_id(pid)
+	if p.is_empty():
+		return ""
+	var fu: Variant = p.get("followup", {})
+	if typeof(fu) == TYPE_DICTIONARY:
+		return UiKit.loc_text(fu, "")
+	return str(fu)
 
 
 func herb(id: String) -> Dictionary:

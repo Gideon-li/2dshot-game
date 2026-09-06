@@ -14,3 +14,10 @@
 | 脉纹 | `pulse-overlay.png` | 只波形：上浮紧 / 中弦 / 右细数 |
 
 角色/UI：`ui/apprentice.png`（江晚）、`patients-three.png`、`formula-tray.png`、`ui-clinic.png`。
+
+## V120 增补
+| 文件 | 说明 |
+| --- | --- |
+| `ui/store/CAM_ASK.png` | 江晚问诊阿福（已换，非旧写意单人） |
+| `ui/chrome/mentor-bubbles.png` | 苏问舟旁白气泡（大/小），无人物立绘 |
+| `ui/chrome/xiahe-badge.png` | 小荷角标极简，不抢戏 |

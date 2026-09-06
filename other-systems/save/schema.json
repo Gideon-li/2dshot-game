@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "disclaimer_accepted": false,
   "locale": "zh",
   "audio": {
@@ -13,12 +13,22 @@
     "patients_seen": [],
     "current_patient_id": null,
     "four_exams": {
+      "wang": false,
+      "wen_listen": false,
+      "wen_ask": false,
+      "qie": false,
       "look": false,
       "listen": false,
       "ask": false,
       "pulse": false
     },
     "last_treatment": null,
-    "scores": []
+    "scores": [],
+    "asked_ten_q_ids": [],
+    "mentor_cues_emitted_this_visit": 0,
+    "pending_revisits": [],
+    "clinic_day": 1,
+    "pharmacy_kid_proxy_enabled": false,
+    "followups": {}
   }
 }

@@ -171,10 +171,16 @@ func _refresh_mentor() -> void:
 	if CaseDB.mentor_is_clickable():
 		_mentor_l.visible = false
 		return
-	var line := CaseDB.mentor_cue_for_visit()
+	var line := ""
+	if GameFlow.has_method("take_mentor_line"):
+		line = GameFlow.take_mentor_line()
+	else:
+		line = CaseDB.mentor_cue_for_visit()
 	if line == "":
 		_mentor_l.visible = false
 		return
+	if GameFlow.has_method("consume_mentor_chime") and GameFlow.consume_mentor_chime():
+		AudioHub.play_chime()
 	var who := CaseDB.mentor_name()
 	if who == "":
 		who = "苏问舟"

@@ -59,3 +59,20 @@ score (UI) = M_final / 100
 ## 熟练度
 
 `proficiency.enabled = false`。
+
+
+## V120 收圆
+
+### 问舟旁白接线
+四诊旗 + 十问覆盖 → `mentor_cue_rules`。同诊 **≤2 句**。缺「寒热」「汗」优先催。补问后可出「这一问有了。」（`mentor.affirm_short`）。不报方、不报证。
+
+API：`MentorCues.next(case, exams, asked_ten_q_ids, cues_emitted)`。
+
+### 结算展示
+与 `Scoring.evaluate()` 对齐。玩家可见：M（score）、rank、flavor、path、误治/过治旗；明细可展 C / C* / B / A' / U（J=T=1）。
+
+### 回访钩子
+结算写入存档 `play.pending_revisits[]`；下次进馆读一句（各案 `revisit`，剧本可覆写）。不接 LLM。
+
+### 小荷
+`pharmacy_kid_rules.proxy_diagnosis.enabled = false`。只做候诊/药柜 UI 口吻，不代诊。

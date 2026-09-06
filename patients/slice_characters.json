@@ -1,12 +1,13 @@
 {
   "id": "mo-wen-qi-huang-slice-characters",
   "project": "墨问岐黄",
-  "version": 5,
+  "version": 6,
   "based_on": [
     "design-pack 03 人物志 v1.1",
     "15 十问与问舟 v1.10",
     "DEV-TASKS-V119",
-    "DEV-TASKS-V119 (江晚/苏问舟/小荷/三病人)"
+    "DEV-TASKS-V119 (江晚/苏问舟/小荷/三病人)",
+    "DEV-TASKS-V120"
   ],
   "notes": {
     "not_quiz": true,
@@ -35,7 +36,9 @@
     "mentor_cues_live_in": "mentor.case_cues + mentor.exam_missing_cues",
     "pharmacy_kid_clickable": false,
     "product_copy": "Default apprentice 江晚 (apprentice_jiang). 林晚/apprentice_lin = legacy alias in notes only. Never primary.",
-    "art_brief": "立绘/锚点学徒一律画江晚，不要画回林晚。"
+    "art_brief": "立绘/锚点学徒一律画江晚，不要画回林晚。",
+    "v120": "mentor cues all interrogatives; xiaohe waiting/cabinet >=3; followup one line per case; no diagnosis/formula in mentor cues",
+    "v120_proxy": "pharmacy_kid.proxy_diagnosis.enabled=false"
   },
   "inquiry_rules": {
     "zh": [
@@ -334,70 +337,70 @@
     "exam_missing_cues": {
       "wang": {
         "zh": [
-          "人还没进门，你倒先开柜了。",
-          "先看他眼睛愿不愿看你。",
-          "口张过没有。舌上的苔，比他自己说的老实。"
+          "人还没坐稳，你先开柜做什么？",
+          "他眼睛愿不愿看你，你看了吗？",
+          "口张过没有？舌上的苔，你看清了吗？"
         ],
         "en": [
-          "They are not even seated, and you already opened the cabinet.",
-          "See whether their eyes will meet yours.",
-          "Has the mouth opened? The tongue coat is more honest than their story."
+          "They are not even seated — why open the cabinet first?",
+          "Will their eyes meet yours — did you look?",
+          "Has the mouth opened? Did you read the tongue coat?"
         ],
         "ja": [
-          "まだ入ってもいないのに、棚を開けた。",
-          "まず目があなたを見るか見よ。",
-          "口を開けたか。舌苔は本人の話より正直だ。"
+          "まだ座ってもいないのに、なぜ棚を先に開ける？",
+          "目があなたを見るか、見たか？",
+          "口を開けたか？舌苔は読めたか？"
         ]
       },
       "wen_listen": {
         "zh": [
-          "他进门那口气，你听了吗。",
-          "咳在喉还是在胸，隔着门也能辨。",
-          "声闷还是清，先听再问。"
+          "他进门那口气，你听了吗？",
+          "咳在喉还是在胸，你分清了吗？",
+          "声闷还是清，先听了再问了吗？"
         ],
         "en": [
           "Did you hear the breath they came in on?",
-          "Cough in the throat or the chest — you can tell from the door.",
-          "Is the voice muffed or clear? Listen before you ask."
+          "Cough in the throat or the chest — which did you hear?",
+          "Is the voice muffed or clear — did you listen before asking?"
         ],
         "ja": [
-          "入ってきた息を聞いたか。",
-          "咳が喉か胸か、戸越しでも分かる。",
-          "声がこもるか澄むか。聞いてから問え。"
-        ]
-      },
-      "qie": {
-        "zh": [
-          "脉枕还空着。",
-          "三指放下去，比猜有用。",
-          "浮中沉，你只按了哪一层？"
-        ],
-        "en": [
-          "The pulse pillow is still empty.",
-          "Three fingers down beat guessing.",
-          "Floating, middle, deep — which layer did you actually press?"
-        ],
-        "ja": [
-          "脈枕がまだ空だ。",
-          "三指を置く方が当て推量より役に立つ。",
-          "浮・中・沈、どの層を押した？"
+          "入ってきた息を聞いたか？",
+          "咳は喉か胸か、聞き分けたか？",
+          "声がこもるか澄むか、聞いてから問うたか？"
         ]
       },
       "wen_ask": {
         "zh": [
-          "十问还空着几格。",
-          "因从何起，你还没问。",
-          "寒热与汗，这两扇门你可曾推开。"
+          "十问还空着几格？",
+          "因从何起，你问了吗？",
+          "寒热与汗，这两扇门你推开了吗？"
         ],
         "en": [
           "How many of the ten questions still sit blank?",
-          "You have not asked what started this.",
+          "Have you asked what started this?",
           "Cold/heat and sweat — have you opened those two doors?"
         ],
         "ja": [
-          "十問、まだ空いている枠がある。",
-          "因は何から、まだ聞いていない。",
-          "寒熱と汗、その二扉は開いたか。"
+          "十問、まだ空いている枠はいくつ？",
+          "因は何から、聞いたか？",
+          "寒熱と汗、その二扉は開いたか？"
+        ]
+      },
+      "qie": {
+        "zh": [
+          "脉枕还空着，你要空着开方吗？",
+          "三指放下去了吗？",
+          "浮中沉，你只按了哪一层？"
+        ],
+        "en": [
+          "The pulse pillow is empty — will you prescribe without it?",
+          "Have you set three fingers down?",
+          "Floating, middle, deep — which layer did you press?"
+        ],
+        "ja": [
+          "脈枕が空だ。空のまま方を出すのか？",
+          "三指は置いたか？",
+          "浮・中・沈、どの層を押した？"
         ]
       }
     },
@@ -412,39 +415,39 @@
         "lines": {
           "zh": [
             "他添衣还是减衣，你问了？",
-            "出汗了没有——这一句能挡掉一半胡开。",
+            "出汗了没有？",
             "汗出不来，还是身上根本没有热气往外走？",
-            "怕风的人，和真正发热的人，不是一种坐姿。",
-            "从哪一天开始的——雨后、风后，还是扛货之后。",
+            "怕风和发热，他坐姿一样吗？你看过吗？",
+            "从哪一天开始的——雨后、风后，还是扛货之后？",
             "身酸和头项紧，他用的是同一个词吗？",
-            "鼻涕清还是浊，问清楚再谈「上火」。",
-            "进门那口气闷不闷，你听了吗。",
-            "脉枕还空着。三指放下去，比猜有用。",
-            "十问还剩几问在桌上——寒热和汗，学徒期我不许你走过。"
+            "鼻涕清还是浊？",
+            "进门那口气闷不闷，你听了吗？",
+            "脉枕还空着，三指放下去了吗？",
+            "寒热和汗，这两扇门你推开了吗？"
           ],
           "en": [
             "Did you ask whether they added a coat or took one off?",
-            "Any sweat? That one question blocks half the wild prescriptions.",
+            "Any sweat?",
             "No sweat coming — or no heat moving outward at all?",
-            "Someone who fears wind does not sit like someone truly febrile.",
+            "Does someone who fears wind sit like someone febrile — did you look?",
             "From which day — after rain, after wind, or after hauling cargo?",
             "Aching body and tight nape — are they using the same word?",
-            "Is the snot clear or thick? Ask before anyone says 'heat rising.'",
+            "Is the snot clear or thick?",
             "Did you hear the breath they came in on?",
-            "The pulse pillow is still empty. Three fingers beat guessing.",
-            "How many of the ten questions still sit on the desk — cold/heat and sweat, I will not let an apprentice walk past."
+            "The pulse pillow is empty — have you set three fingers down?",
+            "Cold/heat and sweat — have you opened those two doors?"
           ],
           "ja": [
-            "衣を足したか減らしたか、聞いたか。",
-            "汗は出たか——この一句で乱暴な処方が半分止まる。",
-            "汗が出ないのか、熱が外へ向かっていないのか。",
-            "風を嫌がる人と、本当に熱のある人は、座り方が違う。",
-            "いつからか——雨のあと、風のあと、荷を担いだあと。",
-            "体の痛みと項のつっぱり、同じ言葉で言っているか。",
-            "鼻水は透明か濁っているか。「上火」の前に聞け。",
-            "入ってきた息を聞いたか。",
-            "脈枕が空だ。三指を置く方が当て推量よりいい。",
-            "十問がいくつ机に残っている——寒熱と汗は、徒弟のあいだ私は通さない。"
+            "衣を足したか減らしたか、聞いたか？",
+            "汗は出たか？",
+            "汗が出ないのか、熱が外へ向かっていないのか？",
+            "風を嫌がる人と熱のある人、座り方は同じか？見たか？",
+            "いつからか——雨のあと、風のあと、荷を担いだあと？",
+            "体の痛みと項のつっぱり、同じ言葉で言っているか？",
+            "鼻水は透明か濁っているか？",
+            "入ってきた息を聞いたか？",
+            "脈枕が空だ。三指は置いたか？",
+            "寒熱と汗、その二扉は開いたか？"
           ]
         }
       },
@@ -457,40 +460,40 @@
         ],
         "lines": {
           "zh": [
-            "手按胸口的人，不一定是心。你问过胁下没有。",
-            "胀会不会随叹气、随生气加重。",
-            "不想吃，和吃了就胀，是两件事。",
-            "早饭还是案牍——从什么时候、因什么起的。",
-            "睡不实，是睡不着，还是睡着易醒。",
-            "旧方还在喝吗。去年那碗，还对得上今天吗。",
-            "他把心事绕开时，你仍要问胸口和饭量。",
-            "脉枕还空着。弦不弦，手指比猜有用。",
-            "眼里看见肩往里含，嘴里问过没有。",
-            "这一问若补上了，我喝茶。补不上，我再问一句。"
+            "手按胸口的人，胁下你问过没有？",
+            "胀会不会随叹气、随生气加重？",
+            "是不想吃，还是吃了就胀？",
+            "从什么时候、因什么起的——早饭还是案牍？",
+            "睡不实，是睡不着，还是睡着易醒？",
+            "旧方还在喝吗？去年那碗还对得上今天吗？",
+            "胸口闷不闷、饭量如何，你问到了吗？",
+            "脉枕还空着，弦不弦你按了吗？",
+            "肩往里含你看见了，嘴里问过没有？",
+            "这一问补上了吗？"
           ],
           "en": [
-            "A hand on the chest is not always the heart. Have you asked under the flanks?",
+            "A hand on the chest — have you asked under the flanks?",
             "Does the fullness worsen with a sigh, or with anger?",
-            "No appetite, and fullness after eating, are two different things.",
-            "Breakfast or paperwork — from when, and after what, did it start?",
+            "No appetite, or fullness after eating?",
+            "From when, and after what — breakfast or paperwork?",
             "Light sleep: cannot fall in, or wakes easily once in?",
             "Still drinking an old formula? Does last year's bowl still match today?",
-            "When they steer off the heart of the matter, still ask about chest and appetite.",
-            "The pulse pillow is empty. Wiry or not — fingers beat guessing.",
-            "You saw the shoulders drawn in. Have the mouth asked what the eyes saw?",
-            "If that question is in, I drink tea. If not, I ask once more."
+            "Have you asked about chest tightness and appetite?",
+            "The pulse pillow is empty — have you felt whether it is wiry?",
+            "You saw the shoulders drawn in — has the mouth asked what the eyes saw?",
+            "Is that question in yet?"
           ],
           "ja": [
-            "胸に手を当てる人が、必ずしも心ではない。脇の下を聞いたか。",
-            "張りは溜息や怒りで強くなるか。",
-            "食べたくないのと、食べて張るのは別事だ。",
-            "朝食か書類か——いつから、何のあとか。",
-            "眠りが浅いのは、入れないのか、入ってすぐ覚めるのか。",
-            "古い方はまだ飲んでいるか。去年の碗は今日に合うか。",
-            "心事を避けても、胸と食欲は聞け。",
-            "脈枕が空だ。弦かどうかは指の方が当て推量よりいい。",
-            "肩が内側へ入るのを見た。目で見たことを口で問うたか。",
-            "その問いが揃えば茶を飲む。揃わねば、もう一句だけ。"
+            "胸に手を当てているが、脇の下は聞いたか？",
+            "張りは溜息や怒りで強くなるか？",
+            "食べたくないのか、食べて張るのか？",
+            "いつから、何のあと——朝食か書類か？",
+            "眠りが浅いのは、入れないのか、入ってすぐ覚めるのか？",
+            "古い方はまだ飲んでいるか？去年の碗は今日に合うか？",
+            "胸の悶えと食欲は聞いたか？",
+            "脈枕が空だ。弦かどうか按じたか？",
+            "肩が内側へ入るのを見た。口で問うたか？",
+            "その問いは揃ったか？"
           ]
         }
       },
@@ -504,39 +507,39 @@
         "lines": {
           "zh": [
             "睡着才汗，还是动一下就汗？",
-            "汗在头还是在身、在后背？",
-            "口干和欲饮，不是同义词。想不想喝，喜热喜冷。",
-            "手心脚心热，下午更烦——你问到时刻了吗。",
-            "夜里不安，是抄经过久，还是不抄也醒。",
-            "旧方还在喝吗。他把邻人的病也讲进来了，先把旧事问清。",
-            "人老了爱往年纪上推，你仍要问手脚心里的热。",
-            "脉枕还空着。细与数，要手指告诉你，不是猜。",
-            "颧上那一点红，嘴里问过没有。",
-            "寒热和汗这两扇门，学徒期我不许你走过。"
+            "汗在头、在身，还是在后背？",
+            "口干之外，想不想喝？喜热还是喜冷？",
+            "手心脚心热，下午更烦——你问到时刻了吗？",
+            "夜里不安，是抄经过久，还是不抄也醒？",
+            "旧方还在喝吗？旧事问清了吗？",
+            "手脚心里的热，你问到了吗？",
+            "脉枕还空着，细与数你按了吗？",
+            "颧上那一点红，嘴里问过没有？",
+            "寒热和汗这两扇门，你推开了吗？"
           ],
           "en": [
             "Sweat only in sleep, or with the slightest move?",
             "Sweat on the head, the body, or the back?",
-            "Dry mouth and wanting to drink are not the same. Want drink? Prefer hot or cold?",
+            "Besides a dry mouth — do they want to drink? Prefer hot or cold?",
             "Hot palms and soles, worse after noon — did you ask the hour?",
             "Restless nights: from copying too long, or waking even without copying?",
-            "Still on an old formula? They may mix in a neighbor's illness — clear the history first.",
-            "Age is an easy excuse. Still ask about heat in the palms and soles.",
-            "The pulse pillow is empty. Thin and rapid need fingers, not guesses.",
+            "Still on an old formula? Have you cleared the history?",
+            "Have you asked about heat in the palms and soles?",
+            "The pulse pillow is empty — have you felt thin and rapid?",
             "That flush on the cheekbones — has the mouth asked what the eyes saw?",
-            "Cold/heat and sweat: I will not let an apprentice walk past those two doors."
+            "Cold/heat and sweat — have you opened those two doors?"
           ],
           "ja": [
-            "寝てから汗か、動いただけでも汗か。",
-            "汗は頭か、身か、背か。",
-            "口の渇きと飲みたさは別だ。飲みたいか。熱いか冷たいか。",
-            "手足の裏が熱い、午後に煩い——時刻を聞いたか。",
-            "夜の不安は写経が長いからか、書かなくても覚めるのか。",
-            "古い方はまだか。隣人の病まで話し出す前に、旧事を聞け。",
-            "年のせいにしがちでも、手足の裏の熱は聞け。",
-            "脈枕が空だ。細と数は指が教える。当て推量ではない。",
-            "頬骨の赤みを見た。口で問うたか。",
-            "寒熱と汗——徒弟のあいだ、私はこの二扇を通さない。"
+            "寝てから汗か、動いただけでも汗か？",
+            "汗は頭か、身か、背か？",
+            "口の渇きのほか、飲みたいか？熱い方がいいか冷たい方がいいか？",
+            "手足の裏が熱い、午後に煩い——時刻を聞いたか？",
+            "夜の不安は写経が長いからか、書かなくても覚めるのか？",
+            "古い方はまだか？旧事は聞けたか？",
+            "手足の裏の熱は聞いたか？",
+            "脈枕が空だ。細と数は按じたか？",
+            "頬骨の赤みを見た。口で問うたか？",
+            "寒熱と汗、その二扉は開いたか？"
           ]
         }
       }
@@ -689,6 +692,11 @@
         "zh": "短褐、肩宽、肤色偏风吹，坐不住，墨色偏暖灰。Q 版圆头身。",
         "en": "Short brown coat, broad shoulders, wind-burned, won't sit still, warm-gray ink. Q-cute round proportions.",
         "ja": "短い褐、肩幅、風焼け、じっとしていられない。暖灰の墨。Q版。"
+      },
+      "followup": {
+        "zh": "明日扛货前，肩还紧不紧？紧的话再来一趟。",
+        "en": "Before you haul tomorrow — are the shoulders still tight? If so, come back.",
+        "ja": "明日荷を担ぐ前、肩はまだ固いか？固ければまた来い。"
       }
     },
     {
@@ -829,6 +837,11 @@
         "zh": "青灰衙役常服、束发，肩往里含，墨色偏冷青灰。Q 版。",
         "en": "Blue-gray clerk robe, tied hair, shoulders drawn in, cool blue-gray ink. Q-cute.",
         "ja": "青灰の書記服、束ね髪、肩が内側。冷たい青灰。Q版。"
+      },
+      "followup": {
+        "zh": "案牍再堆起来时，胸口还闷不闷？闷了就别硬撑。",
+        "en": "When the papers pile again — is the chest still tight? If it is, do not tough it out.",
+        "ja": "書類がまた積もったら、胸はまだ悶えるか？悶えたら無理するな。"
       }
     },
     {
@@ -969,6 +982,11 @@
         "zh": "深褐宽袖、白发髻、手瘦，墨色偏赭。Q 版。",
         "en": "Deep brown wide sleeves, white bun, thin hands, ochre ink. Q-cute.",
         "ja": "深褐の広い袖、白い髻、細い手。赭めの墨。Q版。"
+      },
+      "followup": {
+        "zh": "今夜抄经时，后背还潮不潮？潮了就先歇笔。",
+        "en": "Tonight while copying — is the back still damp? If it is, set the brush down first.",
+        "ja": "今夜の写経、背はまだ湿るか？湿ったら先に筆を置け。"
       }
     }
   ],
@@ -1158,8 +1176,30 @@
       "zh": "浅褐短打、裤脚湿、膝有土、辫或剃圈。不抢江晚与三病人。",
       "en": "Light-brown short tunic, wet cuffs, muddy knees, braid or ring-shave. Must not steal Jiang Wan or the three patients.",
       "ja": "浅褐短打、湿った裾、土の膝。江晩と三人の患者を奪わない。"
+    },
+    "proxy_diagnosis": {
+      "enabled": false,
+      "default": "off",
+      "comment": "馆规：低危可代——全作后开。切片默认关，不做代诊。"
     }
   },
   "apprentice_slice_name": "江晚",
-  "apprentice_design_default": "江晚"
+  "apprentice_design_default": "江晚",
+  "followup_by_case": {
+    "fenghan_biao": {
+      "zh": "明日扛货前，肩还紧不紧？紧的话再来一趟。",
+      "en": "Before you haul tomorrow — are the shoulders still tight? If so, come back.",
+      "ja": "明日荷を担ぐ前、肩はまだ固いか？固ければまた来い。"
+    },
+    "ganyu_qizhi": {
+      "zh": "案牍再堆起来时，胸口还闷不闷？闷了就别硬撑。",
+      "en": "When the papers pile again — is the chest still tight? If it is, do not tough it out.",
+      "ja": "書類がまた積もったら、胸はまだ悶えるか？悶えたら無理するな。"
+    },
+    "yinxu_neire": {
+      "zh": "今夜抄经时，后背还潮不潮？潮了就先歇笔。",
+      "en": "Tonight while copying — is the back still damp? If it is, set the brush down first.",
+      "ja": "今夜の写経、背はまだ湿るか？湿ったら先に筆を置け。"
+    }
+  }
 }

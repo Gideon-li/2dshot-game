@@ -1,6 +1,6 @@
 {
   "id": "xinglin-mowen-slice-logic",
-  "version": 2,
+  "version": 3,
   "project": "墨问岐黄 / 杏林墨问",
   "scope": "vertical_slice",
   "notes": {
@@ -20,7 +20,9 @@
     "split_files": [
       "logic/ten_questions.json",
       "logic/fanwei_pairs.json"
-    ]
+    ],
+    "v120": "mentor_cue wiring ≤2/visit; settlement_display; revisit save hook; xiaohe proxy off",
+    "JT": "J=T=1 keep"
   },
   "exam_ids": [
     "wang",
@@ -1519,7 +1521,49 @@
         "汗",
         "头身",
         "因"
-      ]
+      ],
+      "ten_q_priority_ids": [
+        "hanre",
+        "han",
+        "toushen",
+        "yin"
+      ],
+      "revisit": {
+        "enabled": true,
+        "delay_days": 3,
+        "read_on_next_clinic_enter": true,
+        "template_key": "revisit.fenghan_biao",
+        "from_rank": {
+          "toward_heal": "good",
+          "clear": "good",
+          "work": "slow",
+          "slight": "slow",
+          "none": "mis"
+        },
+        "lines_fallback": {
+          "good": {
+            "zh": "寒从体表散开，人松下来了。",
+            "en": "The chill lets go at the surface.",
+            "ja": "冷えが表からほどけた。"
+          },
+          "slow": {
+            "zh": "寒在松，只是慢。",
+            "en": "It's easing, just slowly.",
+            "ja": "寒さは緩むが遅い。"
+          },
+          "over": {
+            "zh": "表开得太狠，人有点空。",
+            "en": "The exterior opened too hard; they feel emptied.",
+            "ja": "表を開きすぎて、空になった。"
+          },
+          "mis": {
+            "zh": "药往热上走，怕冷反而更明显。",
+            "en": "The herbs ran toward heat; the chills worsened.",
+            "ja": "薬が熱に向かい、悪寒が強まった。"
+          }
+        },
+        "note": "剧本可覆盖 patients.*.revisit_lines；逻辑保证存档可读结构"
+      }
     },
     {
       "id": "ganyu_qizhi",
@@ -1761,7 +1805,49 @@
         "饮食",
         "旧病",
         "因"
-      ]
+      ],
+      "ten_q_priority_ids": [
+        "xiong",
+        "yinshi",
+        "jiubing",
+        "yin"
+      ],
+      "revisit": {
+        "enabled": true,
+        "delay_days": 3,
+        "read_on_next_clinic_enter": true,
+        "template_key": "revisit.ganyu_qizhi",
+        "from_rank": {
+          "toward_heal": "good",
+          "clear": "good",
+          "work": "slow",
+          "slight": "slow",
+          "none": "mis"
+        },
+        "lines_fallback": {
+          "good": {
+            "zh": "气散开了，胸口松一截。",
+            "en": "The qi unknots; the chest has room.",
+            "ja": "気がほどけ、胸が開く。"
+          },
+          "slow": {
+            "zh": "闷在退，还要几天。",
+            "en": "The tightness is backing off, over days.",
+            "ja": "滞りは退くが日が要る。"
+          },
+          "over": {
+            "zh": "气走得太猛，人反而发虚。",
+            "en": "Qi moved too hard; they feel hollow.",
+            "ja": "気を動かしすぎて虚になった。"
+          },
+          "mis": {
+            "zh": "药没走到胁上，闷还在。",
+            "en": "The herbs never reached the flanks; the tightness stays.",
+            "ja": "薬が脇に届かず、悶えたまま。"
+          }
+        },
+        "note": "剧本可覆盖 patients.*.revisit_lines；逻辑保证存档可读结构"
+      }
     },
     {
       "id": "yinxu_neire",
@@ -2005,7 +2091,49 @@
         "渴",
         "寒热",
         "旧病"
-      ]
+      ],
+      "ten_q_priority_ids": [
+        "han",
+        "ke",
+        "hanre",
+        "jiubing"
+      ],
+      "revisit": {
+        "enabled": true,
+        "delay_days": 7,
+        "read_on_next_clinic_enter": true,
+        "template_key": "revisit.yinxu_neire",
+        "from_rank": {
+          "toward_heal": "good",
+          "clear": "good",
+          "work": "slow",
+          "slight": "slow",
+          "none": "mis"
+        },
+        "lines_fallback": {
+          "good": {
+            "zh": "那点虚火往下收，夜里能静一些。",
+            "en": "The false heat settles; nights get quieter.",
+            "ja": "虚火が下り、夜が静かに。"
+          },
+          "slow": {
+            "zh": "阴在补，火还要慢慢退。",
+            "en": "Yin is filling; the heat will take days.",
+            "ja": "陰は補えるが、火は日が要る。"
+          },
+          "over": {
+            "zh": "苦寒用多了，胃先受不住。",
+            "en": "Too much bitter-cold; the stomach folds first.",
+            "ja": "苦寒が過ぎ、胃が先に参った。"
+          },
+          "mis": {
+            "zh": "越温越燥，夜里更不安。",
+            "en": "The more it was warmed, the drier the nights.",
+            "ja": "温めるほど燥き、夜が荒れる。"
+          }
+        },
+        "note": "剧本可覆盖 patients.*.revisit_lines；逻辑保证存档可读结构"
+      }
     }
   ],
   "scoring": {
@@ -2259,7 +2387,8 @@
     "script": "fill bind_character_id; keep inquiry_anchor and never_say; 苏问舟旁白键值另表；ten_q_priority 供催问",
     "art": "implement three pulse.visual profiles; formula plate is a drop target; points are on-body",
     "prototype": "load this json; drag/tap not OptionButton; Qwen uses inquiry_anchor+never_say; API fail uses inquiry_anchor; BEFORE confirm formula call incompat.check; ask panel shows ten_questions.items quick bar; score via scoring.formula M with J=T=1",
-    "scoring_gd": "prefer M_final/100 as score; keep process_mult; emit M,C,B,A_prime,U,J,T in result for debug HUD off"
+    "scoring_gd": "prefer M_final/100 as score; keep process_mult; emit M,C,B,A_prime,U,J,T in result for debug HUD off",
+    "v120_prototype": "MentorCues.next respects max 2; settlement UI reads settlement_display keys from evaluate; write play.pending_revisits on settle; pharmacy_kid.proxy_diagnosis.enabled stays false; J=T=1"
   },
   "incompat": {
     "id": "incompat_lock_v114",
@@ -2602,7 +2731,7 @@
       "max_per_click_reveal": "1–2 inquiry_anchor lines in character voice",
       "mentor_cues": {
         "enabled_interface": true,
-        "slice_default": "off_or_light",
+        "slice_default": "on",
         "note": "苏问舟旁白由剧本键值提供；逻辑只留缺旗催问接口",
         "four_exam_flags": [
           "wang",
@@ -2610,11 +2739,18 @@
           "wen_ask",
           "qie"
         ],
-        "before_treat_if_missing_flag": "emit mentor_cue_id; do not fail submission"
+        "before_treat_if_missing_flag": "emit mentor_cue; do not fail submission",
+        "max_cues_per_visit": 2,
+        "rules_ref": "mentor_cue_rules",
+        "after_priority_filled": "emit affirm_short"
       },
       "coverage": {
         "wen_ask_flag_when": "asked_count >= 2 OR priority_hits >= 1",
-        "slice_note": "不必凑满 10；乱点无关问会让病人不耐烦（后置）"
+        "slice_note": "不必凑满 10；乱点无关问会让病人不耐烦（后置）",
+        "slice_force_nudge": [
+          "hanre",
+          "han"
+        ]
       }
     },
     "i18n_keys": [
@@ -2630,5 +2766,223 @@
       "ASK_TEN_JIUBING",
       "ASK_TEN_YIN"
     ]
+  },
+  "mentor_cue_rules": {
+    "id": "mentor_cue_rules_v120",
+    "enabled": true,
+    "max_cues_per_visit": 2,
+    "never_diagnosis_or_formula": true,
+    "must_be_question_or_affirm": true,
+    "priority": [
+      {
+        "when": "ten_q_missing_priority",
+        "prefer": [
+          "hanre",
+          "han"
+        ],
+        "cue_source": "ten_q_missing | mentor.case_cues ten-q lines"
+      },
+      {
+        "when": "exam_flag_missing",
+        "order": [
+          "wen_ask",
+          "qie",
+          "wang",
+          "wen_listen"
+        ],
+        "cue_source": "mentor.exam_missing_cues"
+      },
+      {
+        "when": "else",
+        "cue_source": "mentor.case_cues"
+      }
+    ],
+    "ten_q_coverage": {
+      "track": "asked_ten_q_ids[]",
+      "priority_from_case": "case.ten_q_priority (maps 寒热→hanre, 汗→han, …)",
+      "song_to_id": {
+        "寒热": "hanre",
+        "汗": "han",
+        "头身": "toushen",
+        "便": "bian",
+        "饮食": "yinshi",
+        "胸": "xiong",
+        "聋": "ermu",
+        "渴": "ke",
+        "旧病": "jiubing",
+        "因": "yin"
+      },
+      "wen_ask_flag_when": "len(asked_ten_q_ids) >= 2 OR any(priority id in asked)",
+      "slice_force_nudge": [
+        "hanre",
+        "han"
+      ],
+      "note": "学徒期缺寒热或汗必催；同诊计入 max_cues"
+    },
+    "triggers": [
+      {
+        "id": "before_open_treatment",
+        "if": "missing exam flag OR missing priority ten_q"
+      },
+      {
+        "id": "on_idle_nudge",
+        "if": "player stalled; optional"
+      },
+      {
+        "id": "after_priority_ask_filled",
+        "emit": "affirm_short (这一问有了。)",
+        "counts_toward_max": true
+      }
+    ],
+    "state": {
+      "mentor_cues_emitted_this_visit": 0,
+      "asked_ten_q_ids": [],
+      "exam_flags": [
+        "wang",
+        "wen_listen",
+        "wen_ask",
+        "qie"
+      ]
+    },
+    "api": {
+      "fn": "MentorCues.next(case_id, exams, asked_ten_q_ids, cues_emitted) -> null | {text, kind, counts:true}",
+      "kind": [
+        "ten_q_missing",
+        "exam_missing",
+        "case_line",
+        "affirm"
+      ],
+      "on_null": "stay silent (already hit max or nothing missing)"
+    },
+    "contracts_prototype": "UI must show bubble when non-null; do not fail treat; count affirm too"
+  },
+  "settlement_display": {
+    "id": "settlement_display_v120",
+    "align_to": "Scoring.evaluate() / ScoreV119.evaluate()",
+    "J_default": 1.0,
+    "T_default": 1.0,
+    "player_facing": [
+      {
+        "key": "M",
+        "from": "score",
+        "note": "0..1 UI; also show M100=round(score*100) optional"
+      },
+      {
+        "key": "rank_id",
+        "from": "rank_id",
+        "labels": "player_facing_ranks"
+      },
+      {
+        "key": "flavor",
+        "from": "flavor",
+        "i18n": true
+      },
+      {
+        "key": "speed_id",
+        "from": "speed_id",
+        "optional_chip": true
+      },
+      {
+        "key": "path",
+        "from": "path",
+        "formula|needle": true
+      },
+      {
+        "key": "mistreat",
+        "from": "mistreat",
+        "flag": true
+      },
+      {
+        "key": "overtreat",
+        "from": "overtreat",
+        "flag": true
+      }
+    ],
+    "debug_or_detail_panel": [
+      "C",
+      "C_star",
+      "B",
+      "A_prime",
+      "U",
+      "J",
+      "T",
+      "process_mult"
+    ],
+    "alias_chips": {
+      "准": "M / rank",
+      "快": "speed_id",
+      "稳": "not mistreat and not overtreat",
+      "温": "optional; slice may hide — maps to low zheng_cost / no overtreat"
+    },
+    "required_evaluate_keys": [
+      "score",
+      "rank_id",
+      "rank_key",
+      "pattern",
+      "process_mult",
+      "mistreat",
+      "overtreat",
+      "speed_id",
+      "speed_key",
+      "flavor",
+      "missing_exams",
+      "path",
+      "ids",
+      "C",
+      "C_star",
+      "B",
+      "A",
+      "A_prime",
+      "U",
+      "J",
+      "T"
+    ],
+    "hud_never": [
+      "syndrome_bucket",
+      "internal_name_zh",
+      "never_say",
+      "formula textbook name"
+    ]
+  },
+  "revisit_save": {
+    "id": "revisit_save_v120",
+    "save_path": "play.pending_revisits[]",
+    "record_shape": {
+      "patient_id": "char_*",
+      "case_id": "fenghan_biao|…",
+      "treated_at_day": "int",
+      "due_day": "int",
+      "path": "formula|needle",
+      "rank_id": "toward_heal|…",
+      "score": "0..1",
+      "flavor_kind": "good|slow|over|mis",
+      "line_key": "revisit.{case_id}.{flavor_kind}",
+      "consumed": false
+    },
+    "on_settlement": "append pending_revisits record",
+    "on_clinic_enter": "if due_day <= current_day and not consumed → show one line, set consumed",
+    "llm": false,
+    "slice_day_clock": "optional; if no day clock, show on next clinic_idle after that patient settled"
+  },
+  "pharmacy_kid_rules": {
+    "id": "pharmacy_kid_xiaohe_v120",
+    "character_id": "pharmacy_kid_xiaohe",
+    "clickable": false,
+    "proxy_diagnosis": {
+      "enabled": false,
+      "default": "off",
+      "comment": "馆规：低危可代——全作卷二后才开。切片默认关，不做代诊。",
+      "whitelist_required": true,
+      "triggers_mentor_cues": false
+    },
+    "ui_voice_only": {
+      "enabled": true,
+      "slots": [
+        "waiting_board",
+        "cabinet_alert"
+      ],
+      "min_lines_per_slot": 3,
+      "lines_live_in": "patients/slice_characters.json → pharmacy_kid.lines (剧本补)"
+    }
   }
 }

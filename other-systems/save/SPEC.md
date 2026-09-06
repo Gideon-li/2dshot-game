@@ -21,3 +21,12 @@
 ## 兼容
 
 读档时若 `version` 小于当前，只填缺省，不要炸。熟练度/收学徒字段本期不要写进去。
+
+
+## V120 增补
+
+- `asked_ten_q_ids`: 当前病人已点的十问 id（`hanre` / `han` …）。
+- `mentor_cues_emitted_this_visit`: 本诊问舟旁白已出句数，**上限 2**（含「这一问有了。」）。
+- `pending_revisits[]`: 结算写入；下次进馆可读一句病程/回访（本地模板，不接 LLM）。字段见 `logic/slice_logic.json` → `revisit_save.record_shape`。
+- `pharmacy_kid_proxy_enabled`: 小荷代诊开关，**默认 false**。切片不做代诊。
+- `four_exams` 可用 `wang/wen_listen/wen_ask/qie`（与逻辑一致）；旧 look/listen/ask/pulse 仍可读。
