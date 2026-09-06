@@ -52,13 +52,13 @@ func _build() -> void:
 	back.pressed.connect(func() -> void: Forage.leave_garden())
 	top.add_child(back)
 	root.add_child(top)
-	var mentor := Forage.mentor_forage_line()
+	var mentor: String = Forage.mentor_forage_line()
 	if mentor != "":
-		var who := CaseDB.mentor_name()
+		var who: String = CaseDB.mentor_name()
 		if who == "":
 			who = "苏问舟"
 		root.add_child(UiKit.ink_label("%s：%s" % [who, mentor], 14, UiKit.SEAL))
-	var ag := Forage.agui_hint()
+	var ag: String = Forage.agui_hint()
 	if ag != "":
 		root.add_child(UiKit.ink_label("%s：%s" % [tr("GARDEN_AGUI"), ag], 13, UiKit.INK_MUTED))
 	root.add_child(UiKit.ink_label(tr("GARDEN_HINT"), 13, UiKit.INK_MUTED))
@@ -95,7 +95,7 @@ func _refresh() -> void:
 func _rebuild_spots() -> void:
 	for c in _spot_row.get_children():
 		c.queue_free()
-	var spots := Forage.spots()
+	var spots: PackedStringArray = Forage.spots()
 	if spots.is_empty():
 		# fallback single plot
 		spots = PackedStringArray(["yard"])
@@ -120,7 +120,7 @@ func _select_spot(spot: String) -> void:
 		c.queue_free()
 	for c in _opt_box.get_children():
 		c.queue_free()
-	var herbs := Forage.herbs_at_spot(spot)
+	var herbs: PackedStringArray = Forage.herbs_at_spot(spot)
 	if herbs.is_empty():
 		# show all enabled if spot empty
 		herbs = Forage.forage_enabled_ids()
@@ -154,7 +154,7 @@ func _select_spot(spot: String) -> void:
 func _refresh_stock() -> void:
 	var bits: PackedStringArray = []
 	for hid in Forage.forage_enabled_ids():
-		var n := Forage.stock(str(hid))
+		var n: int = Forage.stock(str(hid))
 		if n > 0:
 			bits.append("%s×%d" % [Forage.herb_display_name(str(hid)), n])
 	_stock_l.text = "%s：%s" % [tr("GARDEN_STOCK"), ("、".join(bits) if bits.size() > 0 else "—")]
@@ -201,7 +201,7 @@ func _focus_herb(hid: String) -> void:
 		lab.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		col.add_child(lab)
 		row.add_child(panel)
-	var opts := Forage.identify_options(hid)
+	var opts: PackedStringArray = Forage.identify_options(hid)
 	var arr: Array = []
 	for o in opts:
 		arr.append(str(o))

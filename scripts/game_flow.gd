@@ -84,7 +84,7 @@ func start_patient(patient_id: String) -> void:
 	ten_asks_asked.clear()
 	last_fanwei_reason = ""
 	_reset_mentor_visit()
-	var opening := CaseDB.opening_line(current_patient_id)
+	var opening: String = CaseDB.opening_line(current_patient_id)
 	if opening != "":
 		conversation.append({"q": "", "a": opening})
 	fsm_state = "patient_selected"
@@ -166,10 +166,10 @@ func go_clinic() -> void:
 	_go("res://scenes/clinic.tscn")
 
 func settle(path: String, ids: Array) -> Dictionary:
-	var case_data := CaseDB.case_for_patient(current_patient_id)
+	var case_data: Dictionary = CaseDB.case_for_patient(current_patient_id)
 	last_result = Scoring.evaluate(case_data, exams, path, ids)
 	last_result["patient_id"] = current_patient_id
-	var fu := CaseDB.followup_template(current_patient_id)
+	var fu: String = CaseDB.followup_template(current_patient_id)
 	last_result["followup"] = fu
 	last_result["M"] = float(last_result.get("score", 0.0))
 	fsm_state = "settling"
@@ -205,7 +205,7 @@ func pulse_for_current() -> Dictionary:
 func is_seen(pid: String) -> bool:
 	if pid in seen:
 		return true
-	var cid := CaseDB.character_id_for(pid)
+	var cid: String = CaseDB.character_id_for(pid)
 	return cid != "" and cid in seen
 
 func slice_complete() -> bool:
@@ -298,7 +298,7 @@ func _write_settlement() -> void:
 	var fus: Dictionary = play.get("followups", {})
 	if typeof(fus) != TYPE_DICTIONARY:
 		fus = {}
-	var fu_line := CaseDB.followup_template(current_patient_id)
+	var fu_line: String = CaseDB.followup_template(current_patient_id)
 	if fu_line != "" and current_patient_id != "":
 		fus[current_patient_id] = fu_line
 	play["followups"] = fus
@@ -313,7 +313,7 @@ func _write_settlement() -> void:
 	var pending: Array = play.get("pending_revisits", [])
 	if typeof(pending) != TYPE_ARRAY:
 		pending = []
-	var case_data := CaseDB.case_for_patient(current_patient_id)
+	var case_data: Dictionary = CaseDB.case_for_patient(current_patient_id)
 	pending.append({
 		"patient_id": current_patient_id,
 		"case_id": str(case_data.get("id", "")),
@@ -344,7 +344,7 @@ func take_mentor_line() -> String:
 		return mentor_display_line
 	if mentor_lines_this_visit >= 2:
 		return ""
-	var line := CaseDB.mentor_cue_for_visit()
+	var line: String = CaseDB.mentor_cue_for_visit()
 	if line.strip_edges() == "":
 		return ""
 	# Track which tenq cue we just nudged (寒热 / 汗).
@@ -466,7 +466,7 @@ func consume_revisit_line() -> String:
 func select_patient(pid: String) -> bool:
 	if fsm_state != "clinic_idle":
 		return false
-	var char_id := CaseDB.character_id_for(pid)
+	var char_id: String = CaseDB.character_id_for(pid)
 	if char_id == "":
 		char_id = pid
 	if CaseDB.case_for_patient(char_id).is_empty():
@@ -720,7 +720,7 @@ func confirm_needling() -> Dictionary:
 	return _settle_inplace("acupuncture", selected_points.duplicate())
 
 func _settle_inplace(path: String, ids: Array) -> Dictionary:
-	var case_data := CaseDB.case_for_patient(current_patient_id)
+	var case_data: Dictionary = CaseDB.case_for_patient(current_patient_id)
 	var raw: Dictionary = Scoring.evaluate(case_data, exams, path, ids)
 	var rank_id := str(raw.get("rank_id", "none"))
 	var rank_dict := {}
@@ -735,7 +735,7 @@ func _settle_inplace(path: String, ids: Array) -> Dictionary:
 	last_result["flavor"] = flavor_text
 	last_result["missing_exam"] = bool(raw.get("missing_exams", missing_exam_penalty()))
 	last_result["patient_id"] = current_patient_id
-	var fu := CaseDB.followup_template(current_patient_id)
+	var fu: String = CaseDB.followup_template(current_patient_id)
 	last_result["followup"] = fu
 	last_result["M"] = float(last_result.get("score", 0.0))
 	fsm_state = "settling"
@@ -748,7 +748,7 @@ func _settle_inplace(path: String, ids: Array) -> Dictionary:
 	return last_result
 
 func inquiry_anchors() -> PackedStringArray:
-	var case_data := CaseDB.case_for_patient(current_patient_id)
+	var case_data: Dictionary = CaseDB.case_for_patient(current_patient_id)
 	var arr: Variant = case_data.get("clues", {}).get("wen_ask", {}).get("inquiry_anchor", [])
 	var out := PackedStringArray()
 	if typeof(arr) == TYPE_ARRAY:
@@ -757,7 +757,7 @@ func inquiry_anchors() -> PackedStringArray:
 	return out
 
 func never_say() -> PackedStringArray:
-	var case_data := CaseDB.case_for_patient(current_patient_id)
+	var case_data: Dictionary = CaseDB.case_for_patient(current_patient_id)
 	var arr: Variant = case_data.get("clues", {}).get("wen_ask", {}).get("never_say", [])
 	var out := PackedStringArray()
 	if typeof(arr) == TYPE_ARRAY:
@@ -771,7 +771,7 @@ func exam_clues(exam: String) -> PackedStringArray:
 		for a in inquiry_used:
 			asked.append(a)
 		return asked
-	var case_data := CaseDB.case_for_patient(current_patient_id)
+	var case_data: Dictionary = CaseDB.case_for_patient(current_patient_id)
 	var block: Dictionary = case_data.get("clues", {}).get(exam, {})
 	var L := loc()
 	var v: Variant = block.get(L, block.get("zh", []))
@@ -793,8 +793,8 @@ func consume_inquiry_anchor() -> String:
 
 func wrap_inquiry_fallback(anchor: String) -> String:
 	## {sym} = that inquiry_anchor only. Character ask_wrappers. Never diagnosis names.
-	var character := CaseDB.patient_by_id(current_patient_id)
-	var case_data := CaseDB.case_for_patient(current_patient_id)
+	var character: Dictionary = CaseDB.patient_by_id(current_patient_id)
+	var case_data: Dictionary = CaseDB.case_for_patient(current_patient_id)
 	if QwenClient.wants_diagnosis_name(anchor, case_data):
 		var dodge := UiKit.loc_text(character.get("dodge", {}), "")
 		return dodge if dodge != "" else "……"
@@ -847,7 +847,7 @@ func _slice_smoke() -> void:
 		var pid := str(row[0])
 		var path := str(row[1])
 		var ids: Array = row[2]
-		var case_data := CaseDB.case_for_patient(pid)
+		var case_data: Dictionary = CaseDB.case_for_patient(pid)
 		var r: Dictionary = Scoring.evaluate(case_data, exams_all, path, ids)
 		print("score %s %s rank=%s score=%.2f" % [pid, path, str(r.get("rank_id", "")), float(r.get("score", 0.0))])
 		if bool(r.get("mistreat", false)):
@@ -859,20 +859,20 @@ func _slice_smoke() -> void:
 			fails.append("%s missing-exam should discount" % pid)
 	var q := QwenClient.new()
 	add_child(q)
-	var porter := CaseDB.patient_by_id("char_porter")
+	var porter: Dictionary = CaseDB.patient_by_id("char_porter")
 	if porter.is_empty():
 		porter = CaseDB.patient_by_id("fenghan_biao")
-	var c1 := CaseDB.case_for_patient("char_porter")
+	var c1: Dictionary = CaseDB.case_for_patient("char_porter")
 	if c1.is_empty():
 		c1 = CaseDB.case_for_patient("fenghan_biao")
 	var local_a: String = q._template_reply("夜里睡得怎么样？", porter, c1)
 	var local_b: String = q._template_reply("风寒束表是不是？", porter, c1)
 	if str(CaseDB.patient_by_id("fenghan_biao").get("id", "")) != "char_porter":
 		fails.append("bind_character_id join failed")
-	var opening := CaseDB.opening_line("char_porter")
+	var opening: String = CaseDB.opening_line("char_porter")
 	if opening.strip_edges().is_empty():
 		fails.append("opening empty")
-	var hud := CaseDB.hud_card("char_porter")
+	var hud: Dictionary = CaseDB.hud_card("char_porter")
 	for leak in ["风寒", "麻黄", "fenghan", "肝郁", "阴虚"]:
 		for v in hud.values():
 			if str(v).find(leak) >= 0:
@@ -913,7 +913,7 @@ func run_slice_smoke() -> int:
 		var pid := str(row[0])
 		var path := str(row[1])
 		var ids: Array = row[2]
-		var case_data := CaseDB.case_for_patient(pid)
+		var case_data: Dictionary = CaseDB.case_for_patient(pid)
 		var r: Dictionary = Scoring.evaluate(case_data, exams_all, path, ids)
 		print("score %s %s rank=%s score=%.2f" % [pid, path, str(r.get("rank_id", "")), float(r.get("score", 0.0))])
 		if bool(r.get("mistreat", false)):
@@ -967,7 +967,7 @@ func run_slice_smoke() -> int:
 	GameFlow.tenq_asked.clear()
 	GameFlow.ten_asks_asked.clear()
 	GameFlow.mentor_pending_affirm = false
-	var miss_ask := CaseDB.mentor_cue_for_visit()
+	var miss_ask: String = CaseDB.mentor_cue_for_visit()
 	GameFlow.exams = saved_exams
 	GameFlow.tenq_asked.clear()
 	for x in saved_tenq:
@@ -984,13 +984,13 @@ func run_slice_smoke() -> int:
 	GameFlow.exams = exams_miss_ask
 	GameFlow.tenq_asked.clear()
 	GameFlow.ten_asks_asked.clear()
-	var m1 := GameFlow.take_mentor_line()
-	var m1b := GameFlow.take_mentor_line()
+	var m1: String = GameFlow.take_mentor_line()
+	var m1b: String = GameFlow.take_mentor_line()
 	GameFlow.mark_tenq("hanre")
-	var m2 := GameFlow.take_mentor_line()
-	var m3 := GameFlow.take_mentor_line()  # dock rebuild: keep showing last
+	var m2: String = GameFlow.take_mentor_line()
+	var m3: String = GameFlow.take_mentor_line()  # dock rebuild: keep showing last
 	GameFlow.mentor_display_line = ""
-	var m4 := GameFlow.take_mentor_line()  # third NEW cue must be blocked
+	var m4: String = GameFlow.take_mentor_line()  # third NEW cue must be blocked
 	print("take_mentor_cap m1=", m1, " m1b=", m1b, " m2=", m2, " m3=", m3, " m4=", m4, " count=", GameFlow.mentor_lines_this_visit)
 	if m1.strip_edges().is_empty():
 		fails.append("take_mentor_line first cue empty")
@@ -1011,12 +1011,12 @@ func run_slice_smoke() -> int:
 		# Still OK if locale returned MENTOR_TENQ_COLD text; accept non-empty.
 		pass
 	for pid in ["char_porter", "char_clerk", "char_copyist"]:
-		var fu := CaseDB.followup_template(pid)
+		var fu: String = CaseDB.followup_template(pid)
 		print("followup_%s=%s" % [pid, fu])
 		if fu.strip_edges().is_empty():
 			fails.append("followup missing for " + pid)
-	var kid_w := CaseDB.pharmacy_kid_line("waiting")
-	var kid_c := CaseDB.pharmacy_kid_line("cabinet")
+	var kid_w: String = CaseDB.pharmacy_kid_line("waiting")
+	var kid_c: String = CaseDB.pharmacy_kid_line("cabinet")
 	print("xiaohe_waiting=", kid_w)
 	print("xiaohe_cabinet=", kid_c)
 	if kid_w.strip_edges().is_empty() or kid_c.strip_edges().is_empty():
