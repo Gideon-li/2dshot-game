@@ -140,7 +140,10 @@ func _select_spot(spot: String) -> void:
 		sw.color = meta.get("color", Color(0.5, 0.55, 0.4))
 		sw.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		row.add_child(sw)
-		var lab := UiKit.ink_label(Forage.herb_display_name(str(hid)), 13)
+		var shown := "?"
+		if Forage.is_identified(str(hid)):
+			shown = Forage.herb_display_name(str(hid))
+		var lab := UiKit.ink_label(shown, 13)
 		lab.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		row.add_child(lab)
 		b.pressed.connect(_focus_herb.bind(str(hid)))
@@ -232,7 +235,12 @@ func _pick_focus() -> void:
 	var res: Dictionary = Forage.pick_herb(_focus)
 	if bool(res.get("ok", false)):
 		_status.text = "%s +%d" % [tr("GARDEN_PICKED"), int(res.get("added", 1))]
-		AudioHub.play_one("herb-drop")
+		if AudioHub.has_method("play_forage_pull"):
+			AudioHub.play_forage_pull()
+		if AudioHub.has_method("play_forage_bag"):
+			AudioHub.play_forage_bag()
+		else:
+			AudioHub.play_one("herb-drop")
 		_refresh_stock()
 	else:
 		_status.text = tr("GARDEN_NEED_ID")

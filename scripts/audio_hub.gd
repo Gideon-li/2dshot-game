@@ -141,3 +141,11 @@ func _set_linear(p: AudioStreamPlayer, linear: float) -> void:
 		return
 	var v := clampf(linear, 0.0001, 1.0)
 	p.volume_db = linear_to_db(v)
+
+
+func play_forage_pull() -> void:
+	play_one("forage-pull")
+
+
+func play_forage_bag() -> void:
+	play_one("forage-bag")
