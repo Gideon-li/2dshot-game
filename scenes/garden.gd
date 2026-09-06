@@ -10,6 +10,57 @@ var _stock_l: Label
 var _pick_b: Button
 var _spot_row: HBoxContainer
 var _herb_row: HFlowContainer
+var _id_chrome: TextureRect
+
+## Matches ui/forage/README.md herb-icons-12 / clusters-12 grid (4×3).
+const ICON_ATLAS_ORDER: Array[String] = [
+	"guizhi", "baishao", "shengjiang", "gancao",
+	"chaihu", "danggui", "baizhu", "fuling",
+	"mahuang", "dazao", "mudanpi", "shudi",
+]
+const ICON_ATLAS := "res://ui/forage/herb-icons-12.png"
+const CLUSTER_ATLAS := "res://ui/forage/herb-clusters-12.png"
+const IDENTIFY_UI := "res://ui/forage/identify-ui.png"
+
+
+func _atlas_tex(path: String, hid: String) -> Texture2D:
+	if not ResourceLoader.exists(path):
+		return null
+	var idx := ICON_ATLAS_ORDER.find(hid)
+	if idx < 0:
+		return null
+	var full: Texture2D = load(path)
+	if full == null:
+		return null
+	var cols := 4
+	var rows := 3
+	var cell := Vector2(full.get_width() / float(cols), full.get_height() / float(rows))
+	var at := AtlasTexture.new()
+	at.atlas = full
+	at.region = Rect2(Vector2(idx % cols, int(idx / cols)) * cell, cell)
+	return at
+
+
+func _herb_icon(hid: String, size: Vector2 = Vector2(40, 40)) -> Control:
+	var tex := _atlas_tex(ICON_ATLAS, hid)
+	if tex == null:
+		tex = _atlas_tex(CLUSTER_ATLAS, hid)
+	if tex != null:
+		var tr := TextureRect.new()
+		tr.texture = tex
+		tr.custom_minimum_size = size
+		tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		return tr
+	# swatch fallback (e.g. missing atlas id)
+	var meta: Dictionary = Forage.shape_meta(hid) if Forage else {}
+	var sw := ColorRect.new()
+	sw.custom_minimum_size = size
+	sw.color = meta.get("color", Color(0.5, 0.55, 0.4))
+	sw.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return sw
+
 
 
 func _ready() -> void:
@@ -73,11 +124,25 @@ func _build() -> void:
 	root.add_child(_herb_row)
 	_status = UiKit.ink_label("", 14, UiKit.SEAL)
 	root.add_child(_status)
+	var id_wrap := PanelContainer.new()
+	id_wrap.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	if ResourceLoader.exists(IDENTIFY_UI):
+		var sb := StyleBoxTexture.new()
+		sb.texture = load(IDENTIFY_UI)
+		sb.content_margin_left = 16
+		sb.content_margin_right = 16
+		sb.content_margin_top = 12
+		sb.content_margin_bottom = 12
+		id_wrap.add_theme_stylebox_override("panel", sb)
+	root.add_child(id_wrap)
+	var id_col := VBoxContainer.new()
+	id_col.add_theme_constant_override("separation", 8)
+	id_wrap.add_child(id_col)
 	_clue_box = VBoxContainer.new()
-	root.add_child(_clue_box)
+	id_col.add_child(_clue_box)
 	_opt_box = HBoxContainer.new()
 	_opt_box.add_theme_constant_override("separation", 8)
-	root.add_child(_opt_box)
+	id_col.add_child(_opt_box)
 	_pick_b = UiKit.make_button("GARDEN_PICK", true)
 	_pick_b.pressed.connect(_pick_focus)
 	_pick_b.visible = false
@@ -134,12 +199,7 @@ func _select_spot(spot: String) -> void:
 		row.offset_left = 6
 		row.offset_right = -6
 		b.add_child(row)
-		var meta: Dictionary = Forage.shape_meta(str(hid))
-		var sw := ColorRect.new()
-		sw.custom_minimum_size = Vector2(22, 22)
-		sw.color = meta.get("color", Color(0.5, 0.55, 0.4))
-		sw.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		row.add_child(sw)
+		row.add_child(_herb_icon(str(hid), Vector2(36, 36)))
 		var shown := "?"
 		if Forage.is_identified(str(hid)):
 			shown = Forage.herb_display_name(str(hid))
@@ -207,8 +267,19 @@ func _focus_herb(hid: String) -> void:
 		arr.append(str(o))
 	arr.shuffle()
 	for oid in arr:
-		var b := UiKit.make_button("", false)
-		b.text = Forage.herb_display_name(str(oid))
+		var b := Button.new()
+		b.custom_minimum_size = Vector2(140, 48)
+		UiKit.style_button(b, false)
+		var orow := HBoxContainer.new()
+		orow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		orow.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		orow.offset_left = 6
+		orow.offset_right = -6
+		b.add_child(orow)
+		orow.add_child(_herb_icon(str(oid), Vector2(28, 28)))
+		var ol := UiKit.ink_label(Forage.herb_display_name(str(oid)), 13)
+		ol.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		orow.add_child(ol)
 		b.pressed.connect(_try_id.bind(str(oid)))
 		_opt_box.add_child(b)
 	_pick_b.visible = Forage.is_identified(hid)
