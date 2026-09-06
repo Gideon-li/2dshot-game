@@ -22,6 +22,24 @@ const ICON_ATLAS := "res://ui/forage/herb-icons-12.png"
 const CLUSTER_ATLAS := "res://ui/forage/herb-clusters-12.png"
 const IDENTIFY_UI := "res://ui/forage/identify-ui.png"
 
+## YARD-SLICE hotspots → forage scene_spot groups (no efficacy signboards).
+const BED_SPOTS := {
+	"SPOT_A": ["yard_trellis", "yard_edge", "path_dry"],
+	"SPOT_B": ["yard_bed_a", "yard_bed_b", "yard_tree"],
+	"SPOT_C": ["path_slope", "path_pine", "yard_shade", "yard_bed_c"],
+}
+const BED_LABELS := {
+	"SPOT_A": {"zh": "药床甲", "en": "Bed A", "ja": "薬床A"},
+	"SPOT_B": {"zh": "药床乙", "en": "Bed B", "ja": "薬床B"},
+	"SPOT_C": {"zh": "药床丙", "en": "Bed C", "ja": "薬床C"},
+}
+const CAM_FOR_BED := {
+	"SPOT_A": "CAM_SPOT_A",
+	"SPOT_B": "CAM_SPOT_B",
+	"SPOT_C": "CAM_SPOT_C",
+}
+
+
 
 func _atlas_tex(path: String, hid: String) -> Texture2D:
 	if not ResourceLoader.exists(path):
@@ -41,8 +59,22 @@ func _atlas_tex(path: String, hid: String) -> Texture2D:
 	return at
 
 
+func _single_herb_tex(hid: String) -> Texture2D:
+	var path := "res://ui/herbs/%s.png" % hid
+	if ResourceLoader.exists(path):
+		var t: Texture2D = load(path)
+		if t != null:
+			return t
+	return null
+
+
 func _herb_icon(hid: String, size: Vector2 = Vector2(40, 40)) -> Control:
-	var tex := _atlas_tex(ICON_ATLAS, hid)
+	## V121.1: shared with tray via Forage.make_herb_icon (ui/herbs or atlas).
+	if Forage and Forage.has_method("make_herb_icon"):
+		return Forage.make_herb_icon(hid, size)
+	var tex: Texture2D = _single_herb_tex(hid)
+	if tex == null:
+		tex = _atlas_tex(ICON_ATLAS, hid)
 	if tex == null:
 		tex = _atlas_tex(CLUSTER_ATLAS, hid)
 	if tex != null:
@@ -53,13 +85,10 @@ func _herb_icon(hid: String, size: Vector2 = Vector2(40, 40)) -> Control:
 		tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		return tr
-	# swatch fallback (e.g. missing atlas id)
-	var meta: Dictionary = Forage.shape_meta(hid) if Forage else {}
-	var sw := ColorRect.new()
-	sw.custom_minimum_size = size
-	sw.color = meta.get("color", Color(0.5, 0.55, 0.4))
-	sw.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	return sw
+	var placeholder := TextureRect.new()
+	placeholder.custom_minimum_size = size
+	placeholder.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return placeholder
 
 
 
@@ -76,9 +105,14 @@ func _build() -> void:
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	bg.color = Color(0.78, 0.86, 0.72, 1)
 	add_child(bg)
-	if ResourceLoader.exists("res://ui/forage/garden-bg.png"):
+	var bg_path := ""
+	if ResourceLoader.exists("res://ui/yard/YARD_HERO.png"):
+		bg_path = "res://ui/yard/YARD_HERO.png"
+	elif ResourceLoader.exists("res://ui/forage/garden-bg.png"):
+		bg_path = "res://ui/forage/garden-bg.png"
+	if bg_path != "":
 		var art := TextureRect.new()
-		art.texture = load("res://ui/forage/garden-bg.png")
+		art.texture = load(bg_path)
 		art.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
@@ -160,18 +194,27 @@ func _refresh() -> void:
 func _rebuild_spots() -> void:
 	for c in _spot_row.get_children():
 		c.queue_free()
-	var spots: PackedStringArray = Forage.spots()
-	if spots.is_empty():
-		# fallback single plot
-		spots = PackedStringArray(["yard"])
-	for spot in spots:
+	# DOOR_CLINIC
+	var door := UiKit.make_button("", false)
+	door.text = tr("GARDEN_BACK")
+	door.pressed.connect(func() -> void: Forage.leave_garden())
+	_spot_row.add_child(door)
+	for bed in ["SPOT_A", "SPOT_B", "SPOT_C"]:
 		var b := UiKit.make_button("", false)
-		b.text = Forage.spot_label(str(spot))
-		if b.text == "" or b.text == str(spot):
-			b.text = str(spot)
-		b.pressed.connect(_select_spot.bind(str(spot)))
+		var lab: Variant = BED_LABELS.get(bed, {})
+		if typeof(lab) == TYPE_DICTIONARY:
+			b.text = UiKit.loc_text(lab, bed)
+		else:
+			b.text = bed
+		b.pressed.connect(_select_spot.bind(bed))
 		_spot_row.add_child(b)
-	_select_spot(str(spots[0]))
+	# PATH_HILL stub — no second map
+	var hill := UiKit.make_button("", false)
+	hill.text = "山径"
+	hill.pressed.connect(_on_path_hill)
+	_spot_row.add_child(hill)
+	_select_spot("SPOT_A")
+
 
 
 func _select_spot(spot: String) -> void:
@@ -185,10 +228,19 @@ func _select_spot(spot: String) -> void:
 		c.queue_free()
 	for c in _opt_box.get_children():
 		c.queue_free()
-	var herbs: PackedStringArray = Forage.herbs_at_spot(spot)
+	# YARD bed id → underlying forage scene_spot list
+	var scene_spots: Array = BED_SPOTS.get(spot, [spot])
+	var herbs: PackedStringArray = PackedStringArray()
+	var seen := {}
+	for sp in scene_spots:
+		for hid in Forage.herbs_at_spot(str(sp)):
+			if seen.has(str(hid)):
+				continue
+			seen[str(hid)] = true
+			herbs.append(str(hid))
 	if herbs.is_empty():
-		# show all enabled if spot empty
 		herbs = Forage.forage_enabled_ids()
+	_status.text = str(CAM_FOR_BED.get(spot, "CAM_YARD"))
 	for hid in herbs:
 		var b := Button.new()
 		b.custom_minimum_size = Vector2(160, 56)
@@ -253,10 +305,9 @@ func _focus_herb(hid: String) -> void:
 		var col := VBoxContainer.new()
 		col.add_theme_constant_override("separation", 6)
 		panel.add_child(col)
-		var sw := ColorRect.new()
-		sw.custom_minimum_size = Vector2(0, 26)
-		sw.color = card.get("color", Color(0.5, 0.55, 0.4))
-		col.add_child(sw)
+		var icon := _herb_icon(hid, Vector2(0, 48))
+		icon.custom_minimum_size = Vector2(0, 48)
+		col.add_child(icon)
 		var lab := UiKit.ink_label(str(card.get("text", "")), 12)
 		lab.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		col.add_child(lab)
@@ -315,3 +366,15 @@ func _pick_focus() -> void:
 		_refresh_stock()
 	else:
 		_status.text = tr("GARDEN_NEED_ID")
+
+
+func _on_path_hill() -> void:
+	## PATH_HILL stub — no five-region map.
+	_status.text = "今日只采到药圃。"
+	_cam_hint("CAM_HILL")
+
+
+func _cam_hint(cam: String) -> void:
+	# Lightweight camera label; full Camera2D can land with scene nodes later.
+	if _status and cam != "":
+		pass

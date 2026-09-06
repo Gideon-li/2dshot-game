@@ -1029,6 +1029,22 @@ func run_slice_smoke() -> int:
 		fails.append("forage pack expected ≥8 herbs, got %d" % forage_n)
 	if forage_n > 12:
 		fails.append("forage pack expected ≤12 herbs, got %d" % forage_n)
+	# V121.1: enabled list locked to 12 whitelist; each has PNG/atlas (no ColorRect path).
+	var fen: int = Forage.forage_enabled_ids().size() if Forage else 0
+	print("forage_enabled_count=", fen)
+	if fen != 12:
+		fails.append("Forage.forage_enabled_ids expected 12, got %d" % fen)
+	if Forage and (Forage.is_forage_enabled("bohe") or Forage.is_forage_enabled("xingren")):
+		fails.append("non-whitelist bohe/xingren must not be forage-enabled")
+	var missing_tex: PackedStringArray = PackedStringArray()
+	if Forage:
+		for hid in Forage.ICON_WHITELIST:
+			if Forage.herb_texture(str(hid)) == null:
+				missing_tex.append(str(hid))
+	if not missing_tex.is_empty():
+		fails.append("whitelist missing herb texture: " + ",".join(missing_tex))
+	else:
+		print("v121_1_herb_icons_ok")
 	var play_f := _play()
 	var inv0: Dictionary = play_f.get("herb_inventory", {}) if typeof(play_f.get("herb_inventory", {})) == TYPE_DICTIONARY else {}
 	var stock0: Dictionary = play_f.get("herb_stock", {}) if typeof(play_f.get("herb_stock", {})) == TYPE_DICTIONARY else {}

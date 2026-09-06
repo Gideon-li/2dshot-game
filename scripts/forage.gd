@@ -33,6 +33,70 @@ const SHAPE_META := {
 	"shanyao": {"shape": "tuber", "color": Color(0.94, 0.9, 0.78)},
 }
 
+## V121.1 whitelist — only these 12 forage / show PNG (matches garden ICON_ATLAS_ORDER).
+const ICON_WHITELIST: Array[String] = [
+	"guizhi", "baishao", "shengjiang", "gancao",
+	"chaihu", "danggui", "baizhu", "fuling",
+	"mahuang", "dazao", "mudanpi", "shudi",
+]
+const ICON_ATLAS := "res://ui/forage/herb-icons-12.png"
+const CLUSTER_ATLAS := "res://ui/forage/herb-clusters-12.png"
+
+
+func herb_texture(hid: String) -> Texture2D:
+	## Prefer ui/herbs/{id}.png, then forage atlas cells. Never invent a ColorRect here.
+	var path := "res://ui/herbs/%s.png" % hid
+	if ResourceLoader.exists(path):
+		var t1: Texture2D = load(path)
+		if t1 != null:
+			return t1
+	var at: Texture2D = _atlas_tex(ICON_ATLAS, hid)
+	if at != null:
+		return at
+	return _atlas_tex(CLUSTER_ATLAS, hid)
+
+
+func _atlas_tex(path: String, hid: String) -> Texture2D:
+	if not ResourceLoader.exists(path):
+		return null
+	var idx := ICON_WHITELIST.find(hid)
+	if idx < 0:
+		return null
+	var full: Texture2D = load(path)
+	if full == null:
+		return null
+	var cols := 4
+	var cell := Vector2(full.get_width() / float(cols), full.get_height() / 3.0)
+	var at := AtlasTexture.new()
+	at.atlas = full
+	at.region = Rect2(Vector2(idx % cols, int(idx / cols)) * cell, cell)
+	return at
+
+
+func make_herb_icon(hid: String, size: Vector2 = Vector2(40, 40)) -> Control:
+	## Whitelist: TextureRect only (PNG/atlas). Non-whitelist may ColorRect.
+	var tex: Texture2D = herb_texture(hid)
+	if tex != null:
+		var tr := TextureRect.new()
+		tr.texture = tex
+		tr.custom_minimum_size = size
+		tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		return tr
+	if hid in ICON_WHITELIST:
+		var placeholder := TextureRect.new()
+		placeholder.custom_minimum_size = size
+		placeholder.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		return placeholder
+	var meta: Dictionary = shape_meta(hid)
+	var sw := ColorRect.new()
+	sw.custom_minimum_size = size
+	sw.color = meta.get("color", Color(0.5, 0.55, 0.4))
+	sw.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return sw
+
+
 
 func _ready() -> void:
 	_ensure_play_fields()
@@ -67,24 +131,27 @@ func _loc() -> String:
 
 
 func forage_enabled_ids() -> PackedStringArray:
-	var out := PackedStringArray()
-	# Prefer CaseDB forage pack (logic/forage_herbs.json).
+	## Intersect data with ICON_WHITELIST (stable 12). Non-whitelist never enter garden.
+	var cand := {}
 	if CaseDB and CaseDB.forage_by_id.size() > 0:
 		for hid in CaseDB.forage_herb_ids():
-			out.append(str(hid))
-		return out
-	# Fallback: slice_logic herbs[].forage.enabled
-	for h in CaseDB.pack.get("herbs", []):
-		if typeof(h) != TYPE_DICTIONARY:
-			continue
-		var f: Variant = h.get("forage", {})
-		if typeof(f) == TYPE_DICTIONARY and bool((f as Dictionary).get("enabled", false)):
-			out.append(str(h.get("id", "")))
+			cand[str(hid)] = true
+	else:
+		for h in CaseDB.pack.get("herbs", []):
+			if typeof(h) != TYPE_DICTIONARY:
+				continue
+			var f: Variant = h.get("forage", {})
+			if typeof(f) == TYPE_DICTIONARY and bool((f as Dictionary).get("enabled", false)):
+				cand[str(h.get("id", ""))] = true
+	var out := PackedStringArray()
+	for hid in ICON_WHITELIST:
+		if cand.has(hid):
+			out.append(hid)
 	return out
 
 
 func is_forage_enabled(herb_id: String) -> bool:
-	return herb_id in forage_enabled_ids() or CaseDB.forage_by_id.has(herb_id)
+	return herb_id in forage_enabled_ids()
 
 
 func forage_pack(herb_id: String) -> Dictionary:
