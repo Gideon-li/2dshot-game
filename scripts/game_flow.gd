@@ -695,6 +695,14 @@ func run_slice_smoke() -> int:
 	var q := QwenClient.new()
 	add_child(q)
 	print("api_key_present=", not q._read_api_key().is_empty())
+	var exams_miss_ask := {"wang": true, "wen_listen": true, "wen_ask": false, "qie": true}
+	var saved_exams = GameFlow.exams
+	GameFlow.exams = exams_miss_ask
+	var miss_ask := CaseDB.mentor_cue_for_visit()
+	GameFlow.exams = saved_exams
+	print("mentor_missing_ask=", miss_ask)
+	if miss_ask.strip_edges().is_empty():
+		fails.append("mentor missing-ask cue empty")
 	if fails.is_empty():
 		print("SMOKE PASS")
 		return 0

@@ -382,6 +382,23 @@
           "三指を置く方が当て推量より役に立つ。",
           "浮・中・沈、どの層を押した？"
         ]
+      },
+      "wen_ask": {
+        "zh": [
+          "十问还空着几格。",
+          "因从何起，你还没问。",
+          "寒热与汗，这两扇门你可曾推开。"
+        ],
+        "en": [
+          "How many of the ten questions still sit blank?",
+          "You have not asked what started this.",
+          "Cold/heat and sweat — have you opened those two doors?"
+        ],
+        "ja": [
+          "十問、まだ空いている枠がある。",
+          "因は何から、まだ聞いていない。",
+          "寒熱と汗、その二扉は開いたか。"
+        ]
       }
     },
     "case_cues": {

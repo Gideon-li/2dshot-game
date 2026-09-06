@@ -549,6 +549,12 @@ func _fill_exam_dock(col: VBoxContainer) -> void:
 	for eid in ["wang", "wen_listen", "wen_ask", "qie"]:
 		marks.append("●" if GameFlow.exam_done(eid) else "○")
 	col.add_child(UiKit.ink_label("望%s 闻%s 问%s 切%s" % marks, 13, UiKit.INK_MUTED))
+	var mentor_line := CaseDB.mentor_cue_for_visit()
+	if mentor_line != "" and not CaseDB.mentor_is_clickable():
+		var who := CaseDB.mentor_name()
+		if who == "":
+			who = "苏问舟"
+		col.add_child(UiKit.ink_label("%s：%s" % [who, mentor_line], 13, UiKit.SEAL))
 	var focus := str(GameFlow.exam_focus)
 	if focus == "qie":
 		# Text clues only. Art team owns 脉纹 on the pillow; no pulse.tscn / encyclopedia.

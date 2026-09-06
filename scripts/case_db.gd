@@ -238,9 +238,9 @@ func mentor_exam_missing_cue(exam_id: String) -> String:
 
 
 func mentor_cue_for_visit() -> String:
-	## Prefer missing-exam nudge (望/闻/切); else rotate a case boundary line.
+	## Prefer missing-exam nudge; 缺问 (wen_ask) first per V119; else 望/闻/切; else case line.
 	if typeof(GameFlow.exams) == TYPE_DICTIONARY:
-		for exam in ["qie", "wang", "wen_listen"]:
+		for exam in ["wen_ask", "qie", "wang", "wen_listen"]:
 			if not bool(GameFlow.exams.get(exam, false)):
 				var m := mentor_exam_missing_cue(exam)
 				if m != "":
