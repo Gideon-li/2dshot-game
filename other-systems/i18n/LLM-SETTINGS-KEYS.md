@@ -1,0 +1,10 @@
+# V122 设置页 / 本地模型键
+
+- 分区：`SETTINGS_LLM_*`
+- Provider 显示：`LLM_PROVIDER_LOCAL|REMOTE|AUTO|OFFLINE`
+- 状态：`LLM_MODEL_INSTALLED|MISSING|READY` + `LLM_STATUS_*`
+- 缺失提示：`LLM_MISSING_TITLE|BODY|HINT` + `LLM_MISSING_ACTION_*`
+- 推荐模型文案：`LLM_MODEL_NAME_DEFAULT`、`LLM_MODEL_SIZE_HINT`
+- 路径提示：`SETTINGS_LLM_PATH_HINT` → `user://models/`
+- 免责 `BOOT_DISCLAIMER_*` **不动**
+- Steamworks 仍只预研

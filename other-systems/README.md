@@ -11,3 +11,7 @@
 | `steamworks/PRESEARCH.md` | 成就能做、排行榜能做、切片都不接代码 |
 
 接到 Godot 工程后：CSV 进 Localization，雨声挂医馆场景，免责做开机 Scene，存档按 `user://saves/`。
+
+| `LLM-LOCAL.md` | V122 本地 llama-server / 模型路径 / 冒烟 |
+| `i18n/LLM-SETTINGS-KEYS.md` | 问诊 provider 设置键 |
+

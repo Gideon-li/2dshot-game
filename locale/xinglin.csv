@@ -360,3 +360,29 @@ HERB_SHUDI_NAME,熟地,Prepared rehmannia,熟地
 HERB_SHUDI_CLUE_1,块根黑亮，软而油润。,"Dark glossy root chunks, soft and oily.",根塊は黒く艶。柔らかく油っぽい。
 HERB_SHUDI_CLUE_2,气味浊甜，比生地更厚。,"Heavy-sweet smell, denser than raw rehmannia.",濁った甘さ。生地より厚い。
 HERB_SHUDI_CLUE_3,性印象：微温，补里那路。,Felt nature: slightly warm; tonifies the interior path.,印象：やや温。裏を補う路。
+SETTINGS_TITLE,设置,Settings,設定
+SETTINGS_LLM_SECTION,问诊对话,Consultation dialogue,問診の対話
+SETTINGS_LLM_PROVIDER,对话方式,Dialogue provider,対話の方式
+SETTINGS_LLM_MODEL,本地模型,Local model,ローカルモデル
+SETTINGS_LLM_PATH_HINT,放置路径：user://models/,Install path: user://models/,配置先：user://models/
+LLM_PROVIDER_LOCAL,本地模型,Local model,ローカルモデル
+LLM_PROVIDER_REMOTE,开发接口,Dev remote API,開発用リモート
+LLM_PROVIDER_AUTO,自动（优先本地）,Auto (prefer local),自動（ローカル優先）
+LLM_PROVIDER_OFFLINE,离线模板,Offline templates,オフライン定型
+LLM_MODEL_INSTALLED,已安装,Installed,インストール済み
+LLM_MODEL_MISSING,未安装,Missing,未インストール
+LLM_MODEL_READY,本地模型可用,Local model ready,ローカルモデル利用可
+LLM_MODEL_NAME_DEFAULT,Qwen3-4B Instruct Q4_K_M,Qwen3-4B Instruct Q4_K_M,Qwen3-4B Instruct Q4_K_M
+LLM_MODEL_SIZE_HINT,约 2.5GB,About 2.5GB,約 2.5GB
+LLM_MISSING_TITLE,本地模型未找到,Local model not found,ローカルモデルが見つかりません
+LLM_MISSING_BODY,成品问诊默认走本地轻量模型。请将推荐模型放到 user://models/ 后重试，或使用离线模板继续游玩。不会在玩家机上默默连接远程接口。,"Finished builds use a local lightweight model. Place the recommended model under user://models/ and retry, or continue with offline templates. The player build will not silently call a remote API.",製品版の問診はローカル軽量モデルが既定です。推奨モデルを user://models/ に置いて再試行するか、オフライン定型で続けてください。プレイヤー機では黙ってリモートAPIへは繋ぎません。
+LLM_MISSING_HINT,推荐：Qwen3-4B Instruct · Q4_K_M（约 2.5GB）。下载后放入 user://models/。,Recommended: Qwen3-4B Instruct · Q4_K_M (~2.5GB). Put it in user://models/.,推奨：Qwen3-4B Instruct · Q4_K_M（約 2.5GB）。user://models/ に置いてください。
+LLM_MISSING_ACTION_RETRY,重新检测,Check again,再検出
+LLM_MISSING_ACTION_OFFLINE,用离线模板继续,Continue offline,オフライン定型で続ける
+LLM_MISSING_ACTION_OPEN_FOLDER,打开模型文件夹,Open models folder,モデルフォルダを開く
+LLM_STATUS_LOCAL_OK,本地对话就绪,Local dialogue ready,ローカル対話の準備完了
+LLM_STATUS_REMOTE_DEV,开发接口（仅开发构建）,Dev remote (dev builds only),開発用リモート（開発ビルドのみ）
+LLM_STATUS_OFFLINE,已回退离线模板,Fell back to offline templates,オフライン定型に切替済み
+LLM_STATUS_TIMEOUT,本地无应答，已改用离线回复。,No local reply in time; using offline answers.,ローカル応答なし。オフライン返答に切替。
+LLM_STATUS_CHECKING,正在检测本地模型…,Checking local model…,ローカルモデルを確認中…
+LLM_OFFLINE_NOTE,无网时可用本地回复继续问诊。,"Without a network, local replies still work.",オフラインでもローカル返答で問診を続けられます。

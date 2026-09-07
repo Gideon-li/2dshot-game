@@ -91,3 +91,11 @@ API：`MentorCues.next(case, exams, asked_ten_q_ids, cues_emitted)`。
 5. 冒烟：采桂枝+白芍+生姜+甘草 → 阿福风寒路径仍可向愈。
 
 线索文案剧本可覆写；逻辑已给可跑草稿。阿桂含糊提示 ≥3 句归剧本。
+
+
+## V122 问诊 prompt / offline
+
+- 病例卡 system prompt **与 provider 无关**（remote / local / offline 共用字段）。约定：`logic/inquiry_prompt_contract.json`。
+- 只用人物卡 + `inquiry_anchor` / `never_say` + `inquiry_rules`；不把 endpoint、key、provider 写进 prompt。
+- offline：`ask_wrappers` 套 `{sym}`=锚点；追问病名走 `dodge`。
+- 覆盖自检：`python3 logic/check_offline_templates.py` → `logic/offline_coverage_report.json`（须 PASS）。

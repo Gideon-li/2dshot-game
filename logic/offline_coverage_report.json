@@ -1,0 +1,51 @@
+{
+  "id": "offline_template_coverage_v122",
+  "pass": true,
+  "fail_count": 0,
+  "fails": [],
+  "cases": [
+    {
+      "case_id": "fenghan_biao",
+      "bind": "char_porter",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "case_id": "ganyu_qizhi",
+      "bind": "char_clerk",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "case_id": "yinxu_neire",
+      "bind": "char_copyist",
+      "ok": true,
+      "issues": []
+    }
+  ],
+  "provider_note": "prompt/templates provider-agnostic",
+  "prompt_contract": {
+    "from_character": [
+      "name",
+      "age",
+      "identity",
+      "region",
+      "personality",
+      "motive",
+      "pathogenesis_notes.lived",
+      "pathogenesis_notes.how_they_talk_about_it",
+      "ask_wrappers",
+      "dodge",
+      "opening"
+    ],
+    "from_case": [
+      "clues.wen_ask.inquiry_anchor",
+      "clues.wen_ask.never_say",
+      "bind_character_id"
+    ],
+    "from_global": [
+      "inquiry_rules"
+    ],
+    "note": "make_system_prompt / template_reply 只读病例卡+病机锚，与 remote|local|offline 无关。offline 用 wrappers+anchors+dodge。"
+  }
+}

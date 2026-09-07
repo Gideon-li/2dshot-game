@@ -7,3 +7,6 @@ secrets.env
 *.tmp
 *~
 .DS_Store
+*.gguf
+models/
+user_models/

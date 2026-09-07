@@ -1,0 +1,40 @@
+{
+  "id": "inquiry_prompt_contract_v122",
+  "provider_agnostic": true,
+  "builders": {
+    "system_prompt": "QwenClient.make_system_prompt(character, case_data) — used by remote and local",
+    "offline_reply": "QwenClient.template_reply(question, character, case_data)"
+  },
+  "inputs": {
+    "from_character": [
+      "name",
+      "age",
+      "identity",
+      "region",
+      "personality",
+      "motive",
+      "pathogenesis_notes.lived",
+      "pathogenesis_notes.how_they_talk_about_it",
+      "ask_wrappers",
+      "dodge",
+      "opening"
+    ],
+    "from_case": [
+      "clues.wen_ask.inquiry_anchor",
+      "clues.wen_ask.never_say",
+      "bind_character_id"
+    ],
+    "from_global": [
+      "inquiry_rules"
+    ],
+    "note": "make_system_prompt / template_reply 只读病例卡+病机锚，与 remote|local|offline 无关。offline 用 wrappers+anchors+dodge。"
+  },
+  "rules": [
+    "Do not branch prompt content on provider=remote|local|offline",
+    "Never put API keys or endpoint URLs into the case card prompt",
+    "offline must work with only slice_logic + slice_characters (no network)",
+    "never_say stripped / dodged on diagnosis hunt",
+    "{sym} in ask_wrappers fills inquiry_anchor only"
+  ],
+  "self_check": "logic/check_offline_templates.py → logic/offline_coverage_report.json"
+}

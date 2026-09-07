@@ -34,7 +34,7 @@
 
 每人含：`personality` / `voice` / `motive` / `taboos` / `conceal` / `opening` / `ask_wrappers` / `dodge` / `pathogenesis_notes`。
 
-## 问诊边界（病人 + Helix / 本地回退）
+## 问诊边界（病人 + 本地模型 / 远程开发 / 离线回退）
 
 1. **不得主动报诊断名。** 禁止说各案 `never_say`。追问病名走 `dodge`。
 2. **每次措辞不同，咬住症状。** 只从 `inquiry_anchor` 取 1–2 条，用生活词说。
@@ -49,7 +49,9 @@
 - 清荷：胸胁闷、叹口气好一点、吃不下、睡不实、心里不顺
 - 婆婆：手足心热、盗汗、喉干、难睡、下午更烦
 
-API 失败：`ask_wrappers` 套锚。`{sym}` 只填锚，不填诊断名。
+API / 本地模型失败或无网：`ask_wrappers` 套锚。`{sym}` 只填锚，不填诊断名。
+
+**V122：** 问诊可在无网时使用本地回复（成品默认本地轻量模型；开发可用远程接口；任何后端失败走模板）。**不改** `inquiry_anchor` / `never_say`。
 
 ## 给其他组
 
@@ -72,3 +74,7 @@ API 失败：`ask_wrappers` 套锚。`{sym}` 只填锚，不填诊断名。
 - 阿桂含糊提示 3 句：`agui.hints`（门槛旁白，不可点）。
 - 苏问舟可复用一句：`mentor_su_line`——「药还认不准，先别碰人……」
 - 线索写形色气味触感，**不写标准诊断/方名**。
+
+## V122 问诊后端说明（剧本侧）
+
+问诊可在无网时使用本地回复。锚点与人设文案不改；角色开发按 provider（local / remote / offline）切换，offline 仍咬本文件问诊边界。

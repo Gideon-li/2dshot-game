@@ -24,7 +24,8 @@
     "v120": "mentor_cue wiring ≤2/visit; settlement_display; revisit save hook; xiaohe proxy off",
     "JT": "J=T=1 keep",
     "v121": "forage identify+pick; max 12; unidentified cannot enter formula; afternoon slot -1",
-    "v121_1": "whitelist locked to 12; no extra forage herbs"
+    "v121_1": "whitelist locked to 12; no extra forage herbs",
+    "v122": "inquiry prompt provider-agnostic; offline coverage self-check"
   },
   "exam_ids": [
     "wang",
@@ -3758,5 +3759,10 @@
     "note_cap": "切片白名单与 forage_script.json 12 味对齐；其余 forage.enabled=false。含 mahuang/dazao/mudanpi；bohe/shanyao 不在白名单。",
     "script_ref": "patients/forage_script.json",
     "locked_by": "DEV-TASKS-V121-1"
+  },
+  "inquiry": {
+    "prompt_contract": "logic/inquiry_prompt_contract.json",
+    "offline_coverage_report": "logic/offline_coverage_report.json",
+    "provider_agnostic": true
   }
 }
