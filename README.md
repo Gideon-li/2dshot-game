@@ -7,16 +7,17 @@ Open `project.godot` in Godot 4.3+ (4.x). Main scene: `scenes/main.tscn`.
 ## Slice (do not expand)
 
 - One ink-wash clinic, one apprentice, 3 patients
-- Full 望闻问切 (ask via Qwen, local fallback if API fails)
+- Full 望闻问切 (ask via local llama-server / optional DEV remote; offline template fallback)
 - Formula (drag herbs) and acupuncture both viable
 - CN playable; EN/JP i18n keys present
 - Boot disclaimer required
 
 Not this slice: time-travel, leaderboards, full map, hiring apprentices.
 
-## Secrets
+## Secrets / LLM
 
-Qwen key lives only in `secrets.env` on the shared machine. Never commit it. Never paste it in chat. Do not market Qwen/LLM.
+- **Shipping**: local OpenAI-compatible server (llama.cpp `llama-server`) or offline symptom templates. See `docs/LLM-LOCAL.md` / `other-systems/LLM-LOCAL.md`. Dialogue can run offline.
+- **DEV remote** (Helix): `secrets.env` on the machine only. Never commit. Never paste in chat. Do not market model names on Steam.
 
 ## Layout
 

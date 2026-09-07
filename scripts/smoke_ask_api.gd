@@ -1,12 +1,15 @@
 extends Node
-## Headless Helix ask smoke as 赵阿福. Prints only API_OK / API_FALLBACK.
+## Headless inquiry provider smoke. Prints API_OK / LOCAL_OK / OFFLINE_FALLBACK.
 ## Never prints secrets, response body, or key material.
 
 func _ready() -> void:
 	var q := QwenClient.new()
 	add_child(q)
-	var has_key := not q._read_api_key().is_empty()
-	print("has_key=", has_key)
+	print("provider_pref=", q._cfg_provider())
+	print("resolved=", q.resolve_provider())
+	print("allow_remote=", q.allow_remote())
+	print("model_present=", q.model_file_present())
+	print("has_key=", not q._read_api_key().is_empty())
 	var porter := CaseDB.patient_by_id("char_porter")
 	if porter.is_empty():
 		porter = CaseDB.patient_by_id("fenghan_biao")
@@ -16,17 +19,14 @@ func _ready() -> void:
 	var done := false
 	q.replied.connect(func(text: String, from_api: bool) -> void:
 		done = true
-		# Do not print reply body (may echo prompts); only status token.
-		if from_api and str(text).strip_edges() != "":
-			print("API_OK")
-			get_tree().quit(0)
-		else:
-			print("API_FALLBACK")
-			get_tree().quit(0)
+		var status := q.last_status
+		if status == "":
+			status = "API_OK" if from_api else "OFFLINE_FALLBACK"
+		print(status)
+		get_tree().quit(0)
 	)
 	q.ask("夜里睡得怎么样？", porter, case_data)
-	# Safety timeout
 	await get_tree().create_timer(12.0).timeout
 	if not done:
-		print("API_FALLBACK")
+		print("OFFLINE_FALLBACK")
 		get_tree().quit(0)

@@ -957,7 +957,33 @@ func run_slice_smoke() -> int:
 		fails.append("cold herbs on wind-cold should mistreat")
 	var q := QwenClient.new()
 	add_child(q)
+	var porter: Dictionary = CaseDB.patient_by_id("char_porter")
+	var c1: Dictionary = CaseDB.case_for_patient("char_porter")
+	var local_a: String = q._template_reply("夜里睡得怎么样？", porter, c1)
+	var local_b: String = q._template_reply("风寒束表是不是？", porter, c1)
+	print("local_reply_len=", local_a.length())
+	if local_a.strip_edges().is_empty():
+		fails.append("template empty")
+	if local_b.find("风寒") >= 0:
+		fails.append("template leaked diagnosis")
 	print("api_key_present=", not q._read_api_key().is_empty())
+	# V122: main smoke stays offline (no network ask).
+	OS.set_environment("MOWEN_LLM_PROVIDER", "offline")
+	print("llm_provider=", q.resolve_provider())
+	var porter_off: Dictionary = CaseDB.patient_by_id("char_porter")
+	var case_off: Dictionary = CaseDB.case_for_patient("char_porter")
+	var offline_hit := {"ok": false}
+	q.replied.connect(func(_t: String, from_api: bool) -> void:
+		offline_hit["ok"] = (not from_api) and q.last_status == "OFFLINE_FALLBACK"
+		if offline_hit["ok"]:
+			print("OFFLINE_FALLBACK")
+		else:
+			print(q.last_status)
+	, CONNECT_ONE_SHOT)
+	q.ask("夜里睡得怎么样？", porter_off, case_off)
+	if not offline_hit["ok"]:
+		fails.append("expected OFFLINE_FALLBACK from InquiryLLM.ask")
+	OS.set_environment("MOWEN_LLM_PROVIDER", "")
 	var exams_miss_ask := {"wang": true, "wen_listen": true, "wen_ask": false, "qie": true}
 	var saved_exams = GameFlow.exams
 	var saved_tenq: Array = GameFlow.tenq_asked.duplicate()

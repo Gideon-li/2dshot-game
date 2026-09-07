@@ -1,6 +1,6 @@
 # Steam Coming Soon 素材清单（切片可录即挂）
 
-切片已无头冒烟通过。Demo = 本切片。发售页至少提前 2 周。不要把 Qwen/大模型写进卖点。不要挂 Education；Medical Sim 不要放第一。主标签：Simulation / Puzzle / Casual / 2D。
+切片已无头冒烟通过。Demo = 本切片。发售页至少提前 2 周。不要把 Qwen/大模型写进卖点。问诊可在无网时使用本地回复（模板或本机轻量模型）。不要挂 Education；Medical Sim 不要放第一。主标签：Simulation / Puzzle / Casual / 2D。
 
 ## 商店第一句（锁死）
 
@@ -42,3 +42,5 @@
 
 
 Updated paths: ui/store CAM_ASK FORMULA NEEDLE RESULT.
+
+问诊对话可在无网时使用本地回复（本地模型或模板回退）。

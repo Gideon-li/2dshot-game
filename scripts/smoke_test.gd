@@ -84,6 +84,25 @@ func _ready() -> void:
 		fails.append("template leaked diagnosis name")
 	var key_on := not q._read_api_key().is_empty()
 	print("api_key_present=", key_on)
+	# V122: force offline ask — main smoke must not need internet
+	OS.set_environment("MOWEN_LLM_PROVIDER", "offline")
+	var offline_done := {"ok": false}
+	q.replied.connect(func(_t: String, from_api: bool) -> void:
+		offline_done["ok"] = true
+		offline_done["from_api"] = from_api
+		offline_done["status"] = q.last_status
+		print(q.last_status)
+	, CONNECT_ONE_SHOT)
+	q.ask("夜里睡得怎么样？", porter, c1)
+	var waited := 0.0
+	while not offline_done["ok"] and waited < 2.5:
+		await get_tree().process_frame
+		waited += get_process_delta_time()
+	if not offline_done["ok"]:
+		fails.append("offline ask did not finish")
+	elif offline_done.get("from_api", True) or str(offline_done.get("status", "")) != "OFFLINE_FALLBACK":
+		fails.append("expected OFFLINE_FALLBACK in main smoke")
+	OS.set_environment("MOWEN_LLM_PROVIDER", "")
 	# V120 mentor cue when exams / tenq incomplete
 	var saved_exams = GameFlow.exams
 	var saved_tenq = GameFlow.tenq_asked.duplicate()

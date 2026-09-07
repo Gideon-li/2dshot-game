@@ -1,19 +1,29 @@
 class_name QwenClient
 extends Node
-## Runtime ask-path. Key from secrets.env on disk. Never logs the value.
-## Timeouts / missing key / HTTP errors fall back to local symptom templates.
-
-const DEFAULT_MODEL := "qwen3.8-flash"
-const DEFAULT_ENDPOINT := "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
-const TIMEOUT_SEC := 8.0
+## Multi-provider patient ask (V122). Alias: InquiryLLM extends this.
+## local = llama-server OpenAI-compat; remote = Helix DEV; offline = templates.
+## Shipping auto → local then offline (≤2s). Never silently remote. Never logs secrets.
 
 signal replied(text: String, from_api: bool)
+
+const TIMEOUT_SEC := 2.0
+const DEFAULT_MODEL := "qwen3.8-flash"
+const DEFAULT_REMOTE_MODEL := "qwen3.8-flash"
+const DEFAULT_LOCAL_MODEL := "qwen3-4b-instruct-q4_k_m"
+const DEFAULT_LOCAL_BASE := "http://127.0.0.1:8080/v1"
+const DEFAULT_ENDPOINT := "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
+const DEFAULT_REMOTE_ENDPOINT := "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
+const MODEL_USER_PATH := "user://models/qwen3-4b-instruct-q4_k_m.gguf"
+
+var last_status: String = ""
+var last_provider: String = ""
 
 var _http: HTTPRequest
 var _busy := false
 var _pending_character: Dictionary = {}
 var _pending_case: Dictionary = {}
 var _pending_question: String = ""
+var _attempt_provider: String = ""
 
 
 func _ready() -> void:
@@ -33,62 +43,107 @@ func ask(question: String, character: Dictionary, case_data: Dictionary) -> void
 	_pending_question = question
 	if _busy:
 		return
-	var key := _read_api_key()
-	if key.is_empty():
-		_finish(template_reply(question, character, case_data), false)
+	var provider := resolve_provider()
+	_attempt_provider = provider
+	last_provider = provider
+	if provider == "offline":
+		_finish_offline()
 		return
+	if _http == null:
+		_http = HTTPRequest.new()
+		_http.timeout = TIMEOUT_SEC
+		add_child(_http)
+		_http.request_completed.connect(_on_http)
 	_busy = true
-	var endpoint := _read_endpoint()
-	var model := _read_model()
+	var endpoint := ""
+	var model := ""
+	var key := ""
+	if provider == "local":
+		endpoint = _normalize_chat_url(_local_base_url())
+		model = _local_model()
+		key = _local_api_key()
+	else:
+		key = _read_api_key()
+		if key.is_empty():
+			_busy = false
+			_finish_offline()
+			return
+		endpoint = _read_remote_endpoint()
+		model = _read_remote_model()
 	var body := {
 		"model": model,
 		"temperature": 0.9,
 		"max_tokens": 180,
-		"enable_thinking": false,
 		"messages": [
 			{"role": "system", "content": make_system_prompt(character, case_data)},
 			{"role": "user", "content": question},
 		],
 	}
-	var headers := PackedStringArray([
-		"Content-Type: application/json",
-		"Authorization: Bearer " + key,
-	])
+	if provider == "remote":
+		body["enable_thinking"] = false
+	var headers := PackedStringArray(["Content-Type: application/json"])
+	if key != "":
+		headers.append("Authorization: Bearer " + key)
+	_http.timeout = TIMEOUT_SEC
 	var err := _http.request(endpoint, headers, HTTPClient.METHOD_POST, JSON.stringify(body))
 	if err != OK:
 		_busy = false
-		_finish(template_reply(question, character, case_data), false)
+		_finish_offline()
 
 
-func _on_http(result: int, code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
-	_busy = false
-	var fallback := template_reply(_pending_question, _pending_character, _pending_case)
-	if result != HTTPRequest.RESULT_SUCCESS or code < 200 or code >= 300:
-		_finish(fallback, false)
-		return
-	var parsed: Variant = JSON.parse_string(body.get_string_from_utf8())
-	if typeof(parsed) != TYPE_DICTIONARY:
-		_finish(fallback, false)
-		return
-	var choices: Variant = parsed.get("choices", [])
-	if typeof(choices) != TYPE_ARRAY or (choices as Array).is_empty():
-		_finish(fallback, false)
-		return
-	var msg: Variant = (choices as Array)[0]
-	if typeof(msg) != TYPE_DICTIONARY:
-		_finish(fallback, false)
-		return
-	var content: Variant = msg.get("message", {}).get("content", "")
-	var text := str(content).strip_edges()
-	if text.is_empty():
-		_finish(fallback, false)
-		return
-	text = strip_never_say(text, _pending_case)
-	_finish(text, true)
+func resolve_provider() -> String:
+	var pref := _cfg_provider()
+	if pref == "offline":
+		return "offline"
+	if pref == "local":
+		return "local"
+	if pref == "remote":
+		return "remote" if allow_remote() else "offline"
+	# auto: try local (fast fail → offline). Never silent remote on player builds.
+	return "local"
 
 
-func _finish(text: String, from_api: bool) -> void:
-	replied.emit(text, from_api)
+func allow_remote() -> bool:
+	if OS.has_feature("player_build") and not OS.has_feature("editor"):
+		return false
+	if str(_llm_cfg().get("allow_remote", "")).to_lower() in ["1", "true", "yes"]:
+		return true
+	if OS.get_environment("MOWEN_ALLOW_REMOTE").strip_edges().to_lower() in ["1", "true", "yes"]:
+		return true
+	var bag := _read_secrets_bag()
+	if str(bag.get("MOWEN_ALLOW_REMOTE", "")).strip_edges().to_lower() in ["1", "true", "yes"]:
+		return true
+	if OS.has_feature("editor") and not _read_api_key().is_empty():
+		return true
+	return false
+
+
+func model_file_present() -> bool:
+	return FileAccess.file_exists(MODEL_USER_PATH)
+
+
+func status_i18n_key() -> String:
+	if last_status == "LOCAL_OK":
+		return "LLM_STATUS_LOCAL_OK"
+	if last_status == "API_OK":
+		return "LLM_STATUS_REMOTE_DEV"
+	if last_status == "OFFLINE_FALLBACK":
+		return "LLM_STATUS_OFFLINE"
+	if model_file_present():
+		return "LLM_MODEL_READY"
+	return "LLM_MODEL_MISSING"
+
+
+func provider_i18n_key(provider: String = "") -> String:
+	var p := provider if provider != "" else resolve_provider()
+	if p == "local":
+		return "LLM_PROVIDER_LOCAL"
+	if p == "remote":
+		return "LLM_PROVIDER_REMOTE"
+	if p == "offline":
+		return "LLM_PROVIDER_OFFLINE"
+	return "LLM_PROVIDER_AUTO"
+
 
 
 static func loc_key() -> String:
@@ -172,7 +227,6 @@ static func template_reply(question: String, character: Dictionary, case_data: D
 	if wrappers.is_empty():
 		wrappers = ["{sym}"]
 	var wrap := str(wrappers[abs(hash(question + str(Time.get_ticks_msec() / 4000))) % wrappers.size()])
-	# {sym} = inquiry_anchor only. Never diagnosis names.
 	var sym := "，".join(PackedStringArray(picked)) if wrap_key == "zh" else "; ".join(PackedStringArray(picked))
 	return wrap.replace("{sym}", sym)
 
@@ -221,10 +275,112 @@ func _system_prompt(character: Dictionary, case_data: Dictionary) -> String:
 	return make_system_prompt(character, case_data)
 
 
+func _on_http(result: int, code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
+	_busy = false
+	if result != HTTPRequest.RESULT_SUCCESS or code < 200 or code >= 300:
+		_finish_offline()
+		return
+	var parsed: Variant = JSON.parse_string(body.get_string_from_utf8())
+	if typeof(parsed) != TYPE_DICTIONARY:
+		_finish_offline()
+		return
+	var choices: Variant = parsed.get("choices", [])
+	if typeof(choices) != TYPE_ARRAY or (choices as Array).is_empty():
+		_finish_offline()
+		return
+	var msg: Variant = (choices as Array)[0]
+	if typeof(msg) != TYPE_DICTIONARY:
+		_finish_offline()
+		return
+	var content: Variant = msg.get("message", {}).get("content", "")
+	var text := str(content).strip_edges()
+	if text.is_empty():
+		_finish_offline()
+		return
+	text = strip_never_say(text, _pending_case)
+	if _attempt_provider == "local":
+		last_status = "LOCAL_OK"
+	else:
+		last_status = "API_OK"
+	last_provider = _attempt_provider
+	replied.emit(text, true)
+
+
+func _finish_offline() -> void:
+	_busy = false
+	last_status = "OFFLINE_FALLBACK"
+	last_provider = "offline"
+	var text := template_reply(_pending_question, _pending_character, _pending_case)
+	replied.emit(text, false)
+
+
+func _cfg_provider() -> String:
+	var env := OS.get_environment("MOWEN_LLM_PROVIDER").strip_edges().to_lower()
+	if env in ["local", "remote", "offline", "auto"]:
+		return env
+	var p := str(_llm_cfg().get("provider", "auto")).strip_edges().to_lower()
+	if p in ["local", "remote", "offline", "auto"]:
+		return p
+	return "auto"
+
+
+func _local_base_url() -> String:
+	var env := OS.get_environment("MOWEN_LOCAL_BASE_URL").strip_edges()
+	if env != "":
+		return env
+	var u := str(_llm_cfg().get("local_base_url", DEFAULT_LOCAL_BASE)).strip_edges()
+	return u if u != "" else DEFAULT_LOCAL_BASE
+
+
+func _local_model() -> String:
+	var env := OS.get_environment("MOWEN_LOCAL_MODEL").strip_edges()
+	if env != "":
+		return env
+	var m := str(_llm_cfg().get("local_model", DEFAULT_LOCAL_MODEL)).strip_edges()
+	return m if m != "" else DEFAULT_LOCAL_MODEL
+
+
+func _local_api_key() -> String:
+	var env := OS.get_environment("MOWEN_LOCAL_API_KEY").strip_edges()
+	if env != "":
+		return env
+	var k := str(_llm_cfg().get("local_api_key", "local")).strip_edges()
+	return k
+
+
+func _llm_cfg() -> Dictionary:
+	var out := {}
+	var path := "user://llm.cfg"
+	if not FileAccess.file_exists(path):
+		return out
+	var f := FileAccess.open(path, FileAccess.READ)
+	if f == null:
+		return out
+	var section := ""
+	while not f.eof_reached():
+		var line := f.get_line().strip_edges()
+		if line.is_empty() or line.begins_with("#") or line.begins_with(";"):
+			continue
+		if line.begins_with("[") and line.ends_with("]"):
+			section = line.substr(1, line.length() - 2).strip_edges().to_lower()
+			continue
+		if section != "" and section != "llm":
+			continue
+		var eq := line.find("=")
+		if eq <= 0:
+			continue
+		out[line.substr(0, eq).strip_edges()] = line.substr(eq + 1).strip_edges()
+	return out
+
+
 func _read_api_key() -> String:
-	var bag := _read_secrets_bag()
 	for k in ["QWEN_API_KEY", "DASHSCOPE_API_KEY", "KEY"]:
-		var v := str(bag.get(k, "")).strip_edges()
+		var env := OS.get_environment(k).strip_edges()
+		if env != "":
+			return env
+	var bag := _read_secrets_bag()
+	for k2 in ["QWEN_API_KEY", "DASHSCOPE_API_KEY", "KEY"]:
+		var v := str(bag.get(k2, "")).strip_edges()
 		if v != "":
 			return v
 	return ""
@@ -234,6 +390,7 @@ func _read_secrets_bag() -> Dictionary:
 	var out := {}
 	var paths: PackedStringArray = [
 		ProjectSettings.globalize_path("res://secrets.env"),
+		"user://secrets.env",
 		OS.get_executable_path().get_base_dir().path_join("secrets.env"),
 	]
 	for p in paths:
@@ -260,17 +417,30 @@ func _read_secrets_bag() -> Dictionary:
 	return out
 
 
-func _read_model() -> String:
+func _read_remote_model() -> String:
 	var bag := _read_secrets_bag()
-	var m := str(bag.get("QWEN_MODEL", bag.get("MODEL", DEFAULT_MODEL))).strip_edges()
-	return m if m != "" else DEFAULT_MODEL
+	var m := str(bag.get("QWEN_MODEL", bag.get("MODEL", DEFAULT_REMOTE_MODEL))).strip_edges()
+	return m if m != "" else DEFAULT_REMOTE_MODEL
 
 
-func _read_endpoint() -> String:
+func _read_model() -> String:
+	return _read_remote_model()
+
+
+func _read_remote_endpoint() -> String:
 	var bag := _read_secrets_bag()
 	var u := str(bag.get("QWEN_BASE_URL", bag.get("OPENAI_BASE_URL", ""))).strip_edges()
 	if u == "":
-		return DEFAULT_ENDPOINT
+		return DEFAULT_REMOTE_ENDPOINT
+	return _normalize_chat_url(u)
+
+
+func _read_endpoint() -> String:
+	return _read_remote_endpoint()
+
+
+func _normalize_chat_url(url: String) -> String:
+	var u := url.strip_edges()
 	if u.ends_with("/chat/completions"):
 		return u
 	if u.ends_with("/v1") or u.ends_with("/compatible-mode/v1"):
