@@ -23,7 +23,8 @@
     ],
     "v120": "mentor_cue wiring ≤2/visit; settlement_display; revisit save hook; xiaohe proxy off",
     "JT": "J=T=1 keep",
-    "v121": "forage identify+pick; max 12; unidentified cannot enter formula; afternoon slot -1"
+    "v121": "forage identify+pick; max 12; unidentified cannot enter formula; afternoon slot -1",
+    "v121_1": "whitelist locked to 12; no extra forage herbs"
   },
   "exam_ids": [
     "wang",
@@ -3741,20 +3742,21 @@
     "contracts_prototype": "load forage.enabled herbs; show clues then options; success → inventory++; tray filters by identified+stock; afternoon -= 1 on enter; max 12 forage herbs",
     "slice_whitelist": [
       "guizhi",
-      "mahuang",
-      "shengjiang",
       "baishao",
+      "shengjiang",
       "gancao",
-      "dazao",
       "chaihu",
       "danggui",
       "baizhu",
       "fuling",
-      "shudi",
-      "mudanpi"
+      "mahuang",
+      "dazao",
+      "mudanpi",
+      "shudi"
     ],
     "runtime_cap": 12,
     "note_cap": "切片白名单与 forage_script.json 12 味对齐；其余 forage.enabled=false。含 mahuang/dazao/mudanpi；bohe/shanyao 不在白名单。",
-    "script_ref": "patients/forage_script.json"
+    "script_ref": "patients/forage_script.json",
+    "locked_by": "DEV-TASKS-V121-1"
   }
 }
