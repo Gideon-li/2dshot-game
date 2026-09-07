@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://bbv1f3ofqf6ay"
+
+[deps]
+
+files=["res://steam-coming-soon/store-copy.zh.translation", "res://steam-coming-soon/store-copy.en.translation", "res://steam-coming-soon/store-copy.ja.translation"]
+
+source_file="res://steam-coming-soon/store-copy.csv"
+dest_files=["res://steam-coming-soon/store-copy.zh.translation", "res://steam-coming-soon/store-copy.en.translation", "res://steam-coming-soon/store-copy.ja.translation"]
+
+[params]
+
+compress=true
+delimiter=0

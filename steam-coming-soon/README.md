@@ -4,7 +4,7 @@
 
 文案定稿见同目录 `copy.md` / `store-copy.csv`（已与 `STORE_*` i18n 对齐）。
 
-正式名：**墨问岐黄**。学徒默认 **江晚**。禁止商店主名「林晚」「杏林墨问」。禁止卖点：大模型 / Qwen / Helix / AI 问诊。禁止教材/题库/Education 话术。
+正式名：**墨问岐黄**。学徒默认 **江晚**。禁止商店主名「林晚」「杏林墨问」。禁止卖点：大模型 / Qwen / Helix / AI 问诊。禁止教材/题库/Education 话术。禁止空山水胶囊。脉象在前三张内。
 
 ---
 
@@ -49,41 +49,37 @@ Medical Sim 勿第一。不要挂 Education。
 
 ---
 
-## 文件清单
+## 尺寸验收
 
-### 胶囊 / 库头
-
-| 文件 | 尺寸 | 说明 |
+| 文件 | 要求 | 实际 |
 | --- | --- | --- |
-| `capsule_main.png` | 616×353 | 自 CAM_HERO：厅堂+脉枕（可再精裁） |
-| `capsule_small.png` | 231×87 | 小胶囊 |
-| `header_library.png` | 460×215 | 库头图 |
+| `capsule_main.png` | 616×353 | 616×353 OK |
+| `capsule_small.png` | 231×87 | 231×87 OK |
+| `header_library.png` | 460×215 | 460×215 OK |
+| `screenshots/screenshot_01_hero.png` | ≥1280×720 | 1920×1080 OK |
+| `screenshots/screenshot_02_ask.png` | ≥1280×720 | 1920×1080 OK |
+| `screenshots/screenshot_03_pulse.png` | ≥1280×720 | 1920×1080 OK（前三必有脉象） |
+| `screenshots/screenshot_04_formula_or_needle.png` | ≥1280×720 | 1920×1080 OK |
+| `screenshots/screenshot_05_result_or_garden.png` | ≥1280×720 | 1920×1080 OK |
+| `screenshots/pulse_close.png` | 可选 | 1280×720 OK |
 
-### 截图（`screenshots/`）
+备用：`screenshots/screenshot_04b_needle.png`、`screenshot_05b_garden.png`。胶囊可再精裁。
 
-| 文件 | 尺寸 | 说明 |
-| --- | --- | --- |
-| `screenshot_01_hero.png` | 1920×1080 | 诊室主画面 |
-| `screenshot_02_ask.png` | 1920×1080 | 问诊 |
-| `screenshot_03_pulse.png` | 1920×1080 | 切脉（前三必有脉象） |
-| `screenshot_04_formula_or_needle.png` | 1920×1080 | 开方 |
-| `screenshot_04b_needle.png` | 1920×1080 | 扎针（备用） |
-| `screenshot_05_result_or_garden.png` | 1920×1080 | 疗效结算 |
-| `screenshot_05b_garden.png` | 1920×1080 | 药圃（备用） |
-| `pulse_close.png` | 1280×720 | 切脉近景（可选） |
+### 来源
 
-来源说明见 `SCREENSHOTS-ROLE.md`。
+- 胶囊/库头/01：`ui/layers/CAM_HERO.png`（厅堂+脉枕，江晚）
+- 02：`ui/store/CAM_ASK.png`
+- 03 / pulse_close：`CAM_PULSE-empty` + `pulse-overlay`
+- 04：`CAM_FORMULA`；04b：`CAM_NEEDLE`
+- 05：`CAM_RESULT`；05b：药圃 / yard
 
-### 文案
-
-- `copy.md` — 中英日定稿（粘贴块）
-- `store-copy.csv` — 键值对照（STORE_TITLE / TAGLINE / SHORT_DESC / NOT_MEDICAL）
+详见 `SCREENSHOTS-ROLE.md`。
 
 ---
 
 ## 预告片分镜（待录）
 
-暂无 `trailer_60s.mp4`。建议 60 秒无解说试玩分镜：
+暂无 `trailer_60s.mp4`。建议 60 秒无解说试玩：
 
 1. **进馆** — CAM_HERO / 厅堂+脉枕
 2. **问诊** — CAM_ASK，病人说话，不报病名
