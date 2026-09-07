@@ -2,7 +2,7 @@
 GAME_TITLE,杏林墨问,Xinglin Mowen,杏林墨問
 GAME_SUBTITLE,病人不交全症状,The chart is never complete.,望聞問切は、あなたがやる。
 DISCLAIMER,文化学习，不能替代就医。本作为中医文化体验，不是医疗建议。,Cultural learning only. Not medical advice and not a substitute for seeing a doctor.,文化学習です。医療行為ではなく、受診の代わりにはなりません。
-STORE_NOT_MEDICAL,文化体验，不能替代就医。,A cultural game. Not medical advice.,文化体験ゲームです。医療アドバイスではありません。
+STORE_NOT_MEDICAL,文化体验，不能替代就医。,A cultural experience. Not a substitute for medical care.,文化体験です。受診の代わりにはなりません。
 START_CLINIC,进入医馆,Enter the clinic,医館に入る
 BOOT_DISCLAIMER_TITLE,声明,Not medical advice,医療アドバイスではありません
 BOOT_DISCLAIMER_BODY,本作是中医文化体验游戏，不是医疗建议，也不能替代执业医师的诊断或治疗。如有身体不适，请及时就医。,"This is a cultural game, not a medical product. It cannot diagnose, treat, or replace a licensed practitioner. If you feel unwell, seek real care.",本作は文化体験ゲームであり、医療アドバイスではありません。医師の診断・治療の代わりにはなりません。体調がすぐれない場合は、医療機関を受診してください。
@@ -386,3 +386,6 @@ LLM_STATUS_OFFLINE,已回退离线模板,Fell back to offline templates,オフ�
 LLM_STATUS_TIMEOUT,本地无应答，已改用离线回复。,No local reply in time; using offline answers.,ローカル応答なし。オフライン返答に切替。
 LLM_STATUS_CHECKING,正在检测本地模型…,Checking local model…,ローカルモデルを確認中…
 LLM_OFFLINE_NOTE,无网时可用本地回复继续问诊。,"Without a network, local replies still work.",オフラインでもローカル返答で問診を続けられます。
+STORE_TITLE,墨问岐黄,Mo Wen Qi Huang,墨問岐黄
+STORE_TAGLINE,病人不交全症状。望、闻、问、切，都要你亲手做。,"The patient never hands you a complete chart. Look, listen, ask, then feel the pulse.",患者は症状をすべて話さない。望・聞・問・切は、あなたがやる動詞だ。
+STORE_SHORT_DESC,明快 Q 版的中式医馆。病人不交全症状，望、闻、问、切都要亲手做。开方拖药或点穴扎针，多条路都能治，没有唯一答案。午后去后院药圃，看形色气味再认再采，采来的药能进托盘。问诊无网也能用本地回复。,"A bright Q-style Chinese clinic. Patients never hand you a complete chart — look, listen, ask, and take the pulse yourself. Compound a formula or needle points; more than one path can heal. After noon, identify backyard herbs by shape, color, and scent, then pick them into the tray. Inquiry still works offline with local replies.",明るいQ版の中華医館。患者は症状をすべて渡さない。望・聞・問・切は手でやる。薬を組むか、穴を取るか、正しい道はひとつではない。午後は裏庭の薬圃で形・色・香りを見てから採り、盆に載せられる。問診はネットがなくても手元の返事で続けられる。

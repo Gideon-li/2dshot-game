@@ -47,7 +47,7 @@ A bright Q-style Chinese clinic. Patients never hand you a complete chart — lo
 
 启动长文案仍用 `BOOT_DISCLAIMER_*`，不在此改。不要写可学习行医、不要把具体药方当医嘱。
 
-> 注：现有 EN 键为 “A cultural game. Not medical advice.” 商店页请改用上表，与中文「不能替代就医」对齐。其他要素可把 `STORE_NOT_MEDICAL` 英日同步为此稿。
+> 注：`STORE_NOT_MEDICAL` 英日已与本表对齐。
 
 ---
 
@@ -87,3 +87,16 @@ A cultural experience. Not a substitute for medical care.
 明るいQ版の中華医館。患者は症状をすべて渡さない。望・聞・問・切は手でやる。薬を組むか、穴を取るか、正しい道はひとつではない。午後は裏庭の薬圃で形・色・香りを見てから採り、盆に載せられる。問診はネットがなくても手元の返事で続けられる。
 
 文化体験です。受診の代わりにはなりません。
+
+---
+
+## i18n 同步（其他要素 V123）
+
+已写入 `other-systems/i18n/ui.csv` 与 `locale/xinglin.csv`：
+
+- `STORE_TITLE` / `STORE_TAGLINE` / `STORE_SHORT_DESC` / `STORE_NOT_MEDICAL`
+- `STORE_NOT_MEDICAL` 英日已与上表「不能替代就医」对齐
+- 启动长文案 `BOOT_DISCLAIMER_BODY` 未改；页脚 `BOOT_DISCLAIMER_FOOTER` 与商店短免责同义
+- **未**接 Steamworks
+
+同目录 `store-copy.csv` 可直接给商店粘贴对照。

@@ -292,13 +292,15 @@
     "LLM_STATUS_OFFLINE": "已回退离线模板",
     "LLM_STATUS_TIMEOUT": "本地无应答，已改用离线回复。",
     "LLM_STATUS_CHECKING": "正在检测本地模型…",
-    "LLM_OFFLINE_NOTE": "无网时可用本地回复继续问诊。"
+    "LLM_OFFLINE_NOTE": "无网时可用本地回复继续问诊。",
+    "STORE_TITLE": "墨问岐黄",
+    "STORE_SHORT_DESC": "明快 Q 版的中式医馆。病人不交全症状，望、闻、问、切都要亲手做。开方拖药或点穴扎针，多条路都能治，没有唯一答案。午后去后院药圃，看形色气味再认再采，采来的药能进托盘。问诊无网也能用本地回复。"
   },
   "en": {
     "GAME_TITLE": "Xinglin Mowen",
     "GAME_SUBTITLE": "The chart is never complete.",
     "STORE_TAGLINE": "The patient never hands you a complete chart. Look, listen, ask, then feel the pulse.",
-    "STORE_NOT_MEDICAL": "A cultural game. Not medical advice.",
+    "STORE_NOT_MEDICAL": "A cultural experience. Not a substitute for medical care.",
     "BOOT_DISCLAIMER_TITLE": "Not medical advice",
     "BOOT_DISCLAIMER_BODY": "This is a cultural game, not a medical product. It cannot diagnose, treat, or replace a licensed practitioner. If you feel unwell, seek real care.",
     "BOOT_DISCLAIMER_CHECK": "I have read this",
@@ -587,13 +589,15 @@
     "LLM_STATUS_OFFLINE": "Fell back to offline templates",
     "LLM_STATUS_TIMEOUT": "No local reply in time; using offline answers.",
     "LLM_STATUS_CHECKING": "Checking local model…",
-    "LLM_OFFLINE_NOTE": "Without a network, local replies still work."
+    "LLM_OFFLINE_NOTE": "Without a network, local replies still work.",
+    "STORE_TITLE": "Mo Wen Qi Huang",
+    "STORE_SHORT_DESC": "A bright Q-style Chinese clinic. Patients never hand you a complete chart — look, listen, ask, and take the pulse yourself. Compound a formula or needle points; more than one path can heal. After noon, identify backyard herbs by shape, color, and scent, then pick them into the tray. Inquiry still works offline with local replies."
   },
   "ja": {
     "GAME_TITLE": "杏林墨問",
     "GAME_SUBTITLE": "望聞問切は、あなたがやる。",
     "STORE_TAGLINE": "患者は症状をすべて話さない。望・聞・問・切は、あなたがやる動詞だ。",
-    "STORE_NOT_MEDICAL": "文化体験ゲームです。医療アドバイスではありません。",
+    "STORE_NOT_MEDICAL": "文化体験です。受診の代わりにはなりません。",
     "BOOT_DISCLAIMER_TITLE": "医療アドバイスではありません",
     "BOOT_DISCLAIMER_BODY": "本作は文化体験ゲームであり、医療アドバイスではありません。医師の診断・治療の代わりにはなりません。体調がすぐれない場合は、医療機関を受診してください。",
     "BOOT_DISCLAIMER_CHECK": "内容を確認しました",
@@ -882,6 +886,8 @@
     "LLM_STATUS_OFFLINE": "オフライン定型に切替済み",
     "LLM_STATUS_TIMEOUT": "ローカル応答なし。オフライン返答に切替。",
     "LLM_STATUS_CHECKING": "ローカルモデルを確認中…",
-    "LLM_OFFLINE_NOTE": "オフラインでもローカル返答で問診を続けられます。"
+    "LLM_OFFLINE_NOTE": "オフラインでもローカル返答で問診を続けられます。",
+    "STORE_TITLE": "墨問岐黄",
+    "STORE_SHORT_DESC": "明るいQ版の中華医館。患者は症状をすべて渡さない。望・聞・問・切は手でやる。薬を組むか、穴を取るか、正しい道はひとつではない。午後は裏庭の薬圃で形・色・香りを見てから採り、盆に載せられる。問診はネットがなくても手元の返事で続けられる。"
   }
 }
