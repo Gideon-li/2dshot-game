@@ -2,7 +2,7 @@
   "id": "mo-wen-qi-huang-process-script",
   "project": "墨问岐黄",
   "version": 3,
-  "task": "DEV-TASKS-V124",
+  "task": "DEV-TASKS-V128",
   "notes": {
     "priority_herb": "xingren",
     "no_real_dosage": true,
@@ -12,9 +12,10 @@
       "BOOT_DISCLAIMER_*"
     ],
     "tone": "cultural clinic game; teach by hand feel; never diagnose or prescribe for real life",
-    "slice_lock": "xingren=wash, baishao=fry, mudanpi=sun_dry; fuzi optional warn; shengjiang backup fry",
-    "aligned_logic": "2026-09-08 开发负责人：杏仁洗 + 白芍炒",
-    "v128": "mudanpi sun_dry teach lock; flip + sun bar; dazao backup optional not added"
+    "slice_lock": "teach lock: xingren=wash, baishao=fry, mudanpi=sun_dry; fuzi optional warn; shengjiang backup fry only",
+    "aligned_logic": "2026-09-08 开发负责人：杏仁洗 + 白芍炒 + 牡丹皮晒",
+    "v128": "mudanpi sun_dry teach lock; flip + sun bar; dazao backup optional not added",
+    "priority_herb_sun": "mudanpi"
   },
   "mentor_su": {
     "id": "mentor_su",
@@ -23,17 +24,20 @@
       "zh": [
         "火候在人，不在炉。看着条，别盯着火苗发呆。",
         "杏仁生用带尖，先洗去皮尖，再谈入盏。",
-        "须炮制的药，生的拖不进托盘。这是馆规，不是刁难。"
+        "须炮制的药，生的拖不进托盘。这是馆规，不是刁难。",
+        "晒药要动手翻，不是挂机等条。薄片摊匀，日照走完再收。"
       ],
       "en": [
         "The fire sits in the cook, not the stove. Watch the bar — do not stare at the flame.",
         "Raw apricot kernels keep their tips. Wash the skin and tips off before they enter the tray.",
-        "Herbs that must be processed cannot enter the tray raw. House rule — not a trick."
+        "Herbs that must be processed cannot enter the tray raw. House rule — not a trick.",
+        "Sun-drying needs your hands — not idling on a bar. Spread thin; collect when the sun mark is done."
       ],
       "ja": [
         "火加減は人にあり、炉にはない。バーを見ろ。炎をぼんやり見るな。",
         "生の杏仁には尖がある。皮と尖を洗ってから盆へ。",
-        "炮制が必要な薬は、生のまま盆に入れられない。館の決まりだ。"
+        "炮制が必要な薬は、生のまま盆に入れられない。館の決まりだ。",
+        "晒薬は手で裏返す。バー待ちではない。薄く広げ、日照が終わってから回収。"
       ]
     },
     "block_raw": {
@@ -62,21 +66,24 @@
     "lines": {
       "zh": [
         "水溅到鞋了……下次轻一点！",
-        "炒糊了我会闻见。你自己看着办。"
+        "炒糊了我会闻见。你自己看着办。",
+        "翻！别烤糊了——晒糊也算。"
       ],
       "en": [
         "Water on my shoes… lighter next time!",
-        "If you scorch it, I will smell it. Your call."
+        "If you scorch it, I will smell it. Your call.",
+        "Flip! Don't toast it — sun-scorch counts too."
       ],
       "ja": [
         "靴が濡れた……次は優しく！",
-        "焦がしたら匂いで分かる。あとは自分で。"
+        "焦がしたら匂いで分かる。あとは自分で。",
+        "裏返せ！焦がすな——日で焦げるのも同じ。"
       ]
     },
     "sun_dry_hint": {
-      "zh": "晒架空着。放上去，半日格走完再收。",
-      "en": "The drying rack is free. Set it there; pick it up when the half-day mark is done.",
-      "ja": "干し棚が空いてる。乗せて、半日マスが終わってから回収。"
+      "zh": "晒架可用。摊匀，翻一两面，日照满了再收。",
+      "en": "The drying rack is ready. Spread even, flip once or twice, then collect when the sun mark fills.",
+      "ja": "干し棚が使える。均して一〜二面裏返し、日照が満ちたら回収。"
     },
     "sun_lines": {
       "zh": [
@@ -189,6 +196,16 @@
       "zh": "生的拖不进托盘。先去炮制院。",
       "en": "Raw will not enter the tray. Go to the processing yard first.",
       "ja": "生のまま盆に入らない。先に炮制院へ。"
+    },
+    "sun_flip": {
+      "zh": "翻好了。日照还在走。",
+      "en": "Flipped. The sun mark is still moving.",
+      "ja": "裏返した。日照はまだ進む。"
+    },
+    "sun_need_flip": {
+      "zh": "至少翻晒一次。别只挂着看条。",
+      "en": "Flip at least once. Do not just watch the bar.",
+      "ja": "少なくとも一回裏返せ。バーを眺めているだけはだめ。"
     }
   },
   "herbs": [
@@ -248,71 +265,20 @@
       "needs_process": true,
       "process_method": "sun_dry",
       "priority": true,
-      "v128": true,
       "teach": {
-        "zh": "牡丹皮：薄片摊晒。翻面两三次，日照条走满再收，别堆成坨。",
-        "en": "Moutan bark: spread thin slices in the sun. Flip two or three times; take in when the sun bar fills — do not pile them.",
-        "ja": "牡丹皮：薄片を広げて干す。二、三回裏返せ。日照バーが満ちてから回収。山積みにするな。"
+        "zh": "牡丹皮：薄片摊晒。动手翻一两面，看日照，别挂机。",
+        "en": "Moutan: thin slices in the sun. Flip once or twice — watch the sun mark, do not idle.",
+        "ja": "牡丹皮：薄片を晒す。一〜二面裏返せ。日照を見ろ。放置するな。"
       },
       "warn": {
-        "zh": "生片未晒透，不入盏。晒只是馆内教学，不写真实日照时数。",
-        "en": "Raw slices stay out of the tray until sun-dried. Teaching only — no real sun-hour doses.",
-        "ja": "生のままでは盆に入れない。干しは館内教学であり、現実の日照時間ではない。"
+        "zh": "生品不可入盏。翻少或晒过，品质只算勉强。",
+        "en": "Raw stays off the tray. Too few flips or over-sun only rates barely.",
+        "ja": "生は盞に入れない。裏返しが少ないか晒し過ぎは、品質ぎり。"
       },
       "done": {
         "zh": "晒妥了。牡丹皮可以入盏。",
-        "en": "Sun-dried sound. Moutan may enter the tray.",
-        "ja": "干し終えた。牡丹皮を盆に載せてよい。"
-      },
-      "success_ok": {
-        "zh": [
-          "翻晒均匀，皮干得脆。可以入盏。",
-          "日照够了。收起来。"
-        ],
-        "en": [
-          "Flipped evenly; the bark dried crisp. Tray is open.",
-          "Sun was enough. Take it in."
-        ],
-        "ja": [
-          "裏返しが均等で、皮が乾いて脆い。盆に載せてよい。",
-          "日照が足りた。回収せよ。"
-        ]
-      },
-      "success_bare": {
-        "zh": [
-          "勉强干了。下次翻面勤一点。",
-          "边沿还潮一点，还能入盏。"
-        ],
-        "en": [
-          "Barely dry. Flip more often next time.",
-          "Edges still a touch damp — still tray-ready."
-        ],
-        "ja": [
-          "ぎりぎり乾いた。次はもっと裏返せ。",
-          "端が少し湿るが、盆には載る。"
-        ]
-      },
-      "fail": {
-        "zh": [
-          "还潮。再翻晒一轮。",
-          "堆成坨了。摊开再晒。",
-          "日照不够。别急着收。"
-        ],
-        "en": [
-          "Still damp. Flip and sun another round.",
-          "Piled into a lump. Spread them and sun again.",
-          "Not enough sun. Do not take them in yet."
-        ],
-        "ja": [
-          "まだ湿る。もう一轮干せ。",
-          "山になった。広げてやり直せ。",
-          "日照が足りない。急いで回収するな。"
-        ]
-      },
-      "flip_hint": {
-        "zh": "翻一面。别只盯着进度条。",
-        "en": "Flip a side. Do not only watch the bar.",
-        "ja": "裏返せ。バーだけ見るな。"
+        "en": "Sun-dried. Moutan may enter the tray.",
+        "ja": "乾かし終わった。牡丹皮を盆に載せてよい。"
       }
     },
     {

@@ -410,7 +410,7 @@ PROCESS_FRY_HOT,过火了。,Too hot.,火が過ぎた。
 PROCESS_FRY_COLD,欠火。,Too cool.,火が足りない。
 PROCESS_FRY_OK,火候正好。,Heat is right.,火候ちょうどよい。
 PROCESS_FRY_OKAY,勉强能用。,Barely usable.,ぎりぎり使える。
-PROCESS_SUN_HINT,置到半日，小荷会喊你。,Leave it half a day — Xiaohe will call.,半日置く。小荷が呼ぶ。
+PROCESS_SUN_HINT,薄片摊开，翻晒两三次，看日照。,Spread the thin slices; flip two or three times under the sun.,薄片を広げ、二〜三回ひっくり返し、日に当てる。
 PROCESS_SUN_OK,晒好了。,Sun-dried.,乾いた。
 PROCESS_QUALITY_GOOD,妥,Sound,妥
 PROCESS_QUALITY_OK,勉强,Fair,ぎり
@@ -501,3 +501,22 @@ REVISIT_OBSERVE_GOOD,观其向愈，勿药可也。,Healing — observe without 
 REVISIT_OBSERVE_SLOW,再守两日，勿急叠方。,Hold two more days; don't stack formulas.,あと二日守れ。方を重ねるな。
 REVISIT_OBSERVE_OVER,先停猛药，缓一缓再看。,Stop the harsh herbs; ease before another look.,まず猛薬を止め、緩めてから見よ。
 REVISIT_OBSERVE_MIS,先停手观察，改日再议。,Stop and observe; discuss another day.,まず手を止め観察し、後日また議せ。
+PROCESS_SUN_FLIP,翻晒,Flip,裏返す
+PROCESS_SUN_FLIP_HINT,再翻一面。别只挂着看条。,Flip again. Don't just watch the bar.,もう一面。バーを眺めているだけはだめ。
+PROCESS_SUN_FLIP_NEED,至少翻晒一次。,Flip at least once.,少なくとも一回裏返せ。
+PROCESS_SUN_PROGRESS,日照,Sunlight,日照
+PROCESS_SUN_DONE,晒妥了。,Sun-drying done.,乾かし終わった。
+PROCESS_SUN_OKAY,勉强能用。翻少了，或晒过了。,"Usable, barely. Too few flips, or left too long.",ぎり使える。裏返しが少ないか、晒し過ぎ。
+PROCESS_SUN_WEAK,还潮。再翻一面。,Still damp. Flip once more.,まだ湿る。もう一面。
+PROCESS_SUN_OVER,晒过了，色发干。勉强入盏。,Over-dried; the color looks harsh. Barely tray-ready.,晒し過ぎで色が乾く。ぎり盆に入る。
+PROCESS_SUN_RETRY,这盘不行。摊匀再晒。,This tray won't do. Spread even and try again.,この盤はだめ。均して再挑戦。
+PROCESS_SUN_LOCKED,先选要晒的药。,Pick an herb to sun-dry first.,まず干す薬を選べ。
+PROCESS_MUDANPI_HINT,牡丹皮：薄片摊晒。生品不可入盏。,Moutan bark: thin slices in the sun. Raw stays off the tray.,牡丹皮：薄片を晒す。生は盞に入れない。
+PROCESS_MUDANPI_NAME,牡丹皮,Moutan bark,牡丹皮
+PROCESS_WASH_RETRY,没洗净。再涮一轮。,Not clean enough. Rinse another round.,まだ洗えていない。もう一回。
+PROCESS_FRY_RETRY,火候不对。冷一下再炒。,"Heat was off. Cool, then fry again.",火加減が違う。冷まして再炒。
+PROCESS_RETRY,可重试。,You can try again.,やり直せる。
+PROCESS_STATION_ACTIVE,当前工位,Current station,今の工位
+PROCESS_STATION_SUN_READY,晒架可用。,The drying rack is ready.,干し棚が使える。
+MENTOR_PROCESS_SUN,晒药要动手翻，不是挂机等条。,Sun-drying needs your hands — not idling on a bar.,晒薬は手で裏返す。バー待ちではない。
+XIAOHE_PROCESS_SUN,翻！别烤糊了——晒糊也算。,Flip! Don't toast it — sun-scorch counts too.,裏返せ！焦がすな——日で焦げるのも同じ。

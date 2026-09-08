@@ -33,3 +33,16 @@
 合图参考：`raw-vs-processed-sheet.png`（带文案，勿直接当图标）。
 
 差分约定：制态统一橙角标「制」；须炮制未加工勿入盏由逻辑拦截，美术只给视觉差。
+
+
+## V128 晒药
+
+| 文件 | 用途 |
+| --- | --- |
+| `CAM_DRY.png` | 晒架特写镜头（已有） |
+| `sun-flip-ui.png` | 翻晒小游戏 UI（翻晒按钮+进度） |
+| `station-highlight.png` | 洗/炒/晒工位图标，晒工位金环高亮 |
+| `../herbs/process/mudanpi_raw.png` | 牡丹皮生 |
+| `../herbs/process/mudanpi_processed.png` | 牡丹皮晒制（「制」角标） |
+
+教学药 `mudanpi`；`sun_dry` 正式可玩。

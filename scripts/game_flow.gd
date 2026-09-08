@@ -1507,6 +1507,21 @@ func run_slice_smoke() -> int:
 		if Process.processed_stock("baishao") < 1:
 			fails.append("baishao processed stock expected >=1")
 		print("process_smoke_ok")
+		Process._write_entry("mudanpi", 1, 0)
+		if Process.processed_stock("mudanpi") != 0 or Process.raw_stock("mudanpi") < 1:
+			fails.append("mudanpi raw reset failed")
+		if tray_herb_allowed("mudanpi"):
+			fails.append("raw mudanpi must not be tray-allowed before sun_dry")
+		var sun_r: Dictionary = Process.try_sun_dry("mudanpi", 1.0)
+		if not bool(sun_r.get("ok", false)):
+			fails.append("try_sun_dry mudanpi failed: %s" % str(sun_r.get("reason", "")))
+		elif not Process.mark_processed("mudanpi", str(sun_r.get("quality", "ok"))):
+			fails.append("mark_processed mudanpi failed")
+		if Process.processed_stock("mudanpi") < 1:
+			fails.append("mudanpi processed stock expected >=1")
+		if not tray_herb_allowed("mudanpi"):
+			fails.append("processed mudanpi should be tray-allowed")
+		print("process_sun_ok")
 	play_p = _play()
 	play_p["herb_stock"] = stock_p0
 	play_p["herb_inventory"] = inv_p0

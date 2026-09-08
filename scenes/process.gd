@@ -1,5 +1,5 @@
 extends Control
-## V124 炮制院 — STATION_WASH / STATION_FRY / DOOR_PHARMACY.
+## V128 炮制院 — STATION_WASH / STATION_FRY / STATION_DRY + CAM_*.
 
 var _focus: String = ""
 var _station: String = "STATION_WASH"
@@ -10,6 +10,8 @@ var _teach_l: Label
 var _warn_l: Label
 var _herb_row: HFlowContainer
 var _mini_host: Control
+var _yard_art: TextureRect
+var _station_btns: Dictionary = {}
 var _wash_hits: int = 0
 var _wash_needed: int = 5
 var _fry_heat: float = 0.45
@@ -20,6 +22,10 @@ var _fry_active: bool = false
 var _fry_bar: ProgressBar
 var _sun_prog: ProgressBar
 var _sun_active: bool = false
+var _sun_flips: int = 0
+var _sun_over: float = 0.0
+var _sun_flip_l: Label
+var _sun_finish_btn: Button
 
 
 func _herb_tex(hid: String, processed: bool = false) -> Texture2D:
@@ -32,6 +38,8 @@ func _herb_tex(hid: String, processed: bool = false) -> Texture2D:
 		alt_path = "res://ui/herbs/process/zhifuzi.png" if processed else "res://ui/herbs/process/fuzi_raw.png"
 	elif hid == "gancao":
 		alt_path = "res://ui/herbs/process/zhigancao.png" if processed else "res://ui/herbs/process/gancao_raw.png"
+	elif hid == "mudanpi" and not processed:
+		alt_path = "res://ui/herbs/mudanpi.png"
 	if alt_path != "" and ResourceLoader.exists(alt_path):
 		return load(alt_path)
 	if Forage and Forage.has_method("herb_texture"):
@@ -44,7 +52,6 @@ func _herb_tex(hid: String, processed: bool = false) -> Texture2D:
 
 func _herb_icon(hid: String, size: Vector2 = Vector2(40, 40)) -> Control:
 	var processed := Process.processed_count(hid) > 0 and Process.raw_count(hid) <= 0
-	# Prefer dedicated process sheet when present (xingren/baishao raw|processed).
 	var tex := _herb_tex(hid, processed)
 	if tex != null:
 		var tr := TextureRect.new()
@@ -56,10 +63,15 @@ func _herb_icon(hid: String, size: Vector2 = Vector2(40, 40)) -> Control:
 		return tr
 	var sw := ColorRect.new()
 	sw.custom_minimum_size = size
-	sw.color = Color(0.72, 0.55, 0.32) if hid == "baishao" else Color(0.55, 0.45, 0.3)
+	match hid:
+		"baishao":
+			sw.color = Color(0.72, 0.55, 0.32)
+		"mudanpi":
+			sw.color = Color(0.62, 0.38, 0.42)
+		_:
+			sw.color = Color(0.55, 0.45, 0.3)
 	sw.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	return sw
-
 
 
 func _ready() -> void:
@@ -75,10 +87,7 @@ func _process(delta: float) -> void:
 	if _fry_active:
 		_tick_fry(delta)
 	if _sun_active and _sun_prog:
-		_sun_prog.value = minf(100.0, _sun_prog.value + delta * 35.0)
-		if _sun_prog.value >= 100.0:
-			_sun_active = false
-			_finish_process("ok")
+		_tick_sun(delta)
 
 
 func _build() -> void:
@@ -86,22 +95,14 @@ func _build() -> void:
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	bg.color = Color(0.86, 0.78, 0.62, 1)
 	add_child(bg)
-	var bg_path := ""
-	if ResourceLoader.exists("res://ui/process/PROCESS_HERO.png"):
-		bg_path = "res://ui/process/PROCESS_HERO.png"
-	elif ResourceLoader.exists("res://ui/process/yard-bg-indoor.png"):
-		bg_path = "res://ui/process/yard-bg-indoor.png"
-	elif ResourceLoader.exists("res://ui/process/yard-bg.png"):
-		bg_path = "res://ui/process/yard-bg.png"
-	if bg_path != "":
-		var art := TextureRect.new()
-		art.texture = load(bg_path)
-		art.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-		art.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		art.modulate = Color(1, 1, 1, 0.9)
-		add_child(art)
+	_yard_art = TextureRect.new()
+	_yard_art.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_yard_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_yard_art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	_yard_art.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_yard_art.modulate = Color(1, 1, 1, 0.9)
+	add_child(_yard_art)
+	_apply_yard_bg("STATION_WASH")
 	var root := VBoxContainer.new()
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.offset_left = 28
@@ -141,14 +142,18 @@ func _build() -> void:
 	wash_b.name = "STATION_WASH"
 	wash_b.pressed.connect(_select_station.bind("STATION_WASH"))
 	stations.add_child(wash_b)
+	_station_btns["STATION_WASH"] = wash_b
 	var fry_b := UiKit.make_button("PROCESS_STATION_FRY", true)
 	fry_b.name = "STATION_FRY"
 	fry_b.pressed.connect(_select_station.bind("STATION_FRY"))
 	stations.add_child(fry_b)
-	var sun_b := UiKit.make_button("PROCESS_STATION_SUN", false)
+	_station_btns["STATION_FRY"] = fry_b
+	var sun_b := UiKit.make_button("PROCESS_STATION_SUN", true)
 	sun_b.name = "STATION_DRY"
+	sun_b.disabled = false
 	sun_b.pressed.connect(_select_station.bind("STATION_DRY"))
 	stations.add_child(sun_b)
+	_station_btns["STATION_DRY"] = sun_b
 	root.add_child(UiKit.ink_label(tr("PROCESS_PICK_HERB"), 13, UiKit.INK_MUTED))
 	_herb_row = HFlowContainer.new()
 	_herb_row.add_theme_constant_override("h_separation", 8)
@@ -182,9 +187,61 @@ func _build() -> void:
 	_select_station("STATION_WASH")
 
 
+func _apply_yard_bg(st: String) -> void:
+	if _yard_art == null:
+		return
+	var path := ""
+	if st == "STATION_DRY":
+		if ResourceLoader.exists("res://ui/process/CAM_DRY.png"):
+			path = "res://ui/process/CAM_DRY.png"
+		elif ResourceLoader.exists("res://ui/process/yard-bg-outdoor.png"):
+			path = "res://ui/process/yard-bg-outdoor.png"
+	if path == "":
+		if ResourceLoader.exists("res://ui/process/PROCESS_HERO.png"):
+			path = "res://ui/process/PROCESS_HERO.png"
+		elif ResourceLoader.exists("res://ui/process/yard-bg-indoor.png"):
+			path = "res://ui/process/yard-bg-indoor.png"
+		elif ResourceLoader.exists("res://ui/process/yard-bg-outdoor.png"):
+			path = "res://ui/process/yard-bg-outdoor.png"
+	if path != "":
+		_yard_art.texture = load(path)
+		_yard_art.modulate = Color(1, 1, 1, 0.92 if st == "STATION_DRY" else 0.9)
+	else:
+		_yard_art.texture = null
+
+
+func _highlight_stations() -> void:
+	for sid in _station_btns.keys():
+		var b: Button = _station_btns[sid]
+		var active := str(sid) == _station
+		UiKit.style_button(b, active)
+		b.disabled = false
+		if active:
+			b.modulate = Color(1.05, 1.0, 0.92, 1)
+		else:
+			b.modulate = Color(1, 1, 1, 1)
+		var glow := b.get_node_or_null("StationGlow") as TextureRect
+		if active and ResourceLoader.exists("res://ui/process/station-highlight.png"):
+			if glow == null:
+				glow = TextureRect.new()
+				glow.name = "StationGlow"
+				glow.texture = load("res://ui/process/station-highlight.png")
+				glow.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+				glow.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+				glow.stretch_mode = TextureRect.STRETCH_SCALE
+				glow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+				glow.modulate = Color(1, 1, 1, 0.55)
+				b.add_child(glow)
+				b.move_child(glow, 0)
+			glow.visible = true
+		elif glow:
+			glow.visible = false
+
+
 func _refresh() -> void:
 	UiKit.refresh_i18n_buttons(self)
 	_refresh_stock()
+	_highlight_stations()
 	if _focus != "":
 		_focus_herb(_focus)
 
@@ -228,6 +285,8 @@ func _select_station(st: String) -> void:
 	_fry_active = false
 	_sun_active = false
 	_clear_mini()
+	_apply_yard_bg(st)
+	_highlight_stations()
 	match st:
 		"STATION_WASH":
 			_status.text = tr("PROCESS_WASH_HINT")
@@ -238,7 +297,8 @@ func _select_station(st: String) -> void:
 			if _cam_l:
 				_cam_l.text = "CAM_FRY"
 		"STATION_DRY":
-			_status.text = tr("PROCESS_SUN_HINT")
+			var ready := tr("PROCESS_STATION_SUN_READY")
+			_status.text = ready if ready != "PROCESS_STATION_SUN_READY" else tr("PROCESS_SUN_HINT")
 			if _cam_l:
 				_cam_l.text = "CAM_DRY"
 	if _focus != "":
@@ -265,6 +325,8 @@ func _clear_mini() -> void:
 		c.queue_free()
 	_fry_bar = null
 	_sun_prog = null
+	_sun_flip_l = null
+	_sun_finish_btn = null
 
 
 func _start_minigame() -> void:
@@ -300,7 +362,9 @@ func _build_wash() -> void:
 	cancel.pressed.connect(func() -> void:
 		_focus = ""
 		_clear_mini()
-		_status.text = ""
+		_status.text = tr("PROCESS_WASH_RETRY") if tr("PROCESS_WASH_RETRY") != "PROCESS_WASH_RETRY" else tr("PROCESS_RETRY")
+		if _cam_l:
+			_cam_l.text = "CAM_PROCESS"
 	)
 	_mini_host.add_child(cancel)
 
@@ -352,11 +416,20 @@ func _build_fry() -> void:
 	done.text = tr("PROCESS_STATION_FRY") + " · 出锅"
 	done.pressed.connect(_finish_fry)
 	_mini_host.add_child(done)
+	var cancel := UiKit.make_button("PROCESS_CANCEL", false)
+	cancel.pressed.connect(func() -> void:
+		_fry_active = false
+		_focus = ""
+		_clear_mini()
+		_status.text = tr("PROCESS_FRY_RETRY") if tr("PROCESS_FRY_RETRY") != "PROCESS_FRY_RETRY" else tr("PROCESS_RETRY")
+		if _cam_l:
+			_cam_l.text = "CAM_PROCESS"
+	)
+	_mini_host.add_child(cancel)
 
 
 func _tick_fry(delta: float) -> void:
 	_fry_time += delta
-	# Drift toward edges so player must correct.
 	_fry_heat += sin(_fry_time * 1.7) * 0.012 + 0.004
 	_fry_heat = clampf(_fry_heat, 0.0, 1.0)
 	if _fry_bar:
@@ -382,26 +455,133 @@ func _finish_fry() -> void:
 	var grade := "ok"
 	if _fry_out > _fry_in_green * 0.55 or _fry_heat < 0.3 or _fry_heat > 0.7:
 		grade = "ok_ish"
-		_status.text = tr("PROCESS_FRY_OKAY")
+		_status.text = "%s · %s" % [tr("PROCESS_FRY_OKAY"), tr("PROCESS_FRY_RETRY")]
 	else:
 		_status.text = tr("PROCESS_FRY_OK")
 	_finish_process(grade)
 
 
 func _build_sun() -> void:
+	_sun_flips = 0
+	_sun_over = 0.0
+	_sun_active = true
+	if ResourceLoader.exists("res://ui/process/sun-flip-ui.png"):
+		var flip_art := TextureRect.new()
+		flip_art.texture = load("res://ui/process/sun-flip-ui.png")
+		flip_art.custom_minimum_size = Vector2(0, 96)
+		flip_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		flip_art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		flip_art.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_mini_host.add_child(flip_art)
 	_mini_host.add_child(UiKit.ink_label(tr("PROCESS_SUN_HINT"), 13, UiKit.INK_MUTED))
+	var mentor_sun := tr("MENTOR_PROCESS_SUN")
+	if mentor_sun != "MENTOR_PROCESS_SUN":
+		_mini_host.add_child(UiKit.ink_label(mentor_sun, 12, UiKit.SEAL))
+	var xh_sun := tr("XIAOHE_PROCESS_SUN")
+	if xh_sun != "XIAOHE_PROCESS_SUN":
+		_mini_host.add_child(UiKit.ink_label(xh_sun, 12, UiKit.INK_MUTED))
+	var prog_lab := tr("PROCESS_SUN_PROGRESS")
+	if prog_lab == "PROCESS_SUN_PROGRESS":
+		prog_lab = "日照"
+	_mini_host.add_child(UiKit.ink_label(prog_lab, 12, UiKit.INK_MUTED))
 	_sun_prog = ProgressBar.new()
 	_sun_prog.min_value = 0
 	_sun_prog.max_value = 100
 	_sun_prog.value = 0
-	_sun_prog.custom_minimum_size = Vector2(0, 24)
+	_sun_prog.custom_minimum_size = Vector2(0, 26)
+	_sun_prog.show_percentage = true
 	_mini_host.add_child(_sun_prog)
-	var start := UiKit.make_button("PROCESS_START", true)
-	start.pressed.connect(func() -> void:
-		_sun_active = true
-		_status.text = tr("PROCESS_SUN_HINT")
+	_sun_flip_l = UiKit.ink_label("%s · 0" % tr("PROCESS_SUN_FLIP"), 13)
+	_mini_host.add_child(_sun_flip_l)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+	_mini_host.add_child(row)
+	var flip := Button.new()
+	flip.custom_minimum_size = Vector2(140, 52)
+	UiKit.style_button(flip, true)
+	flip.text = tr("PROCESS_SUN_FLIP")
+	if flip.text == "PROCESS_SUN_FLIP":
+		flip.text = "翻晒"
+	flip.pressed.connect(_on_sun_flip)
+	row.add_child(flip)
+	_sun_finish_btn = Button.new()
+	_sun_finish_btn.custom_minimum_size = Vector2(140, 52)
+	UiKit.style_button(_sun_finish_btn, false)
+	_sun_finish_btn.text = tr("PROCESS_SUN_DONE")
+	if _sun_finish_btn.text == "PROCESS_SUN_DONE":
+		_sun_finish_btn.text = "收药"
+	_sun_finish_btn.disabled = true
+	_sun_finish_btn.pressed.connect(_finish_sun)
+	row.add_child(_sun_finish_btn)
+	var cancel := UiKit.make_button("PROCESS_CANCEL", false)
+	cancel.pressed.connect(func() -> void:
+		_sun_active = false
+		_focus = ""
+		_clear_mini()
+		_status.text = tr("PROCESS_SUN_RETRY") if tr("PROCESS_SUN_RETRY") != "PROCESS_SUN_RETRY" else tr("PROCESS_RETRY")
+		if _cam_l:
+			_cam_l.text = "CAM_PROCESS"
+		_apply_yard_bg("STATION_WASH")
 	)
-	_mini_host.add_child(start)
+	_mini_host.add_child(cancel)
+	_status.text = tr("PROCESS_SUN_FLIP_HINT") if tr("PROCESS_SUN_FLIP_HINT") != "PROCESS_SUN_FLIP_HINT" else tr("PROCESS_SUN_HINT")
+
+
+func _on_sun_flip() -> void:
+	_sun_flips += 1
+	if AudioHub:
+		AudioHub.play_one("sun-dry")
+	if _sun_prog:
+		_sun_prog.value = minf(100.0, _sun_prog.value + 8.0)
+	if _sun_flip_l:
+		_sun_flip_l.text = "%s · %d" % [tr("PROCESS_SUN_FLIP"), _sun_flips]
+	_status.text = tr("PROCESS_SUN_FLIP_HINT") if _sun_flips < 2 else tr("PROCESS_SUN_HINT")
+	_update_sun_finish_enabled()
+
+
+func _tick_sun(delta: float) -> void:
+	if not _sun_active or _sun_prog == null:
+		return
+	# Slow sun fill — player must flip at least once, not pure AFK.
+	_sun_prog.value = minf(100.0, _sun_prog.value + delta * 22.0)
+	if _sun_prog.value >= 100.0:
+		_sun_over += delta
+		_sun_prog.modulate = Color(1.0, 0.85, 0.55) if _sun_over > 1.2 else Color(0.85, 1.0, 0.75)
+		if _sun_flips >= 1 and _sun_over >= 2.2:
+			# Left too long on the rack → collect as overexposed.
+			_finish_sun()
+	else:
+		_sun_prog.modulate = Color(1, 1, 1, 1)
+	_update_sun_finish_enabled()
+
+
+func _update_sun_finish_enabled() -> void:
+	if _sun_finish_btn == null or _sun_prog == null:
+		return
+	_sun_finish_btn.disabled = not (_sun_flips >= 1 and _sun_prog.value >= 100.0)
+
+
+func _finish_sun() -> void:
+	if not _sun_active:
+		return
+	if _sun_flips < 1:
+		_status.text = tr("PROCESS_SUN_FLIP_NEED")
+		return
+	if _sun_prog and _sun_prog.value < 100.0:
+		_status.text = tr("PROCESS_SUN_WEAK")
+		return
+	_sun_active = false
+	var grade := "ok"
+	# 翻少（仅 1 次）或过曝 → ok_ish
+	if _sun_flips < 2 or _sun_over > 1.8:
+		grade = "ok_ish"
+		if _sun_over > 1.8:
+			_status.text = tr("PROCESS_SUN_OVER")
+		else:
+			_status.text = tr("PROCESS_SUN_OKAY")
+	else:
+		_status.text = tr("PROCESS_SUN_OK")
+	_finish_process(grade)
 
 
 func _finish_process(grade: String) -> void:
@@ -412,13 +592,32 @@ func _finish_process(grade: String) -> void:
 	_fry_active = false
 	_sun_active = false
 	if not bool(res.get("ok", false)):
-		_status.text = tr("PROCESS_WASH_WEAK")
+		var weak := tr("PROCESS_WASH_WEAK")
+		if _station == "STATION_DRY":
+			weak = tr("PROCESS_SUN_WEAK")
+		elif _station == "STATION_FRY":
+			weak = tr("PROCESS_FRY_RETRY")
+		_status.text = weak
 		return
 	if AudioHub:
 		AudioHub.play_one("stamp-ok")
 	var qlabel := tr("PROCESS_QUALITY_GOOD") if grade == "ok" else tr("PROCESS_QUALITY_OK")
-	_status.text = "%s · %s — %s" % [Process.herb_done_line(hid), qlabel, tr("PROCESS_DONE_HINT")]
+	var done_line := Process.herb_done_line(hid)
+	var retry_hint := ""
+	if grade == "ok_ish":
+		match _station:
+			"STATION_WASH":
+				retry_hint = " · " + tr("PROCESS_WASH_RETRY")
+			"STATION_FRY":
+				retry_hint = " · " + tr("PROCESS_FRY_RETRY")
+			"STATION_DRY":
+				retry_hint = " · " + tr("PROCESS_SUN_RETRY")
+		if retry_hint.find("PROCESS_") >= 0:
+			retry_hint = " · " + tr("PROCESS_RETRY")
+	_status.text = "%s · %s — %s%s" % [done_line, qlabel, tr("PROCESS_DONE_HINT"), retry_hint]
 	_refresh_stock()
 	_rebuild_herbs()
 	_clear_mini()
 	_focus = ""
+	if _cam_l:
+		_cam_l.text = "CAM_PROCESS"

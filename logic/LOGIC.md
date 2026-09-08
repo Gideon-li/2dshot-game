@@ -143,3 +143,12 @@ API：`MentorCues.next(case, exams, asked_ten_q_ids, cues_emitted)`。
 - 观察勿药：向愈档小稳分；结束后 `consumed=true`。
 - 复诊再治：`evaluate` × 0.85。
 - 冒烟：`revisit_day_ok`。
+
+
+## V128 晒药
+
+- `sun_dry` **正式可玩**（不再 placeholder）；`slice_playable_methods` = wash / stir_fry / sun_dry。
+- 教学药：**牡丹皮 `mudanpi`** — `needs_process` + `sun_dry`；生不可入盏。
+- 玩法：翻晒主动 ≥1 + 日照进度；品质 `ok` / `ok_ish`。
+- 工位 `STATION_DRY` / `CAM_DRY`。暮格、托盘拦截、十八反、LLM 不改。
+- 冒烟：`process_sun_ok`。锁见 `PROCESS-SUN-V128.md`。

@@ -1,6 +1,6 @@
 {
   "id": "xinglin-mowen-slice-logic",
-  "version": 7,
+  "version": 8,
   "project": "墨问岐黄 / 杏林墨问",
   "scope": "vertical_slice",
   "notes": {
@@ -28,7 +28,8 @@
     "v122": "inquiry prompt provider-agnostic; offline coverage self-check",
     "v124": "process fields: needs_process/method/raw→processed; quality ok|ok_ish; evening -1; raw cannot enter bowl; 十八反 not unlocked by processing",
     "v125": "acu intro: hegu needle + zusanli moxa; teach_vol1 lock; tolerance hit rules",
-    "v127": "revisit day cycle: play.day, due_day=treated+1, FIFO 1, revisit_consult FSM, observe_no_med; no LLM"
+    "v127": "revisit day cycle: play.day, due_day=treated+1, FIFO 1, revisit_consult FSM, observe_no_med; no LLM",
+    "v128": "sun_dry playable; mudanpi teaching sun-dry; flip+progress; STATION_DRY not placeholder"
   },
   "exam_ids": [
     "wang",
@@ -1610,15 +1611,19 @@
         "script_ref": "patients/forage_script.json"
       },
       "process": {
-        "needs_process": false,
-        "process_method": null,
-        "process_methods": [],
+        "needs_process": true,
+        "process_method": "sun_dry",
+        "process_methods": [
+          "sun_dry"
+        ],
         "raw_id": "mudanpi",
         "processed_id": "mudanpi",
-        "state_model": "ready",
-        "default_state_on_forage_or_cabinet": "processed",
-        "teaching": false,
-        "warning": null
+        "state_model": "same_id_state",
+        "minigame": "flip_sun",
+        "teaching": true,
+        "warning": null,
+        "note_zh": "薄片摊晒；须炮制后才能入盏",
+        "default_state_on_forage_or_cabinet": "raw"
       }
     },
     {
@@ -4264,7 +4269,7 @@
     "provider_agnostic": true
   },
   "process_rules": {
-    "id": "process_rules_v124",
+    "id": "process_rules_v128",
     "scene": "process_yard",
     "enter_from": [
       "clinic",
@@ -4291,17 +4296,20 @@
         "zh": "晒",
         "en": "Sun-dry",
         "ja": "干す",
-        "minigame": "progress_or_placeholder",
-        "slice": "optional_placeholder"
+        "minigame": "flip_sun",
+        "note": "翻晒≥1次 + 日照进度；翻少/过曝→ok_ish",
+        "slice": "playable"
       }
     },
     "slice_playable_methods": [
       "wash",
-      "stir_fry"
+      "stir_fry",
+      "sun_dry"
     ],
     "teaching_herbs": [
       "xingren",
-      "baishao"
+      "baishao",
+      "mudanpi"
     ],
     "optional_warning_herb": "fuzi",
     "quality": {
@@ -4377,7 +4385,41 @@
       ],
       "expect": "xingren must be processed; SMOKE PASS + process tag"
     },
-    "contracts_prototype": "GameFlow.go_process → process.tscn; evening -= 1; wash xingren / stir_fry baishao; write play.herb_stock & process_quality; Process.can_use_in_formula uses processed>0; 十八反 unchanged"
+    "contracts_prototype": "wash xingren / stir_fry baishao / sun_dry mudanpi all playable; STATION_DRY not placeholder; raw needs_process blocked; evening/十八反/LLM unchanged",
+    "sun_dry_teaching_herb": "mudanpi",
+    "stations": {
+      "STATION_WASH": {
+        "method": "wash",
+        "cam": "CAM_WASH",
+        "herbs": [
+          "xingren"
+        ]
+      },
+      "STATION_FRY": {
+        "method": "stir_fry",
+        "cam": "CAM_FRY",
+        "herbs": [
+          "baishao"
+        ]
+      },
+      "STATION_DRY": {
+        "method": "sun_dry",
+        "cam": "CAM_DRY",
+        "herbs": [
+          "mudanpi"
+        ],
+        "playable": true
+      }
+    },
+    "smoke_sun": {
+      "tag": "process_sun_ok",
+      "steps": [
+        "enter process yard (evening -1 unchanged)",
+        "sun_dry mudanpi: flip>=1 + progress → quality ok|ok_ish",
+        "herb_stock.mudanpi.processed>0",
+        "can_use_in_formula mudanpi true"
+      ]
+    }
   },
   "acu_intro_rules": {
     "id": "acu_intro_rules_v125",

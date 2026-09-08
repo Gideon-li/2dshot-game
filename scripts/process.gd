@@ -1,5 +1,5 @@
 extends Node
-## V124 processing yard: wash / stir-fry → raw|processed stock. Autoload Process.
+## V124/V128 processing yard: wash / stir-fry / sun-dry → raw|processed stock. Autoload Process.
 
 signal inventory_changed
 signal quality_changed
@@ -369,6 +369,9 @@ func herb_teach_line(herb_id: String) -> String:
 	match herb_id:
 		"xingren":
 			return tr("PROCESS_XINGREN_HINT")
+		"mudanpi":
+			var mh := tr("PROCESS_MUDANPI_HINT")
+			return mh if mh != "PROCESS_MUDANPI_HINT" else "牡丹皮：薄片摊晒。生品不可入盏。"
 		"fuzi":
 			return tr("PROCESS_FUZI_HINT")
 		_:
@@ -480,3 +483,15 @@ func try_stir(herb_id: String, accuracy: float = 1.0) -> Dictionary:
 
 func try_stir_fry(herb_id: String, accuracy: float = 1.0) -> Dictionary:
 	return try_stir(herb_id, accuracy)
+
+
+func try_sun(herb_id: String, accuracy: float = 1.0) -> Dictionary:
+	return try_sun_dry(herb_id, accuracy)
+
+
+func try_sun_dry(herb_id: String, accuracy: float = 1.0) -> Dictionary:
+	ensure_teaching_raw(herb_id)
+	if raw_count(herb_id) <= 0:
+		return {"ok": false, "reason": "no_raw", "method": "sun_dry"}
+	var grade := "ok" if accuracy >= 0.72 else "ok_ish"
+	return {"ok": true, "quality": grade, "method": "sun_dry", "herb_id": herb_id}
