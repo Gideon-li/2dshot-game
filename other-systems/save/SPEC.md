@@ -37,3 +37,16 @@
 - `herb_inventory`: `{ herb_id: count }` 药圃采入。
 - `herbs_identified`: 已辨认 id 列表；未在此列的药不能进方。
 - `time_slots.afternoon`: 进药圃先耗 1；切片无大地图时辰系统时可只做此格。
+
+
+## V124 增补
+
+- `herb_items[]`: `{ herb_id, count, state: raw|processed, quality: ok|ok_ish|null }`（须炮制药用）。
+- `herb_inventory` 仍可作简单计数；托盘入盏以 `herb_items.state` 为准。
+- `time_slots.evening`: 进炮制院耗 1。
+
+
+### V124 存档（负责人定）
+- `play.herb_stock[id] = {"raw": n, "processed": m}`
+- `play.process_quality[id] = "ok"|"ok_ish"`
+- `needs_process` 药仅 `processed>0` 可入盏

@@ -530,6 +530,11 @@ func _rebuild_dock() -> void:
 		var garden_b := UiKit.make_button("GARDEN_OPEN", true)
 		garden_b.pressed.connect(func() -> void: GameFlow.go_garden())
 		col.add_child(garden_b)
+		var process_b := UiKit.make_button("PROCESS_OPEN", true)
+		if process_b.text == "PROCESS_OPEN" or process_b.text == "":
+			process_b.text = "去炮制院"
+		process_b.pressed.connect(func() -> void: GameFlow.go_process())
+		col.add_child(process_b)
 		# 小荷候诊口吻（不可点、不代诊）
 		if not CaseDB.pharmacy_kid_is_clickable():
 			if _xiaohe_idle_line == "":
@@ -882,6 +887,15 @@ func _build_hud() -> void:
 			GameFlow.go_garden()
 	)
 	top.add_child(garden_hud)
+	var process_hud := UiKit.make_button("PROCESS_OPEN", false)
+	if process_hud.text == "PROCESS_OPEN" or process_hud.text == "":
+		process_hud.text = "去炮制院"
+	process_hud.name = "ProcessOpen"
+	process_hud.pressed.connect(func() -> void:
+		if str(GameFlow.fsm_state) == "clinic_idle":
+			GameFlow.go_process()
+	)
+	top.add_child(process_hud)
 	var row := HBoxContainer.new()
 	row.name = "Patients"
 	row.position = Vector2(24, 50)

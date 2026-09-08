@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 5,
   "disclaimer_accepted": false,
   "locale": "zh",
   "audio": {
@@ -40,6 +40,8 @@
       "morning": 1,
       "afternoon": 1,
       "evening": 1
-    }
+    },
+    "herb_items": [],
+    "process_quality": {}
   }
 }

@@ -99,3 +99,17 @@ API：`MentorCues.next(case, exams, asked_ten_q_ids, cues_emitted)`。
 - 只用人物卡 + `inquiry_anchor` / `never_say` + `inquiry_rules`；不把 endpoint、key、provider 写进 prompt。
 - offline：`ask_wrappers` 套 `{sym}`=锚点；追问病名走 `dodge`。
 - 覆盖自检：`python3 logic/check_offline_templates.py` → `logic/offline_coverage_report.json`（须 PASS）。
+
+
+## V124 炮制
+
+`herbs[].process`：`needs_process` / `process_method` / `raw_id`→`processed_id`（切片同 id + `state`）。
+
+教学味：**杏仁洗**、**白芍炒**；附子可选教学关（毒性警告，治病不强制）。
+
+规则见 `process_rules`：
+
+1. 进炮制院耗 **1 暮格**。
+2. 品质两档：`ok` / `ok_ish`（过火欠火不 Game Over）。
+3. `needs_process` 且 `state!=processed` → **不可入盏**（`Process.can_use_in_formula`）。
+4. **炮制不解锁十八反**（制附子仍反半夏）。

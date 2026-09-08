@@ -13,3 +13,7 @@
 | `layers/CAM_HERO.png` | 商店第 1 张 |
 
 HUD 不挂诊断名。建筑分层 L1–L4 下一轮洗萌态。
+
+## V124 炮制
+
+见 `process/PROCESS.md`：院背景、火候/洗涮 UI、杏仁等 raw→processed 图标。

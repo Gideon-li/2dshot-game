@@ -1,0 +1,284 @@
+{
+  "id": "mo-wen-qi-huang-process-script",
+  "project": "墨问岐黄",
+  "version": 2,
+  "task": "DEV-TASKS-V124",
+  "notes": {
+    "priority_herb": "xingren",
+    "no_real_dosage": true,
+    "no_medical_advice": true,
+    "disclaimer_keys": [
+      "STORE_NOT_MEDICAL",
+      "BOOT_DISCLAIMER_*"
+    ],
+    "tone": "cultural clinic game; teach by hand feel; never diagnose or prescribe for real life",
+    "slice_lock": "teach lock: xingren=wash, baishao=fry; fuzi optional warn; shengjiang backup fry only",
+    "aligned_logic": "2026-09-08 开发负责人：杏仁洗 + 白芍炒"
+  },
+  "mentor_su": {
+    "id": "mentor_su",
+    "clickable": false,
+    "lines": {
+      "zh": [
+        "火候在人，不在炉。看着条，别盯着火苗发呆。",
+        "杏仁生用带尖，先洗去皮尖，再谈入盏。",
+        "须炮制的药，生的拖不进托盘。这是馆规，不是刁难。"
+      ],
+      "en": [
+        "The fire sits in the cook, not the stove. Watch the bar — do not stare at the flame.",
+        "Raw apricot kernels keep their tips. Wash the skin and tips off before they enter the tray.",
+        "Herbs that must be processed cannot enter the tray raw. House rule — not a trick."
+      ],
+      "ja": [
+        "火加減は人にあり、炉にはない。バーを見ろ。炎をぼんやり見るな。",
+        "生の杏仁には尖がある。皮と尖を洗ってから盆へ。",
+        "炮制が必要な薬は、生のまま盆に入れられない。館の決まりだ。"
+      ]
+    },
+    "block_raw": {
+      "zh": "先炮制，再生拖。这味还是生的。",
+      "en": "Process it first. This one is still raw.",
+      "ja": "先に炮制せよ。まだ生だ。"
+    }
+  },
+  "xiaohe": {
+    "id": "pharmacy_kid_xiaohe",
+    "clickable": false,
+    "lines": {
+      "zh": [
+        "水溅到鞋了……下次轻一点！",
+        "炒糊了我会闻见。你自己看着办。"
+      ],
+      "en": [
+        "Water on my shoes… lighter next time!",
+        "If you scorch it, I will smell it. Your call."
+      ],
+      "ja": [
+        "靴が濡れた……次は優しく！",
+        "焦がしたら匂いで分かる。あとは自分で。"
+      ]
+    },
+    "sun_dry_hint": {
+      "zh": "晒架空着。放上去，半日格走完再收。",
+      "en": "The drying rack is free. Set it there; pick it up when the half-day mark is done.",
+      "ja": "干し棚が空いてる。乗せて、半日マスが終わってから回収。"
+    }
+  },
+  "ui": {
+    "title": {
+      "zh": "炮制院",
+      "en": "Processing yard",
+      "ja": "炮制院"
+    },
+    "enter_hint": {
+      "zh": "黄昏到了。洗、炒、晒——把须炮制的药做妥再回托盘。",
+      "en": "Dusk. Wash, stir-fry, or sun-dry — finish what must be processed before the tray.",
+      "ja": "黄昏だ。洗う・炒る・干す——炮制が要る薬を整えてから盆へ。"
+    },
+    "method_wash": {
+      "zh": "洗",
+      "en": "Wash",
+      "ja": "洗う"
+    },
+    "method_fry": {
+      "zh": "炒 · 火候",
+      "en": "Fry · heat",
+      "ja": "炒る · 火加減"
+    },
+    "method_sun": {
+      "zh": "晒",
+      "en": "Sun-dry",
+      "ja": "干す"
+    },
+    "quality_ok": {
+      "zh": "妥",
+      "en": "Sound",
+      "ja": "よし"
+    },
+    "quality_bare": {
+      "zh": "勉强",
+      "en": "Barely",
+      "ja": "ぎりぎり"
+    },
+    "footer_disclaimer_key": "STORE_NOT_MEDICAL"
+  },
+  "feedback": {
+    "teach_start": {
+      "zh": "看手，不看方歌。洗净、火候落在绿区，才算饮片。",
+      "en": "Watch your hands, not a formula song. Clean wash and heat in the green — then it is a finished slice.",
+      "ja": "手を見ろ、歌訣ではない。洗いと火加減が緑なら飲片だ。"
+    },
+    "success_ok": {
+      "zh": [
+        "妥了。可以入盏。",
+        "火候刚好。收起来。",
+        "皮尖去净了，能进托盘。"
+      ],
+      "en": [
+        "Sound. It may enter the tray.",
+        "Heat was right. Put it away.",
+        "Skin and tips are clean — tray is open."
+      ],
+      "ja": [
+        "よし。盆に入れてよい。",
+        "火加減ちょうど。仕舞え。",
+        "皮と尖が取れた。盆に載せられる。"
+      ]
+    },
+    "success_bare": {
+      "zh": [
+        "勉强能用。下次看着条。",
+        "过了一点，还能入盏，别再糊。"
+      ],
+      "en": [
+        "Barely usable. Watch the bar next time.",
+        "A touch over — still tray-ready. Do not scorch again."
+      ],
+      "ja": [
+        "ぎりぎり使える。次はバーを見ろ。",
+        "少し過ぎた。まだ盆には載る。次は焦がすな。"
+      ]
+    },
+    "fail_retry": {
+      "zh": [
+        "还不行。再洗一轮，或把火候拉回绿区。",
+        "欠火了。别急着出锅。",
+        "过火了。灭一灭，再来。"
+      ],
+      "en": [
+        "Not yet. Wash another round, or bring the heat back to green.",
+        "Too little heat. Do not pull it off early.",
+        "Too hot. Ease off, then try again."
+      ],
+      "ja": [
+        "まだだ。もう一度洗うか、火を緑へ戻せ。",
+        "火が足りない。早く上げるな。",
+        "火が過ぎた。弱めてからやり直せ。"
+      ]
+    },
+    "blocked_raw_tray": {
+      "zh": "生的拖不进托盘。先去炮制院。",
+      "en": "Raw will not enter the tray. Go to the processing yard first.",
+      "ja": "生のまま盆に入らない。先に炮制院へ。"
+    }
+  },
+  "herbs": [
+    {
+      "id": "xingren",
+      "zh": "杏仁",
+      "en": "Apricot kernel",
+      "ja": "杏仁",
+      "needs_process": true,
+      "process_method": "wash",
+      "priority": true,
+      "teach": {
+        "zh": "杏仁：洗去皮尖。按节奏涮，别把核磕碎。",
+        "en": "Apricot kernel: wash off skin and tips. Rinse on the beat — do not crack the kernel.",
+        "ja": "杏仁：皮と尖を洗う。リズムで濯げ。核を割るな。"
+      },
+      "warn": {
+        "zh": "生尖未去，不入盏。这是馆内规矩，不是药方剂量。",
+        "en": "With tips still on, it stays out of the tray. House rule — not a real-world dose.",
+        "ja": "尖が残っているうちは盆に入れない。館の決まりであり、現実の用量ではない。"
+      },
+      "done": {
+        "zh": "皮尖净了。杏仁可以入盏。",
+        "en": "Skin and tips are clean. The kernel may enter the tray.",
+        "ja": "皮と尖が取れた。杏仁を盆に載せてよい。"
+      }
+    },
+    {
+      "id": "baishao",
+      "zh": "白芍",
+      "en": "White peony root",
+      "ja": "白芍",
+      "needs_process": true,
+      "process_method": "fry",
+      "priority": true,
+      "teach": {
+        "zh": "白芍：小炒。火候条落在绿区再出锅，别炒糊。",
+        "en": "White peony: a light fry. Keep the heat bar in green, then pull — do not scorch.",
+        "ja": "白芍：軽く炒る。火加減バーが緑なら上げてよい。焦がすな。"
+      },
+      "warn": {
+        "zh": "炒只是游戏里的火候练习，不写真实温度与克数。",
+        "en": "The fry is a heat-feel exercise in the game — no real temperatures or grams.",
+        "ja": "炒るのはゲーム内の火加減練習。現実の温度やグラムは書かない。"
+      },
+      "done": {
+        "zh": "火候妥了。白芍可以入盏。",
+        "en": "Heat is sound. White peony may enter the tray.",
+        "ja": "火加減よし。白芍を盆に載せてよい。"
+      }
+    },
+    {
+      "id": "fuzi",
+      "zh": "附子",
+      "en": "Aconite",
+      "ja": "附子",
+      "needs_process": true,
+      "process_method": "wash",
+      "priority": false,
+      "optional_teaching_only": true,
+      "note": "切片可不强制入治病方；仅作带警告的教学关。十八反不因炮制解锁。",
+      "teach": {
+        "zh": "附子：有毒向量。教学关只练洗与标记，不要求开进本切片病案。",
+        "en": "Aconite: a toxic vector. This teaching gate only practices wash and marking — not required in this slice's cases.",
+        "ja": "附子：有毒ベクトル。教関は洗いと印だけ。今スライスの病案に入れる必要はない。"
+      },
+      "warn": {
+        "zh": "警告：此为文化游戏中的有毒药材标记。完成教学炮制后仍可能被配伍锁拦截。不能替代就医。",
+        "en": "Warning: marked toxic in this cultural game. Even after teaching process, pairing locks may still block it. Not a substitute for medical care.",
+        "ja": "警告：文化ゲーム内の有毒印。教学炮制後も配伍ロックで弾かれることがある。受診の代わりにはならない。"
+      },
+      "done": {
+        "zh": "教学炮制完成。若拖入方中，仍守十八反与安全锁。",
+        "en": "Teaching process done. If dragged into a formula, eighteen-oppose and safety locks still apply.",
+        "ja": "教学炮制が終わった。方に入れても十八反と安全ロックは残る。"
+      },
+      "safe_alt": {
+        "zh": "本切片治病可不碰附子。风寒路径用桂枝、杏仁（炮制后）即可。",
+        "en": "This slice does not need aconite to heal. Wind-cold paths use cinnamon twig and processed apricot kernel.",
+        "ja": "今スライスの治療に附子は不要。風寒は桂枝と炮制済み杏仁で足りる。"
+      }
+    },
+    {
+      "id": "shengjiang",
+      "zh": "生姜",
+      "en": "Fresh ginger",
+      "ja": "生姜",
+      "needs_process": true,
+      "process_method": "fry",
+      "priority": false,
+      "teach": {
+        "zh": "【备用】生姜：小炒走水气。切片默认教学用白芍炒。",
+        "en": "[Backup] Fresh ginger light fry. Slice default teaching fry is white peony.",
+        "ja": "【予備】生姜の軽炒。スライス既定の教学炒は白芍。"
+      },
+      "warn": {
+        "zh": "炒只是游戏里的火候练习，不写真实温度与克数。",
+        "en": "The fry is a heat-feel exercise in the game — no real temperatures or grams.",
+        "ja": "炒るのはゲーム内の火加減練習。現実の温度やグラムは書かない。"
+      },
+      "done": {
+        "zh": "水气走了。生姜可以入盏。",
+        "en": "Moisture is off. Ginger may enter the tray.",
+        "ja": "水気が飛んだ。生姜を盆に載せてよい。"
+      },
+      "backup_only": true,
+      "note": "备用炒味。切片教学锁以白芍炒为准；生姜可作备用火候关。"
+    }
+  ],
+  "i18n_keys_hint": [
+    "PROCESS_TITLE",
+    "PROCESS_TEACH",
+    "PROCESS_WARN_TOXIC",
+    "PROCESS_DONE_HINT",
+    "PROCESS_BLOCK_RAW",
+    "PROCESS_QUALITY_OK",
+    "PROCESS_QUALITY_BARE",
+    "PROCESS_FAIL_RETRY",
+    "MENTOR_PROCESS_*",
+    "XIAOHE_PROCESS_*"
+  ]
+}

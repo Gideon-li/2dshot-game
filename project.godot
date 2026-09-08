@@ -22,6 +22,7 @@ Save="*res://scripts/save.gd"
 UiKit="*res://scripts/ui_kit.gd"
 CaseDB="*res://scripts/case_db.gd"
 Forage="*res://scripts/forage.gd"
+Process="*res://scripts/process.gd"
 GameFlow="*res://scripts/game_flow.gd"
 AudioHub="*res://scripts/audio_hub.gd"
 

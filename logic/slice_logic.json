@@ -1,6 +1,6 @@
 {
   "id": "xinglin-mowen-slice-logic",
-  "version": 4,
+  "version": 5,
   "project": "墨问岐黄 / 杏林墨问",
   "scope": "vertical_slice",
   "notes": {
@@ -25,7 +25,8 @@
     "JT": "J=T=1 keep",
     "v121": "forage identify+pick; max 12; unidentified cannot enter formula; afternoon slot -1",
     "v121_1": "whitelist locked to 12; no extra forage herbs",
-    "v122": "inquiry prompt provider-agnostic; offline coverage self-check"
+    "v122": "inquiry prompt provider-agnostic; offline coverage self-check",
+    "v124": "process fields: needs_process/method/raw→processed; quality ok|ok_ish; evening -1; raw cannot enter bowl; 十八反 not unlocked by processing"
   },
   "exam_ids": [
     "wang",
@@ -218,6 +219,17 @@
           "ja": "麻黄ではない。手がかりを見直せ。"
         },
         "script_ref": "patients/forage_script.json"
+      },
+      "process": {
+        "needs_process": false,
+        "process_method": null,
+        "process_methods": [],
+        "raw_id": "mahuang",
+        "processed_id": "mahuang",
+        "state_model": "ready",
+        "default_state_on_forage_or_cabinet": "processed",
+        "teaching": false,
+        "warning": null
       }
     },
     {
@@ -305,6 +317,17 @@
           "ja": "桂枝ではない。手がかりを見直せ。"
         },
         "script_ref": "patients/forage_script.json"
+      },
+      "process": {
+        "needs_process": false,
+        "process_method": null,
+        "process_methods": [],
+        "raw_id": "guizhi",
+        "processed_id": "guizhi",
+        "state_model": "ready",
+        "default_state_on_forage_or_cabinet": "processed",
+        "teaching": false,
+        "warning": null
       }
     },
     {
@@ -342,6 +365,21 @@
       "role_default": "平",
       "forage": {
         "enabled": false
+      },
+      "process": {
+        "needs_process": true,
+        "process_method": "wash",
+        "process_methods": [
+          "wash"
+        ],
+        "raw_id": "xingren",
+        "processed_id": "xingren",
+        "state_model": "same_id_state",
+        "minigame": "wash_rhythm",
+        "teaching": true,
+        "warning": null,
+        "note_zh": "洗去皮尖；须炮制后才能入盏",
+        "default_state_on_forage_or_cabinet": "raw"
       }
     },
     {
@@ -429,6 +467,17 @@
           "ja": "甘草ではない。手がかりを見直せ。"
         },
         "script_ref": "patients/forage_script.json"
+      },
+      "process": {
+        "needs_process": false,
+        "process_method": null,
+        "process_methods": [],
+        "raw_id": "gancao",
+        "processed_id": "gancao",
+        "state_model": "ready",
+        "default_state_on_forage_or_cabinet": "processed",
+        "teaching": false,
+        "warning": null
       }
     },
     {
@@ -515,6 +564,17 @@
           "ja": "生姜ではない。手がかりを見直せ。"
         },
         "script_ref": "patients/forage_script.json"
+      },
+      "process": {
+        "needs_process": false,
+        "process_method": null,
+        "process_methods": [],
+        "raw_id": "shengjiang",
+        "processed_id": "shengjiang",
+        "state_model": "ready",
+        "default_state_on_forage_or_cabinet": "processed",
+        "teaching": false,
+        "warning": null
       }
     },
     {
@@ -601,6 +661,17 @@
           "ja": "大棗ではない。手がかりを見直せ。"
         },
         "script_ref": "patients/forage_script.json"
+      },
+      "process": {
+        "needs_process": false,
+        "process_method": null,
+        "process_methods": [],
+        "raw_id": "dazao",
+        "processed_id": "dazao",
+        "state_model": "ready",
+        "default_state_on_forage_or_cabinet": "processed",
+        "teaching": false,
+        "warning": null
       }
     },
     {
@@ -692,6 +763,21 @@
           "ja": "白芍ではない。手がかりを見直せ。"
         },
         "script_ref": "patients/forage_script.json"
+      },
+      "process": {
+        "needs_process": true,
+        "process_method": "stir_fry",
+        "process_methods": [
+          "stir_fry"
+        ],
+        "raw_id": "baishao",
+        "processed_id": "baishao",
+        "state_model": "same_id_state",
+        "minigame": "fire_bar",
+        "teaching": true,
+        "warning": null,
+        "note_zh": "清炒；火候在绿区为妥",
+        "default_state_on_forage_or_cabinet": "raw"
       }
     },
     {
@@ -779,6 +865,17 @@
           "ja": "柴胡ではない。手がかりを見直せ。"
         },
         "script_ref": "patients/forage_script.json"
+      },
+      "process": {
+        "needs_process": false,
+        "process_method": null,
+        "process_methods": [],
+        "raw_id": "chaihu",
+        "processed_id": "chaihu",
+        "state_model": "ready",
+        "default_state_on_forage_or_cabinet": "processed",
+        "teaching": false,
+        "warning": null
       }
     },
     {
@@ -865,6 +962,17 @@
           "ja": "当帰ではない。手がかりを見直せ。"
         },
         "script_ref": "patients/forage_script.json"
+      },
+      "process": {
+        "needs_process": false,
+        "process_method": null,
+        "process_methods": [],
+        "raw_id": "danggui",
+        "processed_id": "danggui",
+        "state_model": "ready",
+        "default_state_on_forage_or_cabinet": "processed",
+        "teaching": false,
+        "warning": null
       }
     },
     {
@@ -952,6 +1060,17 @@
           "ja": "白朮ではない。手がかりを見直せ。"
         },
         "script_ref": "patients/forage_script.json"
+      },
+      "process": {
+        "needs_process": false,
+        "process_method": null,
+        "process_methods": [],
+        "raw_id": "baizhu",
+        "processed_id": "baizhu",
+        "state_model": "ready",
+        "default_state_on_forage_or_cabinet": "processed",
+        "teaching": false,
+        "warning": null
       }
     },
     {
@@ -1041,6 +1160,17 @@
           "ja": "茯苓ではない。手がかりを見直せ。"
         },
         "script_ref": "patients/forage_script.json"
+      },
+      "process": {
+        "needs_process": false,
+        "process_method": null,
+        "process_methods": [],
+        "raw_id": "fuling",
+        "processed_id": "fuling",
+        "state_model": "ready",
+        "default_state_on_forage_or_cabinet": "processed",
+        "teaching": false,
+        "warning": null
       }
     },
     {
@@ -1080,6 +1210,17 @@
       "role_default": "平",
       "forage": {
         "enabled": false
+      },
+      "process": {
+        "needs_process": false,
+        "process_method": null,
+        "process_methods": [],
+        "raw_id": "bohe",
+        "processed_id": "bohe",
+        "state_model": "ready",
+        "default_state_on_forage_or_cabinet": "processed",
+        "teaching": false,
+        "warning": null
       }
     },
     {
@@ -1117,6 +1258,17 @@
       "role_default": "平",
       "forage": {
         "enabled": false
+      },
+      "process": {
+        "needs_process": false,
+        "process_method": null,
+        "process_methods": [],
+        "raw_id": "zhiqiao",
+        "processed_id": "zhiqiao",
+        "state_model": "ready",
+        "default_state_on_forage_or_cabinet": "processed",
+        "teaching": false,
+        "warning": null
       }
     },
     {
@@ -1155,6 +1307,17 @@
       "role_default": "平",
       "forage": {
         "enabled": false
+      },
+      "process": {
+        "needs_process": false,
+        "process_method": null,
+        "process_methods": [],
+        "raw_id": "xiangfu",
+        "processed_id": "xiangfu",
+        "state_model": "ready",
+        "default_state_on_forage_or_cabinet": "processed",
+        "teaching": false,
+        "warning": null
       }
     },
     {
@@ -1240,6 +1403,17 @@
           "ja": "熟地ではない。手がかりを見直せ。"
         },
         "script_ref": "patients/forage_script.json"
+      },
+      "process": {
+        "needs_process": false,
+        "process_method": null,
+        "process_methods": [],
+        "raw_id": "shudi",
+        "processed_id": "shudi",
+        "state_model": "ready",
+        "default_state_on_forage_or_cabinet": "processed",
+        "teaching": false,
+        "warning": null
       }
     },
     {
@@ -1278,6 +1452,17 @@
       "role_default": "平",
       "forage": {
         "enabled": false
+      },
+      "process": {
+        "needs_process": false,
+        "process_method": null,
+        "process_methods": [],
+        "raw_id": "shanyao",
+        "processed_id": "shanyao",
+        "state_model": "ready",
+        "default_state_on_forage_or_cabinet": "processed",
+        "teaching": false,
+        "warning": null
       }
     },
     {
@@ -1316,6 +1501,17 @@
       "role_default": "平",
       "forage": {
         "enabled": false
+      },
+      "process": {
+        "needs_process": false,
+        "process_method": null,
+        "process_methods": [],
+        "raw_id": "shanzhuyu",
+        "processed_id": "shanzhuyu",
+        "state_model": "ready",
+        "default_state_on_forage_or_cabinet": "processed",
+        "teaching": false,
+        "warning": null
       }
     },
     {
@@ -1401,6 +1597,17 @@
           "ja": "牡丹皮ではない。手がかりを見直せ。"
         },
         "script_ref": "patients/forage_script.json"
+      },
+      "process": {
+        "needs_process": false,
+        "process_method": null,
+        "process_methods": [],
+        "raw_id": "mudanpi",
+        "processed_id": "mudanpi",
+        "state_model": "ready",
+        "default_state_on_forage_or_cabinet": "processed",
+        "teaching": false,
+        "warning": null
       }
     },
     {
@@ -1437,6 +1644,17 @@
       "role_default": "平",
       "forage": {
         "enabled": false
+      },
+      "process": {
+        "needs_process": false,
+        "process_method": null,
+        "process_methods": [],
+        "raw_id": "zexie",
+        "processed_id": "zexie",
+        "state_model": "ready",
+        "default_state_on_forage_or_cabinet": "processed",
+        "teaching": false,
+        "warning": null
       }
     },
     {
@@ -1476,6 +1694,17 @@
       "role_default": "平",
       "forage": {
         "enabled": false
+      },
+      "process": {
+        "needs_process": false,
+        "process_method": null,
+        "process_methods": [],
+        "raw_id": "zhimu",
+        "processed_id": "zhimu",
+        "state_model": "ready",
+        "default_state_on_forage_or_cabinet": "processed",
+        "teaching": false,
+        "warning": null
       }
     },
     {
@@ -1514,6 +1743,17 @@
       "role_default": "平",
       "forage": {
         "enabled": false
+      },
+      "process": {
+        "needs_process": false,
+        "process_method": null,
+        "process_methods": [],
+        "raw_id": "huangbai",
+        "processed_id": "huangbai",
+        "state_model": "ready",
+        "default_state_on_forage_or_cabinet": "processed",
+        "teaching": false,
+        "warning": null
       }
     },
     {
@@ -1552,6 +1792,17 @@
       "role_default": "平",
       "forage": {
         "enabled": false
+      },
+      "process": {
+        "needs_process": false,
+        "process_method": null,
+        "process_methods": [],
+        "raw_id": "jinyinhua",
+        "processed_id": "jinyinhua",
+        "state_model": "ready",
+        "default_state_on_forage_or_cabinet": "processed",
+        "teaching": false,
+        "warning": null
       }
     },
     {
@@ -1588,6 +1839,17 @@
       "role_default": "平",
       "forage": {
         "enabled": false
+      },
+      "process": {
+        "needs_process": false,
+        "process_method": null,
+        "process_methods": [],
+        "raw_id": "lianqiao",
+        "processed_id": "lianqiao",
+        "state_model": "ready",
+        "default_state_on_forage_or_cabinet": "processed",
+        "teaching": false,
+        "warning": null
       }
     },
     {
@@ -1628,6 +1890,29 @@
       "role_default": "平",
       "forage": {
         "enabled": false
+      },
+      "process": {
+        "needs_process": true,
+        "process_method": "stir_fry",
+        "process_methods": [
+          "stir_fry"
+        ],
+        "raw_id": "fuzi",
+        "processed_id": "fuzi",
+        "state_model": "same_id_state",
+        "minigame": "fire_bar",
+        "teaching": true,
+        "warning": {
+          "toxic": true,
+          "zh": "附子有毒，须炮制教学；切片治病可不靠附子。",
+          "en": "Aconite is toxic; requires processing lesson. Slice cures need not use it.",
+          "ja": "附子は有毒。炮製の教えが必要。今期の治療に必須ではない。",
+          "i18n_key": "PROCESS_WARN_TOXIC",
+          "safe_alternative": "Use non-fuzi legal paths (e.g. guizhi set for exterior)."
+        },
+        "note_zh": "教学关；制后仍走十八反，不解锁半夏等同盏",
+        "slice_required_for_cure": false,
+        "default_state_on_forage_or_cabinet": "raw"
       }
     },
     {
@@ -1665,6 +1950,17 @@
       "role_default": "平",
       "forage": {
         "enabled": false
+      },
+      "process": {
+        "needs_process": false,
+        "process_method": null,
+        "process_methods": [],
+        "raw_id": "ganjiang",
+        "processed_id": "ganjiang",
+        "state_model": "ready",
+        "default_state_on_forage_or_cabinet": "processed",
+        "teaching": false,
+        "warning": null
       }
     }
   ],
@@ -3764,5 +4060,121 @@
     "prompt_contract": "logic/inquiry_prompt_contract.json",
     "offline_coverage_report": "logic/offline_coverage_report.json",
     "provider_agnostic": true
+  },
+  "process_rules": {
+    "id": "process_rules_v124",
+    "scene": "process_yard",
+    "enter_from": [
+      "clinic",
+      "pharmacy",
+      "herb_garden"
+    ],
+    "return_to": "pharmacy",
+    "methods": {
+      "wash": {
+        "zh": "洗",
+        "en": "Wash",
+        "ja": "洗う",
+        "minigame": "wash_rhythm",
+        "note": "节奏点/拖，去泥去尖"
+      },
+      "stir_fry": {
+        "zh": "炒",
+        "en": "Stir-fry",
+        "ja": "炒める",
+        "minigame": "fire_bar",
+        "note": "火候条绿区；过火/欠火→ok_ish"
+      },
+      "sun_dry": {
+        "zh": "晒",
+        "en": "Sun-dry",
+        "ja": "干す",
+        "minigame": "progress_or_placeholder",
+        "slice": "optional_placeholder"
+      }
+    },
+    "slice_playable_methods": [
+      "wash",
+      "stir_fry"
+    ],
+    "teaching_herbs": [
+      "xingren",
+      "baishao"
+    ],
+    "optional_warning_herb": "fuzi",
+    "quality": {
+      "grades": [
+        "ok",
+        "ok_ish"
+      ],
+      "ok": {
+        "tray_bonus_M": 0.02,
+        "note": "妥"
+      },
+      "ok_ish": {
+        "tray_bonus_M": 0.0,
+        "note": "勉强；仍可入盏"
+      },
+      "on_fail_minigame": "retry_or_ok_ish",
+      "no_game_over": true
+    },
+    "time": {
+      "enter_process_costs": {
+        "slot": "evening",
+        "amount": 1
+      },
+      "save_path": "play.time_slots.evening",
+      "note": "切片固定：进炮制院耗 1 暮格"
+    },
+    "inventory": {
+      "save_path": "play.herb_stock",
+      "shape": {
+        "herb_id": {
+          "raw": 0,
+          "processed": 0
+        }
+      },
+      "quality_path": "play.process_quality",
+      "quality_shape": {
+        "herb_id": "ok|ok_ish"
+      },
+      "note": "needs_process 药仅 processed>0 可入盏；legacy herb_inventory/herb_items 可读迁移",
+      "legacy": [
+        "play.herb_inventory",
+        "play.herb_items"
+      ]
+    },
+    "tray_gate": {
+      "unprocessed_cannot_enter": true,
+      "rule": "if herb.process.needs_process and herb_stock[id].processed <= 0 → block; else allow (quality optional bonus)",
+      "check_api": "Process.can_use_in_formula(herb_id, inv_item) -> bool | {ok:false, reason_key}",
+      "on_block": {
+        "toast_i18n": "PROCESS_NEED_FIRST",
+        "mentor_cue": "苏问舟教学短句（剧本补）",
+        "stability_penalty": 1,
+        "note": "拦截提交；扣一点稳/安全分"
+      },
+      "needs_process_false_ok": true
+    },
+    "incompat": {
+      "processing_does_not_unlock_fan_wei": true,
+      "note": "制附子仍反半夏等；沿用 incompat / fanwei_pairs，炮制态不改锁表"
+    },
+    "smoke": {
+      "steps": [
+        "wash xingren → processed ok",
+        "stir_fry baishao → processed ok_ish_or_ok",
+        "tray accepts both",
+        "formula still settles"
+      ],
+      "formula_example": [
+        "mahuang",
+        "guizhi",
+        "xingren",
+        "gancao"
+      ],
+      "expect": "xingren must be processed; SMOKE PASS + process tag"
+    },
+    "contracts_prototype": "GameFlow.go_process → process.tscn; evening -= 1; wash xingren / stir_fry baishao; write play.herb_stock & process_quality; Process.can_use_in_formula uses processed>0; 十八反 unchanged"
   }
 }

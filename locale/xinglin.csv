@@ -389,3 +389,41 @@ LLM_OFFLINE_NOTE,无网时可用本地回复继续问诊。,"Without a network, 
 STORE_TITLE,墨问岐黄,Mo Wen Qi Huang,墨問岐黄
 STORE_TAGLINE,病人不交全症状。望、闻、问、切，都要你亲手做。,"The patient never hands you a complete chart. Look, listen, ask, then feel the pulse.",患者は症状をすべて話さない。望・聞・問・切は、あなたがやる動詞だ。
 STORE_SHORT_DESC,明快 Q 版的中式医馆。病人不交全症状，望、闻、问、切都要亲手做。开方拖药或点穴扎针，多条路都能治，没有唯一答案。午后去后院药圃，看形色气味再认再采，采来的药能进托盘。问诊无网也能用本地回复。,"A bright Q-style Chinese clinic. Patients never hand you a complete chart — look, listen, ask, and take the pulse yourself. Compound a formula or needle points; more than one path can heal. After noon, identify backyard herbs by shape, color, and scent, then pick them into the tray. Inquiry still works offline with local replies.",明るいQ版の中華医館。患者は症状をすべて渡さない。望・聞・問・切は手でやる。薬を組むか、穴を取るか、正しい道はひとつではない。午後は裏庭の薬圃で形・色・香りを見てから採り、盆に載せられる。問診はネットがなくても手元の返事で続けられる。
+PROCESS_TITLE,炮制院,Processing yard,炮製院
+PROCESS_SUBTITLE,火候在人，不在炉。,"The fire is in the hand, not the stove.",火候は人にあり、炉にあらず。
+PROCESS_ENTER,去炮制院,To the processing yard,炮製院へ
+PROCESS_OPEN,去炮制院,To the processing yard,炮製院へ
+PROCESS_EXIT,回药房,Back to the pharmacy,薬局へ戻る
+PROCESS_STATION_WASH,洗,Wash,洗
+PROCESS_STATION_FRY,炒,Stir-fry,炒
+PROCESS_STATION_SUN,晒,Sun-dry,晒
+PROCESS_PICK_HERB,选一味要炮的药,Choose an herb to process,炮製する薬を選ぶ
+PROCESS_RAW_TAG,生,Raw,生
+PROCESS_DONE_TAG,炮,Processed,炮
+PROCESS_START,动手,Begin,始める
+PROCESS_CANCEL,放下,Put down,置く
+PROCESS_WASH_HINT,按节奏洗去泥沙与尖。,Wash to a rhythm — mud and tips come off.,リズムに合わせて泥と尖を洗う。
+PROCESS_WASH_OK,洗净了。,Washed clean.,洗い上がった。
+PROCESS_WASH_WEAK,还带泥。再洗一轮。,Still muddy. Wash again.,まだ泥が残る。もう一度。
+PROCESS_FRY_HINT,把火候条留在绿区。,Keep the fire bar in the green.,火候バーを緑の帯に保て。
+PROCESS_FRY_HOT,过火了。,Too hot.,火が過ぎた。
+PROCESS_FRY_COLD,欠火。,Too cool.,火が足りない。
+PROCESS_FRY_OK,火候正好。,Heat is right.,火候ちょうどよい。
+PROCESS_FRY_OKAY,勉强能用。,Barely usable.,ぎりぎり使える。
+PROCESS_SUN_HINT,置到半日，小荷会喊你。,Leave it half a day — Xiaohe will call.,半日置く。小荷が呼ぶ。
+PROCESS_SUN_OK,晒好了。,Sun-dried.,乾いた。
+PROCESS_QUALITY_GOOD,妥,Sound,妥
+PROCESS_QUALITY_OK,勉强,Fair,ぎり
+PROCESS_BLOCK_RAW,这味须先炮制，生的不能入盏。,This herb must be processed first. Raw cannot enter the bowl.,この薬は先に炮製。生のまま盞に入れない。
+PROCESS_BLOCK_SUBMIT,盏里还有未炮的药，先回炮制院。,A raw herb is still in the bowl. Process it first.,盞に未炮の薬がある。先に炮製院へ。
+PROCESS_WARN_TOXIC,有毒性的教学药。炮制后仍须慎用，游戏内不作真实剂量。,"A teaching herb with toxicity. Even processed, use with care — this is not a real dose.",毒性のある教材薬。炮製後も慎重に。ゲーム内の用量は現実の処方ではない。
+PROCESS_DONE_HINT,炮好了。回药房就能入托盘。,Done. It can go on the tray in the pharmacy.,炮製できた。薬局に戻れば盆に入れられる。
+PROCESS_TIME_COST,耗去一个暮时。,Costs one dusk slot.,暮れのひとコマを使う。
+MENTOR_PROCESS_1,火候在人，不在炉。,"The fire is in the hand, not the stove.",火候は人にあり、炉にあらず。
+MENTOR_PROCESS_2,杏仁不去尖，入盏我不许。,Apricot kernels without tips removed will not enter my bowl.,杏仁の尖を取らぬものは、盞に入れさせぬ。
+MENTOR_PROCESS_3,先炮后用。生的锁在柜里，不是吓你。,"Process first, then use. Locking the raw ones is teaching, not scare.",先に炮じてから使え。生を鍵するのは脅しではない。
+XIAOHE_PROCESS_1,炉子烫！袖子卷起来。,The stove is hot! Roll your sleeves.,炉が熱い！袖をまくれ。
+XIAOHE_PROCESS_2,洗盆的水换过了——大概。,I changed the wash water — probably.,洗い桶の水、替えた——たぶん。
+PROCESS_XINGREN_HINT,洗去皮尖，再谈入方。,Wash off skin and tips before any formula.,皮と尖を洗ってから方へ。
+PROCESS_FUZI_HINT,附子教学关：先看警告，再动手。切片可用别味替代。,Aconite teaching step: read the warning first. This slice allows safer substitutes.,附子の教材：まず警告を読め。今期は別味で代えてよい。
+PROCESS_NEED_FIRST,这味须先炮制，生的不能入盏。,This herb must be processed first. Raw cannot enter the bowl.,この薬は先に炮製。生のまま盞に入れない。

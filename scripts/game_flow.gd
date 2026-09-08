@@ -512,6 +512,17 @@ func leave_garden() -> void:
 	Forage.leave_garden()
 
 
+func go_process() -> void:
+	if fsm_state != "clinic_idle":
+		return
+	if Process:
+		Process.go_process()
+
+
+func leave_process() -> void:
+	if Process:
+		Process.leave_process()
+
 
 func herb_stock(hid: String) -> int:
 	if Forage:
@@ -592,6 +603,8 @@ func can_use_herb_in_formula(hid: String) -> bool:
 
 
 func tray_herb_allowed(hid: String) -> bool:
+	if Process:
+		return Process.can_use_in_formula(hid)
 	if Forage:
 		return Forage.can_use_in_formula(hid)
 	return CaseDB.herbs_by_id.has(hid)
@@ -600,11 +613,17 @@ func tray_herb_allowed(hid: String) -> bool:
 
 func can_add_herb(herb_id: String) -> bool:
 	if not tray_herb_allowed(herb_id):
-		var msg := tr("FORAGE_UNKNOWN_TRAY")
-		if msg == "FORAGE_UNKNOWN_TRAY":
-			msg = tr("GARDEN_UNKNOWN_TRAY")
-		if msg == "GARDEN_UNKNOWN_TRAY" or msg == "":
-			msg = "未认过的药，不能入盘。"
+		var msg := ""
+		if Process and Process.needs_process(herb_id) and Process.processed_stock(herb_id) <= 0:
+			msg = Process.process_block_reason(herb_id)
+			if msg == "":
+				msg = Process.mentor_line(0)
+		if msg == "":
+			msg = tr("FORAGE_UNKNOWN_TRAY")
+			if msg == "FORAGE_UNKNOWN_TRAY":
+				msg = tr("GARDEN_UNKNOWN_TRAY")
+			if msg == "GARDEN_UNKNOWN_TRAY" or msg == "":
+				msg = "未认过的药，不能入盘。"
 		last_fanwei_reason = msg
 		fanwei_locked.emit(last_fanwei_reason)
 		return false
@@ -1102,6 +1121,43 @@ func run_slice_smoke() -> int:
 	play_f["herbs_identified"] = ids0
 	play_f["identified_herbs"] = ids0b
 	Save.data["play"] = play_f
+
+	# V124 process smoke: wash xingren + stir baishao; tray gate (herb_stock raw/processed)
+	var play_p: Dictionary = _play()
+	var stock_p0: Dictionary = play_p.get("herb_stock", {}).duplicate(true) if typeof(play_p.get("herb_stock", {})) == TYPE_DICTIONARY else {}
+	var inv_p0: Dictionary = play_p.get("herb_inventory", {}).duplicate(true) if typeof(play_p.get("herb_inventory", {})) == TYPE_DICTIONARY else {}
+	var pq0: Dictionary = play_p.get("process_quality", {}).duplicate(true) if typeof(play_p.get("process_quality", {})) == TYPE_DICTIONARY else {}
+	if Process == null:
+		fails.append("Process autoload missing")
+	else:
+		# Reset teaching herbs to raw-only so prior save slots cannot skip the gate.
+		Process._write_entry("xingren", 1, 0)
+		Process._write_entry("baishao", 0, 0)
+		if Process.processed_stock("xingren") != 0 or Process.raw_stock("xingren") < 1:
+			fails.append("xingren raw reset failed")
+		if tray_herb_allowed("xingren"):
+			fails.append("raw xingren must not be tray-allowed before wash")
+		var wash_r: Dictionary = Process.try_wash("xingren", 1.0)
+		if not bool(wash_r.get("ok", false)):
+			fails.append("try_wash xingren failed: %s" % str(wash_r.get("reason", "")))
+		elif not Process.mark_processed("xingren", str(wash_r.get("quality", "ok"))):
+			fails.append("mark_processed xingren failed")
+		if not tray_herb_allowed("xingren"):
+			fails.append("processed xingren should be tray-allowed")
+		Process._write_entry("baishao", 1, 0)
+		var stir_r: Dictionary = Process.try_stir("baishao", 1.0)
+		if not bool(stir_r.get("ok", false)):
+			fails.append("try_stir baishao failed: %s" % str(stir_r.get("reason", "")))
+		elif not Process.mark_processed("baishao", str(stir_r.get("quality", "ok"))):
+			fails.append("mark_processed baishao failed")
+		if Process.processed_stock("baishao") < 1:
+			fails.append("baishao processed stock expected >=1")
+		print("process_smoke_ok")
+	play_p = _play()
+	play_p["herb_stock"] = stock_p0
+	play_p["herb_inventory"] = inv_p0
+	play_p["process_quality"] = pq0
+	Save.data["play"] = play_p
 
 	if fails.is_empty():
 		print("SMOKE PASS")

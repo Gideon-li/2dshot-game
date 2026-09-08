@@ -100,7 +100,7 @@ func _ready() -> void:
 		waited += get_process_delta_time()
 	if not offline_done["ok"]:
 		fails.append("offline ask did not finish")
-	elif offline_done.get("from_api", True) or str(offline_done.get("status", "")) != "OFFLINE_FALLBACK":
+	elif offline_done.get("from_api", true) or str(offline_done.get("status", "")) != "OFFLINE_FALLBACK":
 		fails.append("expected OFFLINE_FALLBACK in main smoke")
 	OS.set_environment("MOWEN_LLM_PROVIDER", "")
 	# V120 mentor cue when exams / tenq incomplete
@@ -161,6 +161,42 @@ func _ready() -> void:
 	if float(afu.get("score", 0.0)) < 0.55:
 		fails.append("after forage guizhi, Afu formula score too weak (%.2f)" % float(afu.get("score", 0.0)))
 	print("forage_smoke_ok")
+	# V124 process smoke (herb_stock raw/processed)
+	var play_p: Dictionary = Save.data.get("play", {}) if typeof(Save.data.get("play", {})) == TYPE_DICTIONARY else {}
+	var stock_p0: Dictionary = play_p.get("herb_stock", {}).duplicate(true) if typeof(play_p.get("herb_stock", {})) == TYPE_DICTIONARY else {}
+	var inv_p0: Dictionary = play_p.get("herb_inventory", {}).duplicate(true) if typeof(play_p.get("herb_inventory", {})) == TYPE_DICTIONARY else {}
+	var pq0: Dictionary = play_p.get("process_quality", {}).duplicate(true) if typeof(play_p.get("process_quality", {})) == TYPE_DICTIONARY else {}
+	if Process == null:
+		fails.append("Process autoload missing")
+	else:
+		# Reset teaching herbs to raw-only so prior save slots cannot skip the gate.
+		Process._write_entry("xingren", 1, 0)
+		Process._write_entry("baishao", 0, 0)
+		if Process.processed_stock("xingren") != 0 or Process.raw_stock("xingren") < 1:
+			fails.append("xingren raw reset failed")
+		if GameFlow.tray_herb_allowed("xingren"):
+			fails.append("raw xingren must not be tray-allowed before wash")
+		var wash_r: Dictionary = Process.try_wash("xingren", 1.0)
+		if not bool(wash_r.get("ok", false)):
+			fails.append("try_wash xingren failed")
+		elif not Process.mark_processed("xingren", str(wash_r.get("quality", "ok"))):
+			fails.append("mark_processed xingren failed")
+		if not GameFlow.tray_herb_allowed("xingren"):
+			fails.append("processed xingren should be tray-allowed")
+		Process._write_entry("baishao", 1, 0)
+		var stir_r: Dictionary = Process.try_stir("baishao", 1.0)
+		if not bool(stir_r.get("ok", false)):
+			fails.append("try_stir baishao failed")
+		elif not Process.mark_processed("baishao", str(stir_r.get("quality", "ok"))):
+			fails.append("mark_processed baishao failed")
+		if Process.processed_stock("baishao") < 1:
+			fails.append("baishao processed stock expected >=1")
+		print("process_smoke_ok")
+	play_p = Save.data.get("play", {}) if typeof(Save.data.get("play", {})) == TYPE_DICTIONARY else {}
+	play_p["herb_stock"] = stock_p0
+	play_p["herb_inventory"] = inv_p0
+	play_p["process_quality"] = pq0
+	Save.data["play"] = play_p
 	if fails.is_empty():
 		print("SMOKE PASS")
 		get_tree().quit(0)

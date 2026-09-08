@@ -339,11 +339,20 @@ func is_identified(herb_id: String) -> bool:
 
 
 func stock(herb_id: String) -> int:
+	## Total count. Prefers Process raw+processed shape when present.
+	if Process and Process.has_method("stock_total"):
+		var n: int = Process.stock_total(herb_id)
+		# Fall through only if Process has never seen this id and legacy flat remains.
+		if n > 0 or (Process.has_method("needs_process") and Process.needs_process(herb_id)):
+			return n
 	var play: Dictionary = _play()
 	var inv: Variant = play.get("herb_stock", play.get("herb_inventory", {}))
 	if typeof(inv) != TYPE_DICTIONARY:
 		return 0
-	return int((inv as Dictionary).get(herb_id, 0))
+	var v: Variant = (inv as Dictionary).get(herb_id, 0)
+	if typeof(v) == TYPE_DICTIONARY:
+		return int((v as Dictionary).get("raw", 0)) + int((v as Dictionary).get("processed", 0))
+	return int(v)
 
 
 func mark_identified(herb_id: String) -> void:
@@ -363,11 +372,29 @@ func mark_identified(herb_id: String) -> void:
 func add_stock(herb_id: String, n: int) -> void:
 	if n <= 0:
 		return
+	# V124: route through Process so herb_stock uses {raw, processed}.
+	if Process and Process.has_method("add_stock"):
+		Process.add_stock(herb_id, n)
+		inventory_changed.emit()
+		return
 	var play: Dictionary = _play()
 	var inv: Dictionary = play.get("herb_stock", {}) if typeof(play.get("herb_stock", {})) == TYPE_DICTIONARY else {}
-	inv[herb_id] = int(inv.get(herb_id, 0)) + n
+	var cur: Variant = inv.get(herb_id, 0)
+	if typeof(cur) == TYPE_DICTIONARY:
+		var row: Dictionary = (cur as Dictionary).duplicate()
+		row["processed"] = int(row.get("processed", 0)) + n
+		inv[herb_id] = row
+	else:
+		inv[herb_id] = int(cur) + n
 	play["herb_stock"] = inv
-	play["herb_inventory"] = inv.duplicate()
+	var flat: Dictionary = {}
+	for k in inv.keys():
+		var vv: Variant = inv[k]
+		if typeof(vv) == TYPE_DICTIONARY:
+			flat[k] = int((vv as Dictionary).get("raw", 0)) + int((vv as Dictionary).get("processed", 0))
+		else:
+			flat[k] = int(vv)
+	play["herb_inventory"] = flat
 	Save.data["play"] = play
 	Save.write_slot()
 	inventory_changed.emit()
@@ -403,9 +430,14 @@ func pick_herb(herb_id: String) -> Dictionary:
 func can_use_in_formula(herb_id: String) -> bool:
 	if herb_id == "" or not CaseDB.herbs_by_id.has(herb_id):
 		return false
+	# V124: needs_process must be processed before tray.
+	if Process and Process.has_method("needs_process") and Process.needs_process(herb_id):
+		if not Process.can_use_in_formula(herb_id):
+			return false
 	if herb_id in CaseDB.forage_starter_known():
 		return true
 	if not is_forage_enabled(herb_id):
+		# Non-forage cabinet herbs: process gate above is enough.
 		return true
 	return is_identified(herb_id) and stock(herb_id) > 0
 

@@ -19,6 +19,8 @@ var wenzhou_narration_keys: PackedStringArray = PackedStringArray()
 var forage_pack: Dictionary = {}
 var forage_by_id: Dictionary = {}
 var forage_starter: PackedStringArray = PackedStringArray()
+var process_pack: Dictionary = {}
+var process_by_id: Dictionary = {}
 
 
 func _ready() -> void:
@@ -51,6 +53,7 @@ func _ready() -> void:
 	_load_fanwei_and_ten_asks()
 	_apply_bind_join()
 	_load_forage()
+	_load_process()
 
 
 
@@ -607,3 +610,47 @@ func mentor_forage_line() -> String:
 	if typeof(line) == TYPE_DICTIONARY:
 		return UiKit.loc_text(line, "")
 	return str(line)
+
+
+func _load_process() -> void:
+	## Thin pack: logic/process_herbs.json → process_by_id.
+	process_pack = _load_json("res://logic/process_herbs.json")
+	process_by_id.clear()
+	var rows: Variant = process_pack.get("herbs", [])
+	if typeof(rows) != TYPE_ARRAY:
+		return
+	for row in rows:
+		if typeof(row) != TYPE_DICTIONARY:
+			continue
+		var hid := str((row as Dictionary).get("id", "")).strip_edges()
+		if hid == "":
+			continue
+		var entry: Dictionary = (row as Dictionary).duplicate(true)
+		process_by_id[hid] = entry
+		# Mirror process block onto slice herb when present.
+		if herbs_by_id.has(hid):
+			var h: Dictionary = herbs_by_id[hid]
+			var block: Dictionary = {
+				"needs_process": bool(entry.get("needs_process", false)),
+				"process_method": str(entry.get("process_method", "")),
+			}
+			for k in ["mentor_lines", "xiaohe_lines", "warning", "block_reason"]:
+				if entry.has(k):
+					block[k] = entry[k]
+			h["process"] = block
+			herbs_by_id[hid] = h
+
+
+func process_entry(hid: String) -> Dictionary:
+	if process_by_id.has(hid):
+		return process_by_id[hid] as Dictionary
+	if herbs_by_id.has(hid):
+		var p: Variant = (herbs_by_id[hid] as Dictionary).get("process", {})
+		if typeof(p) == TYPE_DICTIONARY:
+			return p as Dictionary
+	return {}
+
+
+func process_needs(hid: String) -> bool:
+	var e: Dictionary = process_entry(hid)
+	return bool(e.get("needs_process", false))

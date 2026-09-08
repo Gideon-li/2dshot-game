@@ -1,0 +1,53 @@
+{
+  "id": "process_herbs_v124",
+  "version": "1.24",
+  "notes": "炮制短环：杏仁洗（须炮制）+ 白芍炒（须炮制教学）。晒为占位。",
+  "herbs": [
+    {
+      "id": "xingren",
+      "zh": "杏仁",
+      "en": "Apricot kernel",
+      "ja": "杏仁",
+      "needs_process": true,
+      "process_method": "wash",
+      "mentor_lines": {
+        "zh": "杏仁生用带尖，先洗去皮尖，再谈入盏。",
+        "en": "Raw apricot kernels keep their tips. Wash skin and tips off before the tray.",
+        "ja": "生の杏仁には尖がある。皮と尖を洗ってから盆へ。"
+      },
+      "xiaohe_lines": {
+        "zh": "水溅到鞋了……下次轻一点！",
+        "en": "Water on my shoes… lighter next time!",
+        "ja": "靴が濡れた……次は優しく！"
+      },
+      "block_reason": {
+        "zh": "杏仁不去尖，入盏我不许。先去炮制院洗。",
+        "en": "Apricot kernels without tips removed will not enter my bowl. Wash them first.",
+        "ja": "杏仁の尖を取らぬものは、盞に入れさせぬ。先に洗え。"
+      }
+    },
+    {
+      "id": "baishao",
+      "zh": "白芍",
+      "en": "White peony root",
+      "ja": "白芍",
+      "needs_process": true,
+      "process_method": "stir",
+      "mentor_lines": {
+        "zh": "火候在人，不在炉。白芍清炒，条落绿区为妥。",
+        "en": "The fire is in the hand, not the stove. Stir-fry white peony — keep the bar green.",
+        "ja": "火候は人にあり、炉にあらず。白芍は清炒、バーを緑に。"
+      },
+      "xiaohe_lines": {
+        "zh": "炒糊了我会闻见。你自己看着办。",
+        "en": "If you scorch it, I will smell it. Your call.",
+        "ja": "焦がしたら匂いで分かる。あとは自分で。"
+      },
+      "block_reason": {
+        "zh": "白芍须先炒制，生的不能入盏。",
+        "en": "White peony must be stir-fried first. Raw cannot enter the bowl.",
+        "ja": "白芍は先に炒めよ。生のまま盞に入れない。"
+      }
+    }
+  ]
+}
