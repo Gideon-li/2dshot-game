@@ -330,3 +330,42 @@ XIAOHE_PROCESS_1,炉子烫！袖子卷起来。,The stove is hot! Roll your slee
 XIAOHE_PROCESS_2,洗盆的水换过了——大概。,I changed the wash water — probably.,洗い桶の水、替えた——たぶん。
 PROCESS_XINGREN_HINT,洗去皮尖，再谈入方。,Wash off skin and tips before any formula.,皮と尖を洗ってから方へ。
 PROCESS_FUZI_HINT,附子教学关：先看警告，再动手。切片可用别味替代。,Aconite teaching step: read the warning first. This slice allows safer substitutes.,附子の教材：まず警告を読め。今期は別味で代えてよい。
+ACU_TITLE,针灸,Acupuncture,鍼灸
+ACU_SUBTITLE,宁失其穴，勿失其经。,Better miss the point than miss the channel.,寧ろ穴を失うとも、経を失うなかれ。
+ACU_ENTER,上针灸榻,To the acupuncture couch,鍼灸の榻へ
+ACU_EXIT,回诊室,Back to the clinic,診察室へ戻る
+ACU_BODY_HINT,在体图上取穴。用手点，不是点菜单。,Find points on the body map. Tap by hand — not a menu.,体図で取穴する。手で点つ。メニューではない。
+ACU_SUBMIT,确认处治,Confirm treatment,施術を確定
+ACU_RETRY,再试一次,Try again,もう一度
+ACU_HINT,穴心最准；经上可容；出经无效。,Best on the center. Acceptable on the channel. Off-channel does nothing.,穴心が最も良い。経上は可。経を外すと無効。
+ACU_DEQI,得气,Arrival of qi,得気
+ACU_DEQI_HINT,踩着节奏，平补平泻。,Keep the rhythm — even tonify and reduce.,リズムに乗れ。平補平瀉。
+ACU_DEQI_OK,得气了。,Qi has arrived.,得気した。
+ACU_DEQI_FAIL,未得气。可再试一次。,No arrival yet. One more try.,得気していない。もう一度試せる。
+ACU_DEQI_NEED,先得气，再确认。,Get the arrival before you confirm.,まず得気してから確定。
+ACU_MOXA_ZHUANG,壮数,Moxa cones,壮数
+ACU_MOXA_HINT,选壮数，看红晕是否圆润。,Pick cone count; watch for a round blush.,壮数を選び、紅暈が円いか見る。
+ACU_MOXA_OK,灸妥了。,Moxa is set.,灸が妥当。
+ACU_MOXA_ZHUANG_3,三壮,3 cones,三壮
+ACU_MOXA_ZHUANG_5,五壮,5 cones,五壮
+ACU_MOXA_ZHUANG_7,七壮,7 cones,七壮
+ACU_MOXA_DEFAULT,默认五壮。,Default is five cones.,既定は五壮。
+ACU_MISS_JING,出经了。可重试。,Off the channel. Try again.,経を外した。やり直せる。
+ACU_MISS_NEAR,在经上，略偏。勉强可进手法。,"On the channel, a bit off-center. Technique may proceed.",経上だがやや外れる。手法には入れる。
+ACU_HIT_CENTER,穴心。准。,Point center. True.,穴心。良い。
+ACU_TEACH_LOCK,卷一未开此穴。先练合谷与足三里。,This point is locked in volume one. Practice Hegu and Zusanli first.,巻一では未開。まず合谷と足三里を練れ。
+ACU_TEACH_ONLY,教学穴：合谷（针）、足三里（灸）。,"Teaching points: Hegu (needle), Zusanli (moxa).",教材穴：合谷（鍼）、足三里（灸）。
+ACU_METHOD_NEEDLE,针,Needle,鍼
+ACU_METHOD_MOXA,灸,Moxa,灸
+ACU_COUNT,已取 {n} 穴,{n} points taken,{n} 穴
+ACU_COUNT_HINT,一到三穴即可。多了不加分。,One to three points is enough. More won't score higher.,一〜三穴でよい。多くても加点なし。
+ACU_NEED_POINT,先取至少一穴。,Take at least one point first.,まず一穴以上取れ。
+ACU_FEAR_OPTIONAL,怕针可以说。我们改灸，或回去开方。,"If you fear needles, say so — we can moxa, or go back to a formula.",鍼が怖ければ言ってよい。灸にするか、方に戻る。
+ACU_HEGU_NAME,合谷 Hé Gǔ,Hegu (LI4),合谷（ごうこく）
+ACU_HEGU_HINT,合谷走针。点中后跟得气节奏。,"Hegu takes the needle. After the hit, follow the arrival rhythm.",合谷は鍼。当たったら得気のリズムへ。
+ACU_ZUSANLI_NAME,足三里 Zú Sān Lǐ,Zusanli (ST36),足三里（あしさんり）
+ACU_ZUSANLI_HINT,足三里走灸。选壮数，看红晕。,Zusanli takes moxa. Choose cones; watch the blush.,足三里は灸。壮数を選び、紅暈を見る。
+MENTOR_ACU_1,宁失其穴，勿失其经。,Better miss the point than miss the channel.,寧ろ穴を失うとも、経を失うなかれ。
+MENTOR_ACU_2,得气在节奏，不在用力。,"Arrival is rhythm, not force.",得気はリズム。力ではない。
+MENTOR_ACU_3,灸看红晕圆不圆，不看壮数吓人。,Watch whether the moxa blush is round — not how scary the cone count looks.,灸は紅暈が円いか。壮数の多さで嚇すな。
+ACU_DISCLAIMER_HINT,文化体验，不能替代就医。游戏内不作现实进针教法。,A cultural experience. Not a substitute for medical care. No real needling instruction.,文化体験です。受診の代わりにはなりません。現実の刺鍼教法ではありません。

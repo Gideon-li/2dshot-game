@@ -1,6 +1,6 @@
 {
   "id": "xinglin-mowen-slice-logic",
-  "version": 5,
+  "version": 6,
   "project": "墨问岐黄 / 杏林墨问",
   "scope": "vertical_slice",
   "notes": {
@@ -26,7 +26,8 @@
     "v121": "forage identify+pick; max 12; unidentified cannot enter formula; afternoon slot -1",
     "v121_1": "whitelist locked to 12; no extra forage herbs",
     "v122": "inquiry prompt provider-agnostic; offline coverage self-check",
-    "v124": "process fields: needs_process/method/raw→processed; quality ok|ok_ish; evening -1; raw cannot enter bowl; 十八反 not unlocked by processing"
+    "v124": "process fields: needs_process/method/raw→processed; quality ok|ok_ish; evening -1; raw cannot enter bowl; 十八反 not unlocked by processing",
+    "v125": "acu intro: hegu needle + zusanli moxa; teach_vol1 lock; tolerance hit rules"
   },
   "exam_ids": [
     "wang",
@@ -1981,7 +1982,15 @@
         "解表": 0.7,
         "疏风": 0.7
       },
-      "prefer": "针"
+      "prefer": "针",
+      "method": "needle",
+      "teach_vol1": false,
+      "tolerance": {
+        "center_r": 0.025,
+        "jing_r": 0.055
+      },
+      "pinyin": "Fēngchí",
+      "vol1_selectable": false
     },
     {
       "id": "hegu",
@@ -2000,7 +2009,27 @@
         "理气": 0.7,
         "疏风": 0.7
       },
-      "prefer": "针"
+      "prefer": "针",
+      "method": "needle",
+      "teach_vol1": true,
+      "tolerance": {
+        "center_r": 0.025,
+        "jing_r": 0.055
+      },
+      "pinyin": "Hégǔ",
+      "body_pos": {
+        "x": 0.08,
+        "y": 0.46
+      },
+      "needle": {
+        "deqi_modes_slice": [
+          "even"
+        ],
+        "deqi_required": true,
+        "retry_on_fail": 1,
+        "ink_halo": true
+      },
+      "vol1_selectable": true
     },
     {
       "id": "lieque",
@@ -2017,7 +2046,15 @@
         "解表": 0.7,
         "止咳": 0.7
       },
-      "prefer": "针"
+      "prefer": "针",
+      "method": "needle",
+      "teach_vol1": false,
+      "tolerance": {
+        "center_r": 0.025,
+        "jing_r": 0.055
+      },
+      "pinyin": "Lièquē",
+      "vol1_selectable": false
     },
     {
       "id": "dazhui",
@@ -2036,7 +2073,15 @@
         "温里": 0.7,
         "疏风": 0.7
       },
-      "prefer": "针"
+      "prefer": "针",
+      "method": "needle",
+      "teach_vol1": false,
+      "tolerance": {
+        "center_r": 0.025,
+        "jing_r": 0.055
+      },
+      "pinyin": "Dàzhuī",
+      "vol1_selectable": false
     },
     {
       "id": "taichong",
@@ -2054,7 +2099,15 @@
         "理气": 0.7,
         "平肝": 0.7
       },
-      "prefer": "针"
+      "prefer": "针",
+      "method": "needle",
+      "teach_vol1": false,
+      "tolerance": {
+        "center_r": 0.025,
+        "jing_r": 0.055
+      },
+      "pinyin": "Tàichōng",
+      "vol1_selectable": false
     },
     {
       "id": "qimen",
@@ -2070,7 +2123,15 @@
       "funcs": {
         "理气": 0.7
       },
-      "prefer": "针"
+      "prefer": "针",
+      "method": "needle",
+      "teach_vol1": false,
+      "tolerance": {
+        "center_r": 0.025,
+        "jing_r": 0.055
+      },
+      "pinyin": "Qīmén",
+      "vol1_selectable": false
     },
     {
       "id": "neiguan",
@@ -2088,7 +2149,15 @@
         "理气": 0.7,
         "安神": 0.7
       },
-      "prefer": "针"
+      "prefer": "针",
+      "method": "needle",
+      "teach_vol1": false,
+      "tolerance": {
+        "center_r": 0.025,
+        "jing_r": 0.055
+      },
+      "pinyin": "Nèiguān",
+      "vol1_selectable": false
     },
     {
       "id": "yanglingquan",
@@ -2104,7 +2173,15 @@
       "funcs": {
         "理气": 0.7
       },
-      "prefer": "针"
+      "prefer": "针",
+      "method": "needle",
+      "teach_vol1": false,
+      "tolerance": {
+        "center_r": 0.025,
+        "jing_r": 0.055
+      },
+      "pinyin": "Yánglíngquán",
+      "vol1_selectable": false
     },
     {
       "id": "zusanli",
@@ -2121,7 +2198,29 @@
       "funcs": {
         "补气": 0.7
       },
-      "prefer": "针"
+      "prefer": "灸",
+      "method": "moxa",
+      "teach_vol1": true,
+      "tolerance": {
+        "center_r": 0.025,
+        "jing_r": 0.055
+      },
+      "pinyin": "Zúsānlǐ",
+      "body_pos": {
+        "x": 0.38,
+        "y": 0.72
+      },
+      "moxa": {
+        "zhuang_options": [
+          3,
+          5,
+          7
+        ],
+        "zhuang_default": 5,
+        "needs_deqi": false,
+        "halo": "round_red"
+      },
+      "vol1_selectable": true
     },
     {
       "id": "taixi",
@@ -2137,7 +2236,15 @@
       "funcs": {
         "补阴": 0.7
       },
-      "prefer": "针"
+      "prefer": "针",
+      "method": "needle",
+      "teach_vol1": false,
+      "tolerance": {
+        "center_r": 0.025,
+        "jing_r": 0.055
+      },
+      "pinyin": "Tàixī",
+      "vol1_selectable": false
     },
     {
       "id": "sanyinjiao",
@@ -2156,7 +2263,15 @@
         "补血": 0.7,
         "补阴": 0.7
       },
-      "prefer": "针"
+      "prefer": "针",
+      "method": "needle",
+      "teach_vol1": false,
+      "tolerance": {
+        "center_r": 0.025,
+        "jing_r": 0.055
+      },
+      "pinyin": "Sānyīnjiāo",
+      "vol1_selectable": false
     },
     {
       "id": "shenshu",
@@ -2172,7 +2287,15 @@
       "funcs": {
         "补阴": 0.7
       },
-      "prefer": "针"
+      "prefer": "针",
+      "method": "needle",
+      "teach_vol1": false,
+      "tolerance": {
+        "center_r": 0.025,
+        "jing_r": 0.055
+      },
+      "pinyin": "Shènshū",
+      "vol1_selectable": false
     },
     {
       "id": "yongquan",
@@ -2189,7 +2312,15 @@
         "清热": 0.7,
         "补阴": 0.7
       },
-      "prefer": "针"
+      "prefer": "针",
+      "method": "needle",
+      "teach_vol1": false,
+      "tolerance": {
+        "center_r": 0.025,
+        "jing_r": 0.055
+      },
+      "pinyin": "Yǒngquán",
+      "vol1_selectable": false
     },
     {
       "id": "zhaohai",
@@ -2206,7 +2337,15 @@
         "清热": 0.7,
         "补阴": 0.7
       },
-      "prefer": "针"
+      "prefer": "针",
+      "method": "needle",
+      "teach_vol1": false,
+      "tolerance": {
+        "center_r": 0.025,
+        "jing_r": 0.055
+      },
+      "pinyin": "Zhàohǎi",
+      "vol1_selectable": false
     },
     {
       "id": "quchi",
@@ -2223,7 +2362,15 @@
         "解表": 0.7,
         "清热": 0.7
       },
-      "prefer": "针"
+      "prefer": "针",
+      "method": "needle",
+      "teach_vol1": false,
+      "tolerance": {
+        "center_r": 0.025,
+        "jing_r": 0.055
+      },
+      "pinyin": "Qūchí",
+      "vol1_selectable": false
     },
     {
       "id": "mingmen",
@@ -2239,7 +2386,15 @@
       "funcs": {
         "温里": 0.7
       },
-      "prefer": "针"
+      "prefer": "针",
+      "method": "needle",
+      "teach_vol1": false,
+      "tolerance": {
+        "center_r": 0.025,
+        "jing_r": 0.055
+      },
+      "pinyin": "Mìngmén",
+      "vol1_selectable": false
     }
   ],
   "cases": [
@@ -4176,5 +4331,116 @@
       "expect": "xingren must be processed; SMOKE PASS + process tag"
     },
     "contracts_prototype": "GameFlow.go_process → process.tscn; evening -= 1; wash xingren / stir_fry baishao; write play.herb_stock & process_quality; Process.can_use_in_formula uses processed>0; 十八反 unchanged"
+  },
+  "acu_intro_rules": {
+    "id": "acu_intro_rules_v125",
+    "vol1_open_ids": [
+      "hegu",
+      "zusanli"
+    ],
+    "lock_others": true,
+    "lock_behavior": "grey_out_or_toast_TEACH_LOCK",
+    "body_map": "front_q",
+    "point_pos_source": "scenes/acupuncture.gd POINT_POS (authoritative for runtime)",
+    "point_pos": {
+      "hegu": {
+        "x": 0.08,
+        "y": 0.46
+      },
+      "zusanli": {
+        "x": 0.38,
+        "y": 0.72
+      }
+    },
+    "hit": {
+      "center_r": 0.025,
+      "channel_r": 0.055,
+      "grades": {
+        "center": {
+          "label": "准高",
+          "accuracy": 1.0
+        },
+        "channel": {
+          "label": "经上可容",
+          "accuracy": 0.85,
+          "stability_penalty": 0
+        },
+        "miss": {
+          "label": "出经",
+          "accuracy": 0.0,
+          "stability_penalty": 1,
+          "retry": true
+        }
+      },
+      "check_api": "AcuIntro.hit_test(point_id, uv) -> center|channel|miss",
+      "distance": "euclidean on normalized body UV"
+    },
+    "hegu_needle": {
+      "point_id": "hegu",
+      "method": "needle",
+      "deqi": {
+        "slice_mode": "even",
+        "success_if": "rhythm_in_window AND hit!=miss",
+        "fail_retry": 1,
+        "fx": "ink_halo"
+      }
+    },
+    "zusanli_moxa": {
+      "point_id": "zusanli",
+      "method": "moxa",
+      "zhuang_options": [
+        3,
+        5,
+        7
+      ],
+      "zhuang_default": 5,
+      "halo": "round_red_progress_or_click",
+      "no_deqi_bar": true
+    },
+    "session": {
+      "acu_known": "GameFlow session; ids player has seen/taught",
+      "acu_practiced": "GameFlow session; ids successfully needled/moxa'd this visit",
+      "persist": false,
+      "note": "本切片不写长档"
+    },
+    "treat_limits": {
+      "points_per_treat": [
+        1,
+        3
+      ],
+      "over_count_no_extra_score": true,
+      "legal_examples": [
+        [
+          "hegu"
+        ],
+        [
+          "zusanli"
+        ],
+        [
+          "hegu",
+          "zusanli"
+        ]
+      ]
+    },
+    "settle": {
+      "path": "acupuncture",
+      "fn": "GameFlow.settle('acupuncture', selected_ids)",
+      "open_solution": true,
+      "note": "不计炮制/十八反；向量沿用 cases.legal_point_examples"
+    },
+    "smoke": {
+      "tag": "acu_intro_smoke_ok",
+      "cases": [
+        "hegu center + deqi even → settle",
+        "zusanli moxa zhuang=5 → settle"
+      ]
+    },
+    "i18n_keys": [
+      "ACU_HINT",
+      "ACU_DEQI",
+      "ACU_MOXA_ZHUANG",
+      "ACU_MISS_JING",
+      "ACU_TEACH_LOCK"
+    ]
   }
 }

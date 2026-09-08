@@ -310,10 +310,10 @@ func _begin_point(id: String, zone: String) -> void:
 		_set_feedback(tr("ACU_MISS_NEAR"))
 	_active_point = id
 	var method := GameFlow.acu_point_method(id)
-	AudioHub.play_one("needle")
 	if method == "moxa":
 		_open_moxa(id)
 	else:
+		AudioHub.play_one("needle")
 		_open_deqi(id)
 	_paint()
 
@@ -380,6 +380,7 @@ func _tap_deqi() -> void:
 	var ok := v >= 38.0 and v <= 62.0
 	if ok:
 		GameFlow.acu_complete_deqi(_active_point, true)
+		AudioHub.play_one("deqi")
 		_flash_ink(_active_point)
 		_set_feedback(tr("ACU_DEQI_OK"))
 		if _active_point not in _selected:
@@ -435,6 +436,7 @@ func _confirm_moxa() -> void:
 	if _mode != "moxa" or _active_point == "":
 		return
 	if GameFlow.acu_complete_moxa(_active_point, _moxa_zhuang):
+		AudioHub.play_one("moxa")
 		_flash_moxa(_active_point)
 		_set_feedback(tr("ACU_MOXA_OK"))
 		if _active_point not in _selected:

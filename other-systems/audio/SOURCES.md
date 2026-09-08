@@ -23,3 +23,5 @@
 | settle-0.ogg … settle-4.ogg | original | 本目录合成 | 未效→向愈五笔 |
 | forage-pull.ogg | original | 本目录合成 | 采药拔起（茎折+土砂） |
 | forage-bag.ogg | original | 本目录合成 | 入布袋（窸窣+轻落；比 herb-drop 更轻） |
+| deqi.ogg | original | 本目录合成 | 得气成功（暖 bloom / 墨晕；非金属叮） |
+| moxa.ogg | original | 本目录合成 | 艾灸点燃确认（绒絮 + 轻松香；非篝火） |

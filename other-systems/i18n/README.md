@@ -8,3 +8,4 @@ Godot 工程翻译源：`locale/xinglin.csv`（与本目录 `ui.csv` 同步）�
 - 启动免责保留。Steamworks 仍只预研。
 - v1.22：`SETTINGS_LLM_*` / `LLM_*` 本地模型与 provider 状态（见 `LLM-SETTINGS-KEYS.md`）
 - v1.24：`PROCESS_*` 炮制院（见 `PROCESS-KEYS.md`）
+- v1.25：`ACU_*` 针灸入门（见 `ACU-KEYS.md`）

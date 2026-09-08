@@ -113,3 +113,21 @@ API：`MentorCues.next(case, exams, asked_ten_q_ids, cues_emitted)`。
 2. 品质两档：`ok` / `ok_ish`（过火欠火不 Game Over）。
 3. `needs_process` 且 `state!=processed` → **不可入盏**（`Process.can_use_in_formula`）。
 4. **炮制不解锁十八反**（制附子仍反半夏）。
+
+
+## V125 针灸入门短环
+
+`acupoints[]` 增补：`method`（needle/moxa/both）、`teach_vol1`、`tolerance`（`center_r=0.025` / `jing_r=0.055`）。
+
+体图取穴（非纯菜单）。坐标沿用 `scenes/acupuncture.gd` `POINT_POS`：
+
+| id | 法 | 体图 UV | 小环 |
+| --- | --- | --- | --- |
+| `hegu` 合谷 | 针 | (0.08, 0.46) | 得气节奏（切片仅「平」）；失败可再试 1 |
+| `zusanli` 足三里 | 灸 | (0.38, 0.72) | 壮数 3/5/7（默认 5）+ 红晕 |
+
+命中（归一化欧氏）：穴心准高；经容小扣可进手法；出经可重试。卷一其余穴灰显不可选。侧栏列表默认隐藏。
+
+会话级：`GameFlow.acu_known` / `acu_practiced`（不写长档）。结算仍 `settle("acupuncture", …)`，1～3 穴；开方路径不动。
+
+冒烟：`acu_intro_smoke_ok`（合谷得气 **或** 足三里灸 → 可提交）+ `SMOKE PASS`。
