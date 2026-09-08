@@ -15,6 +15,7 @@ var _mentor_panel: Panel
 
 
 func _ready() -> void:
+	_ensure_patient_portrait()
 	_qwen = QwenClient.new()
 	add_child(_qwen)
 	_qwen.replied.connect(_on_reply)
@@ -25,6 +26,28 @@ func _ready() -> void:
 		_show_exam(GameFlow.exam_focus)
 	else:
 		_fill_seated()
+
+
+
+
+func _ensure_patient_portrait() -> void:
+	var pid := str(GameFlow.current_patient_id)
+	if pid == "":
+		return
+	var host := get_node_or_null("PortraitHost") as TextureRect
+	if host == null:
+		host = TextureRect.new()
+		host.name = "PortraitHost"
+		host.custom_minimum_size = Vector2(220, 320)
+		host.position = Vector2(40, 120)
+		host.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		host.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		host.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		add_child(host)
+	var tex: Texture2D = CharacterArt.load_portrait(pid)
+	if tex:
+		host.texture = tex
+
 
 
 func _build() -> void:
@@ -156,6 +179,7 @@ func _clear_stage() -> void:
 
 
 func _fill_seated() -> void:
+	_ensure_patient_portrait()
 	## Sit-down: opening only. No symptom dump, no diagnosis names.
 	_clear_stage()
 	var col := VBoxContainer.new()

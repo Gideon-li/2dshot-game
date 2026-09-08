@@ -1323,6 +1323,20 @@ func run_slice_smoke() -> int:
 	acu_practiced.clear()
 	selected_points.clear()
 
+	# V126: character portraits by id (prefer ui/characters/*.png)
+	var portrait_ids: Array = ["apprentice_jiang", "char_porter", "char_clerk", "char_copyist"]
+	var portrait_ok := 0
+	for pid_art in portrait_ids:
+		var tex_p: Texture2D = CharacterArt.load_portrait(str(pid_art))
+		if tex_p != null:
+			portrait_ok += 1
+		else:
+			fails.append("portrait missing for %s" % str(pid_art))
+	if portrait_ok >= 4:
+		print("portrait_swap_ok")
+	else:
+		fails.append("portrait_swap expected 4 got %d" % portrait_ok)
+
 	if fails.is_empty():
 		print("SMOKE PASS")
 		return 0

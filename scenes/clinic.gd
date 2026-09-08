@@ -248,6 +248,7 @@ func _on_pick(pid: String) -> void:
 	AudioHub.play_chime()
 	_seat_patient(pid)
 	GameFlow.start_patient(pid)
+	_apply_portraits()
 
 
 func _seat_patient(pid: String) -> void:
@@ -283,6 +284,50 @@ func _label_patients() -> void:
 			UiKit.apply_font(lb, 13)
 			lb.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			node.add_child(lb)
+	_apply_portraits()
+
+
+
+
+func _apply_portraits() -> void:
+	## V126: prefer ui/characters/<id>.png; fallback sheet/apprentice.
+	var chars := get_node_or_null("L5_characters")
+	if chars == null:
+		return
+	var ap_art := chars.get_node_or_null("Apprentice/Art") as Sprite2D
+	if ap_art:
+		var at: Texture2D = CharacterArt.load_portrait("apprentice_jiang")
+		if at:
+			ap_art.texture = at
+			ap_art.centered = true
+			ap_art.position = Vector2.ZERO
+			ap_art.scale = Vector2(0.55, 0.55)
+	# Hide shared three-sheet when singles exist; show per-patient sprites.
+	var sheet := chars.get_node_or_null("Patients/Art") as Sprite2D
+	var any_single := false
+	for i in CaseDB.patients.size():
+		var p: Dictionary = CaseDB.patients[i]
+		var pid := str(p.get("id", ""))
+		if CharacterArt.has_single_file(pid):
+			any_single = true
+		var node := chars.get_node_or_null("Patient%d" % i) as Node2D
+		if node == null:
+			continue
+		var spr := node.get_node_or_null("Portrait") as Sprite2D
+		if spr == null:
+			spr = Sprite2D.new()
+			spr.name = "Portrait"
+			spr.z_index = 5
+			spr.centered = true
+			spr.position = Vector2(0, -20)
+			spr.scale = Vector2(0.45, 0.45)
+			node.add_child(spr)
+		var tex: Texture2D = CharacterArt.load_portrait(pid)
+		if tex:
+			spr.texture = tex
+			spr.visible = true
+	if sheet:
+		sheet.visible = not any_single
 
 
 func _build_drawers() -> void:

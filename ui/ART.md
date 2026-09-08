@@ -17,3 +17,17 @@ HUD 不挂诊断名。建筑分层 L1–L4 下一轮洗萌态。
 ## V124 炮制
 
 见 `process/PROCESS.md`：院背景、火候/洗涮 UI、杏仁等 raw→processed 图标。
+
+
+## V126 角色立绘
+
+单人透明底（优先运行时）：见 `characters/README.md`
+
+| 文件 | 角色 |
+| --- | --- |
+| `characters/jiang_wan.png` | 江晚（学徒锚点；禁止林晚） |
+| `characters/zhao_afu.png` | 赵阿福 |
+| `characters/shen_qinghe.png` | 沈清荷 |
+| `characters/zhou_popo.png` | 周婆婆 |
+
+旧 `apprentice.png` / `patients-three.png` 可作备用与商店构图。
