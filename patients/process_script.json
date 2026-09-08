@@ -1,7 +1,7 @@
 {
   "id": "mo-wen-qi-huang-process-script",
   "project": "墨问岐黄",
-  "version": 2,
+  "version": 3,
   "task": "DEV-TASKS-V124",
   "notes": {
     "priority_herb": "xingren",
@@ -12,8 +12,9 @@
       "BOOT_DISCLAIMER_*"
     ],
     "tone": "cultural clinic game; teach by hand feel; never diagnose or prescribe for real life",
-    "slice_lock": "teach lock: xingren=wash, baishao=fry; fuzi optional warn; shengjiang backup fry only",
-    "aligned_logic": "2026-09-08 开发负责人：杏仁洗 + 白芍炒"
+    "slice_lock": "xingren=wash, baishao=fry, mudanpi=sun_dry; fuzi optional warn; shengjiang backup fry",
+    "aligned_logic": "2026-09-08 开发负责人：杏仁洗 + 白芍炒",
+    "v128": "mudanpi sun_dry teach lock; flip + sun bar; dazao backup optional not added"
   },
   "mentor_su": {
     "id": "mentor_su",
@@ -39,6 +40,20 @@
       "zh": "先炮制，再生拖。这味还是生的。",
       "en": "Process it first. This one is still raw.",
       "ja": "先に炮制せよ。まだ生だ。"
+    },
+    "sun_lines": {
+      "zh": [
+        "晒药靠翻面，不靠干等。薄片摊开。",
+        "牡丹皮生片晒透再入盏。"
+      ],
+      "en": [
+        "Sun-drying needs flips, not idle waiting. Spread the slices thin.",
+        "Moutan raw slices enter the tray only when fully sunned."
+      ],
+      "ja": [
+        "干しは裏返しが要る。待つのみではない。薄く広げよ。",
+        "牡丹皮の生片は干し終えてから盆へ。"
+      ]
     }
   },
   "xiaohe": {
@@ -62,6 +77,20 @@
       "zh": "晒架空着。放上去，半日格走完再收。",
       "en": "The drying rack is free. Set it there; pick it up when the half-day mark is done.",
       "ja": "干し棚が空いてる。乗せて、半日マスが終わってから回収。"
+    },
+    "sun_lines": {
+      "zh": [
+        "晒架空着。翻两面我帮你看条。",
+        "别堆高！薄了才干得快。"
+      ],
+      "en": [
+        "Rack is free. Flip twice — I will watch the bar.",
+        "Do not pile high! Thin dries faster."
+      ],
+      "ja": [
+        "干し棚が空いてる。二回裏返して。バーは見る。",
+        "高く積むな！薄い方が乾く。"
+      ]
     }
   },
   "ui": {
@@ -209,6 +238,81 @@
         "zh": "火候妥了。白芍可以入盏。",
         "en": "Heat is sound. White peony may enter the tray.",
         "ja": "火加減よし。白芍を盆に載せてよい。"
+      }
+    },
+    {
+      "id": "mudanpi",
+      "zh": "牡丹皮",
+      "en": "Moutan bark",
+      "ja": "牡丹皮",
+      "needs_process": true,
+      "process_method": "sun_dry",
+      "priority": true,
+      "v128": true,
+      "teach": {
+        "zh": "牡丹皮：薄片摊晒。翻面两三次，日照条走满再收，别堆成坨。",
+        "en": "Moutan bark: spread thin slices in the sun. Flip two or three times; take in when the sun bar fills — do not pile them.",
+        "ja": "牡丹皮：薄片を広げて干す。二、三回裏返せ。日照バーが満ちてから回収。山積みにするな。"
+      },
+      "warn": {
+        "zh": "生片未晒透，不入盏。晒只是馆内教学，不写真实日照时数。",
+        "en": "Raw slices stay out of the tray until sun-dried. Teaching only — no real sun-hour doses.",
+        "ja": "生のままでは盆に入れない。干しは館内教学であり、現実の日照時間ではない。"
+      },
+      "done": {
+        "zh": "晒妥了。牡丹皮可以入盏。",
+        "en": "Sun-dried sound. Moutan may enter the tray.",
+        "ja": "干し終えた。牡丹皮を盆に載せてよい。"
+      },
+      "success_ok": {
+        "zh": [
+          "翻晒均匀，皮干得脆。可以入盏。",
+          "日照够了。收起来。"
+        ],
+        "en": [
+          "Flipped evenly; the bark dried crisp. Tray is open.",
+          "Sun was enough. Take it in."
+        ],
+        "ja": [
+          "裏返しが均等で、皮が乾いて脆い。盆に載せてよい。",
+          "日照が足りた。回収せよ。"
+        ]
+      },
+      "success_bare": {
+        "zh": [
+          "勉强干了。下次翻面勤一点。",
+          "边沿还潮一点，还能入盏。"
+        ],
+        "en": [
+          "Barely dry. Flip more often next time.",
+          "Edges still a touch damp — still tray-ready."
+        ],
+        "ja": [
+          "ぎりぎり乾いた。次はもっと裏返せ。",
+          "端が少し湿るが、盆には載る。"
+        ]
+      },
+      "fail": {
+        "zh": [
+          "还潮。再翻晒一轮。",
+          "堆成坨了。摊开再晒。",
+          "日照不够。别急着收。"
+        ],
+        "en": [
+          "Still damp. Flip and sun another round.",
+          "Piled into a lump. Spread them and sun again.",
+          "Not enough sun. Do not take them in yet."
+        ],
+        "ja": [
+          "まだ湿る。もう一轮干せ。",
+          "山になった。広げてやり直せ。",
+          "日照が足りない。急いで回収するな。"
+        ]
+      },
+      "flip_hint": {
+        "zh": "翻一面。别只盯着进度条。",
+        "en": "Flip a side. Do not only watch the bar.",
+        "ja": "裏返せ。バーだけ見るな。"
       }
     },
     {
