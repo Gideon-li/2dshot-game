@@ -374,7 +374,10 @@ func _on_wash_hit(b: Button) -> void:
 	b.text = "✓"
 	_wash_hits += 1
 	if AudioHub:
-		AudioHub.play_one("ui-ink")
+		if ResourceLoader.exists("res://other-systems/audio/wash.ogg"):
+			AudioHub.play_one("wash")
+		else:
+			AudioHub.play_one("ui-ink")
 	if _wash_hits >= _wash_needed:
 		_finish_process("ok")
 	else:
@@ -387,6 +390,8 @@ func _build_fry() -> void:
 	_fry_in_green = 0.0
 	_fry_out = 0.0
 	_fry_active = true
+	if AudioHub and ResourceLoader.exists("res://other-systems/audio/fry.ogg"):
+		AudioHub.play_one("fry")
 	_mini_host.add_child(UiKit.ink_label(tr("PROCESS_FRY_HINT"), 13, UiKit.INK_MUTED))
 	_fry_bar = ProgressBar.new()
 	_fry_bar.min_value = 0
