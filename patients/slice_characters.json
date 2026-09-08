@@ -1,7 +1,7 @@
 {
   "id": "mo-wen-qi-huang-slice-characters",
   "project": "墨问岐黄",
-  "version": 6,
+  "version": 7,
   "based_on": [
     "design-pack 03 人物志 v1.1",
     "15 十问与问舟 v1.10",
@@ -1200,6 +1200,123 @@
       "zh": "今夜抄经时，后背还潮不潮？潮了就先歇笔。",
       "en": "Tonight while copying — is the back still damp? If it is, set the brush down first.",
       "ja": "今夜の写経、背はまだ湿るか？湿ったら先に筆を置け。"
+    }
+  },
+  "revisit_lines": {
+    "fenghan_biao": {
+      "good": {
+        "zh": "小先生，肩松多了。夜里被子也够了。我来跟一声，还能扛货。",
+        "en": "Doc — shoulders are looser. The blanket was enough at night. Just checking in; I can haul again.",
+        "ja": "小先生、肩がだいぶ楽だ。夜も布団で足りた。一言言いに来た。荷も担げる。"
+      },
+      "slow": {
+        "zh": "好一点，扛货还不利索。鼻涕淡了，风一吹还缩脖子。",
+        "en": "A bit better, but hauling is still clumsy. Snot thinned; wind still makes me hunch.",
+        "ja": "少し楽だが、荷がまだきつい。鼻水は薄くなった。風が吹くとまた首をすくめる。"
+      },
+      "over": {
+        "zh": "药劲太大，人发空，出汗多了。怕冷倒轻，腿发软。",
+        "en": "The herbs hit too hard — I feel emptied, sweat more. Less chill, but legs are weak.",
+        "ja": "薬が強すぎて空になった。汗が多い。悪寒は軽いが足が弱い。"
+      },
+      "mis": {
+        "zh": "好像没对上。怕冷还在，身酸没减。江风一来照样不对劲。",
+        "en": "Doesn't feel like it landed. Still chilly, still sore. River wind hits the same.",
+        "ja": "合ってないみたいだ。まだ寒い、身も痛い。川風が来るとまたおかしい。"
+      }
+    },
+    "ganyu_qizhi": {
+      "good": {
+        "zh": "……胸口松一截。案牍还能写下去。多谢，我坐一下就走。",
+        "en": "…The chest has room. I can write the files again. Thank you — a short sit, then I go.",
+        "ja": "……胸が開いた。書類も書ける。ありがとう。少し座ったら帰る。"
+      },
+      "slow": {
+        "zh": "闷好一点，叹气还是会来。夜里仍浅，只是不那么堵。",
+        "en": "A little less tight; sighs still come. Nights stay light, just less jammed.",
+        "ja": "悶えは少し楽。溜息はまだ出る。夜は浅いが、以前ほど詰まらない。"
+      },
+      "over": {
+        "zh": "气走得猛，人发虚，手心空。写字写不长。",
+        "en": "Qi moved too hard — hollow, empty palms. Cannot write for long.",
+        "ja": "気が動きすぎて虚になった。手のひらが空く。字が長く書けない。"
+      },
+      "mis": {
+        "zh": "胁上的闷还在。饭量照旧。说了像没说。",
+        "en": "The flank tightness stays. Appetite the same. Saying it barely helps.",
+        "ja": "脇の悶えは残る。食欲も同じ。言っても言わないようだ。"
+      }
+    },
+    "yinxu_neire": {
+      "good": {
+        "zh": "劳您。夜里静些了，后背不太潮。还能给庙里写字。",
+        "en": "Kind of you. Nights are quieter; the back less damp. I can still write for the temple.",
+        "ja": "お手数を。夜が静かで、背もあまり湿らない。寺の字も続けられる。"
+      },
+      "slow": {
+        "zh": "好一点，慢。手足心里还有热，下午抄经仍烦。",
+        "en": "A little better, slowly. Palms and soles still warm; copying after noon still frets.",
+        "ja": "少し楽だが遅い。手足の裏はまだ熱い。午後の写経はまだ煩い。"
+      },
+      "over": {
+        "zh": "药苦，胃先顶不住。夜里倒不那么燥，饭吃不下。",
+        "en": "The herbs were bitter; the stomach folded first. Nights less dry, but I cannot eat.",
+        "ja": "薬が苦く、胃が先に参った。夜の燥きは軽いが飯が入らない。"
+      },
+      "mis": {
+        "zh": "越来越燥。盗汗还在，睡不实。不好意思又来烦您。",
+        "en": "Drier than before. Night sweat stays; sleep will not hold. Sorry to trouble you again.",
+        "ja": "前より燥くなった。盗汗も残り、眠りが浅い。またお手数をかけてすみません。"
+      }
+    }
+  },
+  "revisit_ui": {
+    "badge": {
+      "zh": "复诊",
+      "en": "Follow-up",
+      "ja": "再診"
+    },
+    "title": {
+      "zh": "复诊",
+      "en": "Return visit",
+      "ja": "再診"
+    },
+    "observe_label": {
+      "zh": "观察勿药",
+      "en": "Observe — no herbs",
+      "ja": "観察・薬なし"
+    },
+    "observe": {
+      "good": {
+        "zh": "先观察，勿药。身子对了，回去歇着。",
+        "en": "Observe — no more herbs. The body is on track; go rest.",
+        "ja": "まず観察、薬なし。体が向いている。戻って休め。"
+      },
+      "slow": {
+        "zh": "再等一等也行。不舒服再来。",
+        "en": "Waiting a little longer is fine. Come back if it worsens.",
+        "ja": "もう少し待ってもよい。つらければまた来い。"
+      },
+      "over": {
+        "zh": "今日先勿药，让人收一收。明日不对再坐。",
+        "en": "No herbs today — let the body settle. Sit again tomorrow if needed.",
+        "ja": "今日は薬なし。体を収めよ。明日おかしくばまた座れ。"
+      },
+      "mis": {
+        "zh": "观察也可以，但若更不对劲，别硬扛。",
+        "en": "Observing is fine, but if it worsens, do not tough it out.",
+        "ja": "観察でもよい。だが悪化したら無理するな。"
+      },
+      "closing": {
+        "zh": "复诊收工。安心回去。",
+        "en": "Follow-up closed. Go easy.",
+        "ja": "再診はここまで。気をつけて帰れ。"
+      }
+    },
+    "mentor_su_optional": {
+      "zh": "这一趟，人比药先说话。你听清楚了吗？",
+      "en": "This visit, the body speaks before the herbs. Did you hear it?",
+      "ja": "この再診は、薬より人の話が先だ。聞けたか？"
     }
   }
 }

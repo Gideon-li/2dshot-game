@@ -95,3 +95,11 @@ API / 本地模型失败或无网：`ask_wrappers` 套锚。`{sym}` 只填锚，
 - 卷一锁：**合谷 hegu = 针 + 得气平**；**足三里 zusanli = 灸 + 壮数 3/5/7（默认 5）**。
 - 苏问舟 3 句；教学/成败中英日；可选怕针一句。
 - 声明复用 `STORE_NOT_MEDICAL`。**不写**现实进针操作。
+
+## V127 复诊日循环文案
+
+路径：`patients/revisit_script.json`（并写入 `slice_characters.json` → `revisit_lines`）
+
+- 三案 × 4 flavor（`good|slow|over|mis`）复诊主诉，中英日；不报诊断名。
+- 角标「复诊」、观察勿药收工句、可选问舟一句疑问旁白。
+- **不接 LLM**；本地模板即可玩。
