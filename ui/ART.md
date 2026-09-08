@@ -31,3 +31,5 @@ HUD 不挂诊断名。建筑分层 L1–L4 下一轮洗萌态。
 | `characters/zhou_popo.png` | 周婆婆 |
 
 旧 `apprentice.png` / `patients-three.png` 可作备用与商店构图。
+
+V126.1 画风统一：四立绘同套 2D 明快 Q 平涂（婆婆去 3D；江晚收浅墨学徒袍）。

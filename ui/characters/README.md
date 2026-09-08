@@ -10,3 +10,5 @@
 | 苏问舟（选做头像） | `mentor_su` | `ui/characters/su_wenzhou.png` |
 
 透明底 PNG；高约 512～768；明快 Q；禁止林晚。运行时优先单人图，缺则回退 `ui/apprentice.png` / `ui/patients-three.png`。
+
+V126.1：画风统一为 2D 明快 Q 平涂；见 `_proof_v126_1.png`。旧版备份 `_prev_v126/`。
