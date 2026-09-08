@@ -815,10 +815,9 @@ func _fill_score_dock(col: VBoxContainer) -> void:
 	var m_raw := float(r.get("M", r.get("score", 0.0)))
 	var m_pct := int(round(m_raw * 100.0)) if m_raw <= 1.0001 else int(round(m_raw))
 	col.add_child(UiKit.ink_label("M  %d" % m_pct, 15, UiKit.SEAL))
-	if Scoring.has_method("axis_chips"):
-		var chips := Scoring.axis_chips(r)
-		if chips != "":
-			col.add_child(UiKit.ink_label(chips, 12, UiKit.INK_MUTED))
+	var chips := Scoring.axis_chips(r)
+	if chips != "":
+		col.add_child(UiKit.ink_label(chips, 12, UiKit.INK_MUTED))
 	var lab_c := tr("SCORE_C_STAR")
 	if lab_c == "SCORE_C_STAR":
 		lab_c = "覆盖 C*"
