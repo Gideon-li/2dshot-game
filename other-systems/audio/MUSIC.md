@@ -112,3 +112,7 @@
 ## V125（2026-09-08）
 
 针灸入门两声互动短音：`deqi`（得气成功暖 bloom / 墨晕）、`moxa`（艾灸绒燃 + 轻松香确认）。刺入仍用既有 `needle`；未中经可选 `ui-ink` 或静默（无错误哔）。无新 M 轨、无 per-patient BGM；雨/薄床/duck/`needle` 不动。见 `V125-ACU-SFX.md`。
+
+## V127（2026-09-08）
+
+次日开馆一声互动短音：`open-day`（软木门闩 + 可选极远晨钟残响）。挂：次日开馆按钮 / `Area_次日开馆` → `play_one("open-day")`。病人进门仍用 `chime`；雨/薄床/duck 不动。无新 M 轨、无 per-patient BGM。见 `V127-OPEN-DAY-SFX.md`。

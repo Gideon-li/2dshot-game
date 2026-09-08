@@ -1,0 +1,14 @@
+# V127 复诊日循环键
+
+| 组 | 键 |
+| --- | --- |
+| 次日 | `NEXT_DAY` / `NEXT_DAY_HINT` / `NEXT_DAY_DONE` / `DAY_LABEL` / `DAY_TODAY` |
+| 角标/HUD | `REVISIT_BADGE` / `REVISIT_TITLE` / `REVISIT_HINT` / `REVISIT_ENTER` / `REVISIT_NONE` / `REVISIT_PENDING` / `REVISIT_SEATED` / `REVISIT_LIGHT_EXAM` |
+| 收工 | `REVISIT_OBSERVE` / `OBSERVE_HINT` / `OBSERVE_DONE` / `TREAT_AGAIN` / `DONE` / `CONSUMED` |
+| flavor 标签 | `REVISIT_FLAVOR_GOOD|SLOW|OVER|MIS` / `REVISIT_COURSE` |
+| 通用病程句 | `REVISIT_LINE_GOOD|SLOW|OVER|MIS`（三案专句归剧本 `followup_by_case` / `revisit_lines`） |
+| 旁白 | `MENTOR_REVISIT_1` |
+| 回访 | `FOLLOWUP_TITLE` 复用；`FOLLOWUP_REVISIT_READY`；`REVISIT_STUB` |
+| 免责 | **不改** `STORE_NOT_MEDICAL` / `BOOT_DISCLAIMER_*` |
+
+音效：次日开馆可复用门闩/晨钟 1 条，见 `audio/V127-REVISIT-SFX.md`。

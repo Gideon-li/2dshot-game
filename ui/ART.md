@@ -33,3 +33,7 @@ HUD 不挂诊断名。建筑分层 L1–L4 下一轮洗萌态。
 旧 `apprentice.png` / `patients-three.png` 可作备用与商店构图。
 
 V126.1 画风统一：四立绘同套 2D 明快 Q 平涂（婆婆去 3D；江晚收浅墨学徒袍）。
+
+## V127 复诊
+
+见 `chrome/REVISIT.md`：复诊角标 + 病程色差（good/slow/over/mis）+ 次日开馆牌；不新立绘。

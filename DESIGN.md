@@ -113,5 +113,7 @@
 - V123 Steam Coming Soon 包已验收。
 - V124 炮制短环已验收关单。
 - V125 针灸入门已验收关单。
-- V126 角色立绘已验收；V126.1 四立绘画风统一为 2D Q 平涂（见 `DEV-TASKS-V126-1.md`）。
+- V126 / V126.1 立绘已验收。
+- 下一档 **V127 复诊日循环**：次日开馆 + pending 复诊入座（见 `DEV-TASKS-V127.md`）。
 - **V126.1** 立绘画风统一（明快 Q 平涂；婆婆去 3D；江晚收浅墨）：见 `DEV-TASKS-V126-1.md`。
+- **V127** 复诊日循环已接：`play.day` + 次日开馆 FIFO 入座 + 观察勿药；冒烟 `revisit_day_ok`；见 `DEV-TASKS-V127.md` / `logic/REVISIT-DAY-V127.md`。

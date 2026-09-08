@@ -725,7 +725,10 @@ func _sync_revisit_badge() -> void:
 func _do_next_day() -> void:
 	if str(GameFlow.fsm_state) != "clinic_idle":
 		return
-	AudioHub.play_chime()
+	if ResourceLoader.exists("res://other-systems/audio/open-day.ogg"):
+		AudioHub.play_one("open-day")
+	else:
+		AudioHub.play_chime()
 	_revisit_idle_line = ""
 	_revisit_taken = false
 	var pulled: Dictionary = {}
