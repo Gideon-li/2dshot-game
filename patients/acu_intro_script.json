@@ -1,0 +1,145 @@
+{
+  "id": "mo-wen-qi-huang-acu-intro-script",
+  "project": "墨问岐黄",
+  "version": 1,
+  "task": "DEV-TASKS-V125",
+  "notes": {
+    "vol1_only": [
+      "hegu",
+      "zusanli"
+    ],
+    "no_real_needling": true,
+    "disclaimer_keys": [
+      "STORE_NOT_MEDICAL",
+      "BOOT_DISCLAIMER_*"
+    ],
+    "backfill": "2026-09-08 late deliver after V125 code closed; copy pack for UI/i18n"
+  },
+  "mentor_su": {
+    "clickable": false,
+    "lines": {
+      "zh": [
+        "穴在手上找，不在菜单里。先点合谷或足三里。",
+        "针要得气：条落在平处。灸数壮，红晕圆就收。",
+        "这是馆内教学，不是教你现实进针。不能替代就医。"
+      ],
+      "en": [
+        "Find the point on the body, not in a menu. Start with Hegu or Zusanli.",
+        "Needling wants deqi — keep the bar even. Moxa counts zhuang; stop when the red glow is round.",
+        "Clinic teaching only — not real-world needling. Not a substitute for medical care."
+      ],
+      "ja": [
+        "経穴は体で探せ。メニューではない。まず合谷か足三里。",
+        "針は得気：バーが平らならよい。灸は壮数。赤い暈が丸ければ収める。",
+        "館内の教学だ。現実の刺針を教えるものではない。受診の代わりにはならない。"
+      ]
+    }
+  },
+  "points": {
+    "hegu": {
+      "id": "hegu",
+      "zh": "合谷",
+      "pinyin": "Hegu",
+      "en": "Hegu (LI4)",
+      "ja": "合谷",
+      "method": "needle",
+      "teach": {
+        "zh": "合谷：针。点中穴心，得气条走「平」——匀、稳，别乱提插。",
+        "en": "Hegu: needle. Hit the center; keep the deqi bar even — steady, no wild lifts.",
+        "ja": "合谷：針。穴心を当て、得気バーを平に——安定。乱暴に上げ下げするな。"
+      },
+      "success": {
+        "zh": [
+          "得气了。墨晕一闪，可以收针。",
+          "平得干净。合谷这一针算过。"
+        ],
+        "en": [
+          "Deqi. A brief ink bloom — you may withdraw.",
+          "Even and clean. This Hegu needle counts."
+        ],
+        "ja": [
+          "得気した。墨暈が一閃。抜いてよい。",
+          "平がきれい。合谷のこの針は通った。"
+        ]
+      },
+      "fail": {
+        "zh": [
+          "没得气。回到穴心，再试一次。",
+          "出经了。对准合谷再点。"
+        ],
+        "en": [
+          "No deqi. Return to the center and try once more.",
+          "Off the channel. Aim Hegu again."
+        ],
+        "ja": [
+          "得気なし。穴心に戻ってもう一度。",
+          "経を外した。合谷を狙い直せ。"
+        ]
+      },
+      "fear_needle_optional": {
+        "zh": "怕针也没关系。可以改灸足三里，或先只看教学。",
+        "en": "Afraid of needles is fine. Switch to moxa on Zusanli, or just watch the lesson.",
+        "ja": "針が怖くてもよい。足三里の灸に変えるか、教学を見るだけでも。"
+      }
+    },
+    "zusanli": {
+      "id": "zusanli",
+      "zh": "足三里",
+      "pinyin": "Zusanli",
+      "en": "Zusanli (ST36)",
+      "ja": "足三里",
+      "method": "moxa",
+      "teach": {
+        "zh": "足三里：灸。选壮数 3 / 5 / 7（默认 5），红晕圆润再停。",
+        "en": "Zusanli: moxa. Pick 3 / 5 / 7 zhuang (default 5); stop when the red glow is round.",
+        "ja": "足三里：灸。壮数は 3 / 5 / 7（既定 5）。赤い暈が丸ければ止めよ。"
+      },
+      "success": {
+        "zh": [
+          "红晕圆了。这一灸算妥。",
+          "壮数够了，可以收。"
+        ],
+        "en": [
+          "The glow is round. This moxa is sound.",
+          "Zhuang count is enough — you may stop."
+        ],
+        "ja": [
+          "暈が丸い。この灸はよし。",
+          "壮数が足りた。収めてよい。"
+        ]
+      },
+      "fail": {
+        "zh": [
+          "红晕散了。再对准穴心灸一轮。",
+          "偏了。回到足三里再点。"
+        ],
+        "en": [
+          "The glow scattered. Aim the center and moxa again.",
+          "Off point. Return to Zusanli."
+        ],
+        "ja": [
+          "暈が散った。穴心に戻ってもう一轮。",
+          "外れた。足三里を狙い直せ。"
+        ]
+      }
+    }
+  },
+  "ui": {
+    "title": {
+      "zh": "针灸入门",
+      "en": "Acupuncture intro",
+      "ja": "鍼灸入門"
+    },
+    "locked_point": {
+      "zh": "卷一先练合谷与足三里。其它穴灰着。",
+      "en": "Volume one: practice Hegu and Zusanli only. Other points stay gray.",
+      "ja": "巻一は合谷と足三里だけ。ほかは灰色。"
+    },
+    "footer_disclaimer_key": "STORE_NOT_MEDICAL"
+  },
+  "i18n_keys_hint": [
+    "ACU_*",
+    "MENTOR_ACU_*",
+    "STORE_NOT_MEDICAL"
+  ]
+}
