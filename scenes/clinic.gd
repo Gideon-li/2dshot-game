@@ -233,10 +233,7 @@ func _handle_hotspot(kind: String) -> void:
 			_rebuild_dock()
 		"needle":
 			AudioHub.play_one("needle")
-			_switch_camera("CAM_NEEDLE")
-			if GameFlow.current_patient_id != "":
-				GameFlow.enter_needling()
-			_rebuild_dock()
+			_open_acu_body_map()
 
 
 func _pick_at(index: int) -> void:
@@ -441,19 +438,53 @@ func _build_acupoints() -> void:
 		root.add_child(pt)
 
 
+
+func _open_acu_body_map() -> void:
+	## V125: body-map intro overlay (no second world map).
+	_switch_camera("CAM_NEEDLE")
+	if GameFlow.current_patient_id == "":
+		return
+	if GameFlow.fsm_state != "needling":
+		GameFlow.enter_needling()
+	var host := get_node_or_null("UI/Hud") as Control
+	if host == null:
+		host = get_node_or_null("UI") as Control
+	if host == null:
+		return
+	var existing := host.get_node_or_null("AcuOverlay")
+	if existing:
+		return
+	var acu = load("res://scenes/acupuncture.tscn").instantiate()
+	acu.name = "AcuOverlay"
+	acu.set_meta("embedded", true)
+	acu.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	acu.z_index = 40
+	host.add_child(acu)
+	_rebuild_dock()
+
+
+func _close_acu_body_map() -> void:
+	var host := get_node_or_null("UI/Hud")
+	if host == null:
+		host = get_node_or_null("UI")
+	if host == null:
+		return
+	var existing := host.get_node_or_null("AcuOverlay")
+	if existing:
+		existing.queue_free()
+
+
 func _on_point_input(_vp: Node, event: InputEvent, _shape: int, pid: String) -> void:
 	if not (event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT):
 		return
 	AudioHub.play_one("needle")
-	_switch_camera("CAM_NEEDLE")
-	if GameFlow.current_patient_id != "" and GameFlow.fsm_state != "needling":
-		if GameFlow.has_method("enter_needling"):
-			GameFlow.enter_needling()
-		else:
-			GameFlow.open_needling()
-	if GameFlow.has_method("toggle_point"):
-		GameFlow.toggle_point(pid)
-	_rebuild_dock()
+	# Bed dots are entry cues; teach lock + technique live on the body-map overlay.
+	if not GameFlow.acu_teach_unlocked(pid):
+		if _hint:
+			_hint.text = tr("ACU_TEACH_LOCK")
+		_open_acu_body_map()
+		return
+	_open_acu_body_map()
 
 
 func _on_fsm(state: String) -> void:
@@ -476,6 +507,7 @@ func _on_fsm(state: String) -> void:
 
 
 func _on_settled(_result: Dictionary) -> void:
+	_close_acu_body_map()
 	_switch_camera("CAM_RESULT")
 	_rebuild_dock()
 
@@ -640,8 +672,7 @@ func _fill_exam_dock(col: VBoxContainer) -> void:
 	row.add_child(fb)
 	var nb := UiKit.make_button("ACTION_NEEDLE", true)
 	nb.pressed.connect(func() -> void:
-		GameFlow.enter_needling()
-		_switch_camera("CAM_NEEDLE")
+		_open_acu_body_map()
 	)
 	row.add_child(nb)
 
@@ -781,19 +812,30 @@ func _fill_formula_dock(col: VBoxContainer) -> void:
 
 
 func _fill_needle_dock(col: VBoxContainer) -> void:
-	col.add_child(UiKit.ink_label(tr("TREAT_NEEDLE_HINT") if tr("TREAT_NEEDLE_HINT") != "TREAT_NEEDLE_HINT" else "点穴 2–5", 13, UiKit.INK_MUTED))
+	col.add_child(UiKit.ink_label(tr("ACU_BODY_HINT"), 13, UiKit.INK_MUTED))
+	col.add_child(UiKit.ink_label(tr("ACU_TEACH_ONLY"), 12, UiKit.INK_MUTED))
 	var names: Array[String] = []
-	for pid in GameFlow.selected_points:
+	for pid in GameFlow.acu_practiced:
 		names.append(GameFlow.loc_text(GameFlow.points_by_id.get(str(pid), {}), str(pid)))
+	if names.is_empty():
+		for pid in GameFlow.selected_points:
+			names.append(GameFlow.loc_text(GameFlow.points_by_id.get(str(pid), {}), str(pid)))
 	col.add_child(UiKit.ink_label("、".join(PackedStringArray(names)) if names else "—", 14))
 	var row := HBoxContainer.new()
 	col.add_child(row)
-	var ok := UiKit.make_button("ACTION_NEEDLE", true)
+	var map_btn := UiKit.make_button("ACU_ENTER", true)
+	map_btn.pressed.connect(func() -> void: _open_acu_body_map())
+	row.add_child(map_btn)
+	var ok := UiKit.make_button("ACU_SUBMIT", true)
 	ok.disabled = not GameFlow.can_confirm_needling()
-	ok.pressed.connect(func() -> void: GameFlow.confirm_needling())
+	ok.pressed.connect(func() -> void:
+		_close_acu_body_map()
+		GameFlow.confirm_needling()
+	)
 	row.add_child(ok)
 	var back := UiKit.make_button("TREAT_BACK")
 	back.pressed.connect(func() -> void:
+		_close_acu_body_map()
 		GameFlow.open_treatment()
 		_switch_camera("CAM_ASK")
 		_rebuild_dock()

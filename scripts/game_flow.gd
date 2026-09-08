@@ -22,6 +22,11 @@ var seen: Array[String] = []
 var case_order: Array[String] = []
 var tray_herbs: Array[String] = []
 var selected_points: Array[String] = []
+## V125 session-only acupoint memory (not written to Save).
+var acu_known: Array[String] = []
+var acu_practiced: Array[String] = []
+const ACU_CENTER_R := 0.025
+const ACU_JING_R := 0.055
 var inquiry_used: Array[String] = []
 var tenq_asked: Array[String] = []
 var ten_asks_asked: Array[String] = []
@@ -79,6 +84,8 @@ func start_patient(patient_id: String) -> void:
 	last_result = {}
 	tray_herbs.clear()
 	selected_points.clear()
+	acu_known.clear()
+	acu_practiced.clear()
 	inquiry_used.clear()
 	tenq_asked.clear()
 	ten_asks_asked.clear()
@@ -190,6 +197,8 @@ func next_patient() -> void:
 	exam_focus = ""
 	tray_herbs.clear()
 	selected_points.clear()
+	acu_known.clear()
+	acu_practiced.clear()
 	inquiry_used.clear()
 	tenq_asked.clear()
 	ten_asks_asked.clear()
@@ -707,15 +716,120 @@ func ten_ask_prompt(ask: Dictionary) -> String:
 func remove_herb_from_tray(herb_id: String) -> void:
 	tray_herbs.erase(herb_id)
 
+
+func acu_teach_unlocked(point_id: String) -> bool:
+	var p: Dictionary = CaseDB.points_by_id.get(point_id, {})
+	if p.is_empty():
+		return false
+	return bool(p.get("teach_vol1", false))
+
+
+func acu_point_method(point_id: String) -> String:
+	var p: Dictionary = CaseDB.points_by_id.get(point_id, {})
+	return str(p.get("method", "needle"))
+
+
+func acu_tolerance(point_id: String) -> Dictionary:
+	var p: Dictionary = CaseDB.points_by_id.get(point_id, {})
+	var tol: Variant = p.get("tolerance", {})
+	if typeof(tol) != TYPE_DICTIONARY:
+		return {"center_r": ACU_CENTER_R, "jing_r": ACU_JING_R}
+	return {
+		"center_r": float(tol.get("center_r", ACU_CENTER_R)),
+		"jing_r": float(tol.get("jing_r", ACU_JING_R)),
+	}
+
+
+func acu_hit_zone(point_id: String, click_norm: Vector2) -> String:
+	## Returns "center" | "jing" | "miss" using normalized Euclidean distance.
+	var pos: Vector2 = Vector2(0.5, 0.5)
+	# Prefer acupuncture scene constants via CaseDB region; callers pass POINT_POS.
+	var tol := acu_tolerance(point_id)
+	# Distance must be computed by caller against POINT_POS; this overload uses stored meta if any.
+	var meta_p: Dictionary = CaseDB.points_by_id.get(point_id, {})
+	if typeof(meta_p) == TYPE_DICTIONARY and meta_p.has("pos"):
+		var raw = meta_p["pos"]
+		if typeof(raw) == TYPE_ARRAY and raw.size() >= 2:
+			pos = Vector2(float(raw[0]), float(raw[1]))
+		elif typeof(raw) == TYPE_DICTIONARY:
+			pos = Vector2(float(raw.get("x", 0.5)), float(raw.get("y", 0.5)))
+	var d := click_norm.distance_to(pos)
+	if d <= float(tol["center_r"]):
+		return "center"
+	if d <= float(tol["jing_r"]):
+		return "jing"
+	return "miss"
+
+
+func acu_hit_zone_at(point_pos: Vector2, click_norm: Vector2, point_id: String = "") -> String:
+	var tol := acu_tolerance(point_id) if point_id != "" else {"center_r": ACU_CENTER_R, "jing_r": ACU_JING_R}
+	var d := click_norm.distance_to(point_pos)
+	if d <= float(tol["center_r"]):
+		return "center"
+	if d <= float(tol["jing_r"]):
+		return "jing"
+	return "miss"
+
+
+func acu_mark_known(point_id: String) -> void:
+	if point_id == "" or point_id in acu_known:
+		return
+	acu_known.append(point_id)
+
+
+func acu_mark_practiced(point_id: String) -> void:
+	if point_id == "":
+		return
+	acu_mark_known(point_id)
+	if point_id not in acu_practiced:
+		acu_practiced.append(point_id)
+	if point_id not in selected_points and selected_points.size() < 3:
+		selected_points.append(point_id)
+
+
+func acu_can_submit(ids: Array = []) -> bool:
+	var use: Array = ids if not ids.is_empty() else acu_practiced
+	var n := 0
+	for x in use:
+		if str(x) != "":
+			n += 1
+	return n >= 1 and n <= 3
+
+
+func acu_complete_deqi(point_id: String, success: bool) -> bool:
+	## Needle technique success → practiced. Fail does not mark practiced.
+	if not acu_teach_unlocked(point_id):
+		return false
+	if acu_point_method(point_id) not in ["needle", "both"]:
+		return false
+	if success:
+		acu_mark_practiced(point_id)
+	return success
+
+
+func acu_complete_moxa(point_id: String, zhuang: int) -> bool:
+	if not acu_teach_unlocked(point_id):
+		return false
+	if acu_point_method(point_id) not in ["moxa", "both"]:
+		return false
+	if zhuang not in [3, 5, 7]:
+		return false
+	acu_mark_practiced(point_id)
+	return true
+
+
 func toggle_point(point_id: String) -> bool:
 	if fsm_state != "needling":
 		return false
 	if not CaseDB.points_by_id.has(point_id):
 		return false
+	# V125 teach lock: non-vol1 points stay locked on session intro.
+	if not acu_teach_unlocked(point_id):
+		return false
 	if point_id in selected_points:
 		selected_points.erase(point_id)
 		return false
-	if selected_points.size() >= 5:
+	if selected_points.size() >= 3:
 		return false
 	selected_points.append(point_id)
 	return true
@@ -724,7 +838,12 @@ func can_confirm_formula() -> bool:
 	return fsm_state == "formula_crafting" and tray_herbs.size() >= 3 and tray_herbs.size() <= 8
 
 func can_confirm_needling() -> bool:
-	return fsm_state == "needling" and selected_points.size() >= 2 and selected_points.size() <= 5
+	# V125: 1–3 practiced points on intro body-map; legacy selected_points still OK if 1–3.
+	if fsm_state != "needling":
+		return false
+	if not acu_practiced.is_empty():
+		return acu_can_submit(acu_practiced)
+	return selected_points.size() >= 1 and selected_points.size() <= 3
 
 func confirm_formula() -> Dictionary:
 	if not can_confirm_formula():
@@ -736,7 +855,8 @@ func confirm_formula() -> Dictionary:
 func confirm_needling() -> Dictionary:
 	if not can_confirm_needling():
 		return {}
-	return _settle_inplace("acupuncture", selected_points.duplicate())
+	var ids: Array = acu_practiced.duplicate() if not acu_practiced.is_empty() else selected_points.duplicate()
+	return _settle_inplace("acupuncture", ids)
 
 func _settle_inplace(path: String, ids: Array) -> Dictionary:
 	var case_data: Dictionary = CaseDB.case_for_patient(current_patient_id)
@@ -1158,6 +1278,50 @@ func run_slice_smoke() -> int:
 	play_p["herb_inventory"] = inv_p0
 	play_p["process_quality"] = pq0
 	Save.data["play"] = play_p
+
+	# V125 acupuncture intro short loop
+	var hegu_pos := Vector2(0.08, 0.46)
+	var zusanli_pos := Vector2(0.38, 0.72)
+	acu_known.clear()
+	acu_practiced.clear()
+	selected_points.clear()
+	if not acu_teach_unlocked("hegu") or not acu_teach_unlocked("zusanli"):
+		fails.append("teach_vol1 should unlock hegu and zusanli")
+	if acu_teach_unlocked("fengchi"):
+		fails.append("fengchi must stay teach-locked in vol1")
+	var z_center := acu_hit_zone_at(hegu_pos, hegu_pos, "hegu")
+	var z_jing := acu_hit_zone_at(hegu_pos, hegu_pos + Vector2(0.04, 0.0), "hegu")
+	var z_miss := acu_hit_zone_at(hegu_pos, Vector2(0.50, 0.50), "hegu")
+	print("acu_hit center=", z_center, " jing=", z_jing, " miss=", z_miss)
+	if z_center != "center" or z_jing != "jing" or z_miss != "miss":
+		fails.append("acu hit radii center/jing/miss mismatch")
+	fsm_state = "needling"
+	var deqi_ok := acu_complete_deqi("hegu", true)
+	if not deqi_ok or "hegu" not in acu_practiced:
+		fails.append("hegu deqi should mark practiced")
+	if not acu_can_submit(["hegu"]):
+		fails.append("after hegu deqi should be submittable")
+	acu_known.clear()
+	acu_practiced.clear()
+	selected_points.clear()
+	var moxa_ok := acu_complete_moxa("zusanli", 5)
+	var z_ok := acu_hit_zone_at(zusanli_pos, zusanli_pos, "zusanli")
+	if z_ok != "center":
+		fails.append("zusanli center hit failed")
+	if not moxa_ok or "zusanli" not in acu_practiced:
+		fails.append("zusanli moxa should mark practiced")
+	if not acu_can_submit(acu_practiced):
+		fails.append("after zusanli moxa should be submittable")
+	var hegu_meta: Dictionary = CaseDB.points_by_id.get("hegu", {})
+	if str(hegu_meta.get("method", "")) != "needle" or not bool(hegu_meta.get("teach_vol1", false)):
+		fails.append("slice_logic hegu method/teach_vol1 missing")
+	var zu_meta: Dictionary = CaseDB.points_by_id.get("zusanli", {})
+	if str(zu_meta.get("method", "")) != "moxa" or not bool(zu_meta.get("teach_vol1", false)):
+		fails.append("slice_logic zusanli method/teach_vol1 missing")
+	print("acu_intro_smoke_ok")
+	acu_known.clear()
+	acu_practiced.clear()
+	selected_points.clear()
 
 	if fails.is_empty():
 		print("SMOKE PASS")

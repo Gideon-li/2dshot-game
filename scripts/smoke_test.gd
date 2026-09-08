@@ -197,6 +197,49 @@ func _ready() -> void:
 	play_p["herb_inventory"] = inv_p0
 	play_p["process_quality"] = pq0
 	Save.data["play"] = play_p
+	# V125 acupuncture intro: body-map hit + hegu deqi OR zusanli moxa -> can submit
+	var hegu_pos := Vector2(0.08, 0.46)
+	var zusanli_pos := Vector2(0.38, 0.72)
+	GameFlow.acu_known.clear()
+	GameFlow.acu_practiced.clear()
+	GameFlow.selected_points.clear()
+	if not GameFlow.acu_teach_unlocked("hegu") or not GameFlow.acu_teach_unlocked("zusanli"):
+		fails.append("teach_vol1 should unlock hegu and zusanli")
+	if GameFlow.acu_teach_unlocked("fengchi"):
+		fails.append("fengchi must stay teach-locked in vol1")
+	var z_center := GameFlow.acu_hit_zone_at(hegu_pos, hegu_pos, "hegu")
+	var z_jing := GameFlow.acu_hit_zone_at(hegu_pos, hegu_pos + Vector2(0.04, 0.0), "hegu")
+	var z_miss := GameFlow.acu_hit_zone_at(hegu_pos, Vector2(0.50, 0.50), "hegu")
+	print("acu_hit center=", z_center, " jing=", z_jing, " miss=", z_miss)
+	if z_center != "center" or z_jing != "jing" or z_miss != "miss":
+		fails.append("acu hit radii center/jing/miss mismatch")
+	GameFlow.fsm_state = "needling"
+	var deqi_ok := GameFlow.acu_complete_deqi("hegu", true)
+	if not deqi_ok or "hegu" not in GameFlow.acu_practiced:
+		fails.append("hegu deqi should mark practiced")
+	if not GameFlow.acu_can_submit(["hegu"]):
+		fails.append("after hegu deqi should be submittable")
+	GameFlow.acu_known.clear()
+	GameFlow.acu_practiced.clear()
+	GameFlow.selected_points.clear()
+	var moxa_ok := GameFlow.acu_complete_moxa("zusanli", 5)
+	var z_ok := GameFlow.acu_hit_zone_at(zusanli_pos, zusanli_pos, "zusanli")
+	if z_ok != "center":
+		fails.append("zusanli center hit failed")
+	if not moxa_ok or "zusanli" not in GameFlow.acu_practiced:
+		fails.append("zusanli moxa should mark practiced")
+	if not GameFlow.acu_can_submit(GameFlow.acu_practiced):
+		fails.append("after zusanli moxa should be submittable")
+	var hegu_meta: Dictionary = CaseDB.points_by_id.get("hegu", {})
+	if str(hegu_meta.get("method", "")) != "needle" or not bool(hegu_meta.get("teach_vol1", false)):
+		fails.append("slice_logic hegu method/teach_vol1 missing")
+	var zu_meta: Dictionary = CaseDB.points_by_id.get("zusanli", {})
+	if str(zu_meta.get("method", "")) != "moxa" or not bool(zu_meta.get("teach_vol1", false)):
+		fails.append("slice_logic zusanli method/teach_vol1 missing")
+	print("acu_intro_smoke_ok")
+	GameFlow.acu_known.clear()
+	GameFlow.acu_practiced.clear()
+	GameFlow.selected_points.clear()
 	if fails.is_empty():
 		print("SMOKE PASS")
 		get_tree().quit(0)
