@@ -37,3 +37,7 @@ V126.1 画风统一：四立绘同套 2D 明快 Q 平涂（婆婆去 3D；江晚
 ## V127 复诊
 
 见 `chrome/REVISIT.md`：复诊角标 + 病程色差（good/slow/over/mis）+ 次日开馆牌；不新立绘。
+
+## V128 晒药
+
+见 `process/PROCESS.md`：晒架 `CAM_DRY`、翻晒 UI、工位高亮、mudanpi 生制图标。

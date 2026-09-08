@@ -192,6 +192,28 @@ func _ready() -> void:
 		if Process.processed_stock("baishao") < 1:
 			fails.append("baishao processed stock expected >=1")
 		print("process_smoke_ok")
+		# V128 sun-dry mudanpi → processed → tray
+		Process._write_entry("mudanpi", 1, 0)
+		if Process.processed_stock("mudanpi") != 0 or Process.raw_stock("mudanpi") < 1:
+			fails.append("mudanpi raw reset failed")
+		if GameFlow.tray_herb_allowed("mudanpi"):
+			fails.append("raw mudanpi must not be tray-allowed before sun_dry")
+		var sun_r: Dictionary = Process.try_sun_dry("mudanpi", 1.0)
+		if not bool(sun_r.get("ok", false)):
+			fails.append("try_sun_dry mudanpi failed")
+		elif not Process.mark_processed("mudanpi", str(sun_r.get("quality", "ok"))):
+			fails.append("mark_processed mudanpi failed")
+		if Process.processed_stock("mudanpi") < 1:
+			fails.append("mudanpi processed stock expected >=1")
+		if not GameFlow.tray_herb_allowed("mudanpi"):
+			fails.append("processed mudanpi should be tray-allowed")
+		var rules: Dictionary = CaseDB.pack.get("process_rules", {}) if CaseDB else {}
+		var playable: Variant = rules.get("slice_playable_methods", [])
+		if typeof(playable) != TYPE_ARRAY or "sun_dry" not in playable:
+			fails.append("slice_playable_methods must include sun_dry")
+		if not Process.needs_process("mudanpi") or Process.process_method("mudanpi") != "sun_dry":
+			fails.append("mudanpi must needs_process sun_dry")
+		print("process_sun_ok")
 	play_p = Save.data.get("play", {}) if typeof(Save.data.get("play", {})) == TYPE_DICTIONARY else {}
 	play_p["herb_stock"] = stock_p0
 	play_p["herb_inventory"] = inv_p0

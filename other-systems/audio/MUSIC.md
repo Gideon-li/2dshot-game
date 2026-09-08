@@ -116,3 +116,7 @@
 ## V127（2026-09-08）
 
 次日开馆一声互动短音：`open-day`（软木门闩 + 可选极远晨钟残响）。挂：次日开馆按钮 / `Area_次日开馆` → `play_one("open-day")`。病人进门仍用 `chime`；雨/薄床/duck 不动。无新 M 轨、无 per-patient BGM。见 `V127-OPEN-DAY-SFX.md`。
+
+## V128（2026-09-08）
+
+炮制三声互动短音：`wash`（盆涮）、`fry`（干炒沙沙）、`sun-dry`（布席翻晒 + 极轻风铃残响）。挂：wash hit → `play_one("wash")`；fry tick/confirm → `play_one("fry")`；sun flip / dry progress → `play_one("sun-dry")`；完成仍可 `stamp-ok`。V124 洗/炒占位（`ui-ink` / `forage-pull` / `herb-drop`）由正式文件取代。无新 M 轨、无 per-patient BGM；雨/薄床/duck/`chime` 不动。见 `V128-PROCESS-SFX.md`。

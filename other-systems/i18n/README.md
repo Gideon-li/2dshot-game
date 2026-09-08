@@ -10,3 +10,4 @@ Godot 工程翻译源：`locale/xinglin.csv`（与本目录 `ui.csv` 同步）�
 - v1.24：`PROCESS_*` 炮制院（见 `PROCESS-KEYS.md`）
 - v1.25：`ACU_*` 针灸入门（见 `ACU-KEYS.md`）
 - v1.27：`REVISIT_*` / `NEXT_DAY` 复诊日循环（见 `REVISIT-KEYS.md`）
+- v1.28：晒药 `PROCESS_SUN_FLIP/DONE/HINT` 等（见 `PROCESS-SUN-KEYS.md`）

@@ -18,3 +18,6 @@
 页脚文化声明复用 `STORE_NOT_MEDICAL` / `BOOT_DISCLAIMER_*`，**不改**免责长文。
 
 音效（按需）：洗水可先复用 `forage-pull`；炒药/出锅待补短音，见 `other-systems/audio/V124-PROCESS-SFX.md`。
+
+## V128 晒
+见 `PROCESS-SUN-KEYS.md`；音效 `sun-dry.ogg`。

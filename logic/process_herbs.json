@@ -1,7 +1,7 @@
 {
-  "id": "process_herbs_v124",
-  "version": "1.24",
-  "notes": "炮制短环：杏仁洗（须炮制）+ 白芍炒（须炮制教学）。晒为占位。",
+  "id": "process_herbs_v128",
+  "version": "1.28",
+  "notes": "炮制短环：杏仁洗 + 白芍炒 + 牡丹皮晒。三工位均可玩。",
   "herbs": [
     {
       "id": "xingren",
@@ -47,6 +47,29 @@
         "zh": "白芍须先炒制，生的不能入盏。",
         "en": "White peony must be stir-fried first. Raw cannot enter the bowl.",
         "ja": "白芍は先に炒めよ。生のまま盞に入れない。"
+      }
+    },
+    {
+      "id": "mudanpi",
+      "zh": "牡丹皮",
+      "en": "Moutan bark",
+      "ja": "牡丹皮",
+      "needs_process": true,
+      "process_method": "sun_dry",
+      "mentor_lines": {
+        "zh": "牡丹皮薄片摊晒。动手翻，别挂机看条。",
+        "en": "Spread moutan thin. Flip it yourself — do not idle on the bar.",
+        "ja": "牡丹皮は薄片を晒せ。自分で裏返せ。バー待ちはだめ。"
+      },
+      "xiaohe_lines": {
+        "zh": "翻！别烤糊了——晒糊也算。",
+        "en": "Flip! Don't toast it — sun-scorch counts too.",
+        "ja": "裏返せ！焦がすな——日で焦げるのも同じ。"
+      },
+      "block_reason": {
+        "zh": "牡丹皮须先晒透，生的不能入盏。",
+        "en": "Moutan must be sun-dried first. Raw cannot enter the bowl.",
+        "ja": "牡丹皮は先に乾かせ。生のまま盞に入れない。"
       }
     }
   ]

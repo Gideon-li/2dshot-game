@@ -26,3 +26,6 @@
 | deqi.ogg | original | 本目录合成 | 得气成功（暖 bloom / 墨晕；非金属叮） |
 | moxa.ogg | original | 本目录合成 | 艾灸点燃确认（绒絮 + 轻松香；非篝火） |
 | open-day.ogg | original | 本目录合成 | 次日开馆门闩（软木 + 可选远晨钟残响） |
+| sun-dry.ogg | original | 本目录合成 | 晒药布席轻窸窣 + 极轻风铃残响（V128） |
+| wash.ogg | original | 本目录合成 | 洗药盆中短涮（V128；取代 V124 ui-ink 占位） |
+| fry.ogg | original | 本目录合成 | 干炒沙沙（V128；无油爆） |
