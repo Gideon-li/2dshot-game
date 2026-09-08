@@ -375,6 +375,27 @@ func followup_template(pid: String) -> String:
 	return str(fu)
 
 
+func revisit_chief_complaint(pid: String, flavor_kind: String) -> String:
+	## Light revisit main-complaint template by flavor (no LLM).
+	var kind := flavor_kind if flavor_kind in ["good", "slow", "over", "mis"] else "good"
+	var case_data := case_for_patient(pid)
+	var rev: Variant = case_data.get("revisit", {})
+	if typeof(rev) == TYPE_DICTIONARY:
+		var lines: Variant = rev.get("lines_fallback", {})
+		if typeof(lines) == TYPE_DICTIONARY and lines.has(kind):
+			return UiKit.loc_text(lines[kind], "")
+	var p := patient_by_id(pid)
+	var custom: Variant = p.get("revisit_lines", {})
+	if typeof(custom) == TYPE_DICTIONARY and custom.has(kind):
+		return UiKit.loc_text(custom[kind], "")
+	# i18n stubs by flavor
+	var key := "REVISIT_LINE_%s" % kind.to_upper()
+	var trl := TranslationServer.translate(key)
+	if str(trl) != key and str(trl).strip_edges() != "":
+		return str(trl)
+	return TranslationServer.translate("REVISIT_STUB")
+
+
 func herb(id: String) -> Dictionary:
 	return herbs_by_id.get(id, {})
 

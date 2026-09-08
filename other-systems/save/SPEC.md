@@ -50,3 +50,10 @@
 - `play.herb_stock[id] = {"raw": n, "processed": m}`
 - `play.process_quality[id] = "ok"|"ok_ish"`
 - `needs_process` 药仅 `processed>0` 可入盏
+
+
+## V127 增补
+
+- `play.day`（与 `clinic_day` 同义）：次日开馆 +1。
+- `pending_revisits[]`：须含 `treated_at_day`、`due_day`、`flavor_kind`、`consumed`。
+- 开馆 FIFO 入座复诊；消费后 `consumed=true`。不接 LLM。

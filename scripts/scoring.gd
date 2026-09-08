@@ -94,6 +94,7 @@ static func evaluate(case_data: Dictionary, exams_done: Dictionary, path: String
 		"overtreat": overtreat,
 		"speed_id": str(speed.get("id", "none")),
 		"speed_key": str(speed.get("key", "SPEED_STEADY")),
+		"flavor_kind": flavor_kind,
 		"flavor": flavor,
 		"missing_exams": missing,
 		"path": path,

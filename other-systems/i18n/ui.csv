@@ -369,3 +369,39 @@ MENTOR_ACU_1,宁失其穴，勿失其经。,Better miss the point than miss the 
 MENTOR_ACU_2,得气在节奏，不在用力。,"Arrival is rhythm, not force.",得気はリズム。力ではない。
 MENTOR_ACU_3,灸看红晕圆不圆，不看壮数吓人。,Watch whether the moxa blush is round — not how scary the cone count looks.,灸は紅暈が円いか。壮数の多さで嚇すな。
 ACU_DISCLAIMER_HINT,文化体验，不能替代就医。游戏内不作现实进针教法。,A cultural experience. Not a substitute for medical care. No real needling instruction.,文化体験です。受診の代わりにはなりません。現実の刺鍼教法ではありません。
+NEXT_DAY,次日开馆,Open next day,翌日開館
+NEXT_DAY_HINT,过一日。采药、炮制仍可今日做完。,Advance one day. Foraging and processing can still finish today.,一日進める。採薬・炮制は今日のうちでも可。
+NEXT_DAY_DONE,新的一日。看看有没有复诊。,A new day. Check for revisits.,新しい一日。再診があるか見よう。
+DAY_LABEL,第 {n} 日,Day {n},第 {n} 日
+DAY_TODAY,今日,Today,今日
+REVISIT_BADGE,复诊,Revisit,再診
+REVISIT_TITLE,复诊,Revisit,再診
+REVISIT_HINT,看病程变化，再处治或观察收工。,"Check the course — treat again, or observe and close.",経過を見て、再処治か観察で収める。
+REVISIT_ENTER,请复诊号入座,Seat the revisit,再診を通す
+REVISIT_NONE,今日没有到期复诊。,No revisits due today.,今日の再診はない。
+REVISIT_PENDING,有人约了复诊。次日开馆后再看。,Someone is due for a revisit. Open next day to see them.,再診の約束がある。翌日開館してから。
+REVISIT_SEATED,复诊号已入座。,The revisit patient is seated.,再診が通った。
+REVISIT_LIGHT_EXAM,印象还在。再听一两句就够。,Last impression still holds. One or two checks are enough.,印象は残っている。あと一言二言で足りる。
+REVISIT_OBSERVE,观察勿药,Observe — no medicine,観察・投薬なし
+REVISIT_OBSERVE_HINT,向愈时可收工安心，不必再动方。,"When turning toward health, you can close gently — no need to change the formula.",快方なら安心して收めてよい。方を動かさなくていい。
+REVISIT_OBSERVE_DONE,先看着。不舒服再来。,Watch for now. Come back if it worsens.,まずは様子を。つらければまた来て。
+REVISIT_TREAT_AGAIN,再处治,Treat again,再処治
+REVISIT_DONE,这次复诊到此。,This revisit is done.,今回の再診はここまで。
+REVISIT_CONSUMED,这条复诊已清。,That revisit is cleared.,この再診は消えた。
+REVISIT_FLAVOR_GOOD,向愈,Turning well,快方
+REVISIT_FLAVOR_SLOW,迁延,Slow going,遷延
+REVISIT_FLAVOR_OVER,过治不适,Over-treatment unease,やりすぎの不調
+REVISIT_FLAVOR_MIS,好像没对上,Seems off-target,合っていない様子
+REVISIT_COURSE,病程,Course,経過
+REVISIT_LINE_GOOD,好多了，特地来道谢。,Much better — came to say thanks.,大分いい。礼を言いに来た。
+REVISIT_LINE_SLOW,好一点，还想再调一调。,A bit better; still wants a tweak.,少し楽。もう少し整えたい。
+REVISIT_LINE_OVER,药过了，有点不舒服。,The medicine ran strong — a bit uneasy.,薬が過ぎた。少しつらい。
+REVISIT_LINE_MIS,好像没对上，还是老样子。,Doesn't seem to have hit — still the old way.,合っていない様子。以前のまま。
+MENTOR_REVISIT_1,复诊先听病程，再决定动不动方。,"On revisit, hear the course before you touch the formula.",再診はまず経過。方を動かすかはそれから。
+FOLLOWUP_REVISIT_READY,回访到期了。,A follow-up is due.,再診の頃合いだ。
+REVISIT_STUB,过几日再看一眼病程。,Look in on the course in a few days.,数日後に経過を見よう。
+CLINIC_DAY,第 {n} 日,Day {n},第 {n} 日
+REVISIT_OBSERVE_GOOD,观其向愈，勿药可也。,Healing — observe without medicine.,向愈を見て、薬なしでよい。
+REVISIT_OBSERVE_SLOW,再守两日，勿急叠方。,Hold two more days; don't stack formulas.,あと二日守れ。方を重ねるな。
+REVISIT_OBSERVE_OVER,先停猛药，缓一缓再看。,Stop the harsh herbs; ease before another look.,まず猛薬を止め、緩めてから見よ。
+REVISIT_OBSERVE_MIS,先停手观察，改日再议。,Stop and observe; discuss another day.,まず手を止め観察し、後日また議せ。

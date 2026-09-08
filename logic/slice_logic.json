@@ -1,6 +1,6 @@
 {
   "id": "xinglin-mowen-slice-logic",
-  "version": 6,
+  "version": 7,
   "project": "墨问岐黄 / 杏林墨问",
   "scope": "vertical_slice",
   "notes": {
@@ -27,7 +27,8 @@
     "v121_1": "whitelist locked to 12; no extra forage herbs",
     "v122": "inquiry prompt provider-agnostic; offline coverage self-check",
     "v124": "process fields: needs_process/method/raw→processed; quality ok|ok_ish; evening -1; raw cannot enter bowl; 十八反 not unlocked by processing",
-    "v125": "acu intro: hegu needle + zusanli moxa; teach_vol1 lock; tolerance hit rules"
+    "v125": "acu intro: hegu needle + zusanli moxa; teach_vol1 lock; tolerance hit rules",
+    "v127": "revisit day cycle: play.day, due_day=treated+1, FIFO 1, revisit_consult FSM, observe_no_med; no LLM"
   },
   "exam_ids": [
     "wang",
@@ -70,7 +71,8 @@
       "clinic_idle": {
         "enter": "show clinic, wait for player to pick a patient",
         "actions": {
-          "select_patient": "patient_selected"
+          "select_patient": "patient_selected",
+          "next_day_open": "clinic_idle_or_revisit_consult"
         }
       },
       "patient_selected": {
@@ -122,6 +124,14 @@
         "enter": "run scoring.json; show rank + process + over/mis flags; never print diagnosis id",
         "actions": {
           "next_patient": "clinic_idle"
+        }
+      },
+      "revisit_consult": {
+        "enter": "seat revisit patient; badge; template complaint by flavor_kind; no LLM",
+        "actions": {
+          "open_treatment": "treatment_choice",
+          "observe_no_med": "settling",
+          "dismiss_after_consume": "clinic_idle"
         }
       }
     },
@@ -2638,8 +2648,8 @@
       ],
       "revisit": {
         "enabled": true,
-        "delay_days": 3,
-        "read_on_next_clinic_enter": true,
+        "delay_days": 1,
+        "read_on_next_clinic_enter": false,
         "template_key": "revisit.fenghan_biao",
         "from_rank": {
           "toward_heal": "good",
@@ -2670,7 +2680,15 @@
             "ja": "薬が熱に向かい、悪寒が強まった。"
           }
         },
-        "note": "剧本可覆盖 patients.*.revisit_lines；逻辑保证存档可读结构"
+        "note": "剧本可覆盖 patients.*.revisit_lines；逻辑保证存档可读结构",
+        "seat_on_due": true,
+        "flavor_keys": [
+          "good",
+          "slow",
+          "over",
+          "mis"
+        ],
+        "observe_close_line_key": "revisit.fenghan_biao.observe_close"
       }
     },
     {
@@ -2922,8 +2940,8 @@
       ],
       "revisit": {
         "enabled": true,
-        "delay_days": 3,
-        "read_on_next_clinic_enter": true,
+        "delay_days": 1,
+        "read_on_next_clinic_enter": false,
         "template_key": "revisit.ganyu_qizhi",
         "from_rank": {
           "toward_heal": "good",
@@ -2954,7 +2972,15 @@
             "ja": "薬が脇に届かず、悶えたまま。"
           }
         },
-        "note": "剧本可覆盖 patients.*.revisit_lines；逻辑保证存档可读结构"
+        "note": "剧本可覆盖 patients.*.revisit_lines；逻辑保证存档可读结构",
+        "seat_on_due": true,
+        "flavor_keys": [
+          "good",
+          "slow",
+          "over",
+          "mis"
+        ],
+        "observe_close_line_key": "revisit.ganyu_qizhi.observe_close"
       }
     },
     {
@@ -3208,8 +3234,8 @@
       ],
       "revisit": {
         "enabled": true,
-        "delay_days": 7,
-        "read_on_next_clinic_enter": true,
+        "delay_days": 1,
+        "read_on_next_clinic_enter": false,
         "template_key": "revisit.yinxu_neire",
         "from_rank": {
           "toward_heal": "good",
@@ -3240,7 +3266,15 @@
             "ja": "温めるほど燥き、夜が荒れる。"
           }
         },
-        "note": "剧本可覆盖 patients.*.revisit_lines；逻辑保证存档可读结构"
+        "note": "剧本可覆盖 patients.*.revisit_lines；逻辑保证存档可读结构",
+        "seat_on_due": true,
+        "flavor_keys": [
+          "good",
+          "slow",
+          "over",
+          "mis"
+        ],
+        "observe_close_line_key": "revisit.yinxu_neire.observe_close"
       }
     }
   ],
@@ -4053,24 +4087,37 @@
     ]
   },
   "revisit_save": {
-    "id": "revisit_save_v120",
+    "id": "revisit_save_v127",
     "save_path": "play.pending_revisits[]",
+    "day_path": "play.day",
+    "day_default": 1,
+    "llm": false,
     "record_shape": {
       "patient_id": "char_*",
-      "case_id": "fenghan_biao|…",
+      "case_id": "fenghan_biao|ganyu_qizhi|yinxu_neire",
       "treated_at_day": "int",
-      "due_day": "int",
-      "path": "formula|needle",
-      "rank_id": "toward_heal|…",
+      "due_day": "int  # treated_at_day + 1",
+      "path": "formula|needle|acupuncture|observe",
+      "rank_id": "toward_heal|clear|work|slight|none",
       "score": "0..1",
       "flavor_kind": "good|slow|over|mis",
       "line_key": "revisit.{case_id}.{flavor_kind}",
       "consumed": false
     },
-    "on_settlement": "append pending_revisits record",
-    "on_clinic_enter": "if due_day <= current_day and not consumed → show one line, set consumed",
-    "llm": false,
-    "slice_day_clock": "optional; if no day clock, show on next clinic_idle after that patient settled"
+    "on_settlement": {
+      "append": true,
+      "flavor_from_rank": true,
+      "due_day": "treated_at_day + 1",
+      "consumed": false
+    },
+    "on_next_day_open": {
+      "day_increment": 1,
+      "pull": "FIFO first consumed=false && due_day <= play.day",
+      "max_per_open": 1,
+      "action": "seat_revisit_consult",
+      "do_not_auto_consume_on_line_only": true
+    },
+    "on_revisit_finished": "set consumed=true; clear seat"
   },
   "pharmacy_kid_rules": {
     "id": "pharmacy_kid_xiaohe_v120",
@@ -4442,5 +4489,92 @@
       "ACU_MISS_JING",
       "ACU_TEACH_LOCK"
     ]
+  },
+  "revisit_day_rules": {
+    "id": "revisit_day_rules_v127",
+    "entry": {
+      "ui": "clinic_idle NEXT_DAY / 次日开馆",
+      "fn": "GameFlow.next_day_open()",
+      "effects": [
+        "play.day += 1",
+        "maybe_pull_one_revisit()"
+      ]
+    },
+    "fsm": {
+      "states": {
+        "clinic_idle": {
+          "note": "existing; add next_day button"
+        },
+        "revisit_consult": {
+          "enter": "seat pending patient; badge REVISIT; show flavor主诉 template",
+          "exams": "light 0–2 or skip to complaint",
+          "actions": {
+            "open_formula": "formula_crafting (existing)",
+            "open_acupuncture": "needling (existing)",
+            "observe_no_med": "revisit_observe_settle"
+          },
+          "llm": false
+        },
+        "revisit_observe_settle": {
+          "enter": "no herbs/needles; small stability score if flavor=good",
+          "then": "consume pending → clinic_idle"
+        },
+        "revisit_retreat_settle": {
+          "enter": "reuse Scoring.evaluate with optional weight_scale 0.85",
+          "then": "consume pending → clinic_idle"
+        }
+      },
+      "transitions": [
+        "clinic_idle --next_day--> clinic_idle|revisit_consult",
+        "revisit_consult --observe--> revisit_observe_settle --> clinic_idle",
+        "revisit_consult --formula|acu--> (existing craft) --> revisit_retreat_settle --> clinic_idle"
+      ]
+    },
+    "pull_api": {
+      "fn": "RevisitDay.pull_due(play) -> null | pending_record",
+      "order": "ascending due_day, then append order (FIFO)"
+    },
+    "observe_no_med": {
+      "allowed": true,
+      "recommended_when_flavor": [
+        "good"
+      ],
+      "score": {
+        "good": 0.12,
+        "slow": 0.06,
+        "over": 0.02,
+        "mis": 0.0
+      },
+      "rank_hint": {
+        "good": "toward_heal",
+        "slow": "work",
+        "over": "slight",
+        "mis": "none"
+      },
+      "sets_path": "observe",
+      "i18n_key": "REVISIT_OBSERVE"
+    },
+    "retreatment": {
+      "evaluate_weight_scale": 0.85,
+      "note": "复诊再治沿用 evaluate，权重略降",
+      "paths": [
+        "formula",
+        "acupuncture"
+      ]
+    },
+    "hud": {
+      "badge_i18n": "REVISIT_BADGE",
+      "title_i18n": "FOLLOWUP_TITLE",
+      "next_day_i18n": "NEXT_DAY"
+    },
+    "smoke": {
+      "tag": "revisit_day_ok",
+      "steps": [
+        "settle patient → append pending due_day=day+1",
+        "next_day_open → day+=1 → seat revisit",
+        "observe or retreatment → consumed=true"
+      ]
+    },
+    "contracts_prototype": "Save play.day; on settle write pending with flavor_kind+due_day; next_day_open increments day and seats FIFO due; revisit_consult allows formula|acu|observe_no_med; no LLM"
   }
 }

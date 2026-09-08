@@ -37,6 +37,9 @@ var mentor_pending_affirm: bool = false
 var mentor_last_cued_qid: String = ""
 var mentor_chime_pending: bool = false
 var mentor_affirmed_this_visit: bool = false
+## V127 revisit-day loop
+var is_revisit_visit: bool = false
+var active_revisit: Dictionary = {}
 signal fanwei_locked(reason: String)
 
 var cases_by_id: Dictionary:
@@ -130,7 +133,10 @@ func missing_exam_penalty() -> bool:
 func open_treatment() -> void:
 	if current_patient_id == "":
 		return
-	fsm_state = "treatment_choice"
+	if is_revisit_visit:
+		fsm_state = "revisit_consult"
+	else:
+		fsm_state = "treatment_choice"
 	_set_phase(Phase.TREAT)
 	fsm_changed.emit(fsm_state)
 
@@ -167,6 +173,8 @@ func go_clinic() -> void:
 	exams = _blank_exams()
 	conversation.clear()
 	exam_focus = ""
+	is_revisit_visit = false
+	active_revisit = {}
 	fsm_state = "clinic_idle"
 	_write_play()
 	fsm_changed.emit(fsm_state)
@@ -204,6 +212,8 @@ func next_patient() -> void:
 	ten_asks_asked.clear()
 	last_fanwei_reason = ""
 	_reset_mentor_visit()
+	is_revisit_visit = false
+	active_revisit = {}
 	fsm_state = "clinic_idle"
 	_write_play()
 	fsm_changed.emit(fsm_state)
@@ -282,11 +292,13 @@ func _write_four_exams() -> void:
 func _write_play() -> void:
 	var play := _play()
 	play["patients_seen"] = seen.duplicate()
+	_ensure_day(play)
 	_write_four_exams()
 	Save.write_slot()
 
 func _write_settlement() -> void:
 	var play := _play()
+	var day := _ensure_day(play)
 	play["patients_seen"] = seen.duplicate()
 	play["current_patient_id"] = null
 	play["last_treatment"] = last_result.get("path", null)
@@ -302,19 +314,21 @@ func _write_settlement() -> void:
 		"overtreat": last_result.get("overtreat", false),
 		"mistreat": last_result.get("mistreat", false),
 		"M": float(last_result.get("score", 0.0)),
+		"day": day,
+		"revisit": is_revisit_visit,
 	})
 	play["scores"] = scores
 	var fus: Dictionary = play.get("followups", {})
 	if typeof(fus) != TYPE_DICTIONARY:
 		fus = {}
 	var fu_line: String = CaseDB.followup_template(current_patient_id)
-	if fu_line != "" and current_patient_id != "":
+	if fu_line != "" and current_patient_id != "" and not is_revisit_visit:
 		fus[current_patient_id] = fu_line
 	play["followups"] = fus
 	var rev: Dictionary = play.get("revisit", {})
 	if typeof(rev) != TYPE_DICTIONARY:
 		rev = {}
-	if fu_line != "" and current_patient_id != "":
+	if fu_line != "" and current_patient_id != "" and not is_revisit_visit:
 		rev[current_patient_id] = fu_line
 	play["revisit"] = rev
 	play["last_followup"] = fu_line
@@ -322,16 +336,27 @@ func _write_settlement() -> void:
 	var pending: Array = play.get("pending_revisits", [])
 	if typeof(pending) != TYPE_ARRAY:
 		pending = []
-	var case_data: Dictionary = CaseDB.case_for_patient(current_patient_id)
-	pending.append({
-		"patient_id": current_patient_id,
-		"case_id": str(case_data.get("id", "")),
-		"path": last_result.get("path", ""),
-		"rank_id": last_result.get("rank_id", ""),
-		"score": float(last_result.get("score", 0.0)),
-		"line": fu_line,
-		"consumed": false,
-	})
+	if is_revisit_visit:
+		_mark_active_revisit_consumed(pending)
+		is_revisit_visit = false
+		active_revisit = {}
+	else:
+		var case_data: Dictionary = CaseDB.case_for_patient(current_patient_id)
+		var flavor := flavor_kind_from_result(last_result)
+		last_result["flavor_kind"] = flavor
+		pending.append({
+			"patient_id": current_patient_id,
+			"case_id": str(case_data.get("id", "")),
+			"path": last_result.get("path", ""),
+			"rank_id": last_result.get("rank_id", ""),
+			"score": float(last_result.get("score", 0.0)),
+			"flavor_kind": flavor,
+			"treated_at_day": day,
+			"due_day": day + 1,
+			"line": fu_line,
+			"line_key": "revisit.%s.%s" % [str(case_data.get("id", "")), flavor],
+			"consumed": false,
+		})
 	play["pending_revisits"] = pending
 	Save.data["play"] = play
 	Save.write_slot()
@@ -412,6 +437,219 @@ func formula_lock_reason() -> String:
 
 
 
+
+func play_day() -> int:
+	return _ensure_day(_play())
+
+
+func _ensure_day(play: Dictionary) -> int:
+	var d := int(play.get("day", play.get("clinic_day", 1)))
+	if d < 1:
+		d = 1
+	play["day"] = d
+	play["clinic_day"] = d
+	return d
+
+
+func flavor_kind_from_result(r: Dictionary) -> String:
+	var raw := str(r.get("flavor_kind", "")).strip_edges()
+	if raw in ["good", "slow", "over", "mis"]:
+		return raw
+	if bool(r.get("mistreat", false)):
+		return "mis"
+	if bool(r.get("overtreat", false)):
+		return "over"
+	if str(r.get("speed_id", "")) == "slow":
+		return "slow"
+	match str(r.get("rank_id", "")):
+		"toward_heal", "clear":
+			return "good"
+		"work", "slight":
+			return "slow"
+		"none":
+			return "mis"
+		_:
+			return "good"
+
+
+func _mark_active_revisit_consumed(pending: Array) -> void:
+	var pid := str(active_revisit.get("patient_id", current_patient_id))
+	var due := int(active_revisit.get("due_day", -1))
+	var treated := int(active_revisit.get("treated_at_day", -1))
+	for row in pending:
+		if typeof(row) != TYPE_DICTIONARY:
+			continue
+		if bool(row.get("consumed", false)):
+			continue
+		if str(row.get("patient_id", "")) != pid:
+			continue
+		if due >= 0 and int(row.get("due_day", -1)) != due:
+			continue
+		if treated >= 0 and int(row.get("treated_at_day", -1)) != treated:
+			continue
+		row["consumed"] = true
+		return
+	# Fallback: first unconsumed match by patient.
+	for row2 in pending:
+		if typeof(row2) == TYPE_DICTIONARY and str(row2.get("patient_id", "")) == pid and not bool(row2.get("consumed", false)):
+			row2["consumed"] = true
+			return
+
+
+func peek_due_revisit() -> Dictionary:
+	var play := _play()
+	var d := _ensure_day(play)
+	var pending: Variant = play.get("pending_revisits", [])
+	if typeof(pending) != TYPE_ARRAY:
+		return {}
+	for row in pending:
+		if typeof(row) != TYPE_DICTIONARY:
+			continue
+		if bool(row.get("consumed", false)):
+			continue
+		if int(row.get("due_day", d + 99)) <= d:
+			return (row as Dictionary).duplicate(true)
+	return {}
+
+
+func advance_clinic_day() -> Dictionary:
+	## Clinic idle only: day += 1, then FIFO seat one due revisit.
+	if fsm_state != "clinic_idle":
+		return {}
+	var play := _play()
+	var d := _ensure_day(play) + 1
+	play["day"] = d
+	play["clinic_day"] = d
+	Save.data["play"] = play
+	Save.write_slot()
+	var pulled := peek_due_revisit()
+	if not pulled.is_empty():
+		start_revisit(pulled)
+	else:
+		fsm_changed.emit(fsm_state)
+	return pulled
+
+
+func start_revisit(record: Dictionary) -> void:
+	var pid := str(record.get("patient_id", ""))
+	if pid == "":
+		return
+	var char_id: String = CaseDB.character_id_for(pid)
+	if char_id == "":
+		char_id = pid
+	current_patient_id = char_id
+	completed_exams.clear()
+	exams = _blank_exams()
+	# Light revisit: prior impression already known — mark exams done so treatment is open.
+	for e in EXAM_IDS:
+		exams[e] = true
+		completed_exams.append(e)
+	conversation.clear()
+	exam_focus = ""
+	last_result = {}
+	tray_herbs.clear()
+	selected_points.clear()
+	acu_known.clear()
+	acu_practiced.clear()
+	inquiry_used.clear()
+	tenq_asked.clear()
+	ten_asks_asked.clear()
+	last_fanwei_reason = ""
+	_reset_mentor_visit()
+	is_revisit_visit = true
+	active_revisit = record.duplicate(true)
+	var flavor := str(record.get("flavor_kind", "good"))
+	if flavor not in ["good", "slow", "over", "mis"]:
+		flavor = flavor_kind_from_result({"rank_id": record.get("rank_id", ""), "mistreat": false, "overtreat": false})
+		active_revisit["flavor_kind"] = flavor
+	var chief: String = CaseDB.revisit_chief_complaint(current_patient_id, flavor)
+	if chief.strip_edges() == "":
+		chief = str(record.get("line", "")).strip_edges()
+	if chief != "":
+		conversation.append({"q": "", "a": chief})
+	fsm_state = "revisit_consult"
+	_write_four_exams()
+	Save.write_slot()
+	_set_phase(Phase.TREAT)
+	fsm_changed.emit(fsm_state)
+
+
+func revisit_chief_line() -> String:
+	if conversation.is_empty():
+		return ""
+	var turn: Variant = conversation[0]
+	if typeof(turn) == TYPE_DICTIONARY:
+		return str(turn.get("a", "")).strip_edges()
+	return ""
+
+
+func settle_observe() -> Dictionary:
+	## Observe / no-med close for revisit (also allowed in revisit_consult).
+	if current_patient_id == "":
+		return {}
+	if fsm_state not in ["revisit_consult", "treatment_choice", "patient_selected", "examining"]:
+		return {}
+	var flavor := str(active_revisit.get("flavor_kind", "good")) if is_revisit_visit else "good"
+	var score := 0.72 if flavor == "good" else (0.55 if flavor == "slow" else 0.42)
+	var rank_id := "toward_heal" if flavor == "good" else ("work" if flavor == "slow" else "slight")
+	var observe_line := ""
+	match flavor:
+		"good":
+			observe_line = tr("REVISIT_OBSERVE_GOOD")
+		"slow":
+			observe_line = tr("REVISIT_OBSERVE_SLOW")
+		"over":
+			observe_line = tr("REVISIT_OBSERVE_OVER")
+		_:
+			observe_line = tr("REVISIT_OBSERVE_MIS")
+	if observe_line == "REVISIT_OBSERVE_GOOD" or observe_line.begins_with("REVISIT_OBSERVE_"):
+		match flavor:
+			"good":
+				observe_line = "观其向愈，勿药可也。"
+			"slow":
+				observe_line = "再守两日，勿急叠方。"
+			"over":
+				observe_line = "先停猛药，缓一缓再看。"
+			_:
+				observe_line = "先停手观察，改日再议。"
+	last_result = {
+		"score": score,
+		"M": score,
+		"rank_id": rank_id,
+		"rank_key": "RANK_" + rank_id.to_upper(),
+		"path": "observe",
+		"ids": [],
+		"flavor_kind": flavor,
+		"flavor": observe_line,
+		"mistreat": false,
+		"overtreat": false,
+		"speed_id": "steady",
+		"missing_exams": false,
+		"patient_id": current_patient_id,
+		"followup": "",
+		"C_star": score,
+		"B": score,
+		"A_prime": score,
+		"U": score,
+		"J": 1.0,
+		"T": 1.0,
+	}
+	var rank_dict := {}
+	for r in CaseDB.pack.get("scoring", {}).get("patient_facing_ranks", CaseDB.pack.get("scoring", {}).get("player_facing_ranks", [])):
+		if typeof(r) == TYPE_DICTIONARY and str(r.get("id", "")) == rank_id:
+			rank_dict = r
+			break
+	last_result["rank"] = rank_dict
+	fsm_state = "settling"
+	_set_phase(Phase.RESULT)
+	if current_patient_id != "" and current_patient_id not in seen:
+		seen.append(current_patient_id)
+	_write_settlement()
+	fsm_changed.emit(fsm_state)
+	settled.emit(last_result)
+	return last_result
+
+
 func pending_followup_line() -> String:
 	## Peek play.revisit / followups without consuming.
 	var play := _play()
@@ -461,12 +699,7 @@ func consume_revisit_line() -> String:
 	if typeof(fus) == TYPE_DICTIONARY and pid != "" and fus.has(pid):
 		(fus as Dictionary).erase(pid)
 		play["followups"] = fus
-	# Mark matching pending_revisits consumed.
-	var pending: Variant = play.get("pending_revisits", [])
-	if typeof(pending) == TYPE_ARRAY:
-		for row in pending:
-			if typeof(row) == TYPE_DICTIONARY and str(row.get("patient_id", "")) == pid:
-				row["consumed"] = true
+	# V127: idle flash must NOT consume pending_revisits (seat loop owns that).
 	Save.data["play"] = play
 	Save.write_slot()
 	return line
@@ -872,6 +1105,7 @@ func _settle_inplace(path: String, ids: Array) -> Dictionary:
 	last_result = raw.duplicate()
 	last_result["rank"] = rank_dict
 	last_result["flavor"] = flavor_text
+	last_result["flavor_kind"] = flavor_kind_from_result(raw)
 	last_result["missing_exam"] = bool(raw.get("missing_exams", missing_exam_penalty()))
 	last_result["patient_id"] = current_patient_id
 	var fu: String = CaseDB.followup_template(current_patient_id)
@@ -1322,6 +1556,86 @@ func run_slice_smoke() -> int:
 	acu_known.clear()
 	acu_practiced.clear()
 	selected_points.clear()
+
+
+	# V127 revisit-day loop: settle → day+1 → seat → consume
+	var play_rv0: Dictionary = _play().duplicate(true)
+	var saved_fsm := fsm_state
+	var saved_pid := current_patient_id
+	var saved_seen: Array = seen.duplicate()
+	var saved_revisit_flag := is_revisit_visit
+	var saved_active: Dictionary = active_revisit.duplicate(true)
+	var saved_last: Dictionary = last_result.duplicate(true)
+	fsm_state = "clinic_idle"
+	current_patient_id = "char_porter"
+	is_revisit_visit = false
+	active_revisit = {}
+	var play_rv := _play()
+	play_rv["day"] = 1
+	play_rv["clinic_day"] = 1
+	play_rv["pending_revisits"] = []
+	Save.data["play"] = play_rv
+	var ev_rv: Dictionary = Scoring.evaluate(
+		CaseDB.case_for_patient("char_porter"),
+		{"wang": true, "wen_listen": true, "wen_ask": true, "qie": true},
+		"formula",
+		["mahuang", "guizhi", "xingren", "gancao"]
+	)
+	last_result = ev_rv.duplicate()
+	last_result["patient_id"] = "char_porter"
+	last_result["flavor_kind"] = flavor_kind_from_result(ev_rv)
+	if "char_porter" not in seen:
+		seen.append("char_porter")
+	_write_settlement()
+	var pending_rv: Array = _play().get("pending_revisits", [])
+	var row_rv: Dictionary = pending_rv[-1] if pending_rv.size() > 0 and typeof(pending_rv[-1]) == TYPE_DICTIONARY else {}
+	print("revisit_pending due=", row_rv.get("due_day"), " flavor=", row_rv.get("flavor_kind"), " day=", play_day())
+	if int(row_rv.get("treated_at_day", -1)) != 1 or int(row_rv.get("due_day", -1)) != 2:
+		fails.append("pending treated_at_day/due_day expected 1/2")
+	if str(row_rv.get("flavor_kind", "")) not in ["good", "slow", "over", "mis"]:
+		fails.append("pending flavor_kind missing")
+	if bool(row_rv.get("consumed", true)):
+		fails.append("new pending should be unconsumed")
+	fsm_state = "clinic_idle"
+	current_patient_id = ""
+	var pulled_rv: Dictionary = advance_clinic_day()
+	print("revisit_pull day=", play_day(), " fsm=", fsm_state, " pid=", current_patient_id, " pulled=", not pulled_rv.is_empty())
+	if play_day() != 2:
+		fails.append("advance_clinic_day should set day=2, got %d" % play_day())
+	if fsm_state != "revisit_consult":
+		fails.append("expected revisit_consult after day+1 pull, got %s" % fsm_state)
+	if current_patient_id != "char_porter":
+		fails.append("revisit seat expected char_porter")
+	if not is_revisit_visit:
+		fails.append("is_revisit_visit should be true when seated")
+	var chief_rv := revisit_chief_line()
+	if chief_rv.strip_edges() == "":
+		fails.append("revisit chief complaint empty")
+	var obs: Dictionary = settle_observe()
+	if obs.is_empty():
+		fails.append("settle_observe failed")
+	var pending_after: Array = _play().get("pending_revisits", [])
+	var consumed_ok := false
+	for pr in pending_after:
+		if typeof(pr) == TYPE_DICTIONARY and str(pr.get("patient_id", "")) == "char_porter" and bool(pr.get("consumed", false)):
+			consumed_ok = true
+			break
+	if not consumed_ok:
+		fails.append("pending should be consumed after revisit settle")
+	# Persist check: reload shape still has pending_revisits array
+	if typeof(_play().get("pending_revisits", null)) != TYPE_ARRAY:
+		fails.append("pending_revisits must persist on play save")
+	print("revisit_day_ok")
+	# restore smoke sandbox
+	Save.data["play"] = play_rv0
+	fsm_state = saved_fsm
+	current_patient_id = saved_pid
+	seen.clear()
+	for s in saved_seen:
+		seen.append(str(s))
+	is_revisit_visit = saved_revisit_flag
+	active_revisit = saved_active
+	last_result = saved_last
 
 	# V126: character portraits by id (prefer ui/characters/*.png)
 	var portrait_ids: Array = ["apprentice_jiang", "char_porter", "char_clerk", "char_copyist"]

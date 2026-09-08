@@ -197,7 +197,10 @@ func _handle_hotspot(kind: String) -> void:
 	match kind:
 		"door":
 			_switch_camera("CAM_HERO")
-			_pick_at(2)
+			if str(GameFlow.fsm_state) == "clinic_idle" and GameFlow.has_method("advance_clinic_day"):
+				_do_next_day()
+			else:
+				_pick_at(2)
 		"stool_a":
 			_switch_camera("CAM_ASK")
 			_pick_at(0)
@@ -536,11 +539,14 @@ func _on_fsm(state: String) -> void:
 	match state:
 		"clinic_idle":
 			_switch_camera("CAM_HERO")
-		"patient_selected", "examining", "treatment_choice":
+		"patient_selected", "examining", "treatment_choice", "revisit_consult":
 			if GameFlow.exam_focus == "qie":
 				_switch_camera("CAM_PULSE")
 			elif _cam_name == "CAM_HERO":
 				_switch_camera("CAM_ASK")
+			if state == "revisit_consult" and GameFlow.current_patient_id != "":
+				_seat_patient(GameFlow.current_patient_id)
+				_apply_portraits()
 		"formula_crafting":
 			_switch_camera("CAM_FORMULA")
 		"needling":
@@ -549,6 +555,7 @@ func _on_fsm(state: String) -> void:
 			_switch_camera("CAM_RESULT")
 	_rebuild_dock()
 	_refresh()
+	_sync_revisit_badge()
 
 
 func _on_settled(_result: Dictionary) -> void:
@@ -603,7 +610,19 @@ func _rebuild_dock() -> void:
 	_dock.add_child(col)
 	var st := str(GameFlow.fsm_state)
 	if st == "clinic_idle":
+		var day_n := GameFlow.play_day() if GameFlow.has_method("play_day") else 1
+		var day_lab := tr("CLINIC_DAY")
+		if day_lab == "CLINIC_DAY" or day_lab == "":
+			day_lab = "第 %d 日" % day_n
+		else:
+			day_lab = day_lab.replace("{n}", str(day_n))
+		col.add_child(UiKit.ink_label(day_lab, 13, UiKit.INK_MUTED))
 		col.add_child(UiKit.ink_label(tr("CLINIC_HINT"), 14, UiKit.INK_MUTED))
+		var next_b := UiKit.make_button("NEXT_DAY", true)
+		if next_b.text == "NEXT_DAY" or next_b.text == "":
+			next_b.text = "次日开馆"
+		next_b.pressed.connect(func() -> void: _do_next_day())
+		col.add_child(next_b)
 		var garden_b := UiKit.make_button("GARDEN_OPEN", true)
 		garden_b.pressed.connect(func() -> void: GameFlow.go_garden())
 		col.add_child(garden_b)
@@ -637,7 +656,9 @@ func _rebuild_dock() -> void:
 		_dock.visible = true
 		return
 	_dock.visible = true
-	if st in ["patient_selected", "examining", "treatment_choice"]:
+	if st == "revisit_consult":
+		_fill_revisit_dock(col)
+	elif st in ["patient_selected", "examining", "treatment_choice"]:
 		_fill_exam_dock(col)
 	elif st == "formula_crafting":
 		_fill_formula_dock(col)
@@ -671,6 +692,125 @@ func _chrome_row(tex_path: String, text: String, color: Color) -> HBoxContainer:
 	lab.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	row.add_child(lab)
 	return row
+
+
+
+func _sync_revisit_badge() -> void:
+	## Small 复诊章 on seated patient Portrait during revisit_consult.
+	var chars := get_node_or_null("L5_characters")
+	if chars == null:
+		return
+	for i in range(3):
+		var node := chars.get_node_or_null("Patient%d" % i) as Node2D
+		if node == null:
+			continue
+		var badge := node.get_node_or_null("RevisitBadge") as Sprite2D
+		var show := GameFlow.is_revisit_visit and str(GameFlow.fsm_state) == "revisit_consult" and str(node.get_meta("pid", "")) == GameFlow.current_patient_id
+		if show:
+			if badge == null:
+				badge = Sprite2D.new()
+				badge.name = "RevisitBadge"
+				badge.z_index = 20
+				badge.centered = true
+				badge.position = Vector2(48, -90)
+				badge.scale = Vector2(0.22, 0.22)
+				if ResourceLoader.exists("res://ui/chrome/revisit-badge.png"):
+					badge.texture = load("res://ui/chrome/revisit-badge.png")
+				node.add_child(badge)
+			badge.visible = true
+		elif badge:
+			badge.visible = false
+
+
+func _do_next_day() -> void:
+	if str(GameFlow.fsm_state) != "clinic_idle":
+		return
+	AudioHub.play_chime()
+	_revisit_idle_line = ""
+	_revisit_taken = false
+	var pulled: Dictionary = {}
+	if GameFlow.has_method("advance_clinic_day"):
+		pulled = GameFlow.advance_clinic_day()
+	if not pulled.is_empty() and GameFlow.current_patient_id != "":
+		_seat_patient(GameFlow.current_patient_id)
+		_apply_portraits()
+	_rebuild_dock()
+	_refresh()
+	_sync_revisit_badge()
+
+
+func _revisit_flavor_color(kind: String) -> Color:
+	## Light course tint — aligns with revisit-flavor-chrome (good/slow/over/mis).
+	match kind:
+		"good":
+			return Color(0.22, 0.55, 0.38, 1)
+		"slow":
+			return Color(0.55, 0.42, 0.22, 1)
+		"over":
+			return Color(0.78, 0.35, 0.32, 1)
+		_:
+			return Color(0.35, 0.45, 0.55, 1)
+
+
+func _fill_revisit_dock(col: VBoxContainer) -> void:
+	var hud := CaseDB.hud_card(GameFlow.current_patient_id)
+	var badge := tr("REVISIT_BADGE")
+	if badge == "REVISIT_BADGE" or badge == "":
+		badge = "复诊"
+	var fk := "good"
+	if typeof(GameFlow.active_revisit) == TYPE_DICTIONARY:
+		fk = str(GameFlow.active_revisit.get("flavor_kind", "good"))
+	var title := "%s · %s" % [str(hud.get("name", GameFlow.current_patient_id)), badge]
+	col.add_child(_chrome_row("res://ui/chrome/revisit-badge.png", title, _revisit_flavor_color(fk)))
+	var flavor_lab := tr("REVISIT_FLAVOR_%s" % fk.to_upper())
+	if flavor_lab.begins_with("REVISIT_FLAVOR_"):
+		match fk:
+			"good":
+				flavor_lab = "向愈"
+			"slow":
+				flavor_lab = "迁延"
+			"over":
+				flavor_lab = "过治不适"
+			_:
+				flavor_lab = "好像没对上"
+	var course := tr("REVISIT_COURSE")
+	if course == "REVISIT_COURSE" or course == "":
+		course = "病程"
+	col.add_child(UiKit.ink_label("%s：%s" % [course, flavor_lab], 12, _revisit_flavor_color(fk)))
+	var chief := ""
+	if GameFlow.has_method("revisit_chief_line"):
+		chief = GameFlow.revisit_chief_line()
+	if chief == "" and typeof(GameFlow.active_revisit) == TYPE_DICTIONARY:
+		chief = CaseDB.revisit_chief_complaint(GameFlow.current_patient_id, fk)
+	if chief != "":
+		col.add_child(UiKit.ink_label(chief, 14))
+	else:
+		col.add_child(UiKit.ink_label(tr("REVISIT_STUB"), 14, UiKit.INK_MUTED))
+	var hint := tr("REVISIT_HINT")
+	if hint != "" and hint != "REVISIT_HINT":
+		col.add_child(UiKit.ink_label(hint, 12, UiKit.INK_MUTED))
+	var row := HBoxContainer.new()
+	col.add_child(row)
+	var fb := UiKit.make_button("ACTION_PRESCRIBE", true)
+	fb.pressed.connect(func() -> void:
+		GameFlow.enter_formula()
+		_switch_camera("CAM_FORMULA")
+	)
+	row.add_child(fb)
+	var nb := UiKit.make_button("ACTION_NEEDLE", true)
+	nb.pressed.connect(func() -> void:
+		_open_acu_body_map()
+	)
+	row.add_child(nb)
+	var ob := UiKit.make_button("REVISIT_OBSERVE", true)
+	if ob.text == "REVISIT_OBSERVE" or ob.text == "":
+		ob.text = "观察勿药"
+	ob.pressed.connect(func() -> void:
+		if GameFlow.has_method("settle_observe"):
+			GameFlow.settle_observe()
+	)
+	row.add_child(ob)
+
 
 func _fill_exam_dock(col: VBoxContainer) -> void:
 	var hud := CaseDB.hud_card(GameFlow.current_patient_id)
@@ -1052,6 +1192,9 @@ func _paint_hint() -> void:
 			_hint.text = tr("TREAT_FORMULA_HINT")
 		"needle", "acupoint":
 			_hint.text = tr("TREAT_NEEDLE_HINT")
+		"door":
+			var nd := tr("NEXT_DAY")
+			_hint.text = nd if nd != "NEXT_DAY" else "次日开馆"
 		_:
 			if str(GameFlow.fsm_state) == "clinic_idle":
 				var fu2 := GameFlow.pending_followup_line() if GameFlow.has_method("pending_followup_line") else ""
@@ -1099,5 +1242,15 @@ func _refresh() -> void:
 				n.text = UiKit.loc_text(p.get("name", {}), pid)
 			elif n.has_meta("id_label"):
 				var idn := UiKit.loc_text(p.get("identity", {}), "")
-				n.text = "%s · %s" % [idn, tr("UI_SEEN")] if GameFlow.is_seen(pid) else idn
-		(card as Button).disabled = GameFlow.is_seen(pid)
+				var badge := tr("REVISIT_BADGE")
+				if badge == "REVISIT_BADGE":
+					badge = "复诊"
+				var is_rev := bool(GameFlow.is_revisit_visit) and str(GameFlow.current_patient_id) == pid
+				if is_rev:
+					n.text = "%s · %s" % [idn, badge]
+				elif GameFlow.is_seen(pid):
+					n.text = "%s · %s" % [idn, tr("UI_SEEN")]
+				else:
+					n.text = idn
+		var is_rev_card := bool(GameFlow.is_revisit_visit) and str(GameFlow.current_patient_id) == pid
+		(card as Button).disabled = GameFlow.is_seen(pid) and not is_rev_card

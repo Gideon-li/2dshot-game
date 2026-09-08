@@ -131,3 +131,15 @@ API：`MentorCues.next(case, exams, asked_ten_q_ids, cues_emitted)`。
 会话级：`GameFlow.acu_known` / `acu_practiced`（不写长档）。结算仍 `settle("acupuncture", …)`，1～3 穴；开方路径不动。
 
 冒烟：`acu_intro_smoke_ok`（合谷得气 **或** 足三里灸 → 可提交）+ `SMOKE PASS`。
+
+
+## V127 复诊日循环
+
+见 `REVISIT-DAY-V127.md` + `revisit_day_rules`。
+
+- `play.day`；诊室「次日开馆」→ day+1，FIFO 拉 1 个 `due_day<=day` 的 pending。
+- 结算写 `pending_revisits`：`due_day = treated_at_day + 1`，`flavor_kind` ∈ good|slow|over|mis。
+- 态 `revisit_consult`：复诊角标 + 模板主诉（**不接 LLM**）；可开方/针或 **观察勿药**。
+- 观察勿药：向愈档小稳分；结束后 `consumed=true`。
+- 复诊再治：`evaluate` × 0.85。
+- 冒烟：`revisit_day_ok`。
