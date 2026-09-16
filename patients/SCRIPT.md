@@ -136,3 +136,12 @@ API / 本地模型失败或无网：`ask_wrappers` 套锚。`{sym}` 只填锚，
 - 6 步：晨诊处治 / 午后药圃 / 黄昏炮制 / 夜读医典 / 次日开馆 / 复诊收工（中英日 + `DEMO_STEP_*`）
 - 结算下一跳：`DEMO_NEXT_GARDEN|PROCESS|LOFT|NEXT_DAY|REVISIT|REST`
 - 不问诊剧透证型；声明复用。
+
+## V132 情志疏导入门
+
+路径：`patients/emotion_script.json`（逻辑 `options_ref`；与 i18n `COUNSEL_*` / `EMOTION_*` 对齐）
+
+- 三拍：倾听 3 选 1（`listen_desk_night`/`listen_flank`=`anchor`，`listen_cheer_up`=`bad`）→ 6 卡 → 可选收束
+- 6 卡 id：`walk_ease` / `less_desk` / `vent_rest` / `warm_calm` / `no_scold` / `no_harsh_tonify`
+- 清荷 `COUNSEL_QINGHE_1..3`；问舟主句 `MENTOR_EMOTION_1`
+- 不写替代就医、不点破证型名、不新开周绣娘/情缘。

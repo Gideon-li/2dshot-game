@@ -1,0 +1,155 @@
+{
+  "id": "mo-wen-qi-huang-emotion-script",
+  "project": "墨问岐黄",
+  "version": 1,
+  "task": "DEV-TASKS-V132",
+  "notes": {
+    "no_medical_advice": true,
+    "no_romance": true,
+    "no_substitute_for_care": true,
+    "path": "emotion",
+    "aligned_i18n": "other-systems/i18n/ui.json EMOTION_* / COUNSEL_* / MENTOR_EMOTION_*",
+    "slice": "3 listen; 6 counsel cards; optional close; teach 清荷; mentor one line"
+  },
+  "mentor_su": {
+    "id": "mentor_su",
+    "clickable": false,
+    "emotion_lines": {
+      "zh": ["先听完。再动口。"],
+      "en": ["Finish listening. Then speak."],
+      "ja": ["まず聞け。それから口を開け。"]
+    },
+    "emotion_line_keys": ["MENTOR_EMOTION_1"],
+    "optional_extra_keys": ["MENTOR_EMOTION_2"]
+  },
+  "qinghe_lines": {
+    "keys": ["COUNSEL_QINGHE_1", "COUNSEL_QINGHE_2", "COUNSEL_QINGHE_3"],
+    "zh": [
+      "清荷把袖口捏紧了。",
+      "案上墨未干，她却说睡不实。",
+      "胁下一闷，话就短了。"
+    ],
+    "en": [
+      "Qinghe pinches her sleeve cuff.",
+      "Ink on the desk still wet; she says sleep won't hold.",
+      "When the flank tightens, her words shorten."
+    ],
+    "ja": [
+      "清荷は袖口をつまむ。",
+      "案の墨は乾かぬのに、彼女は眠れぬと言う。",
+      "脇下が悶えると、言葉が短くなる。"
+    ]
+  },
+  "listen_options": [
+    {
+      "id": "listen_desk_night",
+      "anchor_match": true,
+      "label_key": "COUNSEL_LISTEN_1",
+      "feedback_key": "COUNSEL_LISTEN_OK",
+      "label": {
+        "zh": "案牍堆着，夜里总静不下来。",
+        "en": "The desk work piles up; nights won't settle.",
+        "ja": "案牘が積み、夜が静まらない。"
+      }
+    },
+    {
+      "id": "listen_flank",
+      "anchor_match": false,
+      "label_key": "COUNSEL_LISTEN_2",
+      "feedback_key": "COUNSEL_LISTEN_OFF",
+      "label": {
+        "zh": "胁下闷，话到嘴边又咽回去。",
+        "en": "Flank feels full; words stop at the lips.",
+        "ja": "脇下が悶え、言葉が喉で止まる。"
+      }
+    },
+    {
+      "id": "listen_cheer_up",
+      "anchor_match": false,
+      "kind": "bad",
+      "label_key": "COUNSEL_LISTEN_3",
+      "feedback_key": "COUNSEL_LISTEN_BAD",
+      "label": {
+        "zh": "只是想太多——劝她想开点就好。",
+        "en": "She's just overthinking — tell her to let it go.",
+        "ja": "考えすぎなだけ——割り切れと言えばよい。"
+      }
+    }
+  ],
+  "cards": [
+    {
+      "id": "walk_ease",
+      "name_key": "COUNSEL_WALK_EASE_NAME",
+      "desc_key": "COUNSEL_WALK_EASE_DESC",
+      "name": {"zh": "缓步疏肝", "en": "Easy walk for the liver qi", "ja": "緩歩で疏肝"},
+      "desc": {"zh": "廊下一圈，气机松一点。", "en": "A turn under the corridor — qi eases a little.", "ja": "廊下を一巡。気機が少し緩む。"}
+    },
+    {
+      "id": "less_desk",
+      "name_key": "COUNSEL_LESS_DESK_NAME",
+      "desc_key": "COUNSEL_LESS_DESK_DESC",
+      "name": {"zh": "少熬夜案牍", "en": "Less late desk work", "ja": "案牘の夜更かしを減らす"},
+      "desc": {"zh": "灯早一点灭，笔晚一点拿。", "en": "Lamp out earlier; brush later.", "ja": "灯を早く消し、筆を遅く取る。"}
+    },
+    {
+      "id": "vent_rest",
+      "name_key": "COUNSEL_VENT_REST_NAME",
+      "desc_key": "COUNSEL_VENT_REST_DESC",
+      "name": {"zh": "倾诉与停绣式休息", "en": "Speak out & rest like pausing embroidery", "ja": "語りと停繡の休み"},
+      "desc": {"zh": "把话放下，像放下绣绷。", "en": "Set the words down like setting aside a hoop.", "ja": "言葉を置く。繡枠を置くように。"}
+    },
+    {
+      "id": "warm_calm",
+      "name_key": "COUNSEL_WARM_CALM_NAME",
+      "desc_key": "COUNSEL_WARM_CALM_DESC",
+      "name": {"zh": "香暖安神", "en": "Warm scent, calm spirit", "ja": "香暖で安神"},
+      "desc": {"zh": "窗缝避风，茶盏温着。", "en": "Seal the draft; keep the tea warm.", "ja": "隙間風を封じ、茶を温く。"}
+    },
+    {
+      "id": "no_scold",
+      "name_key": "COUNSEL_NO_SCOLD_NAME",
+      "desc_key": "COUNSEL_NO_SCOLD_DESC",
+      "name": {"zh": "斥「想太多」", "en": "Scold “overthinking”", "ja": "「考えすぎ」と叱る"},
+      "desc": {"zh": "误卡。像把门摔上。", "en": "Trap card. Like slamming the door.", "ja": "誤カード。扉を叩き閉めるよう。"}
+    },
+    {
+      "id": "no_harsh_tonify",
+      "name_key": "COUNSEL_NO_HARSH_TONIFY_NAME",
+      "desc_key": "COUNSEL_NO_HARSH_TONIFY_DESC",
+      "name": {"zh": "峻补镇坠", "en": "Harsh tonify to pin down", "ja": "峻補で鎮め墜とす"},
+      "desc": {"zh": "误卡。气郁不是虚到能砸补。", "en": "Trap card. Stagnation isn't vacuity you can smash with tonics.", "ja": "誤カード。気郁は峻補で潰せない。"}
+    }
+  ],
+  "close_cues": [
+    {
+      "id": "sleep_early",
+      "label_key": "COUNSEL_CLOSE_SLEEP",
+      "label": {"zh": "今夜早熄灯", "en": "Lights out earlier tonight", "ja": "今夜は早く灯を消す"}
+    },
+    {
+      "id": "walk_corridor",
+      "label_key": "COUNSEL_CLOSE_WALK",
+      "label": {"zh": "明日廊缓步一圈", "en": "Tomorrow: one easy corridor walk", "ja": "明日、廊下を緩歩一巡"}
+    },
+    {
+      "id": "no_rush_work",
+      "label_key": "COUNSEL_CLOSE_WIND",
+      "label": {"zh": "忌日前勿承急活", "en": "Before hard days, skip rushed work", "ja": "忌日の前は急な仕事を受けぬ"}
+    }
+  ],
+  "settle": {
+    "hint_key": "EMOTION_SETTLE_HINT",
+    "ok_key": "EMOTION_SETTLE_OK",
+    "slow_key": "EMOTION_SETTLE_SLOW",
+    "cold_key": "EMOTION_SETTLE_COLD",
+    "harsh_key": "EMOTION_SETTLE_HARSH",
+    "table_weak_key": "EMOTION_SETTLE_TABLE_WEAK"
+  },
+  "i18n_keys_hint": [
+    "ACTION_EMOTION",
+    "EMOTION_*",
+    "COUNSEL_*",
+    "MENTOR_EMOTION_1",
+    "STORE_NOT_MEDICAL"
+  ]
+}
