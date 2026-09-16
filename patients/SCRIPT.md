@@ -128,3 +128,11 @@ API / 本地模型失败或无网：`ask_wrappers` 套锚。`{sym}` 只填锚，
 - 3 劝说：`less_worry` / `rest_wind` / `no_late_lunch`（标签+句）
 - 结算口味：`FOOD_SETTLE_*`；问舟主句 `MENTOR_FOOD_1`「先养胃气」
 - 声明复用 `STORE_NOT_MEDICAL`。不写替代就医、不写疗效承诺。
+
+## V131 Demo 日环引导
+
+路径：`patients/demo_script.json`（与 i18n `DEMO_*` 对齐）
+
+- 6 步：晨诊处治 / 午后药圃 / 黄昏炮制 / 夜读医典 / 次日开馆 / 复诊收工（中英日 + `DEMO_STEP_*`）
+- 结算下一跳：`DEMO_NEXT_GARDEN|PROCESS|LOFT|NEXT_DAY|REVISIT|REST`
+- 不问诊剧透证型；声明复用。

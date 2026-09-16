@@ -1,0 +1,260 @@
+{
+  "id": "mo-wen-qi-huang-demo-script",
+  "project": "墨问岐黄",
+  "version": 1,
+  "task": "DEV-TASKS-V131",
+  "notes": {
+    "no_diagnosis_spoiler": true,
+    "no_zhengxing_name": true,
+    "no_medical_advice": true,
+    "disclaimer_keys": [
+      "STORE_NOT_MEDICAL",
+      "BOOT_DISCLAIMER_*"
+    ],
+    "aligned_i18n": "other-systems/i18n/ui.json DEMO_* / DAY_* / SLOT_*",
+    "logic_steps": "demo_day.json steps; UI DEMO_STEP_1..6 (晨诊处治合并为一步)"
+  },
+  "guide": {
+    "title_key": "DEMO_GUIDE_TITLE",
+    "hint_key": "DEMO_GUIDE_HINT",
+    "done_key": "DEMO_GUIDE_DONE",
+    "idle_key": "DEMO_IDLE_HINT",
+    "title": {
+      "zh": "今日引导",
+      "en": "Today's guide",
+      "ja": "今日のガイド"
+    },
+    "hint": {
+      "zh": "推荐序，可跳步。打勾只是提醒。",
+      "en": "Suggested order — skip freely. Checks are reminders only.",
+      "ja": "推奨順。飛ばしてよい。チェックはただの合図。"
+    },
+    "done": {
+      "zh": "今日引导已走完。",
+      "en": "Today's guide is complete.",
+      "ja": "今日のガイドは完了。"
+    },
+    "idle": {
+      "zh": "看看侧栏引导，或点亮着的入口。",
+      "en": "Check the side guide, or a lit entrance.",
+      "ja": "サイドのガイドか、点灯した入口を。"
+    }
+  },
+  "steps": [
+    {
+      "order": 1,
+      "id": "morning_treat",
+      "logic_ids": [
+        "morning_consult",
+        "treat"
+      ],
+      "title_key": "DEMO_STEP_1",
+      "hint_key": "DEMO_STEP_1_HINT",
+      "title": {
+        "zh": "晨诊处治",
+        "en": "Morning consult & treat",
+        "ja": "晨の診と処治"
+      },
+      "hint": {
+        "zh": "接一位病人：四诊后开方、扎针或食疗。",
+        "en": "See one patient: four exams, then formula, needle, or food therapy.",
+        "ja": "一人を診る。四診のあと方・鍼・食療。"
+      }
+    },
+    {
+      "order": 2,
+      "id": "afternoon_forage",
+      "logic_ids": [
+        "afternoon_forage"
+      ],
+      "title_key": "DEMO_STEP_2",
+      "hint_key": "DEMO_STEP_2_HINT",
+      "title": {
+        "zh": "午后药圃",
+        "en": "Afternoon garden",
+        "ja": "午後の薬圃"
+      },
+      "hint": {
+        "zh": "去药圃认采一味。",
+        "en": "Forage one herb in the garden.",
+        "ja": "薬圃で一味を採る。"
+      }
+    },
+    {
+      "order": 3,
+      "id": "evening_process",
+      "logic_ids": [
+        "evening_process"
+      ],
+      "title_key": "DEMO_STEP_3",
+      "hint_key": "DEMO_STEP_3_HINT",
+      "title": {
+        "zh": "黄昏炮制",
+        "en": "Dusk processing",
+        "ja": "暮れの炮製"
+      },
+      "hint": {
+        "zh": "进炮制院：洗、炒或晒任一事。",
+        "en": "Process yard: wash, fry, or sun-dry one item.",
+        "ja": "炮製院へ。洗・炒・晒のいずれか。"
+      }
+    },
+    {
+      "order": 4,
+      "id": "night_codex",
+      "logic_ids": [
+        "night_codex"
+      ],
+      "title_key": "DEMO_STEP_4",
+      "hint_key": "DEMO_STEP_4_HINT",
+      "title": {
+        "zh": "夜读医典",
+        "en": "Night codex",
+        "ja": "夜の医典"
+      },
+      "hint": {
+        "zh": "上阁楼翻一页，领悟一个节点。",
+        "en": "Loft: flip one page and take one insight.",
+        "ja": "阁楼で一頁。一つのノードを领悟。"
+      }
+    },
+    {
+      "order": 5,
+      "id": "next_day",
+      "logic_ids": [
+        "next_day_open"
+      ],
+      "title_key": "DEMO_STEP_5",
+      "hint_key": "DEMO_STEP_5_HINT",
+      "title": {
+        "zh": "次日开馆",
+        "en": "Open next day",
+        "ja": "翌日開館"
+      },
+      "hint": {
+        "zh": "过一日，看看有没有复诊。",
+        "en": "Advance a day; check for revisits.",
+        "ja": "一日進め、再診があるか見る。"
+      }
+    },
+    {
+      "order": 6,
+      "id": "revisit",
+      "logic_ids": [
+        "next_day_revisit"
+      ],
+      "title_key": "DEMO_STEP_6",
+      "hint_key": "DEMO_STEP_6_HINT",
+      "title": {
+        "zh": "复诊收工",
+        "en": "Revisit & close",
+        "ja": "再診で收める"
+      },
+      "hint": {
+        "zh": "复诊入座，看病程；观察或再治。",
+        "en": "Seat the revisit, read the course; observe or treat again.",
+        "ja": "再診を通し経過を見る。観察か再処治。"
+      }
+    }
+  ],
+  "next_hops": [
+    {
+      "key": "DEMO_NEXT_GARDEN",
+      "when": "after_settle",
+      "text": {
+        "zh": "可去药圃采药。",
+        "en": "You can forage in the garden.",
+        "ja": "薬圃で採薬できる。"
+      }
+    },
+    {
+      "key": "DEMO_NEXT_PROCESS",
+      "when": "after_forage",
+      "text": {
+        "zh": "暮可进炮制院。",
+        "en": "At dusk, enter the process yard.",
+        "ja": "暮れに炮製院へ入れる。"
+      }
+    },
+    {
+      "key": "DEMO_NEXT_LOFT",
+      "when": "after_process",
+      "text": {
+        "zh": "夜可上阁楼夜读。",
+        "en": "At night, you can read in the loft.",
+        "ja": "夜は阁楼で夜読できる。"
+      }
+    },
+    {
+      "key": "DEMO_NEXT_NEXT_DAY",
+      "when": "after_codex",
+      "text": {
+        "zh": "今日事了，可次日开馆。",
+        "en": "Day's work done — open next day when ready.",
+        "ja": "今日のことは済んだ。翌日開館できる。"
+      }
+    },
+    {
+      "key": "DEMO_NEXT_REVISIT",
+      "when": "pending_revisit",
+      "text": {
+        "zh": "有复诊到期，次日开馆后优先入座。",
+        "en": "A revisit is due — seat them first after opening next day.",
+        "ja": "再診が到期。翌日開館後に優先して通す。"
+      }
+    },
+    {
+      "key": "DEMO_NEXT_REST",
+      "when": "optional_rest",
+      "text": {
+        "zh": "也可提前歇息进夜。",
+        "en": "Or rest early into night.",
+        "ja": "先に休んで夜へ入ってもよい。"
+      }
+    },
+    {
+      "key": "DEMO_GUIDE_DONE",
+      "alias": "DEMO_DONE",
+      "when": "guide_complete",
+      "text": {
+        "zh": "今日引导已走完。",
+        "en": "Today's guide is complete.",
+        "ja": "今日のガイドは完了。"
+      }
+    }
+  ],
+  "slot_exhausted": {
+    "morning": {
+      "key": "SLOT_EXHAUSTED_MORNING",
+      "text": {
+        "zh": "晨诊格已用尽。可去药圃、炮制或歇息。",
+        "en": "Morning consult slot spent. Garden, process, or rest.",
+        "ja": "晨の診枠は尽きた。薬圃・炮製・休息へ。"
+      }
+    },
+    "afternoon": {
+      "key": "SLOT_EXHAUSTED_AFTERNOON",
+      "text": {
+        "zh": "午后格已用尽。暮可进炮制院。",
+        "en": "Afternoon slot spent. At dusk, the process yard opens.",
+        "ja": "午後枠は尽きた。暮れに炮製院へ。"
+      }
+    },
+    "dusk": {
+      "key": "SLOT_EXHAUSTED_DUSK",
+      "text": {
+        "zh": "暮格已用尽。夜可上阁楼，或次日开馆。",
+        "en": "Dusk slot spent. Night loft, or open next day.",
+        "ja": "暮枠は尽きた。夜は阁楼へ、または翌日開館。"
+      }
+    },
+    "night": {
+      "key": "SLOT_EXHAUSTED_NIGHT",
+      "text": {
+        "zh": "夜格已用尽。可次日开馆。",
+        "en": "Night slot spent. You may open next day.",
+        "ja": "夜枠は尽きた。翌日開館できる。"
+      }
+    }
+  }
+}
