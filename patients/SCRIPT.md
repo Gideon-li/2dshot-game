@@ -111,3 +111,11 @@ API / 本地模型失败或无网：`ask_wrappers` 套锚。`{sym}` 只填锚，
 - 教学锁加 **牡丹皮 `mudanpi` = 晒**：薄片摊晒、翻面 2～3 次、日照条；生片不入盏。
 - 教学/警告/妥·勉强·再试 + 翻面提示；小荷/问舟晒药短句（中英日）。
 - 仍不写真实日照时数与克数。
+
+## V129 夜读医典
+
+路径：`patients/codex_script.json`（与 `scripts/codex.gd` 同 schema）
+
+- 三页短 id：`hanre_xushi` / `tenq_song` / `pulse_names`（字段 `theory` → `theory.*`）；正文优先 i18n `*_key`。
+- 问舟：`mentor_su.loft_lines`（中英日）。页脚复用 `STORE_NOT_MEDICAL` / `BOOT_DISCLAIMER_*`。
+- 不写方药医嘱、不报诊断名。
