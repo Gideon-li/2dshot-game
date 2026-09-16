@@ -120,3 +120,7 @@
 ## V128（2026-09-08）
 
 炮制三声互动短音：`wash`（盆涮）、`fry`（干炒沙沙）、`sun-dry`（布席翻晒 + 极轻风铃残响）。挂：wash hit → `play_one("wash")`；fry tick/confirm → `play_one("fry")`；sun flip / dry progress → `play_one("sun-dry")`；完成仍可 `stamp-ok`。V124 洗/炒占位（`ui-ink` / `forage-pull` / `herb-drop`）由正式文件取代。无新 M 轨、无 per-patient BGM；雨/薄床/duck/`chime` 不动。见 `V128-PROCESS-SFX.md`。
+
+## V129（2026-09-16）
+
+夜读医典 / 阁楼 loft：新 `candle`（残烛灯花 one-shot ~0.58s）；翻页 **复用** `ui-paper`（不新作 page-flip）；领悟确认可用 `ui-ink` 或 `stamp-ok`。无新 M 轨（M02 夜床仍后置）；雨/薄床/duck 不动。见 `V129-CODEX-SFX.md`。

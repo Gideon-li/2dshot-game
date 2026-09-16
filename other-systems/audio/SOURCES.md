@@ -29,3 +29,4 @@
 | sun-dry.ogg | original | 本目录合成 | 晒药布席轻窸窣 + 极轻风铃残响（V128） |
 | wash.ogg | original | 本目录合成 | 洗药盆中短涮（V128；取代 V124 ui-ink 占位） |
 | fry.ogg | original | 本目录合成 | 干炒沙沙（V128；无油爆） |
+| candle.ogg | original | 本目录合成 | 残烛/灯花（V129 阁楼夜读；非篝火/非艾绒） |
