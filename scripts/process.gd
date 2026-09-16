@@ -455,16 +455,21 @@ func mark_processed(herb_id: String, grade: String = "ok") -> bool:
 	var e := _entry(herb_id)
 	var raw := int(e.get("raw", 0))
 	var proc := int(e.get("processed", 0))
+	var ok := false
 	if raw > 0:
 		_write_entry(herb_id, raw - 1, proc + 1)
 		set_quality(herb_id, grade)
-		return true
-	if proc > 0:
+		ok = true
+	elif proc > 0:
 		set_quality(herb_id, grade)
-		return true
-	_write_entry(herb_id, 0, proc + 1)
-	set_quality(herb_id, grade)
-	return true
+		ok = true
+	else:
+		_write_entry(herb_id, 0, proc + 1)
+		set_quality(herb_id, grade)
+		ok = true
+	if ok and DemoDay:
+		DemoDay.on_process()
+	return ok
 
 
 func try_wash(herb_id: String, accuracy: float = 1.0) -> Dictionary:

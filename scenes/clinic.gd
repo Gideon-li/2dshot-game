@@ -619,43 +619,126 @@ func _rebuild_dock() -> void:
 	_dock.add_child(col)
 	var st := str(GameFlow.fsm_state)
 	if st == "clinic_idle":
+		if DemoDay:
+			DemoDay.ensure()
 		var day_n := GameFlow.play_day() if GameFlow.has_method("play_day") else 1
-		var day_lab := tr("CLINIC_DAY")
-		if day_lab == "CLINIC_DAY" or day_lab == "":
+		var day_lab := tr("DAY_PLAQUE")
+		if day_lab == "DAY_PLAQUE" or day_lab == "":
 			day_lab = "第 %d 日" % day_n
 		else:
 			day_lab = day_lab.replace("{n}", str(day_n))
-		col.add_child(UiKit.ink_label(day_lab, 13, UiKit.INK_MUTED))
+		var day_row := HBoxContainer.new()
+		day_row.add_theme_constant_override("separation", 8)
+		if ResourceLoader.exists("res://ui/demo/day-plaque.png"):
+			var dp := TextureRect.new()
+			dp.texture = load("res://ui/demo/day-plaque.png")
+			dp.custom_minimum_size = Vector2(36, 28)
+			dp.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			dp.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			dp.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			day_row.add_child(dp)
+		day_row.add_child(UiKit.ink_label(day_lab, 14, UiKit.SEAL))
+		col.add_child(day_row)
+		var slot_row := HBoxContainer.new()
+		slot_row.add_theme_constant_override("separation", 10)
+		for sid in ["morning", "afternoon", "evening", "night"]:
+			var rem := DemoDay.slot_remaining(sid) if DemoDay else 1
+			var lab_key := "SLOT_MORNING"
+			match sid:
+				"afternoon":
+					lab_key = "SLOT_AFTERNOON"
+				"evening":
+					lab_key = "SLOT_DUSK"
+				"night":
+					lab_key = "SLOT_NIGHT"
+			var sname := tr(lab_key)
+			slot_row.add_child(UiKit.ink_label("%s%s" % [sname, ("·" if rem > 0 else "×")], 12, UiKit.SEAL if rem > 0 else UiKit.INK_MUTED))
+		col.add_child(slot_row)
 		col.add_child(UiKit.ink_label(tr("CLINIC_HINT"), 14, UiKit.INK_MUTED))
+		if DemoDay and DemoDay.guide_enabled():
+			var guide_box := VBoxContainer.new()
+			guide_box.add_theme_constant_override("separation", 2)
+			var gtitle := HBoxContainer.new()
+			gtitle.add_child(UiKit.ink_label(tr("DEMO_GUIDE_TITLE"), 13, UiKit.SEAL))
+			var dismiss := UiKit.make_button("DEMO_GUIDE_DISMISS", false)
+			dismiss.pressed.connect(func() -> void:
+				DemoDay.set_guide_dismissed(true)
+				_rebuild_dock()
+			)
+			gtitle.add_child(dismiss)
+			guide_box.add_child(gtitle)
+			guide_box.add_child(UiKit.ink_label(tr("DEMO_GUIDE_HINT"), 11, UiKit.INK_MUTED))
+			for sid2 in ["morning_consult", "afternoon_forage", "evening_process", "night_codex", "next_day_revisit"]:
+				var done := DemoDay.is_step_done(sid2) or (sid2 == "morning_consult" and DemoDay.is_step_done("treat"))
+				var line := HBoxContainer.new()
+				line.add_theme_constant_override("separation", 4)
+				if done and ResourceLoader.exists("res://ui/demo/demo-check.png"):
+					var ck := TextureRect.new()
+					ck.texture = load("res://ui/demo/demo-check.png")
+					ck.custom_minimum_size = Vector2(16, 16)
+					ck.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+					ck.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+					ck.mouse_filter = Control.MOUSE_FILTER_IGNORE
+					line.add_child(ck)
+				else:
+					line.add_child(UiKit.ink_label("✓" if done else "○", 12, UiKit.SEAL if done else UiKit.INK_MUTED))
+				line.add_child(UiKit.ink_label(DemoDay.step_label(sid2), 12, UiKit.INK if done else UiKit.INK_MUTED))
+				guide_box.add_child(line)
+			col.add_child(guide_box)
+		elif DemoDay and bool(DemoDay.guide().get("dismissed", false)):
+			var show_b := UiKit.make_button("DEMO_GUIDE_SHOW", false)
+			show_b.pressed.connect(func() -> void:
+				DemoDay.set_guide_dismissed(false)
+				_rebuild_dock()
+			)
+			col.add_child(show_b)
 		var next_b := UiKit.make_button("NEXT_DAY", true)
 		if next_b.text == "NEXT_DAY" or next_b.text == "":
 			next_b.text = "次日开馆"
 		next_b.pressed.connect(func() -> void: _do_next_day())
 		col.add_child(next_b)
 		var garden_b := UiKit.make_button("GARDEN_OPEN", true)
-		garden_b.pressed.connect(func() -> void: GameFlow.go_garden())
+		var g_act: Dictionary = DemoDay.can_act("go_garden") if DemoDay else {"ok": true}
+		garden_b.disabled = not bool(g_act.get("ok", true))
+		if garden_b.disabled:
+			garden_b.tooltip_text = tr(str(g_act.get("reason_key", "SLOT_EXHAUSTED_AFTERNOON")))
+		garden_b.pressed.connect(func() -> void:
+			if DemoDay and not bool(DemoDay.can_act("go_garden").get("ok", false)):
+				return
+			GameFlow.go_garden()
+		)
 		col.add_child(garden_b)
 		var process_b := UiKit.make_button("PROCESS_OPEN", true)
 		if process_b.text == "PROCESS_OPEN" or process_b.text == "":
 			process_b.text = "去炮制院"
-		process_b.pressed.connect(func() -> void: GameFlow.go_process())
+		var p_act: Dictionary = DemoDay.can_act("go_process") if DemoDay else {"ok": true}
+		process_b.disabled = not bool(p_act.get("ok", true))
+		if process_b.disabled:
+			process_b.tooltip_text = tr(str(p_act.get("reason_key", "SLOT_EXHAUSTED_DUSK")))
+		process_b.pressed.connect(func() -> void:
+			if DemoDay and not bool(DemoDay.can_act("go_process").get("ok", false)):
+				return
+			GameFlow.go_process()
+		)
 		col.add_child(process_b)
 		var loft_b := UiKit.make_button("NIGHT_READ_ENTER", true)
 		if loft_b.text == "NIGHT_READ_ENTER" or loft_b.text == "":
 			loft_b.text = "上阁楼"
+		var l_act: Dictionary = DemoDay.can_act("go_loft") if DemoDay else {"ok": true}
+		loft_b.disabled = not bool(l_act.get("ok", true))
+		if loft_b.disabled:
+			loft_b.tooltip_text = tr(str(l_act.get("reason_key", "SLOT_EXHAUSTED_NIGHT")))
+			var rest_b := UiKit.make_button("EARLY_REST_TO_NIGHT", false)
+			if rest_b.text.begins_with("EARLY_REST"):
+				rest_b.text = "提前歇息进夜"
+			rest_b.pressed.connect(func() -> void:
+				if GameFlow.has_method("rest_into_night"):
+					GameFlow.rest_into_night()
+				_rebuild_dock()
+			)
+			col.add_child(rest_b)
 		loft_b.pressed.connect(func() -> void: _do_go_loft())
 		col.add_child(loft_b)
-		if Codex and Codex.is_night_spent() and not Codex.has_any_unlock():
-			var tip := tr("NIGHT_READ_NO_NIGHT")
-			if tip == "NIGHT_READ_NO_NIGHT" or tip == "":
-				tip = "今夜的夜格用尽了。明日再来，或提前歇息进夜。"
-			col.add_child(UiKit.ink_label(tip, 12, UiKit.INK_MUTED))
-			var rest_b := UiKit.make_button("NIGHT_READ_REST_EARLY", true)
-			if rest_b.text == "NIGHT_READ_REST_EARLY" or rest_b.text == "":
-				rest_b.text = "提前歇息进夜"
-			rest_b.pressed.connect(func() -> void: _do_rest_into_night())
-			col.add_child(rest_b)
-		# 小荷候诊口吻（不可点、不代诊）
 		if not CaseDB.pharmacy_kid_is_clickable():
 			if _xiaohe_idle_line == "":
 				_xiaohe_idle_line = CaseDB.pharmacy_kid_line("waiting")
@@ -677,9 +760,7 @@ func _rebuild_dock() -> void:
 				_revisit_idle_line = GameFlow.pending_followup_line()
 		if _revisit_idle_line != "":
 			col.add_child(UiKit.ink_label("%s：%s" % [tr("FOLLOWUP_TITLE"), _revisit_idle_line], 13, UiKit.SEAL))
-		_dock.visible = true
-		return
-	_dock.visible = true
+
 	if st == "revisit_consult":
 		_fill_revisit_dock(col)
 	elif st in ["patient_selected", "examining", "treatment_choice"]:
@@ -1210,6 +1291,10 @@ func _fill_score_dock(col: VBoxContainer) -> void:
 		fu = CaseDB.followup_template(GameFlow.current_patient_id)
 	if fu != "":
 		col.add_child(UiKit.ink_label("%s：%s" % [tr("FOLLOWUP_TITLE"), fu], 13, UiKit.SEAL))
+	if DemoDay:
+		var hop := DemoDay.next_hop_text()
+		if hop != "":
+			col.add_child(UiKit.ink_label(hop, 13, UiKit.SEAL))
 	var nxt := UiKit.make_button("SLICE_DONE" if GameFlow.slice_complete() else "UI_BACK", true)
 	nxt.pressed.connect(func() -> void:
 		_xiaohe_idle_line = ""

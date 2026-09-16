@@ -49,3 +49,7 @@ V126.1 画风统一：四立绘同套 2D 明快 Q 平涂（婆婆去 3D；江晚
 ## V130 食疗
 
 见 `food/FOOD.md`：膳盏 UI、ACTION_FOOD、六食材图标、劝说小卡。
+
+## V131 Demo 引导
+
+见 `demo/DEMO-UI.md`：引导条、勾选小印、Day 小牌。

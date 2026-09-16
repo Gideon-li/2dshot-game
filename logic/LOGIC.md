@@ -179,3 +179,13 @@ API：`MentorCues.next(case, exams, asked_ten_q_ids, cues_emitted)`。
 - 劝说可选：`less_worry` | `rest_wind` | `no_late_lunch`（温分小加）。
 - 慢愈示例：枣莲粥 → 气郁/轻虚可向愈慢档；风寒单走食疗准偏低。
 - `evaluate(..., path="food")`；冒烟 `food_therapy_ok`。
+
+
+## V131 Demo 日环胶水
+
+见 `DEMO-DAY-V131.md` + `demo_day.json` / `demo_day_rules`；怎么玩：`DEMO-DAY.md`。
+
+- `play.time_slots` 晨午暮夜 = 按钮灰亮 **唯一真相**（`DemoDay.can_act`）。
+- `play.demo_guide`：`enabled` / `steps_done` / `dismissed`；六步可跳序。
+- 结算下一跳键：`DEMO_NEXT_GARDEN|PROCESS|LOFT|DAY`。
+- 冒烟：`demo_day_ok`（诊→治→采→炮→夜读→次日复诊）。

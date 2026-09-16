@@ -1,0 +1,81 @@
+{
+  "id": "demo_day_v131",
+  "rules_ref": "slice_logic.json → demo_day_rules",
+  "lock_doc": "logic/DEMO-DAY-V131.md",
+  "steps": [
+    {
+      "id": "morning_consult",
+      "zh": "晨诊：接一位病人，做四诊",
+      "en": "Morning: see a patient, four exams",
+      "ja": "朝診：患者を診て四診",
+      "complete_when": "any patient seated and ≥1 exam or settled",
+      "next_hop_after_settle": "DEMO_NEXT_GARDEN"
+    },
+    {
+      "id": "treat",
+      "zh": "处治：开方 / 针灸 / 食疗任选一路",
+      "en": "Treat: formula, acupuncture, or food",
+      "ja": "処治：方・鍼灸・食療のいずれか",
+      "complete_when": "settle with path in formula|acupuncture|food",
+      "next_hop_keys": {
+        "default": "DEMO_NEXT_GARDEN"
+      }
+    },
+    {
+      "id": "afternoon_forage",
+      "zh": "午后：药圃认采至少一味",
+      "en": "Afternoon: forage at least one herb",
+      "ja": "昼：薬圃で少なくとも一味",
+      "complete_when": "forage identify+pick ≥1",
+      "requires_slot": "afternoon",
+      "next_hop_after": "DEMO_NEXT_PROCESS"
+    },
+    {
+      "id": "evening_process",
+      "zh": "黄昏：炮制院洗/炒/晒任一",
+      "en": "Evening: wash, fry, or sun-dry once",
+      "ja": "暮：炮製で洗・炒・晒のいずれか",
+      "complete_when": "process one herb to processed",
+      "requires_slot": "evening",
+      "next_hop_after": "DEMO_NEXT_LOFT"
+    },
+    {
+      "id": "night_codex",
+      "zh": "夜读：阁楼领悟一页",
+      "en": "Night: comprehend one codex page",
+      "ja": "夜読：阁楼で一頁を悟る",
+      "complete_when": "codex comprehend ≥1 page this run or unlocked+",
+      "requires_slot": "night",
+      "next_hop_after": "DEMO_NEXT_DAY"
+    },
+    {
+      "id": "next_day_revisit",
+      "zh": "次日：开馆见复诊病程",
+      "en": "Next day: open clinic for revisit",
+      "ja": "翌日：開館して再診",
+      "complete_when": "next_day_open and revisit seated or pending consumed",
+      "next_hop_after": "DEMO_DONE"
+    }
+  ],
+  "smoke": {
+    "tag": "demo_day_ok",
+    "steps": [
+      "1 select patient + min four exams (or allow missing with penalty)",
+      "2 settle path in {formula, acupuncture, food}",
+      "3 go_garden: identify+pick ≥1 whitelist herb",
+      "4 go_process: wash|stir_fry|sun_dry → processed",
+      "5 loft: comprehend ≥1 codex page (night cost once)",
+      "6 next_day_open → pending revisit seat (or create pending in step 2)",
+      "7 observe_no_med or retreatment → consume pending"
+    ],
+    "fail_messages": {
+      "no_settle": "demo_day_ok: missing settle",
+      "no_forage": "demo_day_ok: forage not done",
+      "no_process": "demo_day_ok: process not done",
+      "no_codex": "demo_day_ok: codex page not unlocked",
+      "no_revisit": "demo_day_ok: revisit not seated/consumed",
+      "slot_desync": "demo_day_ok: button enable != time_slots"
+    },
+    "also_require": "existing SMOKE PASS rings still green"
+  }
+}

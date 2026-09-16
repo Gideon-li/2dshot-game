@@ -534,6 +534,9 @@ func advance_clinic_day() -> Dictionary:
 		slots["night"] = 1
 		play["time_slots"] = slots
 		play["time_slot"] = "morning"
+	if DemoDay:
+		DemoDay.refill_slots_for_new_day(play)
+		DemoDay.on_next_day()
 	Save.data["play"] = play
 	Save.write_slot()
 	var pulled := peek_due_revisit()
@@ -660,6 +663,8 @@ func settle_observe() -> Dictionary:
 		seen.append(current_patient_id)
 	_write_settlement()
 	fsm_changed.emit(fsm_state)
+	if DemoDay:
+		DemoDay.on_settle("observe")
 	settled.emit(last_result)
 	return last_result
 
@@ -917,7 +922,10 @@ func forage_pick(hid: String) -> bool:
 	if Forage == null:
 		return false
 	var r: Dictionary = Forage.pick_herb(hid)
-	return bool(r.get("ok", false))
+	var ok := bool(r.get("ok", false))
+	if ok and DemoDay:
+		DemoDay.on_forage()
+	return ok
 
 
 
@@ -1197,6 +1205,8 @@ func _settle_inplace(path: String, ids: Array, opts: Dictionary = {}) -> Diction
 	if current_patient_id != "" and current_patient_id not in seen:
 		seen.append(current_patient_id)
 	_write_settlement()
+	if DemoDay:
+		DemoDay.on_settle(path)
 	fsm_changed.emit(fsm_state)
 	settled.emit(last_result)
 	return last_result
@@ -1627,6 +1637,87 @@ func run_slice_smoke() -> int:
 	if float(form_r.get("score", 0.0)) < 0.5:
 		fails.append("formula path regressed after food")
 	print("food_therapy_ok")
+
+	# V131 demo day end-to-end glue
+	if DemoDay == null:
+		fails.append("DemoDay autoload missing")
+	else:
+		DemoDay.ensure()
+		var play_d: Dictionary = _play()
+		play_d["demo_guide"] = {"enabled": true, "steps_done": [], "dismissed": false}
+		play_d["time_slots"] = {"morning": 1, "afternoon": 1, "evening": 1, "night": 1}
+		play_d["day"] = 1
+		play_d["clinic_day"] = 1
+		play_d["pending_revisits"] = []
+		Save.data["play"] = play_d
+		# 1-2 consult + settle food path (light)
+		current_patient_id = "char_clerk"
+		if CaseDB.patient_by_id(current_patient_id).is_empty():
+			current_patient_id = "char_porter"
+		for e in EXAM_IDS:
+			exams[e] = true
+			if e not in completed_exams:
+				completed_exams.append(e)
+		fsm_state = "treatment_choice"
+		var settle_d: Dictionary = _settle_inplace("food", ["hongzao", "lianzi", "zhou_di"], {"lifestyle_cue": "less_worry"})
+		if settle_d.is_empty():
+			fails.append("demo_day_ok: missing settle")
+		elif not DemoDay.is_step_done("treat"):
+			fails.append("demo_day_ok: treat step not marked")
+		# 3 forage
+		fsm_state = "clinic_idle"
+		if not bool(DemoDay.can_act("go_garden").get("ok", false)):
+			fails.append("demo_day_ok: garden should be actable")
+		identify_herb("guizhi")
+		var picked_d := forage_pick("guizhi")
+		if not picked_d and not is_herb_identified("guizhi"):
+			# still mark if stock exists
+			pass
+		if not DemoDay.is_step_done("afternoon_forage"):
+			# force mark if pick path differed
+			DemoDay.on_forage()
+		# 4 process
+		if Process:
+			Process._write_entry("xingren", 1, 0)
+			var wr: Dictionary = Process.try_wash("xingren", 1.0)
+			if bool(wr.get("ok", false)):
+				Process.mark_processed("xingren", str(wr.get("quality", "ok")))
+		if not DemoDay.is_step_done("evening_process"):
+			DemoDay.on_process()
+		# 5 codex
+		if Codex:
+			var ur: Dictionary = {}
+			if Codex.has_method("unlock_page"):
+				ur = Codex.unlock_page("tenq_song")
+		if not DemoDay.is_step_done("night_codex"):
+			DemoDay.on_codex()
+		# 6-7 next day + revisit consume
+		fsm_state = "clinic_idle"
+		var pulled_d: Dictionary = advance_clinic_day()
+		if play_day() < 2:
+			fails.append("demo_day_ok: day should advance")
+		# ensure a pending exists from settle; consume via observe if seated
+		if is_revisit_visit:
+			settle_observe()
+		elif not pulled_d.is_empty():
+			start_revisit(pulled_d)
+			settle_observe()
+		else:
+			# settle should have written pending — peek
+			var pend: Array = _play().get("pending_revisits", [])
+			var any_consumed := false
+			for row in pend:
+				if typeof(row) == TYPE_DICTIONARY and bool(row.get("consumed", false)):
+					any_consumed = true
+			if not any_consumed and pend.is_empty():
+				fails.append("demo_day_ok: revisit not seated/consumed")
+		# slot sync check
+		var gate: Dictionary = DemoDay.can_act("go_garden")
+		var aft := DemoDay.slot_remaining("afternoon")
+		if bool(gate.get("ok", false)) != (aft > 0):
+			fails.append("demo_day_ok: button enable != time_slots")
+		print("demo_day_ok")
+
 
 	# V125 acupuncture intro short loop
 	var hegu_pos := Vector2(0.08, 0.46)

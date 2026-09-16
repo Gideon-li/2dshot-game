@@ -69,3 +69,9 @@
 ## V130 增补
 
 - `play.food_stock`：食疗教学库存（可无限）；不与 `herb_stock` 互通。
+
+
+## V131 增补
+
+- `play.demo_guide`：`{ enabled, steps_done[], dismissed }`，默认引导开。
+- `time_slots` 四格与 HUD/入口按钮同一真相；次日开馆可 refill。

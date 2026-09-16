@@ -276,6 +276,8 @@ func unlock_page(page_id: String) -> Dictionary:
 	play["theory_nodes"] = nodes
 	Save.data["play"] = play
 	Save.write_slot()
+	if DemoDay:
+		DemoDay.on_codex()
 	if fresh:
 		page_unlocked.emit(page_id, theory_id)
 	return {"ok": true, "fresh": fresh, "page_id": page_id, "theory": theory_id, "review": not fresh}

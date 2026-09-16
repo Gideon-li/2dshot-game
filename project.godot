@@ -24,6 +24,7 @@ CaseDB="*res://scripts/case_db.gd"
 Forage="*res://scripts/forage.gd"
 Process="*res://scripts/process.gd"
 Codex="*res://scripts/codex.gd"
+DemoDay="*res://scripts/demo_day.gd"
 GameFlow="*res://scripts/game_flow.gd"
 AudioHub="*res://scripts/audio_hub.gd"
 

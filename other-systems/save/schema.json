@@ -1,5 +1,5 @@
 {
-  "version": 8,
+  "version": 9,
   "disclaimer_accepted": false,
   "locale": "zh",
   "audio": {
@@ -54,6 +54,11 @@
       "shanyao": 99,
       "shengjiang": 99,
       "bingtang": 99
+    },
+    "demo_guide": {
+      "enabled": true,
+      "steps_done": [],
+      "dismissed": false
     }
   }
 }

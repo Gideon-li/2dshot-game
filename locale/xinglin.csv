@@ -616,3 +616,63 @@ FOOD_PATH_TAG,食疗,Food therapy,食療
 MENTOR_FOOD_1,先养胃气。,Nourish stomach qi first.,まず胃気を養え。
 MENTOR_FOOD_2,大补不是美德。,Heavy tonification is not a virtue.,大補は美徳ではない。
 MENTOR_FOOD,先养胃气。,Nourish stomach qi first.,まず胃気を養え。
+DAY_HUD,Day {n},Day {n},Day {n}
+DAY_ADVANCE,进入次日,Advance to next day,翌日へ
+DAY_RESET_HINT,新的一日。日段引导已重置。,A new day. Day-segment guide reset.,新しい一日。日段ガイドをリセット。
+SLOT_MORNING,晨,Morning,晨
+SLOT_AFTERNOON,午,Afternoon,午
+SLOT_DUSK,暮,Dusk,暮
+SLOT_NIGHT,夜,Night,夜
+SLOT_AVAILABLE,可行动,Available,行動可
+SLOT_USED,已用,Used,使用済
+SLOT_LOCKED,未到此时,Not this hour yet,この時ではない
+SLOT_EXHAUSTED,此时辰已尽,This slot is spent,この時辰は尽きた
+SLOT_EXHAUSTED_MORNING,晨诊格已用尽。可去药圃、炮制或歇息。,"Morning consult slot spent. Garden, process, or rest.",晨の診枠は尽きた。薬圃・炮製・休息へ。
+SLOT_EXHAUSTED_AFTERNOON,午后格已用尽。暮可进炮制院。,"Afternoon slot spent. At dusk, the process yard opens.",午後枠は尽きた。暮れに炮製院へ。
+SLOT_EXHAUSTED_DUSK,暮格已用尽。夜可上阁楼，或次日开馆。,"Dusk slot spent. Night loft, or open next day.",暮枠は尽きた。夜は阁楼へ、または翌日開館。
+SLOT_EXHAUSTED_NIGHT,夜格已用尽。可次日开馆。,Night slot spent. You may open next day.,夜枠は尽きた。翌日開館できる。
+SLOT_NEED_DUSK,要耗一个暮格。,Needs one dusk slot.,暮枠が一つ要る。
+SLOT_NEED_NIGHT,要耗一个夜格。,Needs one night slot.,夜枠が一つ要る。
+SLOT_NEED_AFTERNOON,要耗一个午后格。,Needs one afternoon slot.,午後枠が一つ要る。
+DEMO_TITLE,Demo 一日,Demo day,デモ一日
+DEMO_GUIDE_TITLE,今日引导,Today's guide,今日のガイド
+DEMO_GUIDE_HINT,推荐序，可跳步。打勾只是提醒。,Suggested order — skip freely. Checks are reminders only.,推奨順。飛ばしてよい。チェックはただの合図。
+DEMO_GUIDE_TOGGLE,引导,Guide,ガイド
+DEMO_GUIDE_DISMISS,关闭引导,Dismiss guide,ガイドを閉じる
+DEMO_GUIDE_SHOW,显示引导,Show guide,ガイドを表示
+DEMO_GUIDE_DONE,今日引导已走完。,Today's guide is complete.,今日のガイドは完了。
+DEMO_START,Demo 一日,Demo day,デモ一日
+DEMO_START_HINT,新档直入诊所，引导默认开启。,New save into the clinic; guide on by default.,新規で診察室へ。ガイドは既定でオン。
+DEMO_STEP_1,晨诊处治,Morning consult & treat,晨の診と処治
+DEMO_STEP_1_HINT,接一位病人：四诊后开方、扎针或食疗。,"See one patient: four exams, then formula, needle, or food therapy.",一人を診る。四診のあと方・鍼・食療。
+DEMO_STEP_2,午后药圃,Afternoon garden,午後の薬圃
+DEMO_STEP_2_HINT,去药圃认采一味。,Forage one herb in the garden.,薬圃で一味を採る。
+DEMO_STEP_3,黄昏炮制,Dusk processing,暮れの炮製
+DEMO_STEP_3_HINT,进炮制院：洗、炒或晒任一事。,"Process yard: wash, fry, or sun-dry one item.",炮製院へ。洗・炒・晒のいずれか。
+DEMO_STEP_4,夜读医典,Night codex,夜の医典
+DEMO_STEP_4_HINT,上阁楼翻一页，领悟一个节点。,Loft: flip one page and take one insight.,阁楼で一頁。一つのノードを领悟。
+DEMO_STEP_5,次日开馆,Open next day,翌日開館
+DEMO_STEP_5_HINT,过一日，看看有没有复诊。,Advance a day; check for revisits.,一日進め、再診があるか見る。
+DEMO_STEP_6,复诊收工,Revisit & close,再診で收める
+DEMO_STEP_6_HINT,复诊入座，看病程；观察或再治。,"Seat the revisit, read the course; observe or treat again.",再診を通し経過を見る。観察か再処治。
+DEMO_ACTION_CONSULT,晨诊,Morning consult,晨診
+DEMO_ACTION_GARDEN,药圃,Garden,薬圃
+DEMO_ACTION_PROCESS,炮制,Process,炮製
+DEMO_ACTION_LOFT,阁楼,Loft,阁楼
+DEMO_ACTION_NEXT_DAY,次日,Next day,翌日
+DEMO_ACTION_REVISIT,复诊,Revisit,再診
+DEMO_NEXT_GARDEN,可去药圃采药。,You can forage in the garden.,薬圃で採薬できる。
+DEMO_NEXT_PROCESS,暮可进炮制院。,"At dusk, enter the process yard.",暮れに炮製院へ入れる。
+DEMO_NEXT_LOFT,夜可上阁楼夜读。,"At night, you can read in the loft.",夜は阁楼で夜読できる。
+DEMO_NEXT_NEXT_DAY,今日事了，可次日开馆。,Day's work done — open next day when ready.,今日のことは済んだ。翌日開館できる。
+DEMO_NEXT_REVISIT,有复诊到期，次日开馆后优先入座。,A revisit is due — seat them first after opening next day.,再診が到期。翌日開館後に優先して通す。
+DEMO_NEXT_REST,也可提前歇息进夜。,Or rest early into night.,先に休んで夜へ入ってもよい。
+DEMO_IDLE_HINT,看看侧栏引导，或点亮着的入口。,"Check the side guide, or a lit entrance.",サイドのガイドか、点灯した入口を。
+DEMO_BACK_CLINIC,回诊室,Back to clinic,診察室へ
+DEMO_REVISIT_PRIORITY,未消费复诊优先。,Unconsumed revisits come first.,未消費の再診を優先。
+DEMO_NEXT_DAY,可次日开馆。,You may open next day.,翌日開館できる。
+DEMO_DONE,今日引导已走完。,Today's guide is complete.,今日のガイドは完了。
+SLOT_EVENING_EMPTY,暮格已用尽。,Evening slot spent.,暮枠は尽きた。
+SLOT_NIGHT_EMPTY,夜格已用尽。,Night slot spent.,夜枠は尽きた。
+SLOT_AFTERNOON_EMPTY,午后格已用尽。,Afternoon slot spent.,午後枠は尽きた。
+DAY_PLAQUE,第 {n} 日,Day {n},第 {n} 日

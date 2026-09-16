@@ -1,6 +1,6 @@
 {
   "id": "xinglin-mowen-slice-logic",
-  "version": 10,
+  "version": 11,
   "project": "墨问岐黄 / 杏林墨问",
   "scope": "vertical_slice",
   "notes": {
@@ -31,7 +31,8 @@
     "v127": "revisit day cycle: play.day, due_day=treated+1, FIFO 1, revisit_consult FSM, observe_no_med; no LLM",
     "v128": "sun_dry playable; mudanpi teaching sun-dry; flip+progress; STATION_DRY not placeholder",
     "v129": "codex night read; 3 pages; night slot -1; theory flags for tenq/pulse UI",
-    "v130": "food therapy path=food; 6 cards; lifestyle_cue; teaching stock; food_therapy_ok"
+    "v130": "food therapy path=food; 6 cards; lifestyle_cue; teaching stock; food_therapy_ok",
+    "v131": "demo day glue: time_slots single truth, demo_guide checklist, demo_day_ok"
   },
   "exam_ids": [
     "wang",
@@ -4355,7 +4356,8 @@
         "amount": 1
       },
       "note": "切片先固定：进药圃耗 1 个午后格；识别失败本切片可不另耗时",
-      "save_path": "play.time_slots.afternoon"
+      "save_path": "play.time_slots.afternoon",
+      "demo_day_action": "go_garden"
     },
     "smoke": {
       "pick": [
@@ -4458,7 +4460,8 @@
         "amount": 1
       },
       "save_path": "play.time_slots.evening",
-      "note": "切片固定：进炮制院耗 1 暮格"
+      "note": "切片固定：进炮制院耗 1 暮格",
+      "demo_day_action": "go_process"
     },
     "inventory": {
       "save_path": "play.herb_stock",
@@ -4664,7 +4667,8 @@
       "effects": [
         "play.day += 1",
         "maybe_pull_one_revisit()"
-      ]
+      ],
+      "demo_day_step": "next_day_revisit"
     },
     "fsm": {
       "states": {
@@ -4882,7 +4886,8 @@
       "review_free": true,
       "no_night_hint_i18n": "NIGHT_READ_NEED_SLOT",
       "early_rest_to_night_allowed": true,
-      "note": "已读页复习不扣夜格"
+      "note": "已读页复习不扣夜格",
+      "demo_day_action": "go_loft"
     },
     "unlock": {
       "on_comprehend": [
@@ -5224,5 +5229,255 @@
       "prefer": "toward_heal"
     },
     "contracts_prototype": "ACTION_FOOD → food bowl 1–3 from food_items; stock play.food_stock teaching; Scoring.evaluate(..., path='food', ids=food_ids, opts={lifestyle_cue}); does not mutate herb_stock"
+  },
+  "demo_day_rules": {
+    "id": "demo_day_rules_v131",
+    "goal": "glue existing loops into one demo day; no new big systems",
+    "recommended_order": [
+      "morning_consult",
+      "treat",
+      "afternoon_forage",
+      "evening_process",
+      "night_codex",
+      "next_day_revisit"
+    ],
+    "order_skippable": true,
+    "time_slots": {
+      "ids": [
+        "morning",
+        "afternoon",
+        "evening",
+        "night"
+      ],
+      "labels": {
+        "morning": {
+          "zh": "晨",
+          "en": "Morning",
+          "ja": "朝"
+        },
+        "afternoon": {
+          "zh": "午",
+          "en": "Afternoon",
+          "ja": "昼"
+        },
+        "evening": {
+          "zh": "暮",
+          "en": "Evening",
+          "ja": "暮"
+        },
+        "night": {
+          "zh": "夜",
+          "en": "Night",
+          "ja": "夜"
+        }
+      },
+      "save_path": "play.time_slots",
+      "day_path": "play.day",
+      "single_source_of_truth": true,
+      "button_gate": {
+        "note": "HUD 灰亮只读 can_act(slot)/remaining>0，禁止另写一套",
+        "api": "DemoDay.can_act(play, action_id) -> {ok, slot, reason_key}"
+      },
+      "actions": {
+        "morning_consult": {
+          "slot": "morning",
+          "cost": 0,
+          "note": "接诊不强制扣晨格；晨格表示「今日可坐诊」亮灯",
+          "requires_slot_gt": null,
+          "enabled_when": "clinic_idle"
+        },
+        "treat_formula": {
+          "slot": null,
+          "cost": 0,
+          "during": "consult"
+        },
+        "treat_acu": {
+          "slot": null,
+          "cost": 0,
+          "during": "consult"
+        },
+        "treat_food": {
+          "slot": null,
+          "cost": 0,
+          "during": "consult"
+        },
+        "go_garden": {
+          "slot": "afternoon",
+          "cost": 1,
+          "fn": "go_garden / forage enter",
+          "disabled_reason_key": "SLOT_AFTERNOON_EMPTY"
+        },
+        "go_process": {
+          "slot": "evening",
+          "cost": 1,
+          "fn": "go_process",
+          "disabled_reason_key": "SLOT_EVENING_EMPTY"
+        },
+        "go_loft": {
+          "slot": "night",
+          "cost": 1,
+          "fn": "go_loft",
+          "review_free": true,
+          "disabled_reason_key": "SLOT_NIGHT_EMPTY",
+          "early_rest_key": "EARLY_REST_TO_NIGHT"
+        },
+        "next_day_open": {
+          "slot": null,
+          "cost": 0,
+          "fn": "next_day_open",
+          "effects": [
+            "day+=1",
+            "reset_day_segment_checklist",
+            "pull_revisit_fifo"
+          ]
+        }
+      },
+      "on_day_advance": {
+        "refill_slots": {
+          "morning": 1,
+          "afternoon": 1,
+          "evening": 1,
+          "night": 1
+        },
+        "keep_demo_guide_enabled": true,
+        "clear_steps_done_day_segment": true
+      }
+    },
+    "demo_guide": {
+      "save_path": "play.demo_guide",
+      "default": {
+        "enabled": true,
+        "steps_done": [],
+        "dismissed": false
+      },
+      "can_dismiss": true,
+      "steps": [
+        {
+          "id": "morning_consult",
+          "zh": "晨诊：接一位病人，做四诊",
+          "en": "Morning: see a patient, four exams",
+          "ja": "朝診：患者を診て四診",
+          "complete_when": "any patient seated and ≥1 exam or settled",
+          "next_hop_after_settle": "DEMO_NEXT_GARDEN"
+        },
+        {
+          "id": "treat",
+          "zh": "处治：开方 / 针灸 / 食疗任选一路",
+          "en": "Treat: formula, acupuncture, or food",
+          "ja": "処治：方・鍼灸・食療のいずれか",
+          "complete_when": "settle with path in formula|acupuncture|food",
+          "next_hop_keys": {
+            "default": "DEMO_NEXT_GARDEN"
+          }
+        },
+        {
+          "id": "afternoon_forage",
+          "zh": "午后：药圃认采至少一味",
+          "en": "Afternoon: forage at least one herb",
+          "ja": "昼：薬圃で少なくとも一味",
+          "complete_when": "forage identify+pick ≥1",
+          "requires_slot": "afternoon",
+          "next_hop_after": "DEMO_NEXT_PROCESS"
+        },
+        {
+          "id": "evening_process",
+          "zh": "黄昏：炮制院洗/炒/晒任一",
+          "en": "Evening: wash, fry, or sun-dry once",
+          "ja": "暮：炮製で洗・炒・晒のいずれか",
+          "complete_when": "process one herb to processed",
+          "requires_slot": "evening",
+          "next_hop_after": "DEMO_NEXT_LOFT"
+        },
+        {
+          "id": "night_codex",
+          "zh": "夜读：阁楼领悟一页",
+          "en": "Night: comprehend one codex page",
+          "ja": "夜読：阁楼で一頁を悟る",
+          "complete_when": "codex comprehend ≥1 page this run or unlocked+",
+          "requires_slot": "night",
+          "next_hop_after": "DEMO_NEXT_DAY"
+        },
+        {
+          "id": "next_day_revisit",
+          "zh": "次日：开馆见复诊病程",
+          "en": "Next day: open clinic for revisit",
+          "ja": "翌日：開館して再診",
+          "complete_when": "next_day_open and revisit seated or pending consumed",
+          "next_hop_after": "DEMO_DONE"
+        }
+      ]
+    },
+    "settle_next_hop": {
+      "after_first_treat_of_day": "DEMO_NEXT_GARDEN",
+      "if_afternoon_left": "DEMO_NEXT_GARDEN",
+      "if_evening_left_and_garden_done": "DEMO_NEXT_PROCESS",
+      "if_night_left_and_process_done": "DEMO_NEXT_LOFT",
+      "if_ready_for_day_end": "DEMO_NEXT_DAY",
+      "api": "DemoDay.next_hop_after_settle(play, last_result) -> i18n_key",
+      "never_spoil_diagnosis": true
+    },
+    "return_routes": {
+      "from": [
+        "garden",
+        "process",
+        "loft",
+        "food",
+        "acupuncture",
+        "formula"
+      ],
+      "to": "clinic_idle",
+      "must_persist_save": true,
+      "must_not_wipe_demo_guide": true
+    },
+    "hud": {
+      "show_day": true,
+      "show_slots": [
+        "morning",
+        "afternoon",
+        "evening",
+        "night"
+      ],
+      "checklist_default_on": true
+    },
+    "smoke": {
+      "tag": "demo_day_ok",
+      "steps": [
+        "1 select patient + min four exams (or allow missing with penalty)",
+        "2 settle path in {formula, acupuncture, food}",
+        "3 go_garden: identify+pick ≥1 whitelist herb",
+        "4 go_process: wash|stir_fry|sun_dry → processed",
+        "5 loft: comprehend ≥1 codex page (night cost once)",
+        "6 next_day_open → pending revisit seat (or create pending in step 2)",
+        "7 observe_no_med or retreatment → consume pending"
+      ],
+      "fail_messages": {
+        "no_settle": "demo_day_ok: missing settle",
+        "no_forage": "demo_day_ok: forage not done",
+        "no_process": "demo_day_ok: process not done",
+        "no_codex": "demo_day_ok: codex page not unlocked",
+        "no_revisit": "demo_day_ok: revisit not seated/consumed",
+        "slot_desync": "demo_day_ok: button enable != time_slots"
+      },
+      "also_require": "existing SMOKE PASS rings still green"
+    },
+    "contracts_prototype": "DemoDay.can_act + mark_step_done; HUD binds time_slots only; settle shows next_hop key; subscenes return clinic_idle; headless demo_day_ok walks steps 1–7",
+    "i18n_keys": [
+      "DEMO_GUIDE_TITLE",
+      "DEMO_NEXT_GARDEN",
+      "DEMO_NEXT_PROCESS",
+      "DEMO_NEXT_LOFT",
+      "DEMO_NEXT_DAY",
+      "DEMO_DONE",
+      "DAY_LABEL",
+      "SLOT_MORNING",
+      "SLOT_AFTERNOON",
+      "SLOT_EVENING",
+      "SLOT_NIGHT",
+      "SLOT_AFTERNOON_EMPTY",
+      "SLOT_EVENING_EMPTY",
+      "SLOT_NIGHT_EMPTY",
+      "EARLY_REST_TO_NIGHT",
+      "DEMO_DISMISS_GUIDE"
+    ]
   }
 }
