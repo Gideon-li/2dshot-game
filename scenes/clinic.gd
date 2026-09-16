@@ -1047,7 +1047,7 @@ func _fill_exam_dock(col: VBoxContainer) -> void:
 	row.add_child(food_b)
 
 
-func 
+
 func _fill_ask_dock(col: VBoxContainer) -> void:
 	var scroll := ScrollContainer.new()
 	scroll.custom_minimum_size = Vector2(0, 70)
