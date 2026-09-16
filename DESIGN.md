@@ -120,3 +120,4 @@
 - **V127** 复诊日循环已接：`play.day` + 次日开馆 FIFO 入座 + 观察勿药；冒烟 `revisit_day_ok`；见 `DEV-TASKS-V127.md` / `logic/REVISIT-DAY-V127.md`。
 - **V128** 晒药工位可玩 + 炮制院打磨（教学默认牡丹皮）：见 `DEV-TASKS-V128.md`。
 - **V129** 夜读医典短环：阁楼读页解锁理论节点（寒热虚实/十问歌/脉名）；见 `DEV-TASKS-V129.md`。
+- **V130** 食疗入门：处治第三路径，膳盏 6 卡+起居劝说；见 `DEV-TASKS-V130.md`。

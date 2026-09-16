@@ -124,3 +124,7 @@
 ## V129（2026-09-16）
 
 夜读医典 / 阁楼 loft：新 `candle`（残烛灯花 one-shot ~0.58s）；翻页 **复用** `ui-paper`（不新作 page-flip）；领悟确认可用 `ui-ink` 或 `stamp-ok`。无新 M 轨（M02 夜床仍后置）；雨/薄床/duck 不动。见 `V129-CODEX-SFX.md`。
+
+## V130（2026-09-16）
+
+食疗一声互动短音：`bowl`（软置瓷/木碗 + 可选极轻箸点）。挂：食疗卡入碗 → `play_one("bowl")`；配方托盘倒药仍用 `herb-drop`。无新 M 轨、无 per-patient BGM、无食疗大主题；雨/薄床/duck 不动。见 `V130-FOOD-SFX.md`。

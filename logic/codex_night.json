@@ -2,46 +2,58 @@
   "id": "codex_night_v129",
   "pages": [
     {
-      "id": "page_hanre_xushi",
+      "id": "hanre_xushi",
       "theory_node": "theory.hanre_xushi",
       "title": {
         "zh": "寒热虚实",
-        "en": "Cold·Heat·Deficiency·Excess",
+        "en": "Cold, heat, vacuity, repletion",
         "ja": "寒熱虚実"
       },
       "unlock_shows": "settlement_or_mentor_four_word_hint",
-      "body_placeholder": true,
-      "order": 1
+      "body_placeholder": false,
+      "order": 1,
+      "id_aliases": [
+        "page_hanre_xushi"
+      ],
+      "theory": "theory.hanre_xushi"
     },
     {
-      "id": "page_tenq_song",
+      "id": "tenq_song",
       "theory_node": "theory.tenq_song",
       "title": {
         "zh": "十问歌 · 残句",
-        "en": "Ten Questions · fragment",
+        "en": "Ten Questions Song · Fragment",
         "ja": "十問歌・残句"
       },
       "unlock_shows": "ten_questions.classic_line_beside_button",
-      "body_placeholder": true,
-      "order": 2
+      "body_placeholder": false,
+      "order": 2,
+      "id_aliases": [
+        "page_tenq_song"
+      ],
+      "theory": "theory.tenq_song"
     },
     {
-      "id": "page_pulse_names",
+      "id": "pulse_names",
       "theory_node": "theory.pulse_names",
       "title": {
         "zh": "脉语 · 弦",
-        "en": "Pulse words · wiry",
+        "en": "Pulse words · Wiry",
         "ja": "脈語・弦"
       },
       "unlock_shows": "pulse_hud.standard_name",
       "slice_lock_pulse": "xian",
-      "body_placeholder": true,
-      "order": 3
+      "body_placeholder": false,
+      "order": 3,
+      "id_aliases": [
+        "page_pulse_names"
+      ],
+      "theory": "theory.pulse_names"
     }
   ],
   "theory_nodes": {
     "theory.hanre_xushi": {
-      "from_page": "page_hanre_xushi",
+      "from_page": "hanre_xushi",
       "ui": {
         "where": [
           "settlement_flavor_ marginal",
@@ -53,7 +65,7 @@
       }
     },
     "theory.tenq_song": {
-      "from_page": "page_tenq_song",
+      "from_page": "tenq_song",
       "ui": {
         "where": [
           "ten_questions.items[].classic_line"
@@ -75,7 +87,7 @@
       }
     },
     "theory.pulse_names": {
-      "from_page": "page_pulse_names",
+      "from_page": "pulse_names",
       "ui": {
         "where": [
           "pulse.quality_label"
@@ -105,5 +117,7 @@
     }
   },
   "rules_ref": "slice_logic.json → codex_night_rules",
-  "lock_doc": "logic/CODEX-NIGHT-V129.md"
+  "lock_doc": "logic/CODEX-NIGHT-V129.md",
+  "script_ref": "patients/codex_script.json",
+  "page_id_note": "page ids match codex_script (no page_ prefix); id_aliases keep old page_*"
 }

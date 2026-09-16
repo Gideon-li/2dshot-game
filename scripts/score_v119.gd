@@ -50,6 +50,10 @@ static func _actions_of(case_data: Dictionary, path: String, ids: Array) -> Dict
 		for h in CaseDB.pack.get("herbs", []):
 			if typeof(h) == TYPE_DICTIONARY:
 				bag[str(h.get("id", ""))] = h
+	elif path == "food":
+		for h in CaseDB.pack.get("food_items", []):
+			if typeof(h) == TYPE_DICTIONARY:
+				bag[str(h.get("id", ""))] = h
 	else:
 		for p in CaseDB.pack.get("acupoints", CaseDB.pack.get("points", [])):
 			if typeof(p) == TYPE_DICTIONARY:
@@ -80,8 +84,17 @@ static func _coverage(case_data: Dictionary, path: String, ids: Array) -> float:
 
 
 static func _formula_fit(case_data: Dictionary, path: String, ids: Array) -> float:
-	var key := "herbs" if path == "formula" else "points"
-	var examples: Array = case_data.get("legal_formula_examples" if path == "formula" else "legal_point_examples", [])
+	var key := "herbs"
+	var examples: Array = []
+	if path == "formula":
+		key = "herbs"
+		examples = case_data.get("legal_formula_examples", [])
+	elif path == "food":
+		key = "foods"
+		examples = case_data.get("legal_food_examples", [])
+	else:
+		key = "points"
+		examples = case_data.get("legal_point_examples", [])
 	var have := {}
 	for id in ids:
 		have[str(id)] = true
