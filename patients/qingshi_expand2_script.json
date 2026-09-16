@@ -1,0 +1,133 @@
+{
+  "id": "mo-wen-qi-huang-qingshi-expand2-script",
+  "project": "墨问岐黄",
+  "version": 1,
+  "task": "DEV-TASKS-V135",
+  "notes": {
+    "no_diagnosis_names_in_dialogue": true,
+    "seals_total_with_v134": 6,
+    "disclaimer_keys": [
+      "STORE_NOT_MEDICAL",
+      "BOOT_DISCLAIMER_*"
+    ]
+  },
+  "characters": [
+    {
+      "id": "char_danfu",
+      "case_id": "yangxu_weihan",
+      "portrait": "ui/characters/han_danfu.png"
+    },
+    {
+      "id": "char_bashi",
+      "case_id": "xueyu_qing",
+      "portrait": "ui/characters/ma_bashi.png"
+    },
+    {
+      "id": "char_jiaoli",
+      "case_id": "shushi",
+      "portrait": "ui/characters/xia_jiaoli.png"
+    }
+  ],
+  "seals": {
+    "flash_template": {
+      "zh": "证印亮起：{name}",
+      "en": "Seal lit: {name}",
+      "ja": "証印が点く：{name}"
+    },
+    "hint": {
+      "zh": "治好一类，亮一枚。不上诊断名。",
+      "en": "Clear a pattern class, light a seal. No diagnosis names on HUD.",
+      "ja": "一類を治せば一枚。診断名は出さない。"
+    },
+    "items": [
+      {
+        "case_id": "yangxu_weihan",
+        "key": "seal.yangxu_weihan",
+        "name_key": "SEAL_YANGXU_WEIHAN",
+        "name": {
+          "zh": "阳虚畏寒",
+          "en": "Yang vacuity with aversion to cold",
+          "ja": "陽虚畏寒"
+        },
+        "icon": "ui/seals/yangxu_weihan.png"
+      },
+      {
+        "case_id": "xueyu_qing",
+        "key": "seal.xueyu_qing",
+        "name_key": "SEAL_XUEYU_QING",
+        "name": {
+          "zh": "血瘀轻证",
+          "en": "Mild blood stasis",
+          "ja": "血瘀軽証"
+        },
+        "icon": "ui/seals/xueyu_qing.png"
+      },
+      {
+        "case_id": "shushi",
+        "key": "seal.shushi",
+        "name_key": "SEAL_SHUSHI",
+        "name": {
+          "zh": "暑湿",
+          "en": "Summerheat-damp",
+          "ja": "暑湿"
+        },
+        "icon": "ui/seals/shushi.png"
+      }
+    ],
+    "flash_lines": {
+      "yangxu_weihan": {
+        "zh": "证印亮起：阳虚畏寒。",
+        "en": "Seal lit: Yang vacuity with aversion to cold.",
+        "ja": "証印が点く：陽虚畏寒。"
+      },
+      "xueyu_qing": {
+        "zh": "证印亮起：血瘀轻证。",
+        "en": "Seal lit: Mild blood stasis.",
+        "ja": "証印が点く：血瘀軽証。"
+      },
+      "shushi": {
+        "zh": "证印亮起：暑湿。",
+        "en": "Seal lit: Summerheat-damp.",
+        "ja": "証印が点く：暑湿。"
+      }
+    }
+  },
+  "case_hints": {
+    "yangxu_weihan": {
+      "hint": {
+        "zh": "畏寒肢冷、喜温。勿清泻。",
+        "en": "Aversion to cold, cold limbs, prefers warmth. Don't clear-drain.",
+        "ja": "畏寒・肢冷・温を喜ぶ。清瀉するな。"
+      },
+      "mis_clear": {
+        "zh": "清泻太过。人更蜷了。",
+        "en": "Cleared too hard. He curls up tighter.",
+        "ja": "清瀉が過ぎた。さらに縮こまった。"
+      }
+    },
+    "xueyu_qing": {
+      "hint": {
+        "zh": "刺痛固定、色暗。轻证轻方。",
+        "en": "Fixed stabbing pain, dark hue. Mild case, mild formula.",
+        "ja": "刺痛が固定、色が暗い。軽証は軽方。"
+      },
+      "mis_break": {
+        "zh": "破血太猛。人空了一截。",
+        "en": "Broke blood too hard. Vacuity took a bite.",
+        "ja": "破血が強すぎた。虚が一段ついた。"
+      }
+    },
+    "shushi": {
+      "hint": {
+        "zh": "身热汗粘、困痞。清暑化湿，勿纯燥。",
+        "en": "Body heat, sticky sweat, stuffy heaviness. Clear summerheat and transform damp — not pure dryness.",
+        "ja": "身熱・粘汗・困痞。清暑化湿。純燥はだめ。"
+      },
+      "mis_dry": {
+        "zh": "燥烈太过。津更伤。",
+        "en": "Too harsh-dry. Fluids took more damage.",
+        "ja": "燥烈が過ぎた。津がさらに傷つく。"
+      }
+    }
+  }
+}

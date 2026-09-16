@@ -1,7 +1,7 @@
 {
   "id": "mo-wen-qi-huang-revisit-script",
   "project": "墨问岐黄",
-  "version": 3,
+  "version": 4,
   "task": "DEV-TASKS-V127",
   "notes": {
     "no_llm": true,
@@ -246,6 +246,84 @@
           "zh": "困还在。像越补越沉。",
           "en": "Heaviness stays. Feels heavier the more it was tonified.",
           "ja": "困は残る。補うほど沈むようだ。"
+        }
+      }
+    },
+    "yangxu_weihan": {
+      "character_id": "char_danfu",
+      "name_zh": "韩担夫",
+      "flavors": {
+        "good": {
+          "zh": "小先生，畏寒松些了。手脚暖一点。摊我还能支。",
+          "en": "Doc — chill eased. Hands and feet a bit warmer. I can still keep the stall up.",
+          "ja": "小先生、畏寒が少し楽だ。手足が少し温かい。店も支えられる。"
+        },
+        "slow": {
+          "zh": "好一点，慢。天不冷仍想偎炉。",
+          "en": "A little better, slowly. Still want the stove even when it isn't cold.",
+          "ja": "少し楽だが遅い。寒くなくてもまだ炉に寄りたい。"
+        },
+        "over": {
+          "zh": "温得太猛，口干、心烦。冷是退了，人发躁。",
+          "en": "Warmed too hard — dry mouth, restlessness. Cold backed off, but I'm agitated.",
+          "ja": "温が強すぎて口が乾き、心烦。冷えは引いたが躁ぐ。"
+        },
+        "mis": {
+          "zh": "像清泻过了。人更蜷，手脚更凉。",
+          "en": "Felt over-cleared. I curl tighter; limbs colder.",
+          "ja": "清瀉し過ぎたようだ。さらに縮こまり、手足がより冷たい。"
+        }
+      }
+    },
+    "xueyu_qing": {
+      "character_id": "char_bashi",
+      "name_zh": "马把式",
+      "flavors": {
+        "good": {
+          "zh": "先生，刺痛轻了。色也淡些。车还能赶。",
+          "en": "Sir — stabbing eased. Color a bit lighter. I can still drive.",
+          "ja": "先生、刺痛が軽い。色も少し淡い。車も運転できる。"
+        },
+        "slow": {
+          "zh": "好一点。按着仍醒目，阴天还沉。",
+          "en": "A little better. Still clear when pressed; dull days still heavy.",
+          "ja": "少し楽。按えるとまだ目立つ。曇りはまだ沈む。"
+        },
+        "over": {
+          "zh": "破得太猛，人空了一截。痛是轻了，站不稳。",
+          "en": "Broke too hard — vacuity took a bite. Pain lighter, but I can't stand steady.",
+          "ja": "破が強すぎて虚が一段。痛みは軽いが立てない。"
+        },
+        "mis": {
+          "zh": "刺痛还在。像没碰着那处。",
+          "en": "Stabbing stays. Feels like it never touched the spot.",
+          "ja": "刺痛は残る。そこに触れてない感じ。"
+        }
+      }
+    },
+    "shushi": {
+      "character_id": "char_jiaoli",
+      "name_zh": "夏脚力",
+      "flavors": {
+        "good": {
+          "zh": "小先生，困痞松些了。汗不那么粘。我还能跑一趟。",
+          "en": "Doc — stuffiness eased. Sweat less sticky. I can still make a run.",
+          "ja": "小先生、困痞が少し楽だ。汗も粘らない。もう一走りできる。"
+        },
+        "slow": {
+          "zh": "好一点。身还热，饮食仍无味。",
+          "en": "A little better. Body still warm; food still tasteless.",
+          "ja": "少し楽。身はまだ熱い。飲食にまだ味がない。"
+        },
+        "over": {
+          "zh": "清得太过，人发空，汗更多。痞倒轻。",
+          "en": "Cleared too hard — emptied, more sweat. Stuffiness lighter though.",
+          "ja": "清が過ぎて空になり、汗が増えた。痞えは軽い。"
+        },
+        "mis": {
+          "zh": "像燥烈硬逼的。津更伤，心里更痞。",
+          "en": "Felt harsh-dry forced. Fluids worse; chest-gut more stuck.",
+          "ja": "燥烈で無理したようだ。津がさらに傷み、痞えが強くなる。"
         }
       }
     }

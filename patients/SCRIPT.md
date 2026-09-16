@@ -24,7 +24,7 @@
 
 三案各 10 条问舟边界：`mentor.case_cues.<case_id>.lines`（中英日）。缺诊催句：`mentor.exam_missing_cues`。
 
-## 七张病人身份包
+## 十张病人身份包
 
 | id | 人 | 年龄 / 身份 / 地域 | 原型语气 | 本局病机（内部） | 求医动机 |
 | --- | --- | --- | --- | --- | --- |
@@ -35,6 +35,9 @@
 | `char_zoufan` | **刘禾青** | 17 / 镇口走贩 / 青石镇 | 走贩少年 | `fengre_biao` | 嗓子火、头热，货还要往镇里送 |
 | `char_yanhou` | **顾宴余** | 42 / 宴后熟人 / 青石镇 | 市井熟人 | `shiji` | 席上吃猛了，脘胀嗳气不想动 |
 | `char_yaoqin` | **林阿婶** | 48 / 药农亲友 / 青石镇外 | 药圃亲眷 | `pixu_shikun` | 困重纳差，求一口能吃的粥气 |
+| `char_danfu` | **韩担夫** | 55 / 老担夫·夜市摊 / 青石镇 | 担夫摊主 | `yangxu_weihan` | 天不冷也蜷，手脚凉，想偎炉 |
+| `char_bashi` | **马把式** | 38 / 车把式 / 青石镇 | 跌仆镇民 | `xueyu_qing` | 跌处刺痛固定、色暗 |
+| `char_jiaoli` | **夏脚力** | 29 / 夏日脚力·船工 / 青石码头 | 奔走脚力 | `shushi` | 身热汗粘，困痞 |
 
 每人含：`personality` / `voice` / `motive` / `taboos` / `conceal` / `opening` / `ask_wrappers` / `dodge` / `pathogenesis_notes`。
 
@@ -57,6 +60,19 @@
 - 证印：`play.seals[]` 亮对应三枚；不做十二印墙。
 - 候诊最多四席轮换；`town_permit` 后新案权重升高；无 permit 也可偶遇食积教学。
 - i18n：`other-systems/i18n/QINGSHI-EXPAND-KEYS.md`。
+
+### V135 青石再扩（+3 → 共 10 人 / 6 印）
+
+| 案 id | 角色 id | 人 | 教学 |
+| --- | --- | --- | --- |
+| `yangxu_weihan` | `char_danfu` | 韩担夫 | 畏寒肢冷；勿清泻；灸关元/足三里类可案开 |
+| `xueyu_qing` | `char_bashi` | 马把式 | 刺痛固定；轻活血；勿猛破血 |
+| `shushi` | `char_jiaoli` | 夏脚力 | 暑湿困痞；清暑化湿；勿纯燥烈 |
+
+- 证印共 6 枚（V134 三 + 本档三）；不做十二墙。
+- 无 permit：偶遇阳虚教学 1 次；血瘀/暑湿权重极低。
+- i18n：`other-systems/i18n/QINGSHI-EXPAND2-KEYS.md`；锁：`logic/QINGSHI-EXPAND2-V135.md`。
+
 
 
 ## 问诊边界（病人 + 本地模型 / 远程开发 / 离线回退）
@@ -184,3 +200,13 @@ API / 本地模型失败或无网：`ask_wrappers` 套锚。`{sym}` 只填锚，
 - `qingshi_expand_script.json` → 证印闪句 SEAL_* + 案提示
 - `revisit_script.json` → 三案四 flavor
 - 对话不报证型名；证印为类目标记（SEAL_HINT）。不做陈半仙/萨米尔/小儿。
+
+## V135 再补三类青石证印
+
+十人表：旧 7 + `char_danfu`/`yangxu_weihan`（韩担夫）、`char_bashi`/`xueyu_qing`（马把式）、`char_jiaoli`/`shushi`（夏脚力）。
+
+剧本交付：
+- `slice_characters.json` v10
+- `qingshi_expand2_script.json` → 三新证印闪句
+- `revisit_script.json` → 三案四 flavor
+- 对话不报证型名；seals 共 6 枚。不做阴虚燥咳/湿热下注/外伤/小儿/陈半仙/萨米尔。

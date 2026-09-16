@@ -11,7 +11,9 @@
     "disclaimer_keys": [
       "STORE_NOT_MEDICAL",
       "BOOT_DISCLAIMER_*"
-    ]
+    ],
+    "v135_see_also": "qingshi_expand2_script.json",
+    "seals_total": 6
   },
   "characters": [
     {

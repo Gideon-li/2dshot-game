@@ -1,7 +1,7 @@
 {
   "id": "mo-wen-qi-huang-slice-characters",
   "project": "墨问岐黄",
-  "version": 9,
+  "version": 10,
   "based_on": [
     "design-pack 03 人物志 v1.1",
     "15 十问与问舟 v1.10",
@@ -11,7 +11,9 @@
     "DEV-TASKS-V133",
     "logic/XIUNIAN-CASE-V133.md",
     "DEV-TASKS-V134",
-    "logic/QINGSHI-EXPAND-V134.md"
+    "logic/QINGSHI-EXPAND-V134.md",
+    "DEV-TASKS-V135",
+    "logic/QINGSHI-EXPAND2-V135.md"
   ],
   "notes": {
     "not_quiz": true,
@@ -44,7 +46,8 @@
     "v120": "mentor cues all interrogatives; xiaohe waiting/cabinet >=3; followup one line per case; no diagnosis/formula in mentor cues",
     "v120_proxy": "pharmacy_kid.proxy_diagnosis.enabled=false",
     "v133": "char_xiuniang / xuexu_ganyu; memorial on yin; trust; town_permit narration",
-    "v134": "char_zoufan/yanhou/yaoqin +3 cases; seals; waiting rotate max 4"
+    "v134": "char_zoufan/yanhou/yaoqin +3 cases; seals; waiting rotate max 4",
+    "v135": "char_danfu/yangxu_weihan, char_bashi/xueyu_qing, char_jiaoli/shushi; seals to 6"
   },
   "inquiry_rules": {
     "zh": [
@@ -690,6 +693,99 @@
             "便溏か？少し動いて汗か？",
             "補が膩すぎたらどうなるか、考えたか？",
             "この問いは入ったか？"
+          ]
+        }
+      },
+      "yangxu_weihan": {
+        "priority_ten_ask": [
+          "寒热",
+          "汗",
+          "饮食",
+          "头身"
+        ],
+        "lines": {
+          "zh": [
+            "天不冷也蜷——手脚温不温？",
+            "喜热饮、喜添衣，你问到了吗？",
+            "别急着金银花连翘。这一问补上了吗？",
+            "动则更乏，旧时冬月更重吗？",
+            "脉枕按了吗？"
+          ],
+          "en": [
+            "Curls up even when it isn't cold — are the limbs warm?",
+            "Likes hot drink and layers — asked?",
+            "Don't rush jinyinhua-lianqiao. Is that question in?",
+            "Worse with work? Worse in old winters?",
+            "Have you felt the pulse?"
+          ],
+          "ja": [
+            "寒くなくても縮こまる——手足は温いか？",
+            "熱い飲みもの・衣を好むか、聞いたか？",
+            "金銀花連翹を急ぐな。この問いは入ったか？",
+            "動くとさらに乏か？昔の冬はより重いか？",
+            "脈は按じたか？"
+          ]
+        }
+      },
+      "xueyu_qing": {
+        "priority_ten_ask": [
+          "头身",
+          "因",
+          "胸",
+          "旧病"
+        ],
+        "lines": {
+          "zh": [
+            "痛固定不固定？按着更醒目吗？",
+            "跌仆过没有——问到起因了吗？",
+            "色暗你望见了吗？",
+            "别急着猛破血。这一问补上了吗？",
+            "阴天或夜里略重吗？"
+          ],
+          "en": [
+            "Is the pain fixed? Clearer when pressed?",
+            "Was there a fall — onset asked?",
+            "Did you see the dark hue?",
+            "Don't rush fierce blood-breaking. Is that question in?",
+            "A bit worse at night or on dull days?"
+          ],
+          "ja": [
+            "痛みは固定か？按えるとより目立つか？",
+            "転倒したか——きっかけは聞いたか？",
+            "色の暗さは望んだか？",
+            "猛破血を急ぐな。この問いは入ったか？",
+            "夜や曇りで少し重いか？"
+          ]
+        }
+      },
+      "shushi": {
+        "priority_ten_ask": [
+          "寒热",
+          "汗",
+          "饮食",
+          "头身"
+        ],
+        "lines": {
+          "zh": [
+            "汗粘衣不粘？身热像晒还是像蒸？",
+            "脘痞、饮食无味，问到了吗？",
+            "渴不欲饮——你分清了吗？",
+            "别纯用燥烈。这一问补上了吗？",
+            "暑天奔走后更明显吗？"
+          ],
+          "en": [
+            "Sweat sticky on clothes? Heat like sun or like steam?",
+            "Epigastric stuffiness, tasteless food — asked?",
+            "Thirsty without wanting to drink — clear?",
+            "Don't go pure harsh-dry. Is that question in?",
+            "Clearer after summer running?"
+          ],
+          "ja": [
+            "汗は衣に粘るか？身熱は日差しか蒸し暑さか？",
+            "脘痞・飲食に味がないか、聞いたか？",
+            "渇いても飲まない——見分けたか？",
+            "純な燥烈はするな。この問いは入ったか？",
+            "暑さの走りあとより目立つか？"
           ]
         }
       }
@@ -1753,6 +1849,444 @@
         "en": "Auntie says the heaviness eased. Porridge care beats harsh tonify.",
         "ja": "おばは困が少し楽だと言う。粥養の方が猛補より穏。"
       }
+    },
+    {
+      "id": "char_danfu",
+      "case_id": "yangxu_weihan",
+      "name": {
+        "zh": "韩担夫",
+        "en": "Han Danfu",
+        "ja": "韓担夫"
+      },
+      "age": 55,
+      "gender": "male",
+      "identity": {
+        "zh": "老担夫 / 夜市摊主",
+        "en": "Old porter / night-stall keeper",
+        "ja": "老担夫／夜市の店主"
+      },
+      "region": {
+        "zh": "青石镇夜市",
+        "en": "Qingshi night market",
+        "ja": "青石鎮の夜市"
+      },
+      "prototype_tone": "担夫摊主",
+      "address_player": {
+        "zh": "小先生",
+        "en": "doc",
+        "ja": "小先生"
+      },
+      "personality": {
+        "zh": "慢、实在。天不冷也蜷着；怕被当成热证去清。",
+        "en": "Slow, plain. Curls up even when it isn't cold; hates being cleared as a heat case.",
+        "ja": "遅く実直。寒くなくても縮こまる。熱証として清られるのを嫌う。"
+      },
+      "voice": {
+        "zh": "低，带喘。说到手脚凉会搓手。",
+        "en": "Low, a little short of breath. Rubs his hands when the cold limbs come up.",
+        "ja": "低く、少し喘ぐ。手足の冷えの話になると手を擦る。"
+      },
+      "motive": {
+        "zh": "畏寒肢冷，想偎炉子，好把夜市摊支起来——不是来对阳虚名帖。",
+        "en": "Cold aversion, cold limbs; wants the stove so the night stall can stand — not a yang-vacuity name plaque.",
+        "ja": "畏寒肢冷。炉に寄って夜市の店を支えたい。陽虚の名札が欲しいのではない。"
+      },
+      "taboos": {
+        "zh": [
+          "不主动报「阳虚」名",
+          "忌清泻、金银花连翘硬清",
+          "别拦他摊太久"
+        ],
+        "en": [
+          "never volunteers yang-vacuity names",
+          "hates clear-drain / jinyinhua-lianqiao hard clear",
+          "don't hold his stall too long"
+        ],
+        "ja": [
+          "『陽虚』の名を自ら言わない",
+          "清瀉・金銀花連翹の強清を嫌う",
+          "店を長く止めない"
+        ]
+      },
+      "conceal": {
+        "zh": "先说蜷、手脚凉、喜热饮。旧时冬月更重他肯补一句。",
+        "en": "Leads with curling up, cold hands/feet, liking hot drink. He'll add that winters used to be worse.",
+        "ja": "まず縮こまり、手足の冷え、熱い飲みものを好む。昔の冬はもっと重かったと一言足す。"
+      },
+      "pathogenesis_notes": {
+        "internal_only": true,
+        "case_id": "yangxu_weihan",
+        "lived": {
+          "zh": [
+            "特别怕冷，四肢不温",
+            "喜热饮、喜添衣",
+            "头身酸困，动则更乏",
+            "旧时冬月更重",
+            "汗少、出也清冷"
+          ],
+          "en": [
+            "strong aversion to cold, limbs not warm",
+            "likes hot drinks and more layers",
+            "achy fatigue, worse with work",
+            "worse in old winters",
+            "little sweat, and when it comes it's cool"
+          ],
+          "ja": [
+            "特に寒がり、四肢が温まらない",
+            "熱い飲みもの・衣を好む",
+            "頭身が酸困、動くとさらに乏",
+            "昔の冬はより重い",
+            "汗が少なく、出ても冷たい"
+          ]
+        },
+        "how_they_talk_about_it": {
+          "zh": "用炉子、手脚凉、蜷着来说；不说温阳方名。",
+          "en": "Speaks in stove, cold limbs, curling — never warm-yang formula names.",
+          "ja": "炉、手足の冷え、縮こまり。温陽の方名は言わない。"
+        }
+      },
+      "opening": {
+        "zh": "天不冷，我也缩着。手脚凉，就想偎着炉子。",
+        "en": "Even when it isn't cold, I curl up. Hands and feet stay cool — I just want the stove.",
+        "ja": "寒くなくても縮こまる。手足が冷たい。炉に寄りたい。"
+      },
+      "ask_wrappers": {
+        "zh": [
+          "……{sym}。炉子还没生旺。",
+          "小先生，{sym}。别给我清泻。",
+          "手脚一凉，{sym}。",
+          "天不冷我也，{sym}。",
+          "冬月那会儿，{sym}。"
+        ],
+        "en": [
+          "…{sym}. The stove isn't roaring yet.",
+          "Doc — {sym}. Don't clear-drain me.",
+          "When the hands and feet go cold, {sym}.",
+          "Even when it isn't cold, {sym}.",
+          "In the old winter months, {sym}."
+        ],
+        "ja": [
+          "……{sym}。炉がまだ勢いづかない。",
+          "小先生、{sym}。清瀉は頼むからやめてくれ。",
+          "手足が冷えると、{sym}。",
+          "寒くなくても、{sym}。",
+          "冬の頃は、{sym}。"
+        ]
+      },
+      "dodge": {
+        "zh": "别跟我对那些名目。你问怕冷重不重、手脚温不温、想不想偎炉——我再说。",
+        "en": "Don't match names with me. Ask how bad the chill is, whether limbs warm, if I want the stove — then I'll answer.",
+        "ja": "呼び名合わせは要らない。寒がりが重いか、手足が温いか、炉に寄りたいかなら答える。"
+      },
+      "seat": 7,
+      "ink": [
+        0.28,
+        0.3,
+        0.36
+      ],
+      "art_hint": {
+        "zh": "五十五，老担夫。厚袄、扁担影、手常搓。Q 平涂齐 V126.1。",
+        "en": "Fifty-five, old porter. Thick coat, shoulder-pole hint, hands rubbing. Q flat V126.1.",
+        "ja": "五十五、老担夫。厚上着、天秤棒の影、手を擦る。Q平塗り V126.1。"
+      },
+      "portrait_ref": "ui/characters/han_danfu.png",
+      "followup": {
+        "zh": "担夫说畏寒松些了。别再清泻。",
+        "en": "Danfu says the chill eased. Don't clear and drain again.",
+        "ja": "担夫は畏寒が少し楽だと言う。清瀉はするな。"
+      }
+    },
+    {
+      "id": "char_bashi",
+      "case_id": "xueyu_qing",
+      "name": {
+        "zh": "马把式",
+        "en": "Ma Bashi",
+        "ja": "馬把式"
+      },
+      "age": 38,
+      "gender": "male",
+      "identity": {
+        "zh": "跌仆后镇民 / 车把式",
+        "en": "Townsman after a fall / cart driver",
+        "ja": "転倒後の鎮民／車把式"
+      },
+      "region": {
+        "zh": "青石镇",
+        "en": "Qingshi town",
+        "ja": "青石鎮"
+      },
+      "prototype_tone": "跌仆镇民",
+      "address_player": {
+        "zh": "先生",
+        "en": "sir",
+        "ja": "先生"
+      },
+      "personality": {
+        "zh": "硬气、少话。痛处固定他摸得清；怕被人说「破血」。",
+        "en": "Stoic, few words. Knows exactly where the fixed pain sits; hates talk of “breaking blood.”",
+        "ja": "気丈で寡黙。痛む場所は自分で分かる。『破血』の話を嫌う。"
+      },
+      "voice": {
+        "zh": "短。说到刺痛会按住伤处。",
+        "en": "Short. Presses the spot when stabbing pain comes up.",
+        "ja": "短い。刺痛の話になると傷を按える。"
+      },
+      "motive": {
+        "zh": "跌处刺痛固定、色暗，想轻一点好驾车——不是来要猛破血。",
+        "en": "Fixed stabbing after a fall, dark hue; wants it lighter so he can drive — not fierce blood-breaking.",
+        "ja": "転んだところが刺痛固定、色が暗い。少し楽にして車を運転したい。猛破血が欲しいのではない。"
+      },
+      "taboos": {
+        "zh": [
+          "不主动报「血瘀」名",
+          "忌猛破血",
+          "别追问家事隐私"
+        ],
+        "en": [
+          "never volunteers blood-stasis names",
+          "hates fierce blood-breaking",
+          "don't pry into private family matters"
+        ],
+        "ja": [
+          "『血瘀』の名を自ら言わない",
+          "猛破血を嫌う",
+          "家の私事を追わない"
+        ]
+      },
+      "conceal": {
+        "zh": "先说跌仆、刺痛固定、阴天略重。胸口闷他只肯说偶发。",
+        "en": "Leads with the fall, fixed stabbing, slightly worse on dull days. Chest stuffiness he'll only call occasional.",
+        "ja": "まず転倒、刺痛固定、曇りで少し重い。胸の悶えは偶発としか言わない。"
+      },
+      "pathogenesis_notes": {
+        "internal_only": true,
+        "case_id": "xueyu_qing",
+        "lived": {
+          "zh": [
+            "刺痛固定，按着更醒目",
+            "夜里或阴天略重",
+            "头身某处旧伤未净",
+            "胸口偶闷，不剧",
+            "问起因，像跌仆后留下"
+          ],
+          "en": [
+            "fixed stabbing pain, clearer when pressed",
+            "a bit worse at night or on dull days",
+            "an old spot on body/head not fully clear",
+            "occasional chest stuffiness, not severe",
+            "onset feels left from a fall"
+          ],
+          "ja": [
+            "刺痛が固定、按えるとより目立つ",
+            "夜や曇りで少し重い",
+            "頭身のどこかに古い傷が残る",
+            "胸が偶に悶えるが劇しくない",
+            "きっかけは転倒のあと"
+          ]
+        },
+        "how_they_talk_about_it": {
+          "zh": "用跌处、刺痛、色暗来说；不说活血方名。",
+          "en": "Speaks in fall spot, stabbing, dark hue — never invigorate-blood formula names.",
+          "ja": "転んだ場所、刺痛、色の暗さ。活血の方名は言わない。"
+        }
+      },
+      "opening": {
+        "zh": "那一跤磕的地方，刺痛固定，色也暗。",
+        "en": "Where I took the fall — fixed stabbing pain, and the color's dark.",
+        "ja": "転んだところが刺すように痛む。色も暗い。"
+      },
+      "ask_wrappers": {
+        "zh": [
+          "……{sym}。车还等着人。",
+          "先生，{sym}。别给我猛破的。",
+          "按着那儿，{sym}。",
+          "阴天一来，{sym}。",
+          "跌完以后，{sym}。"
+        ],
+        "en": [
+          "…{sym}. The cart's still waiting.",
+          "Sir — {sym}. Nothing fierce that breaks blood.",
+          "When I press that spot, {sym}.",
+          "When the sky goes dull, {sym}.",
+          "After the fall, {sym}."
+        ],
+        "ja": [
+          "……{sym}。車が人を待っている。",
+          "先生、{sym}。猛い破血は要らない。",
+          "そこを按えると、{sym}。",
+          "曇りになると、{sym}。",
+          "転んでから、{sym}。"
+        ]
+      },
+      "dodge": {
+        "zh": "别给我按那些名目。你问痛固定不固定、色暗不暗、跌过没有——我再说。",
+        "en": "Don't pin names on me. Ask if the pain is fixed, if the color is dark, whether there was a fall — then I'll talk.",
+        "ja": "呼び名を当てるな。痛みが固定か、色が暗いか、転んだかなら話す。"
+      },
+      "seat": 8,
+      "ink": [
+        0.34,
+        0.28,
+        0.3
+      ],
+      "art_hint": {
+        "zh": "三十八，车把式。短褐、腕上旧伤暗影、眉紧。Q 平涂齐 V126.1。",
+        "en": "Thirty-eight, cart driver. Short coat, dark old bruise hint on the wrist, tight brow. Q flat V126.1.",
+        "ja": "三十八、車把式。短褐、腕に古い傷の影、眉が寄る。Q平塗り V126.1。"
+      },
+      "portrait_ref": "ui/characters/ma_bashi.png",
+      "followup": {
+        "zh": "把式说刺痛轻了。别上猛破血。",
+        "en": "Bashi says the stabbing eased. No fierce blood-breaking.",
+        "ja": "把式は刺痛が軽くなったと言う。猛破血はするな。"
+      }
+    },
+    {
+      "id": "char_jiaoli",
+      "case_id": "shushi",
+      "name": {
+        "zh": "夏脚力",
+        "en": "Xia Jiaoli",
+        "ja": "夏脚力"
+      },
+      "age": 29,
+      "gender": "male",
+      "identity": {
+        "zh": "夏日脚力 / 船工",
+        "en": "Summer runner / boat hand",
+        "ja": "夏の脚力／船方"
+      },
+      "region": {
+        "zh": "青石码头",
+        "en": "Qingshi dock",
+        "ja": "青石の波止場"
+      },
+      "prototype_tone": "奔走脚力",
+      "address_player": {
+        "zh": "小先生",
+        "en": "doc",
+        "ja": "小先生"
+      },
+      "personality": {
+        "zh": "急、嗓门大。暑天奔走后更烦；怕被人用燥烈硬逼汗。",
+        "en": "Rushed, loud. More irritable after summer runs; hates harsh-dry forcing of sweat.",
+        "ja": "急ぎで声が大きい。暑さの走りあと余計に苛立つ。燥烈で汗を強いるのを嫌う。"
+      },
+      "voice": {
+        "zh": "热，带粘。说到痞会拍胸口。",
+        "en": "Hot, sticky-sounding. Pats the chest when stuffiness comes up.",
+        "ja": "熱く、粘る。痞えの話になると胸を叩く。"
+      },
+      "motive": {
+        "zh": "身热汗粘、困痞，想松一点好再跑一趟——不是来对暑湿方名。",
+        "en": "Body heat, sticky sweat, stuffy heaviness; wants ease for one more run — not a summerheat-damp formula name.",
+        "ja": "身熱・粘汗・困痞。少し楽にしてもう一走りしたい。暑湿の方名が欲しいのではない。"
+      },
+      "taboos": {
+        "zh": [
+          "不主动报「暑湿」名",
+          "忌纯燥烈、麻黄附子硬扛",
+          "别耽误船班太久"
+        ],
+        "en": [
+          "never volunteers summerheat-damp names",
+          "hates pure harsh-dry / mahuang-fuzi tough-it-out",
+          "don't hold the boat shift too long"
+        ],
+        "ja": [
+          "『暑湿』の名を自ら言わない",
+          "純燥烈・麻黄附子の無理を嫌う",
+          "船便を長く止めない"
+        ]
+      },
+      "conceal": {
+        "zh": "先说天暑、汗粘、痞。口渴他会说渴不欲饮。",
+        "en": "Leads with summer heat, sticky sweat, stuffiness. Thirst he'll call wanting drink but not drinking.",
+        "ja": "まず暑さ、粘汗、痞え。渇きは飲みたいが飲まないと言う。"
+      },
+      "pathogenesis_notes": {
+        "internal_only": true,
+        "case_id": "shushi",
+        "lived": {
+          "zh": [
+            "身热汗出粘衣",
+            "头身困重",
+            "饮食无味、脘痞",
+            "口不甚渴或渴不欲饮",
+            "暑天奔走后更明显"
+          ],
+          "en": [
+            "body heat, sweat sticky on clothes",
+            "head and body heavy",
+            "food tasteless, epigastric stuffiness",
+            "not very thirsty, or thirsty without wanting to drink",
+            "clearer after summer running"
+          ],
+          "ja": [
+            "身熱く汗が衣に粘る",
+            "頭身が重い",
+            "飲食に味がなく脘痞",
+            "あまり渇かない、または渇いても飲まない",
+            "暑さの走りあとより目立つ"
+          ]
+        },
+        "how_they_talk_about_it": {
+          "zh": "用天暑、汗粘、痞来说；不说清暑方名。",
+          "en": "Speaks in summer heat, sticky sweat, stuffiness — never clear-summerheat formula names.",
+          "ja": "暑さ、粘汗、痞え。清暑の方名は言わない。"
+        }
+      },
+      "opening": {
+        "zh": "天暑奔走，身热汗粘，心里痞得慌。",
+        "en": "Running in summer heat — body hot, sweat sticky, chest-gut stuck and restless.",
+        "ja": "暑さの中を走る。身熱く汗が粘る。痞えて落ち着かない。"
+      },
+      "ask_wrappers": {
+        "zh": [
+          "……{sym}。船还等着。",
+          "小先生，{sym}。别给我燥烈。",
+          "汗一粘衣，{sym}。",
+          "心里一痞，{sym}。",
+          "奔完一趟，{sym}。"
+        ],
+        "en": [
+          "…{sym}. The boat's still waiting.",
+          "Doc — {sym}. Nothing harsh-dry.",
+          "When sweat sticks to the clothes, {sym}.",
+          "When the chest-gut sticks, {sym}.",
+          "After a run, {sym}."
+        ],
+        "ja": [
+          "……{sym}。船が待っている。",
+          "小先生、{sym}。燥烈は要らない。",
+          "汗が衣に粘ると、{sym}。",
+          "痞えてくると、{sym}。",
+          "一走り終えると、{sym}。"
+        ]
+      },
+      "dodge": {
+        "zh": "别跟我对名目。你问汗粘不粘、痞不痞、渴不渴欲饮——我再说。",
+        "en": "Don't match names with me. Ask if sweat is sticky, if it's stuffy, if thirst wants drink — then I'll answer.",
+        "ja": "呼び名合わせは要らない。汗が粘るか、痞えるか、渇いて飲みたいかなら答える。"
+      },
+      "seat": 9,
+      "ink": [
+        0.4,
+        0.32,
+        0.26
+      ],
+      "art_hint": {
+        "zh": "二十九，夏日脚力。汗渍短褐、草鞋、肩沉。Q 平涂齐 V126.1。",
+        "en": "Twenty-nine, summer runner. Sweat-stained short coat, straw sandals, heavy shoulders. Q flat V126.1.",
+        "ja": "二十九、夏の脚力。汗染みの短褐、草鞋、肩が沈む。Q平塗り V126.1。"
+      },
+      "portrait_ref": "ui/characters/xia_jiaoli.png",
+      "followup": {
+        "zh": "脚力说困痞松些了。别纯用燥烈。",
+        "en": "Jiaoli says the stuffiness eased. Don't go pure harsh-dry.",
+        "ja": "脚力は困痞が少し楽だと言う。純な燥烈はするな。"
+      }
     }
   ],
   "pharmacy_kid": {
@@ -1985,6 +2519,21 @@
       "zh": "阿婶说困轻了些。粥养比猛补稳。",
       "en": "Auntie says the heaviness eased. Porridge care beats harsh tonify.",
       "ja": "おばは困が少し楽だと言う。粥養の方が猛補より穏。"
+    },
+    "yangxu_weihan": {
+      "zh": "担夫说畏寒松些了。别再清泻。",
+      "en": "Danfu says the chill eased. Don't clear and drain again.",
+      "ja": "担夫は畏寒が少し楽だと言う。清瀉はするな。"
+    },
+    "xueyu_qing": {
+      "zh": "把式说刺痛轻了。别上猛破血。",
+      "en": "Bashi says the stabbing eased. No fierce blood-breaking.",
+      "ja": "把式は刺痛が軽くなったと言う。猛破血はするな。"
+    },
+    "shushi": {
+      "zh": "脚力说困痞松些了。别纯用燥烈。",
+      "en": "Jiaoli says the stuffiness eased. Don't go pure harsh-dry.",
+      "ja": "脚力は困痞が少し楽だと言う。純な燥烈はするな。"
     }
   },
   "revisit_lines": {
@@ -2140,6 +2689,72 @@
         "zh": "困还在。像浇了油。",
         "en": "Heaviness stays. Like oil on mud.",
         "ja": "困が残る。油を注いだよう。"
+      }
+    },
+    "yangxu_weihan": {
+      "good": {
+        "zh": "小先生，畏寒松些了。手脚暖一点。摊我还能支。",
+        "en": "Doc — chill eased. Hands and feet a bit warmer. I can still keep the stall up.",
+        "ja": "小先生、畏寒が少し楽だ。手足が少し温かい。店も支えられる。"
+      },
+      "slow": {
+        "zh": "好一点，慢。天不冷仍想偎炉。",
+        "en": "A little better, slowly. Still want the stove even when it isn't cold.",
+        "ja": "少し楽だが遅い。寒くなくてもまだ炉に寄りたい。"
+      },
+      "over": {
+        "zh": "温得太猛，口干、心烦。冷是退了，人发躁。",
+        "en": "Warmed too hard — dry mouth, restlessness. Cold backed off, but I'm agitated.",
+        "ja": "温が強すぎて口が乾き、心烦。冷えは引いたが躁ぐ。"
+      },
+      "mis": {
+        "zh": "像清泻过了。人更蜷，手脚更凉。",
+        "en": "Felt over-cleared. I curl tighter; limbs colder.",
+        "ja": "清瀉し過ぎたようだ。さらに縮こまり、手足がより冷たい。"
+      }
+    },
+    "xueyu_qing": {
+      "good": {
+        "zh": "先生，刺痛轻了。色也淡些。车还能赶。",
+        "en": "Sir — stabbing eased. Color a bit lighter. I can still drive.",
+        "ja": "先生、刺痛が軽い。色も少し淡い。車も運転できる。"
+      },
+      "slow": {
+        "zh": "好一点。按着仍醒目，阴天还沉。",
+        "en": "A little better. Still clear when pressed; dull days still heavy.",
+        "ja": "少し楽。按えるとまだ目立つ。曇りはまだ沈む。"
+      },
+      "over": {
+        "zh": "破得太猛，人空了一截。痛是轻了，站不稳。",
+        "en": "Broke too hard — vacuity took a bite. Pain lighter, but I can't stand steady.",
+        "ja": "破が強すぎて虚が一段。痛みは軽いが立てない。"
+      },
+      "mis": {
+        "zh": "刺痛还在。像没碰着那处。",
+        "en": "Stabbing stays. Feels like it never touched the spot.",
+        "ja": "刺痛は残る。そこに触れてない感じ。"
+      }
+    },
+    "shushi": {
+      "good": {
+        "zh": "小先生，困痞松些了。汗不那么粘。我还能跑一趟。",
+        "en": "Doc — stuffiness eased. Sweat less sticky. I can still make a run.",
+        "ja": "小先生、困痞が少し楽だ。汗も粘らない。もう一走りできる。"
+      },
+      "slow": {
+        "zh": "好一点。身还热，饮食仍无味。",
+        "en": "A little better. Body still warm; food still tasteless.",
+        "ja": "少し楽。身はまだ熱い。飲食にまだ味がない。"
+      },
+      "over": {
+        "zh": "清得太过，人发空，汗更多。痞倒轻。",
+        "en": "Cleared too hard — emptied, more sweat. Stuffiness lighter though.",
+        "ja": "清が過ぎて空になり、汗が増えた。痞えは軽い。"
+      },
+      "mis": {
+        "zh": "像燥烈硬逼的。津更伤，心里更痞。",
+        "en": "Felt harsh-dry forced. Fluids worse; chest-gut more stuck.",
+        "ja": "燥烈で無理したようだ。津がさらに傷み、痞えが強くなる。"
       }
     }
   },
