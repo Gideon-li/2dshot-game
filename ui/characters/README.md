@@ -24,3 +24,12 @@ V126.1：画风统一为 2D 明快 Q 平涂；见 `_proof_v126_1.png`。旧版�
 
 证印：ui/seals/fengre_biao.png / shiji.png / pixu_shikun.png
 
+## V135
+
+| 角色 | id | 文件 |
+| --- | --- | --- |
+| 韩担夫 | char_danfu | han_danfu.png (alias danfu.png) |
+| 马把式 | char_bashi | ma_bashi.png (alias bashi.png) |
+| 夏脚力 | char_jiaoli | xia_jiaoli.png (alias jiaoli.png) |
+
+证印新增：yangxu_weihan / xueyu_qing / shushi（与 V134 共 6 枚）

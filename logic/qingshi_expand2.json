@@ -1,0 +1,178 @@
+{
+  "id": "qingshi_expand2_v135",
+  "version": 135,
+  "rules_ref": "slice_logic.json → qingshi_expand2_rules",
+  "lock_doc": "logic/QINGSHI-EXPAND2-V135.md",
+  "cases": [
+    "yangxu_weihan",
+    "xueyu_qing",
+    "shushi"
+  ],
+  "characters": [
+    "char_danfu",
+    "char_bashi",
+    "char_jiaoli"
+  ],
+  "seals": {
+    "key": "play.seals",
+    "on_settle_if_rank_at_least": "clear",
+    "write_case_id": true,
+    "ui_flash_keys": [
+      "seal.fengre_biao",
+      "seal.shiji",
+      "seal.pixu_shikun",
+      "seal.yangxu_weihan",
+      "seal.xueyu_qing",
+      "seal.shushi"
+    ],
+    "note": "V134 3枚 + V135 3枚 = 共6枚小印；不做十二墙"
+  },
+  "waiting": {
+    "max_seats": 4,
+    "pool_includes_old_seven": true,
+    "weights": {
+      "base": {
+        "yangxu_weihan": 0.35,
+        "xueyu_qing": 0.35,
+        "shushi": 0.35
+      },
+      "with_town_permit_mult": 1.8,
+      "without_permit": {
+        "yangxu_weihan_teach_once": true,
+        "yangxu_weihan_weight": 0.25,
+        "xueyu_qing": 0.05,
+        "shushi": 0.05
+      }
+    },
+    "rotation": "A-D seats; overflow rotates in pool"
+  },
+  "cross_mistreat": {
+    "yangxu_clear_dump": {
+      "if_case": "yangxu_weihan",
+      "if_herbs_any_pairs": [
+        [
+          "jinyinhua",
+          "lianqiao"
+        ],
+        [
+          "zhimu",
+          "huangbai"
+        ]
+      ],
+      "penalty": "mistreat + stability",
+      "revisit": "畏寒更重",
+      "note": "阳虚误清"
+    },
+    "xueyu_harsh_break": {
+      "if_case": "xueyu_qing",
+      "note": "血瘀猛破：现池无红花桃仁；忌寒清堆 + 他日若加破血药勿重剂同用",
+      "if_herbs_any": [
+        "jinyinhua",
+        "lianqiao",
+        "huangbai"
+      ],
+      "penalty": "mistreat + stability",
+      "revisit": "滞更明显"
+    },
+    "shushi_dry_harsh": {
+      "if_case": "shushi",
+      "if_herbs_any_pairs": [
+        [
+          "fuzi",
+          "ganjiang"
+        ]
+      ],
+      "if_herbs_any": [
+        "mahuang"
+      ],
+      "penalty": "mistreat + stability",
+      "revisit": "粘热困更重",
+      "note": "暑湿纯燥"
+    }
+  },
+  "acu_case_temp_open": {
+    "yangxu_weihan": [
+      "guanyuan",
+      "mingmen"
+    ],
+    "xueyu_qing": [
+      "sanyinjiao"
+    ],
+    "shushi": [
+      "quchi"
+    ],
+    "note": "via acu_intro_rules.case_temp_open；不永久扩 vol1_open_ids（仍 hegu/zusanli）"
+  },
+  "legal_paths_summary": {
+    "yangxu_weihan": {
+      "formula": "fuzi+ganjiang+gancao; guizhi+ganjiang+dazao/shengjiang",
+      "acupuncture": [
+        "zusanli moxa",
+        "guanyuan+zusanli",
+        "mingmen"
+      ],
+      "food": [
+        "shengjiang+hongzao",
+        "zhou_di+shengjiang"
+      ],
+      "emotion": "low"
+    },
+    "xueyu_qing": {
+      "formula": "danggui+chuanxiong+baishao (±gancao)",
+      "acupuncture": [
+        "hegu+sanyinjiao",
+        "neiguan+taichong"
+      ],
+      "food": [
+        "zhou_di+hongzao mild warm"
+      ],
+      "emotion": "rarely primary"
+    },
+    "shushi": {
+      "formula": "huangbai+zexie+fuling+bohe (±gancao)",
+      "acupuncture": [
+        "zusanli sparse",
+        "quchi if heat"
+      ],
+      "food": [
+        "zhou_di+lianzi",
+        "zhou_di+bingtang"
+      ],
+      "emotion": "low"
+    }
+  },
+  "new_acu": {
+    "id": "guanyuan",
+    "method": "moxa",
+    "actions": [
+      "warm_yang",
+      "tonify_qi",
+      "restore_yang"
+    ],
+    "vol1_selectable": false,
+    "body_pos": {
+      "x": 0.5,
+      "y": 0.62
+    },
+    "note": "案临时开；不进 vol1_open_ids"
+  },
+  "herbs_note": "未新增药；血瘀靠当归川芎白芍；暑湿靠黄柏泽泻茯苓薄荷",
+  "smoke": {
+    "tag": "qingshi_expand2_ok",
+    "require_each_case_legal_settle": true,
+    "also": "SMOKE PASS"
+  },
+  "do_not": [
+    "阴虚燥咳",
+    "湿热下注",
+    "外伤大案",
+    "小儿",
+    "陈半仙",
+    "萨米尔",
+    "十二墙",
+    "五方",
+    "romance",
+    "Steam",
+    "J/T"
+  ]
+}

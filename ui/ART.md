@@ -65,3 +65,7 @@ V126.1 画风统一：四立绘同套 2D 明快 Q 平涂（婆婆去 3D；江晚
 ## V134 青石扩容
 
 三立绘：//；证印 。
+
+## V135 青石再扩
+
+立绘 han_danfu / ma_bashi / xia_jiaoli；证印 yangxu_weihan / xueyu_qing / shushi。

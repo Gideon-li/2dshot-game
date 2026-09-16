@@ -1,6 +1,6 @@
 {
   "id": "xinglin-mowen-slice-logic",
-  "version": 14,
+  "version": 15,
   "project": "墨问岐黄 / 杏林墨问",
   "scope": "vertical_slice",
   "notes": {
@@ -37,7 +37,8 @@
     "v131": "demo day glue: time_slots single truth, demo_guide checklist, demo_day_ok",
     "v132": "emotion counsel path=emotion; 6 cards; ganyu teach; offline option tree",
     "v133": "xiuniang xuexu_ganyu; suanzaoren/chuanxiong(+longgu/muli mistreat); shenmen+sanyinjiao case_temp_open; trust/town_permit; emotion 2 cards; xiuniang_case_ok",
-    "v134": "qingshi +3 cases fengre_biao/shiji/pixu_shikun; chars zoufan/yanhou/yaoqin; shanzha digest_food; seals play.seals; waiting weights+permit; quchi/sanyinjiao case_temp_open; qingshi_expand_ok; cross mistreat 风热↔风寒"
+    "v134": "qingshi +3 cases fengre_biao/shiji/pixu_shikun; chars zoufan/yanhou/yaoqin; shanzha digest_food; seals play.seals; waiting weights+permit; quchi/sanyinjiao case_temp_open; qingshi_expand_ok; cross mistreat 风热↔风寒",
+    "v135": "qingshi expand2 +3 cases yangxu_weihan/xueyu_qing/shushi; chars danfu/bashi/jiaoli; guanyuan moxa case_temp; seals UI 6; waiting yangxu_weihan_teach_once; mistreat 阳虚误清/血瘀猛破/暑湿纯燥; qingshi_expand2_ok; no permanent vol1_open expand"
   },
   "exam_ids": [
     "wang",
@@ -2553,9 +2554,11 @@
       "pinyin": "Sānyīnjiāo",
       "vol1_selectable": false,
       "case_temp_open": [
-        "xuexu_ganyu"
+        "xuexu_ganyu",
+        "pixu_shikun",
+        "xueyu_qing"
       ],
-      "note": "卷一默认锁；xuexu_ganyu 案临时开（与夜读教学可并存）",
+      "note": "卷一默认锁；xuexu_ganyu/pixu_shikun/xueyu_qing 案临时开（与夜读教学可并存）",
       "body_pos": {
         "x": 0.36,
         "y": 0.68
@@ -2683,7 +2686,11 @@
         "jing_r": 0.055
       },
       "pinyin": "Mìngmén",
-      "vol1_selectable": false
+      "vol1_selectable": false,
+      "case_temp_open": [
+        "yangxu_weihan"
+      ],
+      "note": "卷一默认锁；yangxu_weihan 案临时开"
     },
     {
       "id": "shenmen",
@@ -2727,6 +2734,52 @@
         "xuexu_ganyu"
       ],
       "note": "卷一默认锁；xuexu_ganyu 案临时开"
+    },
+    {
+      "id": "guanyuan",
+      "zh": "关元",
+      "en": "Guanyuan",
+      "ja": "関元",
+      "region": "abdomen",
+      "actions": [
+        "warm_yang",
+        "tonify_qi",
+        "restore_yang"
+      ],
+      "temp": 1,
+      "funcs": {
+        "温阳": 0.75,
+        "补气": 0.55,
+        "回阳": 0.5
+      },
+      "prefer": "灸",
+      "method": "moxa",
+      "teach_vol1": false,
+      "vol1_selectable": false,
+      "tolerance": {
+        "center_r": 0.025,
+        "jing_r": 0.055
+      },
+      "pinyin": "Guānyuán",
+      "body_pos": {
+        "x": 0.5,
+        "y": 0.62
+      },
+      "body_pos_note": "provisional abdomen UV; runtime may override",
+      "moxa": {
+        "zhuang_options": [
+          3,
+          5,
+          7
+        ],
+        "zhuang_default": 5,
+        "needs_deqi": false,
+        "halo": "round_red"
+      },
+      "case_temp_open": [
+        "yangxu_weihan"
+      ],
+      "note": "卷一默认锁；yangxu_weihan 案临时开；偏灸温阳"
     }
   ],
   "cases": [
@@ -5177,6 +5230,1018 @@
         "solo_cap_rank": "slight",
         "note": "情志可轻安神，非主路径"
       }
+    },
+    {
+      "id": "yangxu_weihan",
+      "internal_name_zh": "阳虚畏寒",
+      "bind_character_id": "char_danfu",
+      "urgency": "medium",
+      "zheng_qi": 0.58,
+      "primary_exams": [
+        "wen_ask",
+        "qie",
+        "wang"
+      ],
+      "pulse": {
+        "id": "chen_chi",
+        "zh": "沉迟",
+        "en": "deep-slow",
+        "ja": "沈遅",
+        "rate_bpm": 56,
+        "visual": {
+          "depth": 0.78,
+          "amplitude": 0.35,
+          "tension": 0.25,
+          "width": 0.48,
+          "smoothness": 0.4,
+          "note_for_art": "深层、慢跳、力弱。截图用：墨线沉入纸底，勿画成浮紧。"
+        }
+      },
+      "required_actions": [
+        "warm_yang"
+      ],
+      "preferred_actions": [
+        "restore_yang",
+        "tonify_qi",
+        "warm_interior",
+        "harmonize"
+      ],
+      "preferred_natures": [
+        "warm",
+        "hot",
+        "slightly_warm"
+      ],
+      "forbidden_actions": [
+        "clear_heat",
+        "clear_deficiency_heat",
+        "nourish_yin"
+      ],
+      "over_treat_actions": [
+        "restore_yang",
+        "warm_yang"
+      ],
+      "over_treat_zheng_cost": 5,
+      "clues": {
+        "wang": {
+          "unlocks": [
+            "face_pale_cold",
+            "limbs_curl",
+            "tongue_pale_moist"
+          ],
+          "zh": [
+            "面色苍白偏青",
+            "手脚蜷着不愿露",
+            "舌淡润，苔薄白"
+          ],
+          "en": [
+            "pale bluish face",
+            "limbs curled, unwilling to bare",
+            "pale moist tongue, thin white coat"
+          ],
+          "ja": [
+            "顔色が蒼白く青み",
+            "手足を縮め出すのを嫌がる",
+            "舌淡潤、苔薄白"
+          ]
+        },
+        "wen_listen": {
+          "unlocks": [
+            "weak_voice",
+            "little_heat"
+          ],
+          "zh": [
+            "声音低弱",
+            "身上几乎摸不到热气"
+          ],
+          "en": [
+            "voice low and weak",
+            "almost no warmth off the body"
+          ],
+          "ja": [
+            "声が低く弱い",
+            "体から熱気がほぼない"
+          ]
+        },
+        "wen_ask": {
+          "unlocks": [
+            "aversion_cold",
+            "cold_limbs",
+            "prefers_warm",
+            "old_cold"
+          ],
+          "inquiry_anchor": [
+            "特别怕冷，四肢不温",
+            "喜热饮、喜添衣",
+            "头身酸困，动则更乏",
+            "旧时冬月更重",
+            "汗少、出也清冷"
+          ],
+          "never_say": [
+            "阳虚",
+            "阳虚畏寒",
+            "四逆汤",
+            "肾阳虚",
+            "温阳散寒",
+            "附子理中"
+          ]
+        },
+        "qie": {
+          "unlocks": [
+            "pulse_chen_chi"
+          ],
+          "zh": [
+            "脉沉迟，按之不足"
+          ],
+          "en": [
+            "pulse deep and slow, scant under pressure"
+          ],
+          "ja": [
+            "脈は沈遅、按じて不足"
+          ]
+        }
+      },
+      "legal_formula_examples": [
+        {
+          "herbs": [
+            "fuzi",
+            "ganjiang",
+            "gancao"
+          ],
+          "onset": "fast",
+          "note": "温阳回阳轻方；向量近似四逆思路（勿对玩家说方名）"
+        },
+        {
+          "herbs": [
+            "guizhi",
+            "ganjiang",
+            "dazao",
+            "shengjiang"
+          ],
+          "onset": "medium",
+          "note": "桂姜枣姜温通护中，稍慢更稳"
+        }
+      ],
+      "legal_point_examples": [
+        {
+          "points": [
+            "zusanli"
+          ],
+          "onset": "slow",
+          "note": "灸足三里温中护正"
+        },
+        {
+          "points": [
+            "guanyuan",
+            "zusanli"
+          ],
+          "onset": "medium",
+          "note": "本案临时开关元；灸关元+足三里"
+        },
+        {
+          "points": [
+            "mingmen"
+          ],
+          "onset": "medium",
+          "note": "本案临时开命门；温肾阳"
+        }
+      ],
+      "common_mistreat": [
+        {
+          "herbs": [
+            "jinyinhua",
+            "lianqiao"
+          ],
+          "why": "误清泻：当热邪清，阳更伤，畏寒加重"
+        },
+        {
+          "herbs": [
+            "zhimu",
+            "huangbai"
+          ],
+          "why": "误清泻：苦寒伤阳"
+        },
+        {
+          "herbs": [
+            "shudi"
+          ],
+          "why": "滋腻碍阳，寒更恋"
+        }
+      ],
+      "settlement_flavor": {
+        "good": {
+          "zh": "寒从里松，手脚回了点温。",
+          "en": "Cold eases inside; hands and feet regain a little warmth.",
+          "ja": "裏の冷えがほどけ、手足に温みが戻る。"
+        },
+        "slow": {
+          "zh": "阳在醒，畏寒还要慢慢退。",
+          "en": "Yang is waking; aversion to cold takes days.",
+          "ja": "陽が目覚め、悪寒は日が要る。"
+        },
+        "over": {
+          "zh": "温补太猛，人反而烦躁不安。",
+          "en": "Warmed too hard; restless unease.",
+          "ja": "温めすぎて煩躁に。"
+        },
+        "mis": {
+          "zh": "药往清泻走，怕冷更重了。",
+          "en": "Herbs cleared and drained; chills worsened.",
+          "ja": "清瀉に向かい、悪寒が強まった。"
+        }
+      },
+      "engine": {
+        "syndrome_bucket": "阳虚畏寒",
+        "R_need": {
+          "温阳": 1.0,
+          "回阳": 0.7,
+          "补气": 0.45
+        },
+        "R_temp": 1,
+        "B_ok_formula_names": [
+          "四逆汤",
+          "桂姜温中"
+        ],
+        "B_ok_examples": "legal_formula_examples / legal_point_examples",
+        "master_zang": "肾",
+        "tier": "jing",
+        "ten_q_priority": [
+          "寒热",
+          "头身",
+          "汗",
+          "旧病"
+        ]
+      },
+      "ten_q_priority": [
+        "寒热",
+        "头身",
+        "汗",
+        "旧病"
+      ],
+      "ten_q_priority_ids": [
+        "hanre",
+        "toushen",
+        "han",
+        "jiubing"
+      ],
+      "revisit": {
+        "enabled": true,
+        "delay_days": 1,
+        "read_on_next_clinic_enter": false,
+        "template_key": "revisit.yangxu_weihan",
+        "from_rank": {
+          "toward_heal": "good",
+          "clear": "good",
+          "work": "slow",
+          "slight": "slow",
+          "none": "mis"
+        },
+        "lines_fallback": {
+          "good": {
+            "zh": "寒从里松，手脚回了点温。",
+            "en": "Cold eases inside; hands and feet regain a little warmth.",
+            "ja": "裏の冷えがほどけ、手足に温みが戻る。"
+          },
+          "slow": {
+            "zh": "阳在醒，畏寒还要慢慢退。",
+            "en": "Yang is waking; aversion to cold takes days.",
+            "ja": "陽が目覚め、悪寒は日が要る。"
+          },
+          "over": {
+            "zh": "温补太猛，人反而烦躁不安。",
+            "en": "Warmed too hard; restless unease.",
+            "ja": "温めすぎて煩躁に。"
+          },
+          "mis": {
+            "zh": "怕冷更重——怕是清泻伤阳了。",
+            "en": "Chills worse—likely cleared and hurt yang.",
+            "ja": "悪寒が悪化——清瀉で陽を傷つけたか。"
+          }
+        },
+        "note": "剧本可覆盖 patients.*.revisit_lines；误清须带回访畏寒加重",
+        "seat_on_due": true,
+        "flavor_keys": [
+          "good",
+          "slow",
+          "over",
+          "mis"
+        ],
+        "observe_close_line_key": "revisit.yangxu_weihan.observe_close"
+      },
+      "legal_food_examples": [
+        {
+          "foods": [
+            "shengjiang",
+            "hongzao"
+          ],
+          "onset": "slow",
+          "note": "姜枣温中慢线"
+        },
+        {
+          "foods": [
+            "zhou_di",
+            "shengjiang"
+          ],
+          "onset": "slow",
+          "note": "姜粥护中"
+        }
+      ],
+      "food_fit": {
+        "preferred_actions": [
+          "warm_middle",
+          "warm_yang",
+          "harmonize",
+          "tonify_qi"
+        ],
+        "preferred_tags": [
+          "warm",
+          "protect_middle",
+          "porridge"
+        ],
+        "discouraged_tags": [
+          "cold_clear",
+          "bitter_cold"
+        ],
+        "solo_food_cap_rank": "work",
+        "solo_food_note": "阳虚畏寒单走食疗：姜枣可温分，准偏低"
+      },
+      "legal_emotion_examples": [],
+      "emotion_fit": {
+        "preferred_actions": [],
+        "solo_cap_rank": "slight",
+        "note": "情志低配；非主路径"
+      }
+    },
+    {
+      "id": "xueyu_qing",
+      "internal_name_zh": "血瘀轻证",
+      "bind_character_id": "char_bashi",
+      "urgency": "medium",
+      "zheng_qi": 0.7,
+      "primary_exams": [
+        "wang",
+        "wen_ask",
+        "qie"
+      ],
+      "pulse": {
+        "id": "xian_se",
+        "zh": "弦涩",
+        "en": "wiry-choppy",
+        "ja": "弦渋",
+        "rate_bpm": 70,
+        "visual": {
+          "depth": 0.45,
+          "amplitude": 0.5,
+          "tension": 0.7,
+          "width": 0.35,
+          "smoothness": 0.15,
+          "note_for_art": "略弦、涩滞、少滑。截图用：墨线细涩断续，勿浮数濡软。"
+        }
+      },
+      "required_actions": [
+        "move_blood"
+      ],
+      "preferred_actions": [
+        "nourish_blood",
+        "move_qi",
+        "warm_yang",
+        "harmonize",
+        "open_chest"
+      ],
+      "preferred_natures": [
+        "warm",
+        "neutral"
+      ],
+      "forbidden_actions": [
+        "clear_heat",
+        "resolve_toxin",
+        "cool_blood"
+      ],
+      "over_treat_actions": [
+        "move_blood"
+      ],
+      "over_treat_zheng_cost": 5,
+      "clues": {
+        "wang": {
+          "unlocks": [
+            "dark_lips",
+            "fixed_spot_look",
+            "tongue_dark_spots"
+          ],
+          "zh": [
+            "唇色偏暗",
+            "某处固定不愿碰",
+            "舌暗，边有瘀点"
+          ],
+          "en": [
+            "lips a touch dark",
+            "guards one fixed spot",
+            "dark tongue, stasis flecks at edges"
+          ],
+          "ja": [
+            "唇がやや暗い",
+            "一箇所をかばう",
+            "舌暗、縁に瘀点"
+          ]
+        },
+        "wen_listen": {
+          "unlocks": [
+            "tight_voice",
+            "breath_catch"
+          ],
+          "zh": [
+            "说话带着紧",
+            "深吸时轻顿一下"
+          ],
+          "en": [
+            "voice a bit tight",
+            "a catch on deep breath"
+          ],
+          "ja": [
+            "声がやや緊い",
+            "深呼吸で軽く止まる"
+          ]
+        },
+        "wen_ask": {
+          "unlocks": [
+            "fixed_stabbing",
+            "worse_at_night",
+            "old_knock",
+            "chest_tight_light"
+          ],
+          "inquiry_anchor": [
+            "刺痛固定，按着更醒目",
+            "夜里或阴天略重",
+            "头身某处旧伤未净",
+            "胸口偶闷，不剧",
+            "问起因，像跌仆后留下"
+          ],
+          "never_say": [
+            "血瘀",
+            "血瘀轻证",
+            "血府逐瘀",
+            "活血化瘀",
+            "瘀血",
+            "破血"
+          ]
+        },
+        "qie": {
+          "unlocks": [
+            "pulse_xian_se"
+          ],
+          "zh": [
+            "脉弦涩，往来不利"
+          ],
+          "en": [
+            "wiry-choppy—flow feels impeded"
+          ],
+          "ja": [
+            "脈は弦渋、往来不利"
+          ]
+        }
+      },
+      "legal_formula_examples": [
+        {
+          "herbs": [
+            "danggui",
+            "chuanxiong",
+            "baishao"
+          ],
+          "onset": "medium",
+          "note": "养血活血轻方；勿猛破血"
+        },
+        {
+          "herbs": [
+            "danggui",
+            "chuanxiong",
+            "baishao",
+            "gancao"
+          ],
+          "onset": "slow",
+          "note": "加甘草缓中，更稳"
+        }
+      ],
+      "legal_point_examples": [
+        {
+          "points": [
+            "hegu",
+            "sanyinjiao"
+          ],
+          "onset": "medium",
+          "note": "本案临时开三阴交；合谷+三阴交活血调血"
+        },
+        {
+          "points": [
+            "neiguan",
+            "taichong"
+          ],
+          "onset": "medium",
+          "note": "内关+太冲理气活血轻通"
+        }
+      ],
+      "common_mistreat": [
+        {
+          "herbs": [
+            "jinyinhua",
+            "lianqiao",
+            "huangbai"
+          ],
+          "why": "寒凉堆清，血更凝；轻证勿当热毒猛清"
+        },
+        {
+          "herbs": [
+            "fuzi",
+            "ganjiang"
+          ],
+          "why": "纯燥烈温，伤阴络，刺痛可暂掩后更滞"
+        }
+      ],
+      "settlement_flavor": {
+        "good": {
+          "zh": "滞处松了，刺痛退了半截。",
+          "en": "The stuck place eases; stabbing pain half gone.",
+          "ja": "滞りがほどけ、刺痛が半分退く。"
+        },
+        "slow": {
+          "zh": "血在活，固定处还要养几天。",
+          "en": "Blood is moving; the fixed spot needs days.",
+          "ja": "血は巡るが、固定の痛みは日が要る。"
+        },
+        "over": {
+          "zh": "活血太猛，人空、痛处反跳。",
+          "en": "Moved blood too hard; emptied, pain rebounds.",
+          "ja": "活血しすぎて空になり、痛みが跳ねる。"
+        },
+        "mis": {
+          "zh": "药不对路，滞更明显了。",
+          "en": "Wrong path; stasis feels clearer.",
+          "ja": "薬が合わず、滞りが目立つ。"
+        }
+      },
+      "engine": {
+        "syndrome_bucket": "血瘀轻证",
+        "R_need": {
+          "活血": 1.0,
+          "养血": 0.65,
+          "理气": 0.5
+        },
+        "R_temp": 1,
+        "B_ok_formula_names": [
+          "桃红轻变",
+          "当归川芎芍"
+        ],
+        "B_ok_examples": "legal_formula_examples / legal_point_examples",
+        "master_zang": "肝",
+        "tier": "jing",
+        "ten_q_priority": [
+          "头身",
+          "胸",
+          "旧病",
+          "因"
+        ]
+      },
+      "ten_q_priority": [
+        "头身",
+        "胸",
+        "旧病",
+        "因"
+      ],
+      "ten_q_priority_ids": [
+        "toushen",
+        "xiong",
+        "jiubing",
+        "yin"
+      ],
+      "revisit": {
+        "enabled": true,
+        "delay_days": 1,
+        "read_on_next_clinic_enter": false,
+        "template_key": "revisit.xueyu_qing",
+        "from_rank": {
+          "toward_heal": "good",
+          "clear": "good",
+          "work": "slow",
+          "slight": "slow",
+          "none": "mis"
+        },
+        "lines_fallback": {
+          "good": {
+            "zh": "滞处松了，刺痛退了半截。",
+            "en": "The stuck place eases; stabbing pain half gone.",
+            "ja": "滞りがほどけ、刺痛が半分退く。"
+          },
+          "slow": {
+            "zh": "血在活，固定处还要养几天。",
+            "en": "Blood is moving; the fixed spot needs days.",
+            "ja": "血は巡るが、固定の痛みは日が要る。"
+          },
+          "over": {
+            "zh": "活血太猛，人空、痛处反跳。",
+            "en": "Moved blood too hard; emptied, pain rebounds.",
+            "ja": "活血しすぎて空になり、痛みが跳ねる。"
+          },
+          "mis": {
+            "zh": "滞更明显——怕是清寒或猛破了。",
+            "en": "Stasis clearer—likely cold-cleared or broken too hard.",
+            "ja": "滞りが目立つ——寒清か猛破か。"
+          }
+        },
+        "note": "剧本可覆盖；猛破血/寒清堆须带回访滞重",
+        "seat_on_due": true,
+        "flavor_keys": [
+          "good",
+          "slow",
+          "over",
+          "mis"
+        ],
+        "observe_close_line_key": "revisit.xueyu_qing.observe_close"
+      },
+      "legal_food_examples": [
+        {
+          "foods": [
+            "zhou_di",
+            "hongzao"
+          ],
+          "onset": "slow",
+          "note": "温润护中慢线；食疗非主"
+        },
+        {
+          "foods": [
+            "zhou_di",
+            "shengjiang"
+          ],
+          "onset": "slow",
+          "note": "轻度温通"
+        }
+      ],
+      "food_fit": {
+        "preferred_actions": [
+          "harmonize",
+          "warm_middle",
+          "nourish_blood"
+        ],
+        "preferred_tags": [
+          "warm",
+          "mild",
+          "protect_middle"
+        ],
+        "discouraged_tags": [
+          "cold_clear",
+          "heavy_break"
+        ],
+        "solo_food_cap_rank": "slight",
+        "solo_food_note": "血瘀轻证单走食疗：仅温润，准偏低"
+      },
+      "legal_emotion_examples": [],
+      "emotion_fit": {
+        "preferred_actions": [],
+        "solo_cap_rank": "slight",
+        "note": "情志罕作主路径"
+      }
+    },
+    {
+      "id": "shushi",
+      "internal_name_zh": "暑湿",
+      "bind_character_id": "char_jiaoli",
+      "urgency": "medium",
+      "zheng_qi": 0.68,
+      "primary_exams": [
+        "wen_ask",
+        "wang",
+        "qie"
+      ],
+      "pulse": {
+        "id": "ru_shu",
+        "zh": "濡数",
+        "en": "soft-rapid",
+        "ja": "濡数",
+        "rate_bpm": 84,
+        "visual": {
+          "depth": 0.32,
+          "amplitude": 0.45,
+          "tension": 0.25,
+          "width": 0.55,
+          "smoothness": 0.65,
+          "note_for_art": "软、偏数、宽而不紧。截图用：墨带宽软带快，勿弦紧沉迟。"
+        }
+      },
+      "required_actions": [
+        "clear_heat",
+        "drain_damp"
+      ],
+      "preferred_actions": [
+        "release_exterior",
+        "tonify_spleen",
+        "harmonize",
+        "resolve_toxin",
+        "dry_damp"
+      ],
+      "preferred_natures": [
+        "cool",
+        "cold",
+        "slightly_cold",
+        "neutral"
+      ],
+      "forbidden_actions": [
+        "warm_yang",
+        "restore_yang",
+        "induce_sweat"
+      ],
+      "over_treat_actions": [
+        "clear_heat",
+        "drain_damp",
+        "dry_damp"
+      ],
+      "over_treat_zheng_cost": 4,
+      "clues": {
+        "wang": {
+          "unlocks": [
+            "sweaty_sticky",
+            "heavy_look",
+            "tongue_yellow_greasy"
+          ],
+          "zh": [
+            "身热汗粘、衣领潮",
+            "人困重",
+            "舌苔黄腻"
+          ],
+          "en": [
+            "sticky heat-sweat on the collar",
+            "looks heavy-limbed",
+            "yellow greasy coat"
+          ],
+          "ja": [
+            "熱汗が粘く衿が湿る",
+            "体が重い",
+            "苔黄膩"
+          ]
+        },
+        "wen_listen": {
+          "unlocks": [
+            "thick_breath",
+            "lazy_voice"
+          ],
+          "zh": [
+            "气息带浊",
+            "说话懒得抬"
+          ],
+          "en": [
+            "breath a bit thick",
+            "won't raise the voice"
+          ],
+          "ja": [
+            "息が濁り気味",
+            "声を上げたがらない"
+          ]
+        },
+        "wen_ask": {
+          "unlocks": [
+            "summer_heat_sticky",
+            "poor_appetite",
+            "heavy_head",
+            "thirst_not_much"
+          ],
+          "inquiry_anchor": [
+            "身热汗出粘衣",
+            "头身困重",
+            "饮食无味、脘痞",
+            "口不甚渴或渴不欲饮",
+            "暑天奔走后更明显"
+          ],
+          "never_say": [
+            "暑湿",
+            "藿香正气",
+            "清暑化湿",
+            "湿温",
+            "暑邪",
+            "香薷"
+          ]
+        },
+        "qie": {
+          "unlocks": [
+            "pulse_ru_shu"
+          ],
+          "zh": [
+            "脉濡数，软而偏快"
+          ],
+          "en": [
+            "soft-rapid—yielding and a bit fast"
+          ],
+          "ja": [
+            "脈は濡数、軟くやや速い"
+          ]
+        }
+      },
+      "legal_formula_examples": [
+        {
+          "herbs": [
+            "huangbai",
+            "zexie",
+            "fuling",
+            "bohe"
+          ],
+          "onset": "medium",
+          "note": "清热利湿轻清；向量近似清暑化湿（勿说方名）"
+        },
+        {
+          "herbs": [
+            "huangbai",
+            "zexie",
+            "fuling",
+            "bohe",
+            "gancao"
+          ],
+          "onset": "slow",
+          "note": "加甘草缓中"
+        }
+      ],
+      "legal_point_examples": [
+        {
+          "points": [
+            "zusanli"
+          ],
+          "onset": "slow",
+          "note": "针可少用；足三里护中兼化湿"
+        },
+        {
+          "points": [
+            "quchi"
+          ],
+          "onset": "medium",
+          "note": "本案临时开曲池；热偏显时清气分"
+        },
+        {
+          "points": [
+            "zusanli",
+            "quchi"
+          ],
+          "onset": "medium",
+          "note": "护中+清热轻配"
+        }
+      ],
+      "common_mistreat": [
+        {
+          "herbs": [
+            "fuzi",
+            "ganjiang"
+          ],
+          "why": "纯燥烈/温燥：助热敛湿，粘汗困痞更重"
+        },
+        {
+          "herbs": [
+            "mahuang"
+          ],
+          "why": "发汗太过伤正，暑湿不去"
+        },
+        {
+          "herbs": [
+            "shudi"
+          ],
+          "why": "滋腻碍湿"
+        }
+      ],
+      "settlement_flavor": {
+        "good": {
+          "zh": "暑湿在化，汗粘退了，人清爽些。",
+          "en": "Summer-damp eases; sticky sweat fades, clearer.",
+          "ja": "暑湿がほどけ、粘汗が退き清々しい。"
+        },
+        "slow": {
+          "zh": "热湿在退，困还要几天。",
+          "en": "Heat-damp backing off; heaviness takes days.",
+          "ja": "熱湿は退くが、重さは日が要る。"
+        },
+        "over": {
+          "zh": "清利太过，人空乏、口更干。",
+          "en": "Cleared/drained too hard; emptied, mouth drier.",
+          "ja": "清利しすぎて空乏、口が乾く。"
+        },
+        "mis": {
+          "zh": "温燥发汗，粘热困更重。",
+          "en": "Warm-dry sweat made sticky heat worse.",
+          "ja": "温燥の発汗で粘熱の重さが増した。"
+        }
+      },
+      "engine": {
+        "syndrome_bucket": "暑湿",
+        "R_need": {
+          "清热": 0.9,
+          "祛湿": 1.0,
+          "解表": 0.35
+        },
+        "R_temp": -1,
+        "B_ok_formula_names": [
+          "清暑化湿轻方"
+        ],
+        "B_ok_examples": "legal_formula_examples / legal_point_examples",
+        "master_zang": "脾",
+        "tier": "jing",
+        "ten_q_priority": [
+          "寒热",
+          "汗",
+          "饮食",
+          "头身"
+        ]
+      },
+      "ten_q_priority": [
+        "寒热",
+        "汗",
+        "饮食",
+        "头身"
+      ],
+      "ten_q_priority_ids": [
+        "hanre",
+        "han",
+        "yinshi",
+        "toushen"
+      ],
+      "revisit": {
+        "enabled": true,
+        "delay_days": 1,
+        "read_on_next_clinic_enter": false,
+        "template_key": "revisit.shushi",
+        "from_rank": {
+          "toward_heal": "good",
+          "clear": "good",
+          "work": "slow",
+          "slight": "slow",
+          "none": "mis"
+        },
+        "lines_fallback": {
+          "good": {
+            "zh": "暑湿在化，汗粘退了，人清爽些。",
+            "en": "Summer-damp eases; sticky sweat fades, clearer.",
+            "ja": "暑湿がほどけ、粘汗が退き清々しい。"
+          },
+          "slow": {
+            "zh": "热湿在退，困还要几天。",
+            "en": "Heat-damp backing off; heaviness takes days.",
+            "ja": "熱湿は退くが、重さは日が要る。"
+          },
+          "over": {
+            "zh": "清利太过，人空乏、口更干。",
+            "en": "Cleared/drained too hard; emptied, mouth drier.",
+            "ja": "清利しすぎて空乏、口が乾く。"
+          },
+          "mis": {
+            "zh": "粘热困更重——怕是温燥发汗了。",
+            "en": "Sticky heat worse—likely warm-dry sweating.",
+            "ja": "粘熱の重さが増した——温燥の発汗か。"
+          }
+        },
+        "note": "剧本可覆盖；误用附姜/麻黄须带回访粘困加重",
+        "seat_on_due": true,
+        "flavor_keys": [
+          "good",
+          "slow",
+          "over",
+          "mis"
+        ],
+        "observe_close_line_key": "revisit.shushi.observe_close"
+      },
+      "legal_food_examples": [
+        {
+          "foods": [
+            "zhou_di",
+            "lianzi"
+          ],
+          "onset": "slow",
+          "note": "轻清莲粥"
+        },
+        {
+          "foods": [
+            "zhou_di",
+            "bingtang"
+          ],
+          "onset": "slow",
+          "note": "冰糖粥轻清"
+        }
+      ],
+      "food_fit": {
+        "preferred_actions": [
+          "clear_heat",
+          "drain_damp",
+          "harmonize",
+          "tonify_spleen"
+        ],
+        "preferred_tags": [
+          "cool_light",
+          "porridge",
+          "protect_middle"
+        ],
+        "discouraged_tags": [
+          "warm_pungent",
+          "heavy_tonify",
+          "dry_harsh"
+        ],
+        "solo_food_cap_rank": "work",
+        "solo_food_note": "暑湿单走食疗：轻清可温分，准偏低"
+      },
+      "legal_emotion_examples": [],
+      "emotion_fit": {
+        "preferred_actions": [],
+        "solo_cap_rank": "slight",
+        "note": "情志非主路径"
+      }
     }
   ],
   "scoring": {
@@ -6469,6 +7534,16 @@
       ],
       "pixu_shikun": [
         "sanyinjiao"
+      ],
+      "yangxu_weihan": [
+        "guanyuan",
+        "mingmen"
+      ],
+      "xueyu_qing": [
+        "sanyinjiao"
+      ],
+      "shushi": [
+        "quchi"
       ]
     },
     "case_temp_open_note": "不永久写入 vol1_open_ids；仅当 bind case 为 key 时临时可选",
@@ -7753,7 +8828,7 @@
         "seal.shiji",
         "seal.pixu_shikun"
       ],
-      "note": "本档只亮这3枚"
+      "note": "V134 3枚；V135 再+3 见 qingshi_expand2_rules（共6）"
     },
     "waiting": {
       "max_seats": 4,
@@ -7800,5 +8875,183 @@
     },
     "split_file": "logic/qingshi_expand.json",
     "lock_doc": "logic/QINGSHI-EXPAND-V134.md"
+  },
+  "qingshi_expand2_rules": {
+    "id": "qingshi_expand2_v135",
+    "version": 135,
+    "cases": [
+      "yangxu_weihan",
+      "xueyu_qing",
+      "shushi"
+    ],
+    "characters": [
+      "char_danfu",
+      "char_bashi",
+      "char_jiaoli"
+    ],
+    "seals": {
+      "key": "play.seals",
+      "on_settle_if_rank_at_least": "clear",
+      "write_case_id": true,
+      "ui_flash_keys": [
+        "seal.fengre_biao",
+        "seal.shiji",
+        "seal.pixu_shikun",
+        "seal.yangxu_weihan",
+        "seal.xueyu_qing",
+        "seal.shushi"
+      ],
+      "note": "V134 3枚 + V135 3枚 = 共6枚小印；不做十二墙"
+    },
+    "waiting": {
+      "max_seats": 4,
+      "pool_includes_old_seven": true,
+      "weights": {
+        "base": {
+          "yangxu_weihan": 0.35,
+          "xueyu_qing": 0.35,
+          "shushi": 0.35
+        },
+        "with_town_permit_mult": 1.8,
+        "without_permit": {
+          "yangxu_weihan_teach_once": true,
+          "yangxu_weihan_weight": 0.25,
+          "xueyu_qing": 0.05,
+          "shushi": 0.05
+        }
+      },
+      "rotation": "A-D seats; overflow rotates in pool"
+    },
+    "cross_mistreat": {
+      "yangxu_clear_dump": {
+        "if_case": "yangxu_weihan",
+        "if_herbs_any_pairs": [
+          [
+            "jinyinhua",
+            "lianqiao"
+          ],
+          [
+            "zhimu",
+            "huangbai"
+          ]
+        ],
+        "penalty": "mistreat + stability",
+        "revisit": "畏寒更重",
+        "note": "阳虚误清"
+      },
+      "xueyu_harsh_break": {
+        "if_case": "xueyu_qing",
+        "note": "血瘀猛破：现池无红花桃仁；忌寒清堆 + 他日若加破血药勿重剂同用",
+        "if_herbs_any": [
+          "jinyinhua",
+          "lianqiao",
+          "huangbai"
+        ],
+        "penalty": "mistreat + stability",
+        "revisit": "滞更明显"
+      },
+      "shushi_dry_harsh": {
+        "if_case": "shushi",
+        "if_herbs_any_pairs": [
+          [
+            "fuzi",
+            "ganjiang"
+          ]
+        ],
+        "if_herbs_any": [
+          "mahuang"
+        ],
+        "penalty": "mistreat + stability",
+        "revisit": "粘热困更重",
+        "note": "暑湿纯燥"
+      }
+    },
+    "acu_case_temp_open": {
+      "yangxu_weihan": [
+        "guanyuan",
+        "mingmen"
+      ],
+      "xueyu_qing": [
+        "sanyinjiao"
+      ],
+      "shushi": [
+        "quchi"
+      ],
+      "note": "via acu_intro_rules.case_temp_open；不永久扩 vol1_open_ids（仍 hegu/zusanli）"
+    },
+    "legal_paths_summary": {
+      "yangxu_weihan": {
+        "formula": "fuzi+ganjiang+gancao; guizhi+ganjiang+dazao/shengjiang",
+        "acupuncture": [
+          "zusanli moxa",
+          "guanyuan+zusanli",
+          "mingmen"
+        ],
+        "food": [
+          "shengjiang+hongzao",
+          "zhou_di+shengjiang"
+        ],
+        "emotion": "low"
+      },
+      "xueyu_qing": {
+        "formula": "danggui+chuanxiong+baishao (±gancao)",
+        "acupuncture": [
+          "hegu+sanyinjiao",
+          "neiguan+taichong"
+        ],
+        "food": [
+          "zhou_di+hongzao mild warm"
+        ],
+        "emotion": "rarely primary"
+      },
+      "shushi": {
+        "formula": "huangbai+zexie+fuling+bohe (±gancao)",
+        "acupuncture": [
+          "zusanli sparse",
+          "quchi if heat"
+        ],
+        "food": [
+          "zhou_di+lianzi",
+          "zhou_di+bingtang"
+        ],
+        "emotion": "low"
+      }
+    },
+    "new_acu": {
+      "id": "guanyuan",
+      "method": "moxa",
+      "actions": [
+        "warm_yang",
+        "tonify_qi",
+        "restore_yang"
+      ],
+      "vol1_selectable": false,
+      "body_pos": {
+        "x": 0.5,
+        "y": 0.62
+      },
+      "note": "案临时开；不进 vol1_open_ids"
+    },
+    "herbs_note": "未新增药；血瘀靠当归川芎白芍；暑湿靠黄柏泽泻茯苓薄荷",
+    "smoke": {
+      "tag": "qingshi_expand2_ok",
+      "require_each_case_legal_settle": true,
+      "also": "SMOKE PASS"
+    },
+    "split_file": "logic/qingshi_expand2.json",
+    "lock_doc": "logic/QINGSHI-EXPAND2-V135.md",
+    "do_not": [
+      "阴虚燥咳",
+      "湿热下注",
+      "外伤大案",
+      "小儿",
+      "陈半仙",
+      "萨米尔",
+      "十二墙",
+      "五方",
+      "romance",
+      "Steam",
+      "J/T"
+    ]
   }
 }

@@ -1,6 +1,6 @@
 class_name CharacterArt
 extends RefCounted
-## V126/V134: per-id portraits under ui/characters/. Fallback to apprentice.png / patients-three thirds.
+## V126/V134/V135: per-id portraits under ui/characters/. Fallback to apprentice.png / patients-three thirds.
 
 const PATHS := {
 	"apprentice_jiang": "res://ui/characters/jiang_wan.png",
@@ -12,6 +12,9 @@ const PATHS := {
 	"char_zoufan": "res://ui/characters/liu_heqing.png",
 	"char_yanhou": "res://ui/characters/gu_yanyu.png",
 	"char_yaoqin": "res://ui/characters/lin_ashen.png",
+	"char_danfu": "res://ui/characters/han_danfu.png",
+	"char_bashi": "res://ui/characters/ma_bashi.png",
+	"char_jiaoli": "res://ui/characters/xia_jiaoli.png",
 	"pharmacy_kid_xiaohe": "res://ui/characters/xiaohe.png",
 	"mentor_su": "res://ui/characters/su_wenzhou.png",
 }
@@ -20,12 +23,15 @@ const SEAL_PATHS := {
 	"fengre_biao": "res://ui/seals/fengre_biao.png",
 	"shiji": "res://ui/seals/shiji.png",
 	"pixu_shikun": "res://ui/seals/pixu_shikun.png",
+	"yangxu_weihan": "res://ui/seals/yangxu_weihan.png",
+	"xueyu_qing": "res://ui/seals/xueyu_qing.png",
+	"shushi": "res://ui/seals/shushi.png",
 }
 
 const FALLBACK_APPRENTICE := "res://ui/apprentice.png"
 const FALLBACK_PATIENTS := "res://ui/patients-three.png"
 
-## Full Qingshi pool (7). Hall seats are max 4 via waiting rotation — not all forced on stage.
+## Full Qingshi pool (10). Hall seats are max 4 via waiting rotation — not all forced on stage.
 const PATIENT_ORDER := [
 	"char_porter",
 	"char_clerk",
@@ -34,10 +40,14 @@ const PATIENT_ORDER := [
 	"char_zoufan",
 	"char_yanhou",
 	"char_yaoqin",
+	"char_danfu",
+	"char_bashi",
+	"char_jiaoli",
 ]
 
 const OLD_FOUR := ["char_porter", "char_clerk", "char_copyist", "char_xiuniang"]
 const NEW_THREE := ["char_zoufan", "char_yanhou", "char_yaoqin"]
+const EXPAND2_THREE := ["char_danfu", "char_bashi", "char_jiaoli"]
 const WAITING_MAX_SEATS := 4
 
 static var _warned: Dictionary = {}

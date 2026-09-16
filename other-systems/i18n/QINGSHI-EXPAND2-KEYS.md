@@ -1,0 +1,14 @@
+# V135 青石再扩键（+3 人 / +3 证印 → 共 10 人 / 6 印）
+
+承 V134 `QINGSHI-EXPAND-KEYS.md` 风格。
+
+| 组 | 键 |
+| --- | --- |
+| 证印 | `SEAL_YANGXU_WEIHAN` / `SEAL_XUEYU_QING` / `SEAL_SHUSHI`、`SEAL_COUNT_HINT` |
+| 担夫·阳虚畏寒 | `CHAR_DANFU_*`、`DANFU_OPENING/WAIT`、`FOLLOWUP_YANGXU_WEIHAN`、`CASE_YANGXU_*` |
+| 把式·血瘀轻证 | `CHAR_BASHI_*`、`BASHI_OPENING/WAIT`、`FOLLOWUP_XUEYU_QING`、`CASE_XUEYU_*` |
+| 脚力·暑湿 | `CHAR_JIAOLI_*`、`JIAOLI_OPENING/WAIT`、`FOLLOWUP_SHUSHI`、`CASE_SHUSHI_*` |
+| 旁白 | `MENTOR_EXPAND2_1..3`、`DEMO_HINT_EXPAND2` |
+| 免责 | **不改** |
+
+十人表：`patients/SCRIPT.md`。锁：`logic/QINGSHI-EXPAND2-V135.md`。

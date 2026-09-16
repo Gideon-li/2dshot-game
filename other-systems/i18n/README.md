@@ -17,3 +17,4 @@ Godot 工程翻译源：`locale/xinglin.csv`（与本目录 `ui.csv` 同步）�
 - v1.32：情志 `EMOTION_*` / `COUNSEL_*`（见 `EMOTION-KEYS.md`）
 - v1.33：周绣娘 `XIUNIANG_*` / `TRUST_*` / `TOWN_PERMIT_*`（见 `XIUNIANG-KEYS.md`）
 - v1.34：青石扩容三新人/三证/证印（见 `QINGSHI-EXPAND-KEYS.md`）
+- v1.35：青石再扩三新人/三证印（见 `QINGSHI-EXPAND2-KEYS.md`）

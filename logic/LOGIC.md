@@ -229,3 +229,15 @@ API：`MentorCues.next(case, exams, asked_ten_q_ids, cues_emitted)`。
 - 候诊：仍 4 席 A–D；有 `town_permit` 三新案权重 ×1.8；无 permit 可偶遇一次 `shiji` 教学。
 - **风热/风寒误叉**：风热误用麻黄/桂枝 → mistreat + 稳罚、回访热更重/咽更疼；风寒误用金银花/连翘 → 旧案 `common_mistreat` 保持（表寒更闭）。
 - 冒烟：`qingshi_expand_ok`（三案各 ≥1 合法 settle）+ `SMOKE PASS`。
+
+## V135 青石诊案再扩（expand2）
+
+见 `QINGSHI-EXPAND2-V135.md` + `qingshi_expand2.json` / `qingshi_expand2_rules`。怎么跑：`QINGSHI-EXPAND2.md`。
+
+- +3 案 +3 人：`yangxu_weihan`/`char_danfu`，`xueyu_qing`/`char_bashi`，`shushi`/`char_jiaoli`；旧 7 保留（共 **10**）。
+- 新穴：`guanyuan`（灸；温阳/补气/回阳；案临时开）。`case_temp_open`：阳虚→关元+命门；血瘀→三阴交；暑湿→曲池。**不**永久扩 `vol1_open_ids`。
+- 证印：settle rank≥`clear` → `play.seals[]`；UI 闪键共 **6**（V134 三 + 本档三）。
+- 候诊：仍 4 席；有 `town_permit` ×1.8；无 permit：`yangxu_weihan_teach_once` weight≈0.25；血瘀/暑湿各 0.05。
+- **误治短注**：阳虚误清（银花连翘/知母黄柏）；血瘀猛破（寒清堆；破血重剂忌）；暑湿纯燥（附姜/麻黄）。
+- 冒烟：`qingshi_expand2_ok`（三案各 ≥1 合法 settle）+ `SMOKE PASS`。
+

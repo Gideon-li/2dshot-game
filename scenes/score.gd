@@ -135,7 +135,7 @@ func _refresh() -> void:
 	var foot := find_child("ScoreFoot", true, false) as Label
 	if foot:
 		foot.text = tr("BOOT_DISCLAIMER_FOOTER")
-	# V134 seal flash (official qingshi_expand_script flash_lines / SEAL_FLASH)
+	# V134/V135 seal flash (qingshi_expand/expand2 script flash_lines / SEAL_FLASH)
 	var seal_id := str(r.get("seal_id", "")).strip_edges()
 	var seal_line := str(r.get("seal_flash", "")).strip_edges()
 	if seal_line == "" and seal_id != "" and CaseDB.has_method("seal_flash_line"):

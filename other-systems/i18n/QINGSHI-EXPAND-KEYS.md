@@ -10,3 +10,6 @@
 | 免责 | **不改** |
 
 七人表：`patients/SCRIPT.md`。
+
+## V135
+见 `QINGSHI-EXPAND2-KEYS.md`（再 +3，共 6 印 / 10 人）。
