@@ -676,3 +676,53 @@ SLOT_EVENING_EMPTY,暮格已用尽。,Evening slot spent.,暮枠は尽きた。
 SLOT_NIGHT_EMPTY,夜格已用尽。,Night slot spent.,夜枠は尽きた。
 SLOT_AFTERNOON_EMPTY,午后格已用尽。,Afternoon slot spent.,午後枠は尽きた。
 DAY_PLAQUE,第 {n} 日,Day {n},第 {n} 日
+ACTION_EMOTION,情志,Emotion care,情志
+ACTION_COUNSEL,疏导,Counsel,疏導
+EMOTION_TITLE,情志疏导,Emotion counseling,情志疏導
+EMOTION_SUBTITLE,听、映、缓。不是说教开药。,"Listen, mirror, ease — not a lecture or a prescription.",聴き、映し、緩める。説教や処方ではない。
+EMOTION_ENTER,坐下疏导,Sit and counsel,坐って疏導する
+EMOTION_EXIT,回处治,Back to treatment,処治へ戻る
+EMOTION_HINT,情志也是病。先贴着她的话走。,Emotion is also illness. Stay close to her words first.,情志も病。まず彼女の言葉に添え。
+EMOTION_PATH_TAG,情志,Emotion,情志
+COUNSEL_BEAT_LISTEN,倾听,Listen,傾聴
+COUNSEL_BEAT_LISTEN_HINT,选更贴的那句复述。不点破证型名。,Pick the closer restate. Don't name the pattern.,より近い言い換えを選ぶ。証型名は言わない。
+COUNSEL_LISTEN_1,案牍堆着，夜里总静不下来。,The desk work piles up; nights won't settle.,案牘が積み、夜が静まらない。
+COUNSEL_LISTEN_2,胁下闷，话到嘴边又咽回去。,Flank feels full; words stop at the lips.,脇下が悶え、言葉が喉で止まる。
+COUNSEL_LISTEN_3,只是想太多——劝她想开点就好。,She's just overthinking — tell her to let it go.,考えすぎなだけ——割り切れと言えばよい。
+COUNSEL_LISTEN_OK,她点了点头。被听见了。,She nods. She was heard.,彼女はうなずく。届いた。
+COUNSEL_LISTEN_OFF,这话偏了。她眉心更紧。,That missed. Her brow tightens.,外れた。眉間がさらに寄る。
+COUNSEL_LISTEN_BAD,「想开点」像一盆冷水。,“Just cheer up” lands like cold water.,「割り切れ」は冷水のようだ。
+COUNSEL_BEAT_CARDS,疏导卡,Counsel cards,疏導カード
+COUNSEL_BEAT_CARDS_HINT,选 1～2 张。听、缓，不要镇坠。,Pick 1–2. Ease — don't crush.,1〜2 枚。緩める。鎮め墜とすな。
+COUNSEL_CARD_NEED,至少选一张疏导卡。,Pick at least one counsel card.,少なくとも一枚選べ。
+COUNSEL_CARD_MAX,最多两张。,Two is enough.,最大二枚。
+COUNSEL_WALK_EASE_NAME,缓步疏肝,Easy walk for the liver qi,緩歩で疏肝
+COUNSEL_WALK_EASE_DESC,廊下一圈，气机松一点。,A turn under the corridor — qi eases a little.,廊下を一巡。気機が少し緩む。
+COUNSEL_LESS_DESK_NAME,少熬夜案牍,Less late desk work,案牘の夜更かしを減らす
+COUNSEL_LESS_DESK_DESC,灯早一点灭，笔晚一点拿。,Lamp out earlier; brush later.,灯を早く消し、筆を遅く取る。
+COUNSEL_VENT_REST_NAME,倾诉与停绣式休息,Speak out & rest like pausing embroidery,語りと停繡の休み
+COUNSEL_VENT_REST_DESC,把话放下，像放下绣绷。,Set the words down like setting aside a hoop.,言葉を置く。繡枠を置くように。
+COUNSEL_WARM_CALM_NAME,香暖安神,"Warm scent, calm spirit",香暖で安神
+COUNSEL_WARM_CALM_DESC,窗缝避风，茶盏温着。,Seal the draft; keep the tea warm.,隙間風を防ぎ、茶を温く。
+COUNSEL_NO_SCOLD_NAME,斥「想太多」,Scold “overthinking”,「考えすぎ」と叱る
+COUNSEL_NO_SCOLD_DESC,误卡。像把门摔上。,Trap card. Like slamming the door.,誤カード。戸を叩きつけるよう。
+COUNSEL_NO_HARSH_TONIFY_NAME,峻补镇坠,Harsh tonify to pin down,峻補で鎮墜
+COUNSEL_NO_HARSH_TONIFY_DESC,误卡。气郁不是虚到能砸补。,Trap card. Stagnation isn't vacuity you can smash with tonics.,誤カード。気鬱は砸補できる虚ではない。
+COUNSEL_BEAT_CLOSE,收束,Close,收束
+COUNSEL_BEAT_CLOSE_HINT,一句起居约定（可选）。,One lifestyle pact (optional).,起居の約束一句（任意）。
+COUNSEL_CLOSE_SKIP,不另约定,No extra pact,約束なし
+COUNSEL_CLOSE_SLEEP,今夜早熄灯,Lights out earlier tonight,今夜は早く灯を消す
+COUNSEL_CLOSE_WALK,明日廊缓步一圈,Tomorrow: one easy corridor walk,明日、廊下を緩く一巡
+COUNSEL_CLOSE_WIND,忌日前勿承急活,"Before hard days, skip rushed work",忌日の前に急ぎの仕事を請けない
+COUNSEL_SUBMIT,进病程,Send to course,経過へ
+EMOTION_SETTLE_HINT,疏、缓、温。不是心理处方。,"Ease, slow, warm — not a therapy prescription.",疏・緩・温。心理処方ではない。
+EMOTION_SETTLE_OK,气机松了一寸。可再观。,Qi eased an inch. Watch on.,気機が寸ほど緩んだ。様子を見よう。
+EMOTION_SETTLE_SLOW,向愈偏慢，但她肯听了。,"Recovery is slow, but she will listen now.",快方は遅いが、彼女は耳を貸す。
+EMOTION_SETTLE_COLD,话说冷了。温分下去。,The words went cold. Warmth dropped.,言葉が冷えた。温が下がった。
+EMOTION_SETTLE_HARSH,镇得太死，或补得太峻。,"Pinned too hard, or tonified too harshly.",鎮め過ぎか、補が峻すぎる。
+EMOTION_SETTLE_TABLE_WEAK,表寒还在，单靠疏导偏慢。,Exterior cold remains — counsel alone is slow.,表寒が残る。疏導だけでは遅い。
+MENTOR_EMOTION_1,先听完。再动口。,Finish listening. Then speak.,まず聴き終えよ。それから口を開け。
+MENTOR_EMOTION_2,气郁不是一句「想开」能开的。,Stagnation doesn't open to “cheer up.”,気鬱は「割り切れ」の一言では開かない。
+COUNSEL_QINGHE_1,清荷把袖口捏紧了。,Qinghe pinches her sleeve cuff.,清荷が袖口を握る。
+COUNSEL_QINGHE_2,案上墨未干，她却说睡不实。,Ink on the desk still wet; she says sleep won't hold.,机の墨は乾かぬのに、彼女は眠れぬと言う。
+COUNSEL_QINGHE_3,胁下一闷，话就短了。,"When the flank tightens, her words shorten.",脇下が悶えれば、言葉が短くなる。

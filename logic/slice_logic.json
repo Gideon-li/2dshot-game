@@ -1,6 +1,6 @@
 {
   "id": "xinglin-mowen-slice-logic",
-  "version": 11,
+  "version": 12,
   "project": "墨问岐黄 / 杏林墨问",
   "scope": "vertical_slice",
   "notes": {
@@ -32,7 +32,8 @@
     "v128": "sun_dry playable; mudanpi teaching sun-dry; flip+progress; STATION_DRY not placeholder",
     "v129": "codex night read; 3 pages; night slot -1; theory flags for tenq/pulse UI",
     "v130": "food therapy path=food; 6 cards; lifestyle_cue; teaching stock; food_therapy_ok",
-    "v131": "demo day glue: time_slots single truth, demo_guide checklist, demo_day_ok"
+    "v131": "demo day glue: time_slots single truth, demo_guide checklist, demo_day_ok",
+    "v132": "emotion counsel path=emotion; 6 cards; ganyu teach; offline option tree"
   },
   "exam_ids": [
     "wang",
@@ -2732,6 +2733,12 @@
         ],
         "solo_food_cap_rank": "work",
         "solo_food_note": "风寒表实单走食疗：准偏低、温可尚可"
+      },
+      "legal_emotion_examples": [],
+      "emotion_fit": {
+        "preferred_actions": [],
+        "solo_cap_rank": "slight",
+        "note": "非气郁案单走情志：准偏低"
       }
     },
     {
@@ -3059,6 +3066,53 @@
         ],
         "discouraged_tags": [],
         "solo_food_cap_rank": "toward_heal"
+      },
+      "legal_emotion_examples": [
+        {
+          "listen": "anchor_match",
+          "cards": [
+            "walk_ease",
+            "less_desk"
+          ],
+          "close": "optional",
+          "target_rank": "toward_heal",
+          "note": "缓步+少案牍"
+        },
+        {
+          "listen": "anchor_match",
+          "cards": [
+            "vent_rest",
+            "warm_calm"
+          ],
+          "target_rank": "toward_heal",
+          "note": "倾诉停歇+香暖"
+        },
+        {
+          "listen": "anchor_match",
+          "cards": [
+            "walk_ease"
+          ],
+          "target_rank": "clear",
+          "note": "单卡也可慢愈线"
+        }
+      ],
+      "emotion_fit": {
+        "preferred_actions": [
+          "soothe_liver",
+          "move_qi",
+          "calm_shen",
+          "harmonize"
+        ],
+        "preferred_cards": [
+          "walk_ease",
+          "less_desk",
+          "vent_rest",
+          "warm_calm"
+        ],
+        "penalty_cards": [
+          "no_scold",
+          "no_harsh_tonify"
+        ]
       }
     },
     {
@@ -3391,6 +3445,12 @@
           "pungent_strong"
         ],
         "solo_food_cap_rank": "toward_heal"
+      },
+      "legal_emotion_examples": [],
+      "emotion_fit": {
+        "preferred_actions": [],
+        "solo_cap_rank": "slight",
+        "note": "非气郁案单走情志：准偏低"
       }
     }
   ],
@@ -3520,6 +3580,16 @@
         "example_bonus": 0.1,
         "legal_example_key": "legal_food_examples",
         "foods_key": "foods"
+      },
+      "emotion_path": {
+        "preferred_cover_weight": 0.55,
+        "example_bonus": 0.12,
+        "legal_example_key": "legal_emotion_examples",
+        "cards_key": "cards",
+        "penalty_ids": [
+          "no_scold",
+          "no_harsh_tonify"
+        ]
       }
     },
     "speed": {
@@ -5405,7 +5475,47 @@
           "complete_when": "next_day_open and revisit seated or pending consumed",
           "next_hop_after": "DEMO_DONE"
         }
-      ]
+      ],
+      "ui_steps_from_script": [
+        {
+          "id": "morning_treat",
+          "logic_ids": [
+            "morning_consult",
+            "treat"
+          ]
+        },
+        {
+          "id": "afternoon_forage",
+          "logic_ids": [
+            "afternoon_forage"
+          ]
+        },
+        {
+          "id": "evening_process",
+          "logic_ids": [
+            "evening_process"
+          ]
+        },
+        {
+          "id": "night_codex",
+          "logic_ids": [
+            "night_codex"
+          ]
+        },
+        {
+          "id": "next_day",
+          "logic_ids": [
+            "next_day_open"
+          ]
+        },
+        {
+          "id": "revisit",
+          "logic_ids": [
+            "next_day_revisit"
+          ]
+        }
+      ],
+      "script_ref": "patients/demo_script.json"
     },
     "settle_next_hop": {
       "after_first_treat_of_day": "DEMO_NEXT_GARDEN",
@@ -5414,7 +5524,12 @@
       "if_night_left_and_process_done": "DEMO_NEXT_LOFT",
       "if_ready_for_day_end": "DEMO_NEXT_DAY",
       "api": "DemoDay.next_hop_after_settle(play, last_result) -> i18n_key",
-      "never_spoil_diagnosis": true
+      "never_spoil_diagnosis": true,
+      "key_aliases": {
+        "DEMO_NEXT_NEXT_DAY": "DEMO_NEXT_DAY",
+        "DEMO_GUIDE_DONE": "DEMO_DONE",
+        "DEMO_NEXT_REVISIT": "DEMO_NEXT_DAY"
+      }
     },
     "return_routes": {
       "from": [
@@ -5478,6 +5593,224 @@
       "SLOT_NIGHT_EMPTY",
       "EARLY_REST_TO_NIGHT",
       "DEMO_DISMISS_GUIDE"
+    ]
+  },
+  "counsel_cards": [
+    {
+      "id": "walk_ease",
+      "zh": "缓步疏肝",
+      "en": "Easy walking to ease the liver",
+      "ja": "緩歩で肝を疏す印象",
+      "kind": "good",
+      "actions": [
+        "soothe_liver",
+        "move_qi",
+        "harmonize"
+      ],
+      "tags": [
+        "ease",
+        "move",
+        "gentle"
+      ],
+      "onset": "slow",
+      "warm": 0.05
+    },
+    {
+      "id": "less_desk",
+      "zh": "少熬夜案牍",
+      "en": "Less late desk work",
+      "ja": "夜更かしの案牘を減らす",
+      "kind": "good",
+      "actions": [
+        "soothe_liver",
+        "calm_shen",
+        "harmonize"
+      ],
+      "tags": [
+        "rest",
+        "desk"
+      ],
+      "onset": "slow",
+      "warm": 0.04
+    },
+    {
+      "id": "vent_rest",
+      "zh": "倾诉与停歇",
+      "en": "Vent and rest (pause the grind)",
+      "ja": "語りと休み",
+      "kind": "good",
+      "actions": [
+        "soothe_liver",
+        "calm_shen",
+        "move_qi"
+      ],
+      "tags": [
+        "vent",
+        "rest"
+      ],
+      "onset": "slow",
+      "warm": 0.05
+    },
+    {
+      "id": "warm_calm",
+      "zh": "香暖安神",
+      "en": "Warm calm setting",
+      "ja": "香暖で安神",
+      "kind": "good",
+      "actions": [
+        "calm_shen",
+        "harmonize"
+      ],
+      "tags": [
+        "warm",
+        "calm"
+      ],
+      "onset": "slow",
+      "warm": 0.06
+    },
+    {
+      "id": "no_scold",
+      "zh": "勿斥「想太多」",
+      "en": "Do not scold “overthinking”",
+      "ja": "「考えすぎ」と叱らない",
+      "kind": "penalty",
+      "actions": [],
+      "tags": [
+        "scold",
+        "harsh"
+      ],
+      "onset": "fast",
+      "warm": -0.12,
+      "stability_penalty": 0.1,
+      "note": "误选惩罚卡 / 反例"
+    },
+    {
+      "id": "no_harsh_tonify",
+      "zh": "勿峻补镇坠",
+      "en": "No harsh tonify to pin it down",
+      "ja": "峻補で鎮め墜とさない",
+      "kind": "penalty",
+      "actions": [
+        "tonify_qi"
+      ],
+      "tags": [
+        "harsh_tonify"
+      ],
+      "onset": "fast",
+      "warm": -0.1,
+      "stability_penalty": 0.08,
+      "note": "误卡"
+    }
+  ],
+  "emotion_counsel_rules": {
+    "id": "emotion_counsel_rules_v132",
+    "path": "emotion",
+    "action_id": "ACTION_EMOTION",
+    "action_aliases": [
+      "ACTION_COUNSEL"
+    ],
+    "teach_case_id": "ganyu_qizhi",
+    "teach_character_id": "char_clerk",
+    "beats": [
+      {
+        "id": "listen",
+        "pick": 1,
+        "from": 3,
+        "note": "3 选 1 复述，贴 inquiry_anchor，不点破证型名",
+        "options_ref": "patients/emotion_script.json → listen_options"
+      },
+      {
+        "id": "cards",
+        "min": 1,
+        "max": 2,
+        "pool": [
+          "walk_ease",
+          "less_desk",
+          "vent_rest",
+          "warm_calm",
+          "no_scold",
+          "no_harsh_tonify"
+        ],
+        "reject_3rd": true
+      },
+      {
+        "id": "close",
+        "optional": true,
+        "note": "起居约定一句",
+        "options_ref": "patients/emotion_script.json → close_cues"
+      }
+    ],
+    "llm": false,
+    "offline_option_tree": true,
+    "scoring": {
+      "path": "emotion",
+      "reuse_M_formula": true,
+      "C_from": "cover counsel_cards.actions vs case required/preferred (soothe_liver/move_qi)",
+      "B_from": "hit legal_emotion_examples → ~70",
+      "A_from": "listen_match + close_optional + penalty cards",
+      "U_from": "1–2 cards base 80",
+      "J": 1.0,
+      "T": 1.0,
+      "fenghan_solo_cap_rank": "slight",
+      "ganyu_legal_target": "toward_heal"
+    },
+    "legal_examples_ganyu": [
+      {
+        "listen": "anchor_match",
+        "cards": [
+          "walk_ease",
+          "less_desk"
+        ],
+        "close": "optional",
+        "target_rank": "toward_heal",
+        "note": "缓步+少案牍"
+      },
+      {
+        "listen": "anchor_match",
+        "cards": [
+          "vent_rest",
+          "warm_calm"
+        ],
+        "target_rank": "toward_heal",
+        "note": "倾诉停歇+香暖"
+      },
+      {
+        "listen": "anchor_match",
+        "cards": [
+          "walk_ease"
+        ],
+        "target_rank": "clear",
+        "note": "单卡也可慢愈线"
+      }
+    ],
+    "penalty_cards": [
+      "no_scold",
+      "no_harsh_tonify"
+    ],
+    "smoke": {
+      "tag": "emotion_counsel_ok",
+      "case": "ganyu_qizhi",
+      "character": "char_clerk",
+      "listen": "best_anchor_option",
+      "cards": [
+        "walk_ease",
+        "less_desk"
+      ],
+      "expect_rank_at_least": "clear",
+      "prefer": "toward_heal"
+    },
+    "contracts_prototype": "ACTION_EMOTION → listen pick → 1–2 counsel_cards → optional close → Scoring.evaluate(path='emotion', ids=card_ids, opts={listen_id, close_id}); formula/acu/food unchanged",
+    "i18n_keys": [
+      "ACTION_EMOTION",
+      "EMOTION_LISTEN",
+      "EMOTION_CARDS",
+      "EMOTION_CLOSE",
+      "COUNSEL_WALK_EASE",
+      "COUNSEL_LESS_DESK",
+      "COUNSEL_VENT_REST",
+      "COUNSEL_WARM_CALM",
+      "COUNSEL_NO_SCOLD",
+      "COUNSEL_NO_HARSH"
     ]
   }
 }

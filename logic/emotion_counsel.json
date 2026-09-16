@@ -1,0 +1,117 @@
+{
+  "id": "emotion_counsel_v132",
+  "path": "emotion",
+  "counsel_cards": [
+    {
+      "id": "walk_ease",
+      "zh": "缓步疏肝",
+      "en": "Easy walking to ease the liver",
+      "ja": "緩歩で肝を疏す印象",
+      "kind": "good",
+      "actions": [
+        "soothe_liver",
+        "move_qi",
+        "harmonize"
+      ],
+      "tags": [
+        "ease",
+        "move",
+        "gentle"
+      ],
+      "onset": "slow",
+      "warm": 0.05
+    },
+    {
+      "id": "less_desk",
+      "zh": "少熬夜案牍",
+      "en": "Less late desk work",
+      "ja": "夜更かしの案牘を減らす",
+      "kind": "good",
+      "actions": [
+        "soothe_liver",
+        "calm_shen",
+        "harmonize"
+      ],
+      "tags": [
+        "rest",
+        "desk"
+      ],
+      "onset": "slow",
+      "warm": 0.04
+    },
+    {
+      "id": "vent_rest",
+      "zh": "倾诉与停歇",
+      "en": "Vent and rest (pause the grind)",
+      "ja": "語りと休み",
+      "kind": "good",
+      "actions": [
+        "soothe_liver",
+        "calm_shen",
+        "move_qi"
+      ],
+      "tags": [
+        "vent",
+        "rest"
+      ],
+      "onset": "slow",
+      "warm": 0.05
+    },
+    {
+      "id": "warm_calm",
+      "zh": "香暖安神",
+      "en": "Warm calm setting",
+      "ja": "香暖で安神",
+      "kind": "good",
+      "actions": [
+        "calm_shen",
+        "harmonize"
+      ],
+      "tags": [
+        "warm",
+        "calm"
+      ],
+      "onset": "slow",
+      "warm": 0.06
+    },
+    {
+      "id": "no_scold",
+      "zh": "勿斥「想太多」",
+      "en": "Do not scold “overthinking”",
+      "ja": "「考えすぎ」と叱らない",
+      "kind": "penalty",
+      "actions": [],
+      "tags": [
+        "scold",
+        "harsh"
+      ],
+      "onset": "fast",
+      "warm": -0.12,
+      "stability_penalty": 0.1,
+      "note": "误选惩罚卡 / 反例"
+    },
+    {
+      "id": "no_harsh_tonify",
+      "zh": "勿峻补镇坠",
+      "en": "No harsh tonify to pin it down",
+      "ja": "峻補で鎮め墜とさない",
+      "kind": "penalty",
+      "actions": [
+        "tonify_qi"
+      ],
+      "tags": [
+        "harsh_tonify"
+      ],
+      "onset": "fast",
+      "warm": -0.1,
+      "stability_penalty": 0.08,
+      "note": "误卡"
+    }
+  ],
+  "rules_ref": "slice_logic.json → emotion_counsel_rules",
+  "lock_doc": "logic/EMOTION-COUNSEL-V132.md",
+  "teach": {
+    "case_id": "ganyu_qizhi",
+    "character_id": "char_clerk"
+  }
+}

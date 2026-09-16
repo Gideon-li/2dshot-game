@@ -23,6 +23,10 @@ var case_order: Array[String] = []
 var tray_herbs: Array[String] = []
 var food_tray: Array[String] = []
 var lifestyle_cue: String = ""
+var counsel_tray: Array[String] = []
+var counsel_close: String = ""
+var counsel_listen_id: String = ""
+var counsel_listen_match: String = ""
 var selected_points: Array[String] = []
 ## V125 session-only acupoint memory (not written to Save).
 var acu_known: Array[String] = []
@@ -90,6 +94,10 @@ func start_patient(patient_id: String) -> void:
 	tray_herbs.clear()
 	food_tray.clear()
 	lifestyle_cue = ""
+	counsel_tray.clear()
+	counsel_close = ""
+	counsel_listen_id = ""
+	counsel_listen_match = ""
 	selected_points.clear()
 	acu_known.clear()
 	acu_practiced.clear()
@@ -791,6 +799,70 @@ func confirm_food() -> Dictionary:
 	if not can_confirm_food():
 		return {}
 	return _settle_inplace("food", food_tray.duplicate(), {"lifestyle_cue": lifestyle_cue})
+
+
+func enter_emotion() -> void:
+	if current_patient_id == "":
+		return
+	open_treatment()
+	counsel_tray.clear()
+	counsel_close = ""
+	counsel_listen_id = ""
+	counsel_listen_match = ""
+	fsm_state = "emotion_counsel"
+	fsm_changed.emit(fsm_state)
+
+
+func open_emotion() -> void:
+	enter_emotion()
+	_go("res://scenes/emotion.tscn")
+
+
+func add_counsel(cid: String) -> bool:
+	if fsm_state != "emotion_counsel":
+		return false
+	cid = str(cid)
+	if cid == "" or cid in counsel_tray:
+		return false
+	if counsel_tray.size() >= 2:
+		return false
+	counsel_tray.append(cid)
+	return true
+
+
+func remove_counsel(cid: String) -> void:
+	counsel_tray.erase(str(cid))
+
+
+func set_counsel_close(cid: String) -> void:
+	counsel_close = str(cid).strip_edges()
+
+
+func can_confirm_emotion_cards() -> bool:
+	return fsm_state == "emotion_counsel" and counsel_tray.size() >= 1 and counsel_tray.size() <= 2
+
+
+func can_confirm_emotion() -> bool:
+	return can_confirm_emotion_cards()
+
+
+func confirm_emotion(opts: Dictionary = {}) -> Dictionary:
+	if not can_confirm_emotion():
+		return {}
+	var o: Dictionary = opts.duplicate()
+	if o.has("listen_id"):
+		counsel_listen_id = str(o.get("listen_id", ""))
+	if o.has("listen_match"):
+		counsel_listen_match = str(o.get("listen_match", ""))
+	if o.has("close_id"):
+		counsel_close = str(o.get("close_id", ""))
+	var settle_opts := {
+		"listen_id": counsel_listen_id if counsel_listen_id != "" else str(o.get("listen_id", "")),
+		"listen_match": counsel_listen_match if counsel_listen_match != "" else str(o.get("listen_match", "")),
+		"close_id": counsel_close if counsel_close != "" else str(o.get("close_id", "")),
+	}
+	return _settle_inplace("emotion", counsel_tray.duplicate(), settle_opts)
+
 
 
 func enter_formula() -> void:
@@ -1637,6 +1709,33 @@ func run_slice_smoke() -> int:
 	if float(form_r.get("score", 0.0)) < 0.5:
 		fails.append("formula path regressed after food")
 	print("food_therapy_ok")
+
+	# V132 emotion counsel: walk_ease + less_desk on ganyu/clerk with listen anchor
+	var emo_ids: Array = ["walk_ease", "less_desk"]
+	var case_emo: Dictionary = CaseDB.case_for_patient("char_clerk")
+	if case_emo.is_empty() or str(case_emo.get("id", "")) != "ganyu_qizhi":
+		var by_id: Dictionary = {}
+		for c in CaseDB.pack.get("cases", []):
+			if typeof(c) == TYPE_DICTIONARY and str(c.get("id", "")) == "ganyu_qizhi":
+				by_id = c
+				break
+		if not by_id.is_empty():
+			case_emo = by_id
+	if case_emo.is_empty():
+		case_emo = CaseDB.case_for_patient("ganyu_qizhi")
+	var exams_emo := {"wang": true, "wen_listen": true, "wen_ask": true, "qie": true}
+	var emo_r: Dictionary = Scoring.evaluate(case_emo, exams_emo, "emotion", emo_ids, {"listen_match": "anchor", "listen_id": "listen_desk_night"})
+	print("emotion_counsel score=", emo_r.get("score"), " rank=", emo_r.get("rank_id"))
+	var rank_e := str(emo_r.get("rank_id", ""))
+	if rank_e not in ["toward_heal", "work", "clear"]:
+		fails.append("emotion path rank too low %s" % rank_e)
+	if float(emo_r.get("score", 0.0)) < 0.45:
+		fails.append("emotion counsel score too weak %.2f" % float(emo_r.get("score", 0.0)))
+	# Ensure food path still works (no regress)
+	var food_r2: Dictionary = Scoring.evaluate(case_food, exams_food, "food", food_ids, {"lifestyle_cue": "less_worry"})
+	if float(food_r2.get("score", 0.0)) < 0.45:
+		fails.append("food path regressed after emotion")
+	print("emotion_counsel_ok")
 
 	# V131 demo day end-to-end glue
 	if DemoDay == null:

@@ -54,6 +54,10 @@ static func _actions_of(case_data: Dictionary, path: String, ids: Array) -> Dict
 		for h in CaseDB.pack.get("food_items", []):
 			if typeof(h) == TYPE_DICTIONARY:
 				bag[str(h.get("id", ""))] = h
+	elif path == "emotion":
+		for h in CaseDB.pack.get("counsel_cards", []):
+			if typeof(h) == TYPE_DICTIONARY:
+				bag[str(h.get("id", ""))] = h
 	else:
 		for p in CaseDB.pack.get("acupoints", CaseDB.pack.get("points", [])):
 			if typeof(p) == TYPE_DICTIONARY:
@@ -92,6 +96,9 @@ static func _formula_fit(case_data: Dictionary, path: String, ids: Array) -> flo
 	elif path == "food":
 		key = "foods"
 		examples = case_data.get("legal_food_examples", [])
+	elif path == "emotion":
+		key = "cards"
+		examples = case_data.get("legal_emotion_examples", [])
 	else:
 		key = "points"
 		examples = case_data.get("legal_point_examples", [])
@@ -133,6 +140,12 @@ static func _adjust(case_data: Dictionary, path: String, ids: Array) -> float:
 			if nat in prefs or nat.replace("slightly_", "") in prefs:
 				ok += 1
 		return float(ok) / float(ids.size())
+	if path == "emotion":
+		var e := ids.size()
+		return 0.85 if e >= 1 and e <= 2 else 0.35
+	if path == "food":
+		var f := ids.size()
+		return 1.0 if f >= 1 and f <= 3 else 0.35
 	var n := ids.size()
 	return 1.0 if n >= 2 and n <= 5 else 0.4
 
@@ -145,6 +158,16 @@ static func _structure(path: String, ids: Array) -> float:
 		if n >= 2:
 			return 0.6
 		return 0.2
+	if path == "emotion":
+		var e := ids.size()
+		if e >= 1 and e <= 2:
+			return 0.8
+		return 0.3
+	if path == "food":
+		var f := ids.size()
+		if f >= 1 and f <= 3:
+			return 1.0 if f >= 2 else 0.7
+		return 0.3
 	var m := ids.size()
 	if m >= 2 and m <= 5:
 		return 1.0

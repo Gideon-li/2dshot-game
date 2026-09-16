@@ -451,6 +451,44 @@ func lifestyle_cues() -> Array:
 	return arr if typeof(arr) == TYPE_ARRAY else []
 
 
+func counsel_card(id: String) -> Dictionary:
+	for row in pack.get("counsel_cards", []):
+		if typeof(row) == TYPE_DICTIONARY and str(row.get("id", "")) == id:
+			return row
+	return {}
+
+
+func counsel_name(id: String) -> String:
+	var item := counsel_card(id)
+	if item.is_empty():
+		return id
+	var key := "COUNSEL_%s_NAME" % id.to_upper()
+	var trn := TranslationServer.translate(key)
+	if trn != key and trn != "":
+		return trn
+	var loc := GameFlow.loc() if GameFlow else "zh"
+	for k in [loc, "zh", "en"]:
+		if item.has(k) and str(item.get(k, "")).strip_edges() != "":
+			return str(item.get(k))
+		if typeof(item.get("name")) == TYPE_DICTIONARY and str(item["name"].get(k, "")) != "":
+			return str(item["name"][k])
+	return str(item.get("name", id))
+
+
+func counsel_desc(id: String) -> String:
+	var item := counsel_card(id)
+	var key := "COUNSEL_%s_DESC" % id.to_upper()
+	var trn := TranslationServer.translate(key)
+	if trn != key and trn != "":
+		return trn
+	var loc := GameFlow.loc() if GameFlow else "zh"
+	var d: Variant = item.get("desc", item.get("blurb", {}))
+	if typeof(d) == TYPE_DICTIONARY:
+		return str(d.get(loc, d.get("zh", "")))
+	return str(d)
+
+
+
 
 func point_name(id: String) -> String:
 	var p := point(id)

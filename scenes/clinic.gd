@@ -973,6 +973,17 @@ func _fill_revisit_dock(col: VBoxContainer) -> void:
 			get_tree().change_scene_to_file("res://scenes/food.tscn")
 	)
 	row.add_child(food_b)
+	var emo_b := UiKit.make_button("ACTION_EMOTION", true)
+	if emo_b.text == "ACTION_EMOTION" or emo_b.text == "":
+		emo_b.text = "情志"
+	emo_b.pressed.connect(func() -> void:
+		if GameFlow.has_method("open_emotion"):
+			GameFlow.open_emotion()
+		elif GameFlow.has_method("enter_emotion"):
+			GameFlow.enter_emotion()
+			get_tree().change_scene_to_file("res://scenes/emotion.tscn")
+	)
+	row.add_child(emo_b)
 	var ob := UiKit.make_button("REVISIT_OBSERVE", true)
 	if ob.text == "REVISIT_OBSERVE" or ob.text == "":
 		ob.text = "观察勿药"
@@ -1051,6 +1062,14 @@ func _fill_exam_dock(col: VBoxContainer) -> void:
 			GameFlow.open_food()
 	)
 	row.add_child(food_b)
+	var emo_b := UiKit.make_button("ACTION_EMOTION", true)
+	if emo_b.text == "ACTION_EMOTION" or emo_b.text == "":
+		emo_b.text = "情志"
+	emo_b.pressed.connect(func() -> void:
+		if GameFlow.has_method("open_emotion"):
+			GameFlow.open_emotion()
+	)
+	row.add_child(emo_b)
 
 
 

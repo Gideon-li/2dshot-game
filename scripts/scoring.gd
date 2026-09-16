@@ -33,6 +33,14 @@ static func evaluate(case_data: Dictionary, exams_done: Dictionary, path: String
 			natures.append(str(item.get("nature", "neutral")))
 			zheng += int(item.get("zheng_cost", 0))
 			onset_vals.append(_onset_num(str(item.get("onset", "slow"))))
+		elif path == "emotion":
+			item = {}
+			for row in CaseDB.pack.get("counsel_cards", []):
+				if typeof(row) == TYPE_DICTIONARY and str(row.get("id", "")) == id:
+					item = row
+					break
+			natures.append("neutral")
+			onset_vals.append(_onset_num(str(item.get("onset", "slow"))))
 		else:
 			item = CaseDB.point(id)
 		if item.is_empty():
@@ -67,6 +75,9 @@ static func evaluate(case_data: Dictionary, exams_done: Dictionary, path: String
 	elif path == "food":
 		if ids.size() > 3:
 			overtreat = true
+	elif path == "emotion":
+		if ids.size() > 2:
+			overtreat = true
 	else:
 		if ids.size() > int(scoring.get("overtreat", {}).get("if_point_count_gt", 5)):
 			overtreat = true
@@ -84,6 +95,16 @@ static func evaluate(case_data: Dictionary, exams_done: Dictionary, path: String
 				break
 		if ids.has("bingtang"):
 			score -= 0.05
+	if path == "emotion":
+		for idv in ids:
+			var cid := str(idv)
+			for row in CaseDB.pack.get("counsel_cards", []):
+				if typeof(row) == TYPE_DICTIONARY and str(row.get("id", "")) == cid:
+					score += float(row.get("warm", 0.0))
+					score -= float(row.get("stability_penalty", 0.0))
+					break
+		if str(opts.get("listen_match", "")) == "anchor":
+			score += 0.05
 	score = clampf(score, 0.0, 1.0)
 	var rank := _rank(scoring, score)
 	if mistreat:
