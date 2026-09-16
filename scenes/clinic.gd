@@ -669,7 +669,7 @@ func _rebuild_dock() -> void:
 			guide_box.add_child(gtitle)
 			guide_box.add_child(UiKit.ink_label(tr("DEMO_GUIDE_HINT"), 11, UiKit.INK_MUTED))
 			for sid2 in ["morning_consult", "afternoon_forage", "evening_process", "night_codex", "next_day_revisit"]:
-				var done := DemoDay.is_step_done(sid2) or (sid2 == "morning_consult" and DemoDay.is_step_done("treat"))
+				var done: bool = DemoDay.is_step_done(sid2) or (sid2 == "morning_consult" and DemoDay.is_step_done("treat"))
 				var line := HBoxContainer.new()
 				line.add_theme_constant_override("separation", 4)
 				if done and ResourceLoader.exists("res://ui/demo/demo-check.png"):
