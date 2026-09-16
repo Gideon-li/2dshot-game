@@ -249,10 +249,18 @@ func _handle_hotspot(kind: String) -> void:
 				_do_go_loft()
 
 
+func _waiting_list() -> Array:
+	## V134: hall shows ≤4 from weighted pool, not full 7 roster.
+	if GameFlow.has_method("waiting_patients"):
+		return GameFlow.waiting_patients()
+	return CaseDB.patients
+
+
 func _pick_at(index: int) -> void:
-	if index < 0 or index >= CaseDB.patients.size():
+	var seats: Array = _waiting_list()
+	if index < 0 or index >= seats.size():
 		return
-	_on_pick(str(CaseDB.patients[index].get("id", "")))
+	_on_pick(str(seats[index].get("id", "")))
 
 
 func _on_pick(pid: String) -> void:
@@ -280,17 +288,24 @@ func _label_patients() -> void:
 	if chars == null:
 		return
 	var wait_homes := [Vector2(405, 290), Vector2(545, 290), Vector2(300, 340), Vector2(685, 290)]
-	for i in CaseDB.patients.size():
-		var p: Dictionary = CaseDB.patients[i]
+	var seats: Array = _waiting_list()
+	var max_seats := mini(seats.size(), wait_homes.size())
+	# Hide any leftover PatientN beyond max 4 (never expand hall)
+	for i in 8:
+		var extra := chars.get_node_or_null("Patient%d" % i) as Node2D
+		if extra and i >= max_seats:
+			extra.visible = false
+	for i in max_seats:
+		var p: Dictionary = seats[i]
 		var node := chars.get_node_or_null("Patient%d" % i) as Node2D
 		if node == null:
 			node = Node2D.new()
 			node.name = "Patient%d" % i
-			var home: Vector2 = wait_homes[i] if i < wait_homes.size() else Vector2(685 + 40 * (i - 3), 290)
-			node.position = home
 			chars.add_child(node)
+		node.visible = true
+		node.position = wait_homes[i]
 		node.set_meta("pid", str(p.get("id", "")))
-		node.set_meta("home", node.position)
+		node.set_meta("home", wait_homes[i])
 		node.y_sort_enabled = true
 		if node.get_node_or_null("Name") == null:
 			var lb := Label.new()
@@ -303,9 +318,47 @@ func _label_patients() -> void:
 			lb.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			node.add_child(lb)
 	_apply_portraits()
+	_rebuild_waiting_hud()
 
 
 
+
+
+
+func _rebuild_waiting_hud() -> void:
+	var hud := get_node_or_null("UI/Hud")
+	if hud == null:
+		return
+	var row := hud.find_child("Patients", true, false)
+	if row == null:
+		return
+	for c in row.get_children():
+		c.queue_free()
+	var seats_hud: Array = _waiting_list()
+	for i in seats_hud.size():
+		var p: Dictionary = seats_hud[i]
+		var pid := str(p.get("id", ""))
+		var card := Button.new()
+		card.name = pid
+		card.custom_minimum_size = Vector2(170, 56) if seats_hud.size() >= 4 else Vector2(200, 56)
+		card.set_meta("pid", pid)
+		UiKit.style_button(card, false)
+		card.pressed.connect(_on_pick.bind(pid))
+		var inner := VBoxContainer.new()
+		inner.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		inner.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		inner.offset_left = 8
+		inner.offset_right = -8
+		inner.offset_top = 4
+		inner.offset_bottom = -4
+		card.add_child(inner)
+		var nm := UiKit.ink_label(UiKit.loc_text(p.get("name", {}), pid), 15)
+		nm.set_meta("name_label", true)
+		inner.add_child(nm)
+		var idn := UiKit.ink_label(UiKit.loc_text(p.get("identity", {}), ""), 12, UiKit.INK_MUTED)
+		idn.set_meta("id_label", true)
+		inner.add_child(idn)
+		row.add_child(card)
 
 func _apply_portraits() -> void:
 	## V126: prefer ui/characters/<id>.png; fallback sheet/apprentice.
@@ -320,11 +373,13 @@ func _apply_portraits() -> void:
 			ap_art.centered = true
 			ap_art.position = Vector2.ZERO
 			ap_art.scale = Vector2(0.55, 0.55)
-	# Hide shared three-sheet when singles exist; show per-patient sprites.
+	# Hide shared three-sheet when singles exist; show per-patient sprites (≤4 seats).
 	var sheet := chars.get_node_or_null("Patients/Art") as Sprite2D
 	var any_single := false
-	for i in CaseDB.patients.size():
-		var p: Dictionary = CaseDB.patients[i]
+	var seats_art: Array = _waiting_list()
+	var max_art := mini(seats_art.size(), 4)
+	for i in max_art:
+		var p: Dictionary = seats_art[i]
 		var pid := str(p.get("id", ""))
 		if CharacterArt.has_single_file(pid):
 			any_single = true
@@ -1324,6 +1379,12 @@ func _fill_score_dock(col: VBoxContainer) -> void:
 		fu = CaseDB.followup_template(GameFlow.current_patient_id)
 	if fu != "":
 		col.add_child(UiKit.ink_label("%s：%s" % [tr("FOLLOWUP_TITLE"), fu], 13, UiKit.SEAL))
+		var seal_line := str(GameFlow.last_result.get("seal_flash", "")).strip_edges()
+		var seal_id := str(GameFlow.last_result.get("seal_id", "")).strip_edges()
+		if seal_line == "" and seal_id != "" and CaseDB.has_method("seal_flash_line"):
+			seal_line = CaseDB.seal_flash_line(seal_id)
+		if seal_line != "":
+			col.add_child(UiKit.ink_label(seal_line, 14, UiKit.SEAL))
 	if DemoDay:
 		var hop := DemoDay.next_hop_text()
 		if hop != "":
@@ -1386,12 +1447,13 @@ func _build_hud() -> void:
 	row.add_theme_constant_override("separation", 8)
 	row.mouse_filter = Control.MOUSE_FILTER_STOP
 	bar.add_child(row)
-	for i in CaseDB.patients.size():
-		var p: Dictionary = CaseDB.patients[i]
+	var seats_hud: Array = _waiting_list()
+	for i in seats_hud.size():
+		var p: Dictionary = seats_hud[i]
 		var pid := str(p.get("id", ""))
 		var card := Button.new()
 		card.name = pid
-		card.custom_minimum_size = Vector2(170, 56) if CaseDB.patients.size() >= 4 else Vector2(200, 56)
+		card.custom_minimum_size = Vector2(170, 56) if seats_hud.size() >= 4 else Vector2(200, 56)
 		card.set_meta("pid", pid)
 		UiKit.style_button(card, false)
 		card.pressed.connect(_on_pick.bind(pid))
@@ -1469,6 +1531,9 @@ func _paint_hint() -> void:
 
 
 func _refresh() -> void:
+	if str(GameFlow.fsm_state) == "clinic_idle" and GameFlow.has_method("refresh_waiting_seats"):
+		# Keep seats; only force rebuild labels/portraits from current waiting_seat_ids
+		pass
 	if _title:
 		_title.text = tr("GAME_TITLE")
 	if _foot:

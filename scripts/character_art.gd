@@ -1,6 +1,6 @@
 class_name CharacterArt
 extends RefCounted
-## V126: per-id portraits under ui/characters/. Fallback to apprentice.png / patients-three thirds.
+## V126/V134: per-id portraits under ui/characters/. Fallback to apprentice.png / patients-three thirds.
 
 const PATHS := {
 	"apprentice_jiang": "res://ui/characters/jiang_wan.png",
@@ -9,15 +9,36 @@ const PATHS := {
 	"char_clerk": "res://ui/characters/shen_qinghe.png",
 	"char_copyist": "res://ui/characters/zhou_popo.png",
 	"char_xiuniang": "res://ui/characters/zhou_xiuniang.png",
+	"char_zoufan": "res://ui/characters/liu_heqing.png",
+	"char_yanhou": "res://ui/characters/gu_yanyu.png",
+	"char_yaoqin": "res://ui/characters/lin_ashen.png",
 	"pharmacy_kid_xiaohe": "res://ui/characters/xiaohe.png",
 	"mentor_su": "res://ui/characters/su_wenzhou.png",
+}
+
+const SEAL_PATHS := {
+	"fengre_biao": "res://ui/seals/fengre_biao.png",
+	"shiji": "res://ui/seals/shiji.png",
+	"pixu_shikun": "res://ui/seals/pixu_shikun.png",
 }
 
 const FALLBACK_APPRENTICE := "res://ui/apprentice.png"
 const FALLBACK_PATIENTS := "res://ui/patients-three.png"
 
-## Equal horizontal thirds for porter / clerk / copyist.
-const PATIENT_ORDER := ["char_porter", "char_clerk", "char_copyist", "char_xiuniang"]
+## Full Qingshi pool (7). Hall seats are max 4 via waiting rotation — not all forced on stage.
+const PATIENT_ORDER := [
+	"char_porter",
+	"char_clerk",
+	"char_copyist",
+	"char_xiuniang",
+	"char_zoufan",
+	"char_yanhou",
+	"char_yaoqin",
+]
+
+const OLD_FOUR := ["char_porter", "char_clerk", "char_copyist", "char_xiuniang"]
+const NEW_THREE := ["char_zoufan", "char_yanhou", "char_yaoqin"]
+const WAITING_MAX_SEATS := 4
 
 static var _warned: Dictionary = {}
 
@@ -26,18 +47,48 @@ static func portrait_path(id: String) -> String:
 	return str(PATHS.get(id, ""))
 
 
-static func load_portrait(id: String) -> Texture2D:
-	var path := portrait_path(id)
-	if path != "" and ResourceLoader.exists(path):
+static func seal_path(case_id: String) -> String:
+	return str(SEAL_PATHS.get(case_id, ""))
+
+
+static func _load_texture_file(path: String) -> Texture2D:
+	if path == "":
+		return null
+	if ResourceLoader.exists(path):
 		var tex: Texture2D = load(path)
 		if tex != null:
 			return tex
+	# Headless / pre-import: load PNG bytes directly
+	if not path.begins_with("res://"):
+		return null
+	if not FileAccess.file_exists(path):
+		return null
+	var abs_path := ProjectSettings.globalize_path(path)
+	var img := Image.new()
+	if img.load(abs_path) != OK:
+		return null
+	return ImageTexture.create_from_image(img)
+
+
+static func load_portrait(id: String) -> Texture2D:
+	var path := portrait_path(id)
+	var tex := _load_texture_file(path)
+	if tex != null:
+		return tex
 	return _fallback(id)
+
+
+static func load_seal(case_id: String) -> Texture2D:
+	return _load_texture_file(seal_path(case_id))
 
 
 static func has_single_file(id: String) -> bool:
 	var path := portrait_path(id)
-	return path != "" and ResourceLoader.exists(path)
+	if path == "":
+		return false
+	if ResourceLoader.exists(path):
+		return true
+	return FileAccess.file_exists(path)
 
 
 static func _fallback(id: String) -> Texture2D:
@@ -49,7 +100,7 @@ static func _fallback(id: String) -> Texture2D:
 			return load(FALLBACK_APPRENTICE) as Texture2D
 		return null
 	var idx := PATIENT_ORDER.find(id)
-	# Sheet only covers first three; xiuniang and later need single-file portraits.
+	# Sheet only covers first three; later patients need single-file portraits.
 	if idx < 0 or idx >= 3:
 		return null
 	if not ResourceLoader.exists(FALLBACK_PATIENTS):

@@ -1,5 +1,5 @@
 {
-  "version": 10,
+  "version": 11,
   "disclaimer_accepted": false,
   "locale": "zh",
   "audio": {
@@ -65,7 +65,9 @@
     },
     "flags": {
       "xiuniang_death_day_told": false,
-      "town_permit": false
-    }
+      "town_permit": false,
+      "shiji_teach_seen": false
+    },
+    "seals": []
   }
 }

@@ -66,6 +66,27 @@ static func evaluate(case_data: Dictionary, exams_done: Dictionary, path: String
 		if actions.has(str(a)):
 			mistreat = true
 			break
+	# V134: common_mistreat herb/point lists (e.g. fengre + mahuang/guizhi)
+	if not mistreat:
+		for row in case_data.get("common_mistreat", []):
+			if typeof(row) != TYPE_DICTIONARY:
+				continue
+			if path == "formula":
+				var herbs: Variant = row.get("herbs", [])
+				if typeof(herbs) == TYPE_ARRAY:
+					for h in herbs:
+						if str(h) in ids:
+							mistreat = true
+							break
+			else:
+				var pts: Variant = row.get("points", [])
+				if typeof(pts) == TYPE_ARRAY:
+					for pt in pts:
+						if str(pt) in ids:
+							mistreat = true
+							break
+			if mistreat:
+				break
 	var overtreat := false
 	if path == "formula":
 		if zheng > int(case_data.get("over_treat_zheng_cost", 99)):

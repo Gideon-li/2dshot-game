@@ -204,6 +204,15 @@ static func _mistreat(case_data: Dictionary, path: String, ids: Array) -> bool:
 	for a in case_data.get("forbidden_actions", []):
 		if have.has(str(a)):
 			return true
+	for row in case_data.get("common_mistreat", []):
+		if typeof(row) != TYPE_DICTIONARY:
+			continue
+		var key := "herbs" if path == "formula" else "points"
+		var bag: Variant = row.get(key, [])
+		if typeof(bag) == TYPE_ARRAY:
+			for x in bag:
+				if str(x) in ids:
+					return true
 	return false
 
 

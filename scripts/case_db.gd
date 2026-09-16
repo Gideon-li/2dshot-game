@@ -21,6 +21,7 @@ var forage_by_id: Dictionary = {}
 var forage_starter: PackedStringArray = PackedStringArray()
 var process_pack: Dictionary = {}
 var process_by_id: Dictionary = {}
+var qingshi_expand_script: Dictionary = {}
 
 
 func _ready() -> void:
@@ -54,6 +55,7 @@ func _ready() -> void:
 	_apply_bind_join()
 	_load_forage()
 	_load_process()
+	_load_qingshi_expand()
 
 
 
@@ -525,6 +527,198 @@ func _loc_key() -> String:
 	return "zh"
 
 
+
+func _load_qingshi_expand() -> void:
+	## Official V134 script pack: seals flash + case hints. Cards live in slice_characters.
+	qingshi_expand_script = _load_json("res://patients/qingshi_expand_script.json")
+	_ensure_qingshi_roster()
+
+
+func _ensure_qingshi_roster() -> void:
+	## If slice JSON omitted the +3, pull minimal ids from official script + openings via i18n keys.
+	var need := ["char_zoufan", "char_yanhou", "char_yaoqin"]
+	var case_of := {"char_zoufan": "fengre_biao", "char_yanhou": "shiji", "char_yaoqin": "pixu_shikun"}
+	var open_key := {"char_zoufan": "ZOUFAN_OPENING", "char_yanhou": "YANHOU_OPENING", "char_yaoqin": "YAOQIN_OPENING"}
+	var name_key := {"char_zoufan": "CHAR_ZOUFAN_NAME", "char_yanhou": "CHAR_YANHOU_NAME", "char_yaoqin": "CHAR_YAOQIN_NAME"}
+	var id_key := {"char_zoufan": "CHAR_ZOUFAN_TITLE", "char_yanhou": "CHAR_YANHOU_TITLE", "char_yaoqin": "CHAR_YAOQIN_TITLE"}
+	var portraits := {"char_zoufan": "ui/characters/liu_heqing.png", "char_yanhou": "ui/characters/gu_yanyu.png", "char_yaoqin": "ui/characters/lin_ashen.png"}
+	var seat_n := 4
+	for pid in need:
+		if patients_by_id.has(pid):
+			continue
+		var opening := tr(str(open_key.get(pid, "")))
+		if opening == str(open_key.get(pid, "")) or opening == "":
+			opening = ""
+		var card := {
+			"id": pid,
+			"case_id": str(case_of.get(pid, "")),
+			"seat": seat_n,
+			"pool_only": true,
+			"name": {"zh": tr(str(name_key.get(pid, ""))), "en": tr(str(name_key.get(pid, ""))), "ja": tr(str(name_key.get(pid, "")))},
+			"identity": {"zh": tr(str(id_key.get(pid, ""))), "en": tr(str(id_key.get(pid, ""))), "ja": tr(str(id_key.get(pid, "")))},
+			"opening": {"zh": opening, "en": opening, "ja": opening},
+			"portrait_ref": str(portraits.get(pid, "")),
+			"dodge": {
+				"zh": "我不是来对那些名目的。问身上的感觉就好。",
+				"en": "I did not come to match names. Ask what the body feels.",
+				"ja": "呼び名を合わせに来たのではない。体の感覚を問うてくれ。"
+			},
+			"ask_wrappers": {
+				"zh": ["……{sym}。", "小先生，{sym}。"],
+				"en": ["…{sym}.", "Physician — {sym}."],
+				"ja": ["……{sym}。", "小先生、{sym}。"],
+			},
+		}
+		# Prefer portrait path from official script pack when present
+		for row in qingshi_expand_script.get("characters", []):
+			if typeof(row) == TYPE_DICTIONARY and str(row.get("id", "")) == pid:
+				var por := str(row.get("portrait", ""))
+				if por != "":
+					card["portrait_ref"] = por
+				var cid := str(row.get("case_id", ""))
+				if cid != "":
+					card["case_id"] = cid
+		patients.append(card)
+		patients_by_id[pid] = card
+		seat_n += 1
+	patients.sort_custom(func(a, b): return int(a.get("seat", 0)) < int(b.get("seat", 0)))
+
+
+func qingshi_expand_rules() -> Dictionary:
+	var rules: Dictionary = pack.get("qingshi_expand_rules", {})
+	if rules.is_empty():
+		var split: Dictionary = _load_json("res://logic/qingshi_expand.json")
+		if not split.is_empty():
+			return split
+	return rules
+
+
+func seal_flash_line(case_id: String) -> String:
+	var seals: Dictionary = qingshi_expand_script.get("seals", {})
+	var flash: Variant = seals.get("flash_lines", {})
+	if typeof(flash) == TYPE_DICTIONARY and flash.has(case_id):
+		return UiKit.loc_text(flash[case_id], "")
+	var items: Variant = seals.get("items", [])
+	if typeof(items) == TYPE_ARRAY:
+		for row in items:
+			if typeof(row) == TYPE_DICTIONARY and str(row.get("case_id", "")) == case_id:
+				var nm := UiKit.loc_text(row.get("name", {}), str(row.get("name_key", case_id)))
+				var tmpl := UiKit.loc_text(seals.get("flash_template", {}), "")
+				if tmpl != "" and tmpl.find("{name}") >= 0:
+					return tmpl.replace("{name}", nm)
+				var key := "SEAL_FLASH"
+				var t := tr(key)
+				if t != key and t != "":
+					return t.replace("{name}", nm)
+				return nm
+	var key2 := "SEAL_%s" % case_id.to_upper()
+	var nm2 := tr(key2)
+	if nm2 == key2:
+		nm2 = case_id
+	var flash_tr := tr("SEAL_FLASH")
+	if flash_tr != "SEAL_FLASH" and flash_tr != "":
+		return flash_tr.replace("{name}", nm2)
+	return nm2
+
+
+func waiting_max_seats() -> int:
+	var rules := qingshi_expand_rules()
+	var waiting: Dictionary = rules.get("waiting", {}) if typeof(rules.get("waiting", {})) == TYPE_DICTIONARY else {}
+	return int(waiting.get("max_seats", CharacterArt.WAITING_MAX_SEATS))
+
+
+func waiting_pool_ids() -> PackedStringArray:
+	## Full roster (old four + new three). Hall shows ≤ max seats.
+	var out := PackedStringArray()
+	var rules := qingshi_expand_rules()
+	var chars: Variant = rules.get("characters", [])
+	# Prefer PATIENT_ORDER when present in CaseDB
+	for pid in CharacterArt.PATIENT_ORDER:
+		if patients_by_id.has(pid) and pid not in out:
+			out.append(pid)
+	for p in patients:
+		var pid := str(p.get("id", ""))
+		if pid != "" and pid not in out:
+			out.append(pid)
+	if typeof(chars) == TYPE_ARRAY:
+		for c in chars:
+			var cid := str(c)
+			if patients_by_id.has(cid) and cid not in out:
+				out.append(cid)
+	return out
+
+
+func waiting_weight_for(pid: String, has_town_permit: bool, shiji_teach_seen: bool) -> float:
+	var case_data := case_for_patient(pid)
+	var case_id := str(case_data.get("id", ""))
+	var rules := qingshi_expand_rules()
+	var waiting: Dictionary = rules.get("waiting", {}) if typeof(rules.get("waiting", {})) == TYPE_DICTIONARY else {}
+	var weights: Dictionary = waiting.get("weights", {}) if typeof(waiting.get("weights", {})) == TYPE_DICTIONARY else {}
+	var base: Dictionary = weights.get("base", {}) if typeof(weights.get("base", {})) == TYPE_DICTIONARY else {}
+	var without: Dictionary = weights.get("without_permit", {}) if typeof(weights.get("without_permit", {})) == TYPE_DICTIONARY else {}
+	var mult := float(weights.get("with_town_permit_mult", 1.8))
+	# Old four: steady base so hall stays populated
+	if pid in CharacterArt.OLD_FOUR:
+		return 1.0
+	var w := float(base.get(case_id, 0.2))
+	if has_town_permit:
+		return w * mult
+	# without permit: low weights; shiji teach-once boost
+	if case_id == "shiji":
+		w = float(without.get("shiji_weight", 0.25))
+		if bool(without.get("shiji_teach_once", true)) and not shiji_teach_seen:
+			w = maxf(w, 0.55)
+	elif case_id in ["fengre_biao", "pixu_shikun"]:
+		w = float(without.get(case_id, 0.05))
+	return w
+
+
+func pick_waiting_seats(has_town_permit: bool, shiji_teach_seen: bool, exclude: Array = [], rng: RandomNumberGenerator = null) -> PackedStringArray:
+	## Weighted sample without replacement, size ≤ waiting_max_seats().
+	var max_n := waiting_max_seats()
+	var pool := waiting_pool_ids()
+	var candidates: Array = []
+	var ws: Array = []
+	for pid in pool:
+		if str(pid) in exclude:
+			continue
+		var w := waiting_weight_for(str(pid), has_town_permit, shiji_teach_seen)
+		if w <= 0.0:
+			continue
+		candidates.append(str(pid))
+		ws.append(w)
+	var picked := PackedStringArray()
+	if candidates.is_empty():
+		return picked
+	var R := rng if rng != null else RandomNumberGenerator.new()
+	if rng == null:
+		R.randomize()
+	while picked.size() < max_n and not candidates.is_empty():
+		var total := 0.0
+		for w in ws:
+			total += float(w)
+		if total <= 0.0:
+			break
+		var roll := R.randf() * total
+		var acc := 0.0
+		var idx := 0
+		for i in candidates.size():
+			acc += float(ws[i])
+			if roll <= acc:
+				idx = i
+				break
+		picked.append(str(candidates[idx]))
+		candidates.remove_at(idx)
+		ws.remove_at(idx)
+	# Guarantee shiji teach-once appears if no permit and not yet seen
+	if not has_town_permit and not shiji_teach_seen and "char_yanhou" not in picked and patients_by_id.has("char_yanhou"):
+		if picked.size() >= max_n:
+			picked[picked.size() - 1] = "char_yanhou"
+		else:
+			picked.append("char_yanhou")
+	return picked
+
+
 func _builtin_patients() -> Array:
 	## Last-resort cards if JSON missing. Same ids as slice_characters.json.
 	return [
@@ -601,6 +795,49 @@ func _builtin_patients() -> Array:
 				"ja": ["……{sym}。声は細い。", "そのくらい——{sym}。", "針が止まると、{sym}。"],
 			},
 			"ink": [0.32, 0.28, 0.34],
+		},
+
+		{
+			"id": "char_zoufan",
+			"case_id": "fengre_biao",
+			"age": 17,
+			"seat": 4,
+			"pool_only": true,
+			"name": {"zh": "刘禾青", "en": "Liu Heqing", "ja": "劉禾青"},
+			"identity": {"zh": "镇口走贩", "en": "Town-gate peddler", "ja": "鎮口の走販"},
+			"opening": {"zh": "嗓子火辣辣的。头也热。货还要往镇里送。", "en": "Throat burns. Head feels hot. Still got to haul goods into town.", "ja": "喉が熱い。頭も熱い。荷はまだ鎮へ運ぶ。"},
+			"dodge": {"zh": "我不是来对那些名目的。你问嗓子火不火、头热不热——我再说。", "en": "I did not come to match names. Ask throat fire and hot head.", "ja": "呼び名を合わせに来たのではない。喉と頭の熱さなら答える。"},
+			"ask_wrappers": {"zh": ["……{sym}。货还堆着。", "小先生，{sym}。"], "en": ["…{sym}. Goods still piled.", "Doc — {sym}."], "ja": ["……{sym}。荷がまだある。", "小先生、{sym}。"]},
+			"ink": [0.42, 0.22, 0.28],
+			"portrait_ref": "ui/characters/liu_heqing.png",
+		},
+		{
+			"id": "char_yanhou",
+			"case_id": "shiji",
+			"age": 42,
+			"seat": 5,
+			"pool_only": true,
+			"name": {"zh": "顾宴余", "en": "Gu Yanyu", "ja": "顧宴余"},
+			"identity": {"zh": "宴后熟人", "en": "Banquet acquaintance", "ja": "宴のあとの知人"},
+			"opening": {"zh": "昨晚席上吃猛了。脘胀、嗳气，不想动。", "en": "Ate too hard at last night's table. Epigastrium full, belching, no urge to move.", "ja": "昨夜の席で食べ過ぎた。脘が張り、噯気。動きたくない。"},
+			"dodge": {"zh": "我不是来对那些名目的。你问昨夕吃了什么、胀在哪——我再说。", "en": "I did not come to match names. Ask what last evening held.", "ja": "呼び名を合わせに来たのではない。昨夕の食事なら答える。"},
+			"ask_wrappers": {"zh": ["……{sym}。席上劝得凶。", "小先生，{sym}。"], "en": ["…{sym}. The toasts were fierce.", "Doc — {sym}."], "ja": ["……{sym}。席の勧がきつかった。", "小先生、{sym}。"]},
+			"ink": [0.3, 0.34, 0.26],
+			"portrait_ref": "ui/characters/gu_yanyu.png",
+		},
+		{
+			"id": "char_yaoqin",
+			"case_id": "pixu_shikun",
+			"age": 48,
+			"seat": 6,
+			"pool_only": true,
+			"name": {"zh": "林阿婶", "en": "Aunt Lin", "ja": "林のおば"},
+			"identity": {"zh": "药农亲友", "en": "Herb farmer's kin", "ja": "薬農の親類"},
+			"opening": {"zh": "身子困重，吃不下。苔腻那味，阿桂也闻过。", "en": "Body feels heavy and dull; can't eat much. That greasy-coating feel — A'gui smelled it too.", "ja": "体が重く困る。食べられない。膩苔の匂い、阿桂も嗅いだ。"},
+			"dodge": {"zh": "我不是来对那些名目的。你问困不困、吃得下吗——我再说。", "en": "I did not come to match names. Ask heaviness and appetite.", "ja": "呼び名を合わせに来たのではない。困と食欲なら答える。"},
+			"ask_wrappers": {"zh": ["……{sym}。阿桂也这么说。", "小先生，{sym}。"], "en": ["…{sym}. A'gui said so too.", "Physician — {sym}."], "ja": ["……{sym}。阿桂もそう言う。", "小先生、{sym}。"]},
+			"ink": [0.26, 0.36, 0.3],
+			"portrait_ref": "ui/characters/lin_ashen.png",
 		},
 	]
 

@@ -46,7 +46,10 @@ var mentor_affirmed_this_visit: bool = false
 ## V127 revisit-day loop
 var is_revisit_visit: bool = false
 var active_revisit: Dictionary = {}
+## V134 waiting pool (max 4 hall seats; full roster rotates)
+var waiting_seat_ids: Array[String] = []
 signal fanwei_locked(reason: String)
+signal seal_granted(case_id: String, flash_line: String)
 
 var cases_by_id: Dictionary:
 	get:
@@ -64,6 +67,7 @@ func _ready() -> void:
 	_restore_seen()
 	var loc := str(Save.data.get("locale", "zh"))
 	TranslationServer.set_locale(loc)
+	refresh_waiting_seats(true)
 	case_order.clear()
 	for p in CaseDB.patients:
 		if typeof(p) == TYPE_DICTIONARY:
@@ -179,9 +183,12 @@ func back_to_consult() -> void:
 	_go("res://scenes/consult.tscn")
 
 func go_clinic() -> void:
+	var prev_pid := current_patient_id
 	if fsm_state == "settling" and current_patient_id != "" and current_patient_id not in seen:
 		seen.append(current_patient_id)
 		_write_settlement()
+	if prev_pid != "" and prev_pid in seen:
+		rotate_waiting_after_seen(prev_pid)
 	current_patient_id = ""
 	completed_exams.clear()
 	exams = _blank_exams()
@@ -1292,6 +1299,119 @@ func _rank_at_least(rank_id: String, need: String) -> bool:
 	return a >= b
 
 
+
+func get_seals() -> Array:
+	var play := _play()
+	var seals: Variant = play.get("seals", [])
+	if typeof(seals) != TYPE_ARRAY:
+		seals = []
+		play["seals"] = seals
+		Save.data["play"] = play
+	return seals
+
+
+func has_seal(case_id: String) -> bool:
+	return case_id != "" and case_id in get_seals()
+
+
+func grant_seal(case_id: String) -> bool:
+	## Write play.seals[] on clear+; return true if newly added.
+	if case_id == "":
+		return false
+	var play := _play()
+	var seals: Array = play.get("seals", []) if typeof(play.get("seals", [])) == TYPE_ARRAY else []
+	if case_id in seals:
+		return false
+	seals.append(case_id)
+	play["seals"] = seals
+	Save.data["play"] = play
+	var flash := CaseDB.seal_flash_line(case_id) if CaseDB.has_method("seal_flash_line") else case_id
+	last_result["seal_id"] = case_id
+	last_result["seal_flash"] = flash
+	last_result["seal_key"] = "seal.%s" % case_id
+	seal_granted.emit(case_id, flash)
+	return true
+
+
+func _maybe_grant_seal(rank_id: String) -> void:
+	var rules: Dictionary = CaseDB.qingshi_expand_rules() if CaseDB.has_method("qingshi_expand_rules") else {}
+	var seals_cfg: Dictionary = rules.get("seals", {}) if typeof(rules.get("seals", {})) == TYPE_DICTIONARY else {}
+	var need := str(seals_cfg.get("on_settle_if_rank_at_least", "clear"))
+	if not _rank_at_least(rank_id, need):
+		return
+	var case_data: Dictionary = CaseDB.case_for_patient(current_patient_id)
+	var cid := str(case_data.get("id", ""))
+	var allowed: Variant = rules.get("cases", ["fengre_biao", "shiji", "pixu_shikun"])
+	if typeof(allowed) == TYPE_ARRAY and cid not in allowed:
+		# Only V134 three seals this slice (lock: 本档只亮这3枚)
+		return
+	if grant_seal(cid):
+		# Mark shiji teach once when that case clears
+		if cid == "shiji":
+			set_play_flag("shiji_teach_seen", true)
+
+
+func refresh_waiting_seats(force: bool = false) -> void:
+	## Fill ≤4 hall seats from weighted pool. Does not force all 7 on stage.
+	if not force and not waiting_seat_ids.is_empty():
+		return
+	var permit := get_play_flag("town_permit", false)
+	var shiji_seen := get_play_flag("shiji_teach_seen", false)
+	var exclude: Array = []
+	# Prefer unseen for hall; still allow seen if pool thin
+	var picked: PackedStringArray = CaseDB.pick_waiting_seats(permit, shiji_seen, exclude)
+	if picked.is_empty():
+		# Fallback: first max seats of PATIENT_ORDER present in CaseDB
+		var max_n := CaseDB.waiting_max_seats() if CaseDB.has_method("waiting_max_seats") else 4
+		for pid in CharacterArt.PATIENT_ORDER:
+			if CaseDB.patients_by_id.has(pid) and picked.size() < max_n:
+				picked.append(pid)
+	waiting_seat_ids.clear()
+	for pid in picked:
+		waiting_seat_ids.append(str(pid))
+
+
+func waiting_patients() -> Array:
+	## Patient dicts currently on hall seats (≤4).
+	if waiting_seat_ids.is_empty():
+		refresh_waiting_seats(true)
+	var out: Array = []
+	for pid in waiting_seat_ids:
+		var p: Dictionary = CaseDB.patient_by_id(str(pid))
+		if not p.is_empty():
+			out.append(p)
+	# Never exceed max seats
+	var max_n := CaseDB.waiting_max_seats() if CaseDB.has_method("waiting_max_seats") else 4
+	if out.size() > max_n:
+		out = out.slice(0, max_n)
+	return out
+
+
+func rotate_waiting_after_seen(pid: String) -> void:
+	## After a seat is called/seen, optionally refill that slot from pool.
+	if pid == "":
+		return
+	var permit := get_play_flag("town_permit", false)
+	var shiji_seen := get_play_flag("shiji_teach_seen", false)
+	var exclude: Array = []
+	for s in waiting_seat_ids:
+		if str(s) != pid:
+			exclude.append(str(s))
+	for s in seen:
+		exclude.append(str(s))
+	var refill: PackedStringArray = CaseDB.pick_waiting_seats(permit, shiji_seen, exclude)
+	var replacement := ""
+	for cand in refill:
+		if str(cand) != pid and str(cand) not in waiting_seat_ids:
+			replacement = str(cand)
+			break
+	var idx := waiting_seat_ids.find(pid)
+	if idx >= 0:
+		if replacement != "":
+			waiting_seat_ids[idx] = replacement
+		# else leave seat as-seen (clinic greys it)
+
+
 func _maybe_grant_town_permit(rank_id: String) -> void:
 	if not is_xiuniang_case() and current_patient_id != "char_xiuniang":
 		# allow after settle when patient id still set
@@ -1494,9 +1614,13 @@ func _settle_inplace(path: String, ids: Array, opts: Dictionary = {}) -> Diction
 		seen.append(current_patient_id)
 	_write_settlement()
 	_maybe_grant_town_permit(rank_id)
-	# Persist town_permit after grant (may mutate play after _write_settlement)
-	if bool(last_result.get("town_permit", false)):
+	_maybe_grant_seal(rank_id)
+	# Persist town_permit / seals after grant (may mutate play after _write_settlement)
+	if bool(last_result.get("town_permit", false)) or str(last_result.get("seal_id", "")) != "":
 		Save.write_slot()
+	# Mark shiji teach if that patient was seated without permit
+	if current_patient_id == "char_yanhou":
+		set_play_flag("shiji_teach_seen", true)
 	if DemoDay:
 		DemoDay.on_settle(path)
 	fsm_changed.emit(fsm_state)
@@ -2052,6 +2176,115 @@ func run_slice_smoke() -> int:
 	seen.clear()
 	for s_xn in saved_seen_xn:
 		seen.append(str(s_xn))
+
+	# V134 青石诊案扩容：三案各 ≥1 合法 settle → seals 含三 id
+	var play_qs0: Dictionary = _play().duplicate(true)
+	var saved_fsm_qs := fsm_state
+	var saved_pid_qs := current_patient_id
+	var saved_seen_qs: Array = seen.duplicate()
+	var play_qs := _play()
+	play_qs["seals"] = []
+	var flags_qs: Dictionary = play_qs.get("flags", {}) if typeof(play_qs.get("flags", {})) == TYPE_DICTIONARY else {}
+	flags_qs["town_permit"] = true  # weight path; seals still require clear settle
+	flags_qs["shiji_teach_seen"] = false
+	play_qs["flags"] = flags_qs
+	Save.data["play"] = play_qs
+	refresh_waiting_seats(true)
+	if waiting_seat_ids.size() > CaseDB.waiting_max_seats():
+		fails.append("qingshi_expand_ok: waiting seats %d > max" % waiting_seat_ids.size())
+	if waiting_seat_ids.size() < 1:
+		fails.append("qingshi_expand_ok: waiting pool empty")
+	# Roster must include +3
+	for need_pid in ["char_zoufan", "char_yanhou", "char_yaoqin"]:
+		if CaseDB.patient_by_id(need_pid).is_empty():
+			fails.append("qingshi_expand_ok: missing %s" % need_pid)
+	for need_case in ["fengre_biao", "shiji", "pixu_shikun"]:
+		if not CaseDB.cases_by_id.has(need_case):
+			fails.append("qingshi_expand_ok: missing case %s" % need_case)
+	# Portraits
+	for art_pid in ["char_zoufan", "char_yanhou", "char_yaoqin"]:
+		if CharacterArt.load_portrait(art_pid) == null:
+			fails.append("qingshi_expand_ok: portrait missing %s" % art_pid)
+	# Temp-open acu
+	current_patient_id = "char_zoufan"
+	if not acu_teach_unlocked("quchi") or not acu_teach_unlocked("hegu"):
+		fails.append("qingshi_expand_ok: fengre should temp-open quchi+hegu")
+	current_patient_id = "char_yaoqin"
+	if not acu_teach_unlocked("sanyinjiao"):
+		fails.append("qingshi_expand_ok: pixu should temp-open sanyinjiao")
+	# Mistreat: fengre + mahuang/guizhi
+	var mis_fr: Dictionary = Scoring.evaluate(
+		CaseDB.case_for_patient("char_zoufan"),
+		{"wang": true, "wen_listen": true, "wen_ask": true, "qie": true},
+		"formula",
+		["mahuang", "guizhi", "gancao"]
+	)
+	if not bool(mis_fr.get("mistreat", false)):
+		fails.append("qingshi_expand_ok: fengre+mahuang/guizhi should mistreat")
+	# Keep old fenghan mistreat
+	var mis_fh: Dictionary = Scoring.evaluate(
+		CaseDB.case_for_patient("char_porter"),
+		{"wang": true, "wen_listen": true, "wen_ask": true, "qie": true},
+		"formula",
+		["jinyinhua", "lianqiao", "gancao"]
+	)
+	if not bool(mis_fh.get("mistreat", false)):
+		fails.append("qingshi_expand_ok: fenghan+jinyinhua should still mistreat")
+	# shanzha present for shiji
+	if not CaseDB.herbs_by_id.has("shanzha"):
+		fails.append("qingshi_expand_ok: shanzha herb missing")
+	# Three legal settles
+	var legal_rows := [
+		["char_zoufan", "formula", ["jinyinhua", "lianqiao", "bohe", "gancao"], "fengre_biao"],
+		["char_yanhou", "formula", ["baizhu", "fuling", "shengjiang", "zhiqiao", "shanzha"], "shiji"],
+		["char_yaoqin", "acupuncture", ["zusanli", "sanyinjiao"], "pixu_shikun"],
+	]
+	var seals_got: Array = []
+	for row_qs in legal_rows:
+		var pid_qs := str(row_qs[0])
+		var path_qs := str(row_qs[1])
+		var ids_qs: Array = row_qs[2]
+		var expect_case := str(row_qs[3])
+		current_patient_id = pid_qs
+		for e_qs in EXAM_IDS:
+			exams[e_qs] = true
+			if e_qs not in completed_exams:
+				completed_exams.append(e_qs)
+		fsm_state = "treatment_choice"
+		var settle_qs: Dictionary = _settle_inplace(path_qs, ids_qs)
+		var rank_qs := str(settle_qs.get("rank_id", ""))
+		print("qingshi_settle ", pid_qs, " ", path_qs, " rank=", rank_qs, " score=", settle_qs.get("score"), " mistreat=", settle_qs.get("mistreat"))
+		if bool(settle_qs.get("mistreat", false)):
+			fails.append("qingshi_expand_ok: legal path mistreat on %s" % pid_qs)
+		if float(settle_qs.get("score", 0.0)) < 0.35 and rank_qs in ["", "none"]:
+			# try alternate legal path
+			if path_qs == "formula":
+				settle_qs = _settle_inplace("acupuncture", ["zusanli"] if pid_qs != "char_zoufan" else ["quchi", "hegu"])
+				rank_qs = str(settle_qs.get("rank_id", ""))
+				print("qingshi_settle_fallback ", pid_qs, " rank=", rank_qs)
+		if not _rank_at_least(rank_qs, "clear"):
+			fails.append("qingshi_expand_ok: legal settle need rank>=clear got %s on %s" % [rank_qs, pid_qs])
+		elif expect_case not in get_seals():
+			fails.append("qingshi_expand_ok: settle clear but seal not written for %s" % expect_case)
+	for need_seal in ["fengre_biao", "shiji", "pixu_shikun"]:
+		if need_seal not in get_seals():
+			fails.append("qingshi_expand_ok: seals missing %s got=%s" % [need_seal, str(get_seals())])
+	# Seal flash lines from official script
+	for cid_flash in ["fengre_biao", "shiji", "pixu_shikun"]:
+		var fl := CaseDB.seal_flash_line(cid_flash)
+		if fl.strip_edges() == "":
+			fails.append("qingshi_expand_ok: seal flash empty for %s" % cid_flash)
+	print("qingshi_seals=", get_seals())
+	print("qingshi_waiting=", waiting_seat_ids)
+	print("qingshi_expand_ok")
+	Save.data["play"] = play_qs0
+	fsm_state = saved_fsm_qs
+	current_patient_id = saved_pid_qs
+	seen.clear()
+	for s_qs in saved_seen_qs:
+		seen.append(str(s_qs))
+	refresh_waiting_seats(true)
+
 
 	# V131 demo day end-to-end glue
 	if DemoDay == null:

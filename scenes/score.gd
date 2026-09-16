@@ -7,6 +7,8 @@ var _speed: Label
 var _flags: Label
 var _miss: Label
 var _followup: Label
+var _seal_flash: Label
+var _seal_icon: TextureRect
 
 
 func _ready() -> void:
@@ -53,6 +55,20 @@ func _build() -> void:
 	_followup.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_followup.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	col.add_child(_followup)
+	var seal_row := HBoxContainer.new()
+	seal_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	seal_row.add_theme_constant_override("separation", 10)
+	_seal_icon = TextureRect.new()
+	_seal_icon.custom_minimum_size = Vector2(48, 48)
+	_seal_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_seal_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	_seal_icon.visible = false
+	seal_row.add_child(_seal_icon)
+	_seal_flash = UiKit.ink_label("", 18, UiKit.SEAL)
+	_seal_flash.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_seal_flash.visible = false
+	seal_row.add_child(_seal_flash)
+	col.add_child(seal_row)
 	var bot := HBoxContainer.new()
 	bot.alignment = BoxContainer.ALIGNMENT_CENTER
 	var next := UiKit.make_button("ACTION_NEXT_PATIENT", true)
@@ -119,6 +135,18 @@ func _refresh() -> void:
 	var foot := find_child("ScoreFoot", true, false) as Label
 	if foot:
 		foot.text = tr("BOOT_DISCLAIMER_FOOTER")
+	# V134 seal flash (official qingshi_expand_script flash_lines / SEAL_FLASH)
+	var seal_id := str(r.get("seal_id", "")).strip_edges()
+	var seal_line := str(r.get("seal_flash", "")).strip_edges()
+	if seal_line == "" and seal_id != "" and CaseDB.has_method("seal_flash_line"):
+		seal_line = CaseDB.seal_flash_line(seal_id)
+	if _seal_flash:
+		_seal_flash.visible = seal_line != ""
+		_seal_flash.text = seal_line
+	if _seal_icon:
+		var tex: Texture2D = CharacterArt.load_seal(seal_id) if seal_id != "" else null
+		_seal_icon.texture = tex
+		_seal_icon.visible = tex != null
 	UiKit.refresh_i18n_buttons(self)
 
 
