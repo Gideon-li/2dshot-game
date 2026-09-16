@@ -1,0 +1,150 @@
+{
+  "id": "mo-wen-qi-huang-qingshi-expand-script",
+  "project": "墨问岐黄",
+  "version": 1,
+  "task": "DEV-TASKS-V134",
+  "notes": {
+    "no_diagnosis_names_in_dialogue": true,
+    "seals_are_class_marks_not_hud_diagnosis": true,
+    "no_chen_banxian": true,
+    "no_samir": true,
+    "disclaimer_keys": [
+      "STORE_NOT_MEDICAL",
+      "BOOT_DISCLAIMER_*"
+    ]
+  },
+  "characters": [
+    {
+      "id": "char_zoufan",
+      "case_id": "fengre_biao",
+      "portrait": "ui/characters/liu_heqing.png"
+    },
+    {
+      "id": "char_yanhou",
+      "case_id": "shiji",
+      "portrait": "ui/characters/gu_yanyu.png"
+    },
+    {
+      "id": "char_yaoqin",
+      "case_id": "pixu_shikun",
+      "portrait": "ui/characters/lin_ashen.png"
+    }
+  ],
+  "seals": {
+    "title": {
+      "zh": "证印",
+      "en": "Pattern seals",
+      "ja": "証印"
+    },
+    "hint": {
+      "zh": "治好一类，亮一枚。不上诊断名。",
+      "en": "Clear a pattern class, light a seal. No diagnosis names on HUD.",
+      "ja": "一類を治せば一枚。診断名は出さない。"
+    },
+    "flash_template": {
+      "zh": "证印亮起：{name}",
+      "en": "Seal lit: {name}",
+      "ja": "証印が点く：{name}"
+    },
+    "locked": {
+      "zh": "未亮",
+      "en": "Unlit",
+      "ja": "未点"
+    },
+    "unlocked": {
+      "zh": "已识",
+      "en": "Known",
+      "ja": "識"
+    },
+    "items": [
+      {
+        "case_id": "fengre_biao",
+        "key": "seal.fengre_biao",
+        "name_key": "SEAL_FENGRE_BIAO",
+        "name": {
+          "zh": "风热",
+          "en": "Wind-heat",
+          "ja": "風熱"
+        },
+        "icon": "ui/seals/fengre_biao.png"
+      },
+      {
+        "case_id": "shiji",
+        "key": "seal.shiji",
+        "name_key": "SEAL_SHIJI",
+        "name": {
+          "zh": "食积",
+          "en": "Food stagnation",
+          "ja": "食積"
+        },
+        "icon": "ui/seals/shiji.png"
+      },
+      {
+        "case_id": "pixu_shikun",
+        "key": "seal.pixu_shikun",
+        "name_key": "SEAL_PIXU_SHIKUN",
+        "name": {
+          "zh": "脾虚湿困",
+          "en": "Spleen vacuity with damp encumbrance",
+          "ja": "脾虚湿困"
+        },
+        "icon": "ui/seals/pixu_shikun.png"
+      }
+    ],
+    "flash_lines": {
+      "fengre_biao": {
+        "zh": "证印亮起：风热。",
+        "en": "Seal lit: Wind-heat.",
+        "ja": "証印が点く：風熱。"
+      },
+      "shiji": {
+        "zh": "证印亮起：食积。",
+        "en": "Seal lit: Food stagnation.",
+        "ja": "証印が点く：食積。"
+      },
+      "pixu_shikun": {
+        "zh": "证印亮起：脾虚湿困。",
+        "en": "Seal lit: Spleen vacuity with damp.",
+        "ja": "証印が点く：脾虚湿困。"
+      }
+    }
+  },
+  "case_hints": {
+    "fengre_biao": {
+      "hint": {
+        "zh": "热象偏多，与风寒不同。",
+        "en": "More heat signs — not the same as wind-cold.",
+        "ja": "熱象が多い。風寒とは違う。"
+      },
+      "mis_cold": {
+        "zh": "当风寒去补了。热更闷。",
+        "en": "Treated as wind-cold and tonified. Heat feels more stuck.",
+        "ja": "風寒として補った。熱がさらに悶える。"
+      }
+    },
+    "shiji": {
+      "hint": {
+        "zh": "先问饮食。消导宜轻。",
+        "en": "Ask diet first. Digestion guidance stays light.",
+        "ja": "まず飲食を問え。消導は軽く。"
+      },
+      "mis_harsh": {
+        "zh": "峻下太猛。人虚了一截。",
+        "en": "Purged too hard. Vacuity took a bite.",
+        "ja": "峻下が強すぎた。虚が一段ついた。"
+      }
+    },
+    "pixu_shikun": {
+      "hint": {
+        "zh": "困重纳差，宜健脾化湿。",
+        "en": "Heavy body, poor appetite — support spleen, transform damp.",
+        "ja": "困重・納差。健脾化湿がよい。"
+      },
+      "mis_tonify": {
+        "zh": "补得太腻。湿更困。",
+        "en": "Tonified too richly. Damp feels heavier.",
+        "ja": "補が膩すぎた。湿がさらに困る。"
+      }
+    }
+  }
+}

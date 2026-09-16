@@ -1,7 +1,7 @@
 {
   "id": "mo-wen-qi-huang-revisit-script",
   "project": "墨问岐黄",
-  "version": 2,
+  "version": 3,
   "task": "DEV-TASKS-V127",
   "notes": {
     "no_llm": true,
@@ -168,6 +168,84 @@
           "zh": "胸口还像压着架。忌日近的那几天更醒。",
           "en": "The chest still feels framed. Near the memorial days I wake even more.",
           "ja": "胸はまだ架に圧されるよう。忌日が近い日は余計に覚める。"
+        }
+      }
+    },
+    "fengre_biao": {
+      "character_id": "char_zoufan",
+      "name_zh": "刘禾青",
+      "flavors": {
+        "good": {
+          "zh": "小先生，嗓子松多了。头也不那么热。货我送完再来跟一声。",
+          "en": "Doc — throat's much better. Head less hot. I'll check in after I finish the haul.",
+          "ja": "小先生、喉がだいぶ楽だ。頭も熱くない。荷を届けてから一言言いに来る。"
+        },
+        "slow": {
+          "zh": "好一点。咽还刺，出汗仍不畅。还能走，慢。",
+          "en": "A bit better. Throat still stings; sweat still sticky. I can walk — slowly.",
+          "ja": "少し楽。咽はまだ刺す。汗もまだ出にくい。歩けるが遅い。"
+        },
+        "over": {
+          "zh": "清得太猛，人发空，腿软。热倒退了，走不动货。",
+          "en": "Cleared too hard — emptied, weak legs. Heat backed off, but I can't haul.",
+          "ja": "清が強すぎて空になった。足が弱い。熱は引いたが荷が運べない。"
+        },
+        "mis": {
+          "zh": "像当风寒捂的。热更闷，咽更疼。",
+          "en": "Felt like a wind-cold wrap. Heat more stuck; throat hurts worse.",
+          "ja": "風寒で温めたみたいだ。熱がさらに悶え、咽がより痛い。"
+        }
+      }
+    },
+    "shiji": {
+      "character_id": "char_yanhou",
+      "name_zh": "顾宴余",
+      "flavors": {
+        "good": {
+          "zh": "老弟，胀松了。嗳气少。我少喝两杯，过两日再坐。",
+          "en": "Friend — fullness eased. Less belching. I'll drink less; sit again in a couple days.",
+          "ja": "老弟、張りが楽だ。噯気も少ない。酒を控える。二日後また座る。"
+        },
+        "slow": {
+          "zh": "好一点。饭后仍堵。闻到荤还想躲。",
+          "en": "A little better. Still blocks after meals. Still duck rich meat smell.",
+          "ja": "少し楽。食後はまだ詰まる。葷の匂いからはまだ逃げたい。"
+        },
+        "over": {
+          "zh": "泻得太狠，人虚了一截。胀是轻了，站不稳。",
+          "en": "Purged too hard — vacuity took a bite. Fullness lighter, but I can't stand steady.",
+          "ja": "瀉が強すぎて虚が一段。張りは軽いが立てない。"
+        },
+        "mis": {
+          "zh": "胀还在。像没消着。别再给我猛的。",
+          "en": "Fullness stays. Doesn't feel digested. Nothing harsh again.",
+          "ja": "張りは残る。消えてない感じ。キツいのはもう要らない。"
+        }
+      }
+    },
+    "pixu_shikun": {
+      "character_id": "char_yaoqin",
+      "name_zh": "林阿婶",
+      "flavors": {
+        "good": {
+          "zh": "小大夫，困轻了。粥吃得下。药圃我还能帮半天。",
+          "en": "Doctor — heaviness eased. I can take porridge. I can still help half a day at the plots.",
+          "ja": "小大夫、困が楽だ。粥が入る。薬圃も半日は手伝える。"
+        },
+        "slow": {
+          "zh": "好一点，慢。午后还困，口仍淡。",
+          "en": "A little better, slowly. Afternoon still heavy; mouth still bland.",
+          "ja": "少し楽だが遅い。午後はまだ困る。口も淡い。"
+        },
+        "over": {
+          "zh": "补得太腻，更不想吃。身上像裹了布。",
+          "en": "Tonified too greasy — even less appetite. Body feels wrapped in cloth.",
+          "ja": "補が膩すぎて、さらに食べたくない。体が布に包まれたよう。"
+        },
+        "mis": {
+          "zh": "困还在。像越补越沉。",
+          "en": "Heaviness stays. Feels heavier the more it was tonified.",
+          "ja": "困は残る。補うほど沈むようだ。"
         }
       }
     }

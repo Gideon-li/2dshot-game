@@ -24,7 +24,7 @@
 
 三案各 10 条问舟边界：`mentor.case_cues.<case_id>.lines`（中英日）。缺诊催句：`mentor.exam_missing_cues`。
 
-## 四张病人身份包
+## 七张病人身份包
 
 | id | 人 | 年龄 / 身份 / 地域 | 原型语气 | 本局病机（内部） | 求医动机 |
 | --- | --- | --- | --- | --- | --- |
@@ -32,6 +32,9 @@
 | `char_clerk` | 沈清荷 | 27 / 县衙书办 / 江南县城 | 书生账房 | `ganyu_qizhi` | 案牍堆着，夜里睡不实，求一口气顺 |
 | `char_copyist` | 周婆婆 | 61 / 抄经香铺老人 / 内陆小镇 | 老人 | `yinxu_neire` | 夜里抄经眼干喉干，想睡安一点好继续写 |
 | `char_xiuniang` | **周绣娘** | 28 / 绣坊主事 / 青石镇 | 绣娘织妇 | `xuexu_ganyu` | 睡不好、头沉；活做到一半针停在手里 |
+| `char_zoufan` | **刘禾青** | 17 / 镇口走贩 / 青石镇 | 走贩少年 | `fengre_biao` | 嗓子火、头热，货还要往镇里送 |
+| `char_yanhou` | **顾宴余** | 42 / 宴后熟人 / 青石镇 | 市井熟人 | `shiji` | 席上吃猛了，脘胀嗳气不想动 |
+| `char_yaoqin` | **林阿婶** | 48 / 药农亲友 / 青石镇外 | 药圃亲眷 | `pixu_shikun` | 困重纳差，求一口能吃的粥气 |
 
 每人含：`personality` / `voice` / `motive` / `taboos` / `conceal` / `opening` / `ask_wrappers` / `dodge` / `pathogenesis_notes`。
 
@@ -42,6 +45,19 @@
 - 合法开放解：酸枣仁汤思路 / 神门·三阴交 / 情志起居（忌日前勿急绣、留灯勿独熬）/ 枣莲粥慢温；抓住郁或血虚一面并护胃即可。
 - 达标 settle → `play.flags.town_permit` + 问舟旁白；**不做**出镇旅行、情缘、女儿高热同诊。
 - i18n：`other-systems/i18n/XIUNIANG-KEYS.md`。
+
+### V134 青石扩容（+3）
+
+| 案 id | 角色 id | 人 | 教学 |
+| --- | --- | --- | --- |
+| `fengre_biao` | `char_zoufan` | 刘禾青 | 与阿福风寒对照；勿大补 |
+| `shiji` | `char_yanhou` | 顾宴余 | 问饮食；勿峻下；勿上陆衡抢案 |
+| `pixu_shikun` | `char_yaoqin` | 林阿婶 | 困重纳差；健脾化湿 / 粥养 |
+
+- 证印：`play.seals[]` 亮对应三枚；不做十二印墙。
+- 候诊最多四席轮换；`town_permit` 后新案权重升高；无 permit 也可偶遇食积教学。
+- i18n：`other-systems/i18n/QINGSHI-EXPAND-KEYS.md`。
+
 
 ## 问诊边界（病人 + 本地模型 / 远程开发 / 离线回退）
 
@@ -160,3 +176,11 @@ API / 本地模型失败或无网：`ask_wrappers` 套锚。`{sym}` 只填锚，
 - `patients/xiuniang_script.json` → 忌日/出镇旁白/专属卡索引
 - `patients/emotion_script.json` → `no_rush_embroider` / `leave_lamp_on`（键映射 COUNSEL_NO_RUSH_EMBROIDERY_* / COUNSEL_LAMP_COMPANY_*）
 - `patients/revisit_script.json` → `xuexu_ganyu` 四 flavor
+
+## V134 青石诊案扩容
+
+剧本交付：
+- `slice_characters.json` v9 → `char_zoufan`/`fengre_biao`、`char_yanhou`/`shiji`、`char_yaoqin`/`pixu_shikun`
+- `qingshi_expand_script.json` → 证印闪句 SEAL_* + 案提示
+- `revisit_script.json` → 三案四 flavor
+- 对话不报证型名；证印为类目标记（SEAL_HINT）。不做陈半仙/萨米尔/小儿。

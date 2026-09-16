@@ -1,7 +1,7 @@
 {
   "id": "mo-wen-qi-huang-slice-characters",
   "project": "墨问岐黄",
-  "version": 8,
+  "version": 9,
   "based_on": [
     "design-pack 03 人物志 v1.1",
     "15 十问与问舟 v1.10",
@@ -9,7 +9,9 @@
     "DEV-TASKS-V119 (江晚/苏问舟/小荷/三病人)",
     "DEV-TASKS-V120",
     "DEV-TASKS-V133",
-    "logic/XIUNIAN-CASE-V133.md"
+    "logic/XIUNIAN-CASE-V133.md",
+    "DEV-TASKS-V134",
+    "logic/QINGSHI-EXPAND-V134.md"
   ],
   "notes": {
     "not_quiz": true,
@@ -41,7 +43,8 @@
     "art_brief": "立绘/锚点学徒一律画江晚，不要画回林晚。",
     "v120": "mentor cues all interrogatives; xiaohe waiting/cabinet >=3; followup one line per case; no diagnosis/formula in mentor cues",
     "v120_proxy": "pharmacy_kid.proxy_diagnosis.enabled=false",
-    "v133": "char_xiuniang / xuexu_ganyu; memorial on yin; trust; town_permit narration"
+    "v133": "char_xiuniang / xuexu_ganyu; memorial on yin; trust; town_permit narration",
+    "v134": "char_zoufan/yanhou/yaoqin +3 cases; seals; waiting rotate max 4"
   },
   "inquiry_rules": {
     "zh": [
@@ -595,6 +598,99 @@
           "zh": "这案稳了。出镇许可，我写下。",
           "en": "This case holds. I'll write the town-leave permit.",
           "ja": "この案は落ち着いた。出鎮許可を記す。"
+        }
+      },
+      "fengre_biao": {
+        "priority_ten_ask": [
+          "寒热",
+          "汗",
+          "咽",
+          "头"
+        ],
+        "lines": {
+          "zh": [
+            "嗓子火——怕冷重，还是怕热更明显？",
+            "汗出不畅，你问到了吗？",
+            "和阿福那种怕冷扛货，像不像？",
+            "口渴轻不轻？头胀像不像晒过？",
+            "别急着麻桂。这一问补上了吗？"
+          ],
+          "en": [
+            "Throat fire — is chill worse, or heat?",
+            "Did you ask whether sweat opens cleanly?",
+            "Does it look like A'fu's wind-cold haul, or not?",
+            "Mild thirst? Head full like sun?",
+            "Don't rush mahuang-guizhi. Is that question in?"
+          ],
+          "ja": [
+            "喉の熱——悪寒が重いか、熱が目立つか？",
+            "汗が出にくいか聞いたか？",
+            "阿福の惡寒の荷運びと似ているか？",
+            "渇きは軽いか？頭の脹れは日差しのようか？",
+            "麻桂を急ぐな。この問いは入ったか？"
+          ]
+        }
+      },
+      "shiji": {
+        "priority_ten_ask": [
+          "饮食",
+          "胸",
+          "便",
+          "因"
+        ],
+        "lines": {
+          "zh": [
+            "昨晚席上吃了什么，你问清了吗？",
+            "胀在脘还是胸？嗳气多不多？",
+            "便黏不爽——问到了吗？",
+            "消导宜轻。峻下他怕不怕？",
+            "这一问补上了吗？"
+          ],
+          "en": [
+            "What did he eat at last night's table — clear?",
+            "Fullness in the epigastrium or chest? Much belching?",
+            "Sticky, incomplete stool — asked?",
+            "Keep digestion light. Does he fear a hard purge?",
+            "Is that question in yet?"
+          ],
+          "ja": [
+            "昨夜の席で何を食べたか、はっきりしたか？",
+            "張りは脘か胸か？噯気は多いか？",
+            "便が粘くすっきりしない——聞いたか？",
+            "消導は軽く。峻下を怖がるか？",
+            "この問いは入ったか？"
+          ]
+        }
+      },
+      "pixu_shikun": {
+        "priority_ten_ask": [
+          "饮食",
+          "头身",
+          "便",
+          "汗"
+        ],
+        "lines": {
+          "zh": [
+            "困在头还是在身？午后更重吗？",
+            "口淡、纳差，你问到了吗？",
+            "便溏不溏？稍动就汗吗？",
+            "补得太腻会怎样，你想过吗？",
+            "这一问补上了吗？"
+          ],
+          "en": [
+            "Heaviness in head or body? Worse after noon?",
+            "Bland mouth, poor appetite — asked?",
+            "Soft stool? Sweat with light work?",
+            "What if tonify runs too greasy — thought it through?",
+            "Is that question in yet?"
+          ],
+          "ja": [
+            "困は頭か身か？午後より重いか？",
+            "口淡・納差は聞いたか？",
+            "便溏か？少し動いて汗か？",
+            "補が膩すぎたらどうなるか、考えたか？",
+            "この問いは入ったか？"
+          ]
         }
       }
     },
@@ -1222,6 +1318,441 @@
         "en": "Has the memorial day passed? Does the needle still stop at night? If it does, do not force the stitch.",
         "ja": "忌日は過ぎたか？夜に針はまだ止まるか？止まったら無理に繡るな。"
       }
+    },
+    {
+      "id": "char_zoufan",
+      "case_id": "fengre_biao",
+      "name": {
+        "zh": "刘禾青",
+        "en": "Liu Heqing",
+        "ja": "劉禾青"
+      },
+      "age": 17,
+      "gender": "male",
+      "identity": {
+        "zh": "镇口走贩",
+        "en": "Town-gate peddler",
+        "ja": "鎮口の走販"
+      },
+      "region": {
+        "zh": "青石镇",
+        "en": "Qingshi town",
+        "ja": "青石鎮"
+      },
+      "prototype_tone": "走贩少年",
+      "address_player": {
+        "zh": "小先生",
+        "en": "young physician",
+        "ja": "小先生"
+      },
+      "personality": {
+        "zh": "急、嗓门亮。货比身子要紧。怕耽误送货。",
+        "en": "Hurried, loud. Goods matter more than the body. Fears delaying delivery.",
+        "ja": "急ぎで声が大きい。荷が体より大事。配達遅れを恐れる。"
+      },
+      "voice": {
+        "zh": "快，短。说到咽就用手捂一下。",
+        "en": "Fast, short. Covers the throat when naming it.",
+        "ja": "速く短い。咽の話で手を当てる。"
+      },
+      "motive": {
+        "zh": "嗓子火、头热，货还要往镇里送——不是来对题。",
+        "en": "Throat burns, head hot; goods still need hauling into town — not a quiz.",
+        "ja": "喉が熱く頭も熱い。荷はまだ鎮へ。試験ではない。"
+      },
+      "taboos": {
+        "zh": [
+          "不主动报证型名、方名",
+          "不把风热说成风寒对案",
+          "不做情缘"
+        ],
+        "en": [
+          "never volunteers pattern or formula names",
+          "does not frame wind-heat as wind-cold",
+          "no romance"
+        ],
+        "ja": [
+          "証型名も方名も自ら言わない",
+          "風熱を風寒にしない",
+          "恋愛なし"
+        ]
+      },
+      "conceal": {
+        "zh": "先说嗓子火、头热、还要送货。不交全症状。",
+        "en": "Leads with throat fire, hot head, deliveries waiting. No full chart.",
+        "ja": "まず喉の熱、頭の熱、配達。全症状は渡さない。"
+      },
+      "pathogenesis_notes": {
+        "internal_only": true,
+        "case_id": "fengre_biao",
+        "lived": {
+          "zh": [
+            "嗓子火辣",
+            "头热",
+            "咽痛",
+            "汗出不畅偏热",
+            "货还要送"
+          ],
+          "en": [
+            "burning throat",
+            "hot head",
+            "sore throat",
+            "heat with sticky sweat",
+            "goods still to haul"
+          ],
+          "ja": [
+            "喉が熱い",
+            "頭が熱い",
+            "咽痛",
+            "熱っぽい汗が出にくい",
+            "荷が残る"
+          ]
+        },
+        "how_they_talk_about_it": {
+          "zh": "用嗓子、头热、送货来说；不说标准证型名。",
+          "en": "Speaks in throat, hot head, deliveries; never textbook pattern names.",
+          "ja": "喉、頭の熱、配達の話。標準の証名は言わない。"
+        }
+      },
+      "opening": {
+        "zh": "嗓子火辣辣的。头也热。货还要往镇里送。",
+        "en": "Throat burns. Head feels hot. Still got to haul goods into town.",
+        "ja": "喉が熱い。頭も熱い。荷はまだ鎮へ運ぶ。"
+      },
+      "ask_wrappers": {
+        "zh": [
+          "……{sym}。货还堆着。",
+          "小先生，{sym}。别耽误太久。",
+          "嗓子一紧，{sym}。",
+          "头热的时候，{sym}。"
+        ],
+        "en": [
+          "…{sym}. Goods still piled.",
+          "Doc — {sym}. Don't keep me long.",
+          "When the throat tightens, {sym}.",
+          "When the head is hot, {sym}."
+        ],
+        "ja": [
+          "……{sym}。荷がまだある。",
+          "小先生、{sym}。長く止めないで。",
+          "喉がつまるとき、{sym}。",
+          "頭が熱いとき、{sym}。"
+        ]
+      },
+      "dodge": {
+        "zh": "我不是来对那些名目的。你问嗓子火不火、头热不热、汗出得畅不畅——我再说。",
+        "en": "I did not come to match names. Ask if the throat burns, if the head is hot, if sweat comes free — then I will answer.",
+        "ja": "呼び名を合わせに来たのではない。喉が熱いか、頭が熱いか、汗が出やすいかなら答える。"
+      },
+      "seat": 4,
+      "pool_only": true,
+      "ink": [
+        0.42,
+        0.22,
+        0.28
+      ],
+      "art_hint": {
+        "zh": "十七，少年。短褐担货，面热唇红。Q 版平涂，齐 V126.1。",
+        "en": "Seventeen. Short tunic, carrying goods; flushed face. Q flat, match V126.1.",
+        "ja": "十七。短褐で荷。顔が赤い。Q平塗り、V126.1。"
+      },
+      "portrait_ref": "ui/characters/liu_heqing.png",
+      "followup": {
+        "zh": "禾青说咽痛松些了。别再当风寒大补。",
+        "en": "Heqing says the throat eased. Don't treat it as wind-cold and tonify.",
+        "ja": "禾青は咽が少し楽だと言う。風寒の大補にするな。"
+      }
+    },
+    {
+      "id": "char_yanhou",
+      "case_id": "shiji",
+      "name": {
+        "zh": "顾宴余",
+        "en": "Gu Yanyu",
+        "ja": "顧宴余"
+      },
+      "age": 42,
+      "gender": "male",
+      "identity": {
+        "zh": "宴后熟人",
+        "en": "Banquet acquaintance",
+        "ja": "宴のあとの知人"
+      },
+      "region": {
+        "zh": "青石镇",
+        "en": "Qingshi town",
+        "ja": "青石鎮"
+      },
+      "prototype_tone": "市井熟人",
+      "address_player": {
+        "zh": "小先生",
+        "en": "young physician",
+        "ja": "小先生"
+      },
+      "personality": {
+        "zh": "圆滑、不好意思。先笑后叹。不提官场名姓。",
+        "en": "Smooth, sheepish. Smiles then sighs. No yamen names.",
+        "ja": "円くて決まり悪い。まず笑って溜息。役所の名は出さない。"
+      },
+      "voice": {
+        "zh": "慢，带酒气回味。说到胀就拍肚子。",
+        "en": "Slow, leftover wine in the voice. Pats the belly when naming fullness.",
+        "ja": "遅く酒の名残。張りの話で腹を叩く。"
+      },
+      "motive": {
+        "zh": "席上吃猛了，脘胀嗳气不想动——求松一截，不是来对题。",
+        "en": "Ate too hard; epigastrium full, belching, no urge to move — wants ease, not a quiz.",
+        "ja": "食べ過ぎて脘が張り噯気。楽になりたい。試験ではない。"
+      },
+      "taboos": {
+        "zh": [
+          "不主动报证型名、方名",
+          "勿上陆衡抢案全文",
+          "不做情缘",
+          "勿峻下自荐"
+        ],
+        "en": [
+          "never volunteers pattern or formula names",
+          "no Lu Heng case-stealing plot",
+          "no romance",
+          "does not ask for harsh purge"
+        ],
+        "ja": [
+          "証型名も方名も自ら言わない",
+          "陸衡の搶案なし",
+          "恋愛なし",
+          "峻下を自ら求めない"
+        ]
+      },
+      "conceal": {
+        "zh": "先说吃猛了、脘胀、嗳气。不交全症状。",
+        "en": "Leads with overeating, fullness, belching. No full chart.",
+        "ja": "まず食べ過ぎ、張り、噯気。全症状は渡さない。"
+      },
+      "pathogenesis_notes": {
+        "internal_only": true,
+        "case_id": "shiji",
+        "lived": {
+          "zh": [
+            "脘胀",
+            "嗳气",
+            "不想动",
+            "昨夕吃猛",
+            "口黏"
+          ],
+          "en": [
+            "epigastric fullness",
+            "belching",
+            "no urge to move",
+            "ate hard last night",
+            "sticky mouth"
+          ],
+          "ja": [
+            "脘の張り",
+            "噯気",
+            "動きたくない",
+            "昨夕食べ過ぎ",
+            "口がねばる"
+          ]
+        },
+        "how_they_talk_about_it": {
+          "zh": "用席面、胀、嗳气来说；不说标准证型名。",
+          "en": "Speaks in banquet, fullness, belching; never textbook pattern names.",
+          "ja": "宴、張り、噯気の話。標準の証名は言わない。"
+        }
+      },
+      "opening": {
+        "zh": "昨晚席上吃猛了。脘胀、嗳气，不想动。",
+        "en": "Ate too hard at last night's table. Epigastrium full, belching, no urge to move.",
+        "ja": "昨夜の席で食べ過ぎた。脘が張り、噯気。動きたくない。"
+      },
+      "ask_wrappers": {
+        "zh": [
+          "……{sym}。席上劝得凶。",
+          "小先生，{sym}。别笑话我。",
+          "胀的时候，{sym}。",
+          "嗳一口，{sym}。"
+        ],
+        "en": [
+          "…{sym}. The toasts were fierce.",
+          "Doc — {sym}. Don't laugh.",
+          "When it fills, {sym}.",
+          "One belch, and {sym}."
+        ],
+        "ja": [
+          "……{sym}。席の勧がきつかった。",
+          "小先生、{sym}。笑わないで。",
+          "張るとき、{sym}。",
+          "噯気のあと、{sym}。"
+        ]
+      },
+      "dodge": {
+        "zh": "我不是来对那些名目的。你问昨夕吃了什么、胀在哪、嗳气多不多——我再说。",
+        "en": "I did not come to match names. Ask what last evening held, where it fills, how often I belch — then I will answer.",
+        "ja": "呼び名を合わせに来たのではない。昨夕何を食べたか、どこが張るか、噯気が多いかなら答える。"
+      },
+      "seat": 5,
+      "pool_only": true,
+      "ink": [
+        0.3,
+        0.34,
+        0.26
+      ],
+      "art_hint": {
+        "zh": "四十二，市井。酒气未消，手按脘。Q 版平涂，齐 V126.1。",
+        "en": "Forty-two, townsman. Wine not gone; hand on epigastrium. Q flat, V126.1.",
+        "ja": "四十二。酒気残り、脘を押さえる。Q平塗り、V126.1。"
+      },
+      "portrait_ref": "ui/characters/gu_yanyu.png",
+      "followup": {
+        "zh": "宴余说胀松了些。先别峻下。",
+        "en": "Yanyu says the fullness eased. Don't purge harshly yet.",
+        "ja": "宴余は張りが少し楽だと言う。まず峻下するな。"
+      }
+    },
+    {
+      "id": "char_yaoqin",
+      "case_id": "pixu_shikun",
+      "name": {
+        "zh": "林阿婶",
+        "en": "Aunt Lin",
+        "ja": "林のおば"
+      },
+      "age": 48,
+      "gender": "female",
+      "identity": {
+        "zh": "药农亲友",
+        "en": "Herb farmer's kin",
+        "ja": "薬農の親類"
+      },
+      "region": {
+        "zh": "青石镇外",
+        "en": "Outside Qingshi town",
+        "ja": "青石鎮の外れ"
+      },
+      "prototype_tone": "药圃亲眷",
+      "address_player": {
+        "zh": "小先生",
+        "en": "young physician",
+        "ja": "小先生"
+      },
+      "personality": {
+        "zh": "实在、慢声。先说困重纳差，爱提阿桂闻过的味。",
+        "en": "Plain, slow. Leads with heaviness and poor intake; mentions what A'gui smelled.",
+        "ja": "実直で声が遅い。困重と納差。阿桂が嗅いだ匂いを言う。"
+      },
+      "voice": {
+        "zh": "软，带土气。说到苔腻会笑一下。",
+        "en": "Soft, earthy. Smiles when naming the greasy coat.",
+        "ja": "柔らかく土の気。膩苔の話で少し笑う。"
+      },
+      "motive": {
+        "zh": "困重纳差，求一口能吃的粥气——不是来对题。",
+        "en": "Heavy and dull with poor intake; wants porridge qi that goes down — not a quiz.",
+        "ja": "困重で食べられない。入る粥気がほしい。試験ではない。"
+      },
+      "taboos": {
+        "zh": [
+          "不主动报证型名、方名",
+          "不求猛补",
+          "不做情缘"
+        ],
+        "en": [
+          "never volunteers pattern or formula names",
+          "does not ask for harsh tonify",
+          "no romance"
+        ],
+        "ja": [
+          "証型名も方名も自ら言わない",
+          "猛補を求めない",
+          "恋愛なし"
+        ]
+      },
+      "conceal": {
+        "zh": "先说困重、吃不下、苔腻那味。不交全症状。",
+        "en": "Leads with heaviness, poor intake, greasy-coat feel. No full chart.",
+        "ja": "まず困重、食べられない、膩苔。全症状は渡さない。"
+      },
+      "pathogenesis_notes": {
+        "internal_only": true,
+        "case_id": "pixu_shikun",
+        "lived": {
+          "zh": [
+            "困重",
+            "纳差",
+            "苔腻印象",
+            "肢软",
+            "饭后更沉"
+          ],
+          "en": [
+            "heavy dull body",
+            "poor intake",
+            "greasy-coat feel",
+            "soft limbs",
+            "heavier after meals"
+          ],
+          "ja": [
+            "困重",
+            "納差",
+            "膩苔の印象",
+            "肢が弱い",
+            "食後さらに重い"
+          ]
+        },
+        "how_they_talk_about_it": {
+          "zh": "用困、吃不下、药圃味来说；不说标准证型名。",
+          "en": "Speaks in heaviness, can't-eat, herb-plot smell; never textbook pattern names.",
+          "ja": "困、食べられない、薬圃の匂い。標準の証名は言わない。"
+        }
+      },
+      "opening": {
+        "zh": "身子困重，吃不下。苔腻那味，阿桂也闻过。",
+        "en": "Body feels heavy and dull; can't eat much. That greasy-coating feel — A'gui smelled it too.",
+        "ja": "体が重く困る。食べられない。膩苔の匂い、阿桂も嗅いだ。"
+      },
+      "ask_wrappers": {
+        "zh": [
+          "……{sym}。阿桂也这么说。",
+          "小先生，{sym}。",
+          "困的时候，{sym}。",
+          "粥都懒得喝时，{sym}。"
+        ],
+        "en": [
+          "…{sym}. A'gui said so too.",
+          "Physician — {sym}.",
+          "When the heaviness sits, {sym}.",
+          "When even porridge feels hard, {sym}."
+        ],
+        "ja": [
+          "……{sym}。阿桂もそう言う。",
+          "小先生、{sym}。",
+          "困るとき、{sym}。",
+          "粥も面倒なとき、{sym}。"
+        ]
+      },
+      "dodge": {
+        "zh": "我不是来对那些名目的。你问困不困、吃得下吗、饭后沉不沉——我再说。",
+        "en": "I did not come to match names. Ask if the body is heavy, if food goes down, if meals make it worse — then I will answer.",
+        "ja": "呼び名を合わせに来たのではない。体が重いか、食べられるか、食後に沈むかなら答える。"
+      },
+      "seat": 6,
+      "pool_only": true,
+      "ink": [
+        0.26,
+        0.36,
+        0.3
+      ],
+      "art_hint": {
+        "zh": "四十八，药圃亲眷。布裙泥边，神倦。Q 版平涂，齐 V126.1。",
+        "en": "Forty-eight, herb-plot kin. Cloth skirt mud-edged, weary. Q flat, V126.1.",
+        "ja": "四十八。薬圃の親類。布裙に泥、疲れ顔。Q平塗り、V126.1。"
+      },
+      "portrait_ref": "ui/characters/lin_ashen.png",
+      "followup": {
+        "zh": "阿婶说困轻了些。粥养比猛补稳。",
+        "en": "Auntie says the heaviness eased. Porridge care beats harsh tonify.",
+        "ja": "おばは困が少し楽だと言う。粥養の方が猛補より穏。"
+      }
     }
   ],
   "pharmacy_kid": {
@@ -1439,6 +1970,21 @@
       "zh": "忌日过了没有？夜里针还停不停？停了就别硬绣。",
       "en": "Has the memorial day passed? Does the needle still stop at night? If it does, do not force the stitch.",
       "ja": "忌日は過ぎたか？夜に針はまだ止まるか？止まったら無理に繡るな。"
+    },
+    "fengre_biao": {
+      "zh": "禾青说咽痛松些了。别再当风寒大补。",
+      "en": "Heqing says the throat eased. Don't treat it as wind-cold and tonify.",
+      "ja": "禾青は咽が少し楽だと言う。風寒の大補にするな。"
+    },
+    "shiji": {
+      "zh": "宴余说胀松了些。先别峻下。",
+      "en": "Yanyu says the fullness eased. Don't purge harshly yet.",
+      "ja": "宴余は張りが少し楽だと言う。まず峻下するな。"
+    },
+    "pixu_shikun": {
+      "zh": "阿婶说困轻了些。粥养比猛补稳。",
+      "en": "Auntie says the heaviness eased. Porridge care beats harsh tonify.",
+      "ja": "おばは困が少し楽だと言う。粥養の方が猛補より穏。"
     }
   },
   "revisit_lines": {
@@ -1528,6 +2074,72 @@
         "zh": "胸口还像压着架。忌日近的那几天更醒。",
         "en": "The chest still feels framed. Near the memorial days I wake even more.",
         "ja": "胸はまだ架に圧されるよう。忌日が近い日は余計に覚める。"
+      }
+    },
+    "fengre_biao": {
+      "good": {
+        "zh": "小先生，嗓子不那么火了。货也能送。",
+        "en": "Doc — throat less fiery. I can haul again.",
+        "ja": "小先生、喉がそんなに熱くない。荷も運べる。"
+      },
+      "slow": {
+        "zh": "好一点，慢。头还热，风一吹嗓子紧。",
+        "en": "A bit better, slowly. Head still warm; wind tightens the throat.",
+        "ja": "少し楽だが遅い。頭は熱い。風で喉がつまる。"
+      },
+      "over": {
+        "zh": "药太清，人发空，出汗多。",
+        "en": "Herbs too clearing — emptied, sweat more.",
+        "ja": "薬が清すぎて空に。汗が多い。"
+      },
+      "mis": {
+        "zh": "更热了。咽更疼。像穿错了衣。",
+        "en": "Hotter. Throat hurts more. Wrong coat.",
+        "ja": "もっと熱い。咽が余計に痛い。衣を間違えたよう。"
+      }
+    },
+    "shiji": {
+      "good": {
+        "zh": "胀松了。嗳气少。能走几步。",
+        "en": "Fullness eased. Less belching. Can walk a bit.",
+        "ja": "張りが楽。噯気が少ない。少し歩ける。"
+      },
+      "slow": {
+        "zh": "还胀，轻些。别再劝酒。",
+        "en": "Still full, lighter. No more toasts.",
+        "ja": "まだ張るが軽い。もう勧酒するな。"
+      },
+      "over": {
+        "zh": "泻得猛，人发虚。",
+        "en": "Purged too hard — hollow.",
+        "ja": "瀉が強くて虚に。"
+      },
+      "mis": {
+        "zh": "还堵着。像没对上。",
+        "en": "Still jammed. Missed it.",
+        "ja": "まだ詰まっている。合ってない。"
+      }
+    },
+    "pixu_shikun": {
+      "good": {
+        "zh": "困轻了。粥吃得下。阿桂也说苔淡了。",
+        "en": "Heaviness eased. Can take porridge. A'gui says the coat looks lighter.",
+        "ja": "困が軽い。粥が入る。阿桂も苔が淡いと言う。"
+      },
+      "slow": {
+        "zh": "还沉，慢。纳差好些。",
+        "en": "Still heavy, slowly. Appetite a bit better.",
+        "ja": "まだ重いが遅い。食欲は少し。"
+      },
+      "over": {
+        "zh": "补得太猛，更闷。",
+        "en": "Tonified too hard — more stuffy.",
+        "ja": "補が強すぎて余計に悶える。"
+      },
+      "mis": {
+        "zh": "困还在。像浇了油。",
+        "en": "Heaviness stays. Like oil on mud.",
+        "ja": "困が残る。油を注いだよう。"
       }
     }
   },
