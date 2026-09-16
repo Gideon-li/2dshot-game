@@ -128,3 +128,7 @@
 ## V130（2026-09-16）
 
 食疗一声互动短音：`bowl`（软置瓷/木碗 + 可选极轻箸点）。挂：食疗卡入碗 → `play_one("bowl")`；配方托盘倒药仍用 `herb-drop`。无新 M 轨、无 per-patient BGM、无食疗大主题；雨/薄床/duck 不动。见 `V130-FOOD-SFX.md`。
+
+## V132（2026-09-16）
+
+情志疏导一声互动短音：`tea`（软置茶盏于木案 + 可选极轻液面 hush）。挂：茶盏/疏导卡轻放 → `play_one("tea")`；对话翻纸复用 `ui-paper`（不新作 page-flip）。无新 M 轨、无 per-patient BGM、无情志大主题；雨/薄床/duck 不动。见 `V132-COUNSEL-SFX.md`。

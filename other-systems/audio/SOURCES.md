@@ -31,3 +31,4 @@
 | fry.ogg | original | 本目录合成 | 干炒沙沙（V128；无油爆） |
 | candle.ogg | original | 本目录合成 | 残烛/灯花（V129 阁楼夜读；非篝火/非艾绒） |
 | bowl.ogg | original | 本目录合成 | 摆碗/入盏（V130 食疗；瓷木轻放+可选箸点；异于 herb-drop） |
+| tea.ogg | original | 本目录合成 | 茶盏轻放木案（V132 情志疏导；瓷木轻触+可选液面 hush；异于 bowl / herb-drop） |

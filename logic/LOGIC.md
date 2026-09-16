@@ -189,3 +189,13 @@ API：`MentorCues.next(case, exams, asked_ten_q_ids, cues_emitted)`。
 - `play.demo_guide`：`enabled` / `steps_done` / `dismissed`；六步可跳序。
 - 结算下一跳键：`DEMO_NEXT_GARDEN|PROCESS|LOFT|DAY`。
 - 冒烟：`demo_day_ok`（诊→治→采→炮→夜读→次日复诊）。
+
+
+## V132 情志疏导入门
+
+见 `EMOTION-COUNSEL-V132.md` + `emotion_counsel.json`。
+
+- path=`emotion`；`ACTION_EMOTION`；教学锚沈清荷 / `ganyu_qizhi`。
+- 三拍：listen → 1～2 张 `counsel_cards` → 可选 close。
+- 六卡：`walk_ease` / `less_desk` / `vent_rest` / `warm_calm` / `no_scold` / `no_harsh_tonify`（后两张惩罚）。
+- 离线选项树；`evaluate(path="emotion")`；冒烟 `emotion_counsel_ok`。
