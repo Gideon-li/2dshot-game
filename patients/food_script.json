@@ -1,0 +1,260 @@
+{
+  "id": "mo-wen-qi-huang-food-script",
+  "project": "墨问岐黄",
+  "version": 1,
+  "task": "DEV-TASKS-V130",
+  "notes": {
+    "no_medical_advice": true,
+    "no_substitute_for_care": true,
+    "no_formula_prescription": true,
+    "disclaimer_keys": [
+      "STORE_NOT_MEDICAL",
+      "BOOT_DISCLAIMER_*"
+    ],
+    "path": "food",
+    "aligned_i18n": "other-systems/i18n/ui.json FOOD_* / MENTOR_FOOD_*",
+    "slice": "6 cards; 3 lifestyle_cue; settle flavors; mentor one line primary"
+  },
+  "mentor_su": {
+    "id": "mentor_su",
+    "clickable": false,
+    "food_lines": {
+      "zh": [
+        "先养胃气。"
+      ],
+      "en": [
+        "Nourish stomach qi first."
+      ],
+      "ja": [
+        "まず胃気を養え。"
+      ]
+    },
+    "food_line_keys": [
+      "MENTOR_FOOD_1"
+    ],
+    "optional_extra_keys": [
+      "MENTOR_FOOD_2"
+    ]
+  },
+  "cards": [
+    {
+      "id": "zhou_di",
+      "name_key": "FOOD_ZHOU_DI_NAME",
+      "desc_key": "FOOD_ZHOU_DI_DESC",
+      "name": {
+        "zh": "粳米粥底",
+        "en": "Japonica rice porridge base",
+        "ja": "粳米の粥底"
+      },
+      "desc": {
+        "zh": "护中。万膳之底。",
+        "en": "Guards the center. Base of many meals.",
+        "ja": "中を護る。万膳の底。"
+      }
+    },
+    {
+      "id": "hongzao",
+      "name_key": "FOOD_HONGZAO_NAME",
+      "desc_key": "FOOD_HONGZAO_DESC",
+      "name": {
+        "zh": "红枣",
+        "en": "Red dates",
+        "ja": "紅棗"
+      },
+      "desc": {
+        "zh": "甘温安神，缓补。",
+        "en": "Sweet-warm; calms and tonifies gently.",
+        "ja": "甘温で安神。緩補。"
+      }
+    },
+    {
+      "id": "lianzi",
+      "name_key": "FOOD_LIANZI_NAME",
+      "desc_key": "FOOD_LIANZI_DESC",
+      "name": {
+        "zh": "莲子",
+        "en": "Lotus seeds",
+        "ja": "蓮子"
+      },
+      "desc": {
+        "zh": "健脾宁心，宜慢养。",
+        "en": "Supports spleen and calms the heart — slow care.",
+        "ja": "脾を健やかにし心を寧んず。ゆっくり養う。"
+      }
+    },
+    {
+      "id": "shanyao",
+      "name_key": "FOOD_SHANYAO_NAME",
+      "desc_key": "FOOD_SHANYAO_DESC",
+      "name": {
+        "zh": "山药",
+        "en": "Chinese yam",
+        "ja": "山薬"
+      },
+      "desc": {
+        "zh": "益气养阴，不峻。",
+        "en": "Benefits qi and yin without harshness.",
+        "ja": "気を益し陰を養う。峻ではない。"
+      }
+    },
+    {
+      "id": "shengjiang",
+      "name_key": "FOOD_SHENGJIANG_NAME",
+      "desc_key": "FOOD_SHENGJIANG_DESC",
+      "name": {
+        "zh": "生姜",
+        "en": "Fresh ginger",
+        "ja": "生姜"
+      },
+      "desc": {
+        "zh": "轻散寒、开胃。勿当麻黄用。",
+        "en": "Gently disperses cold and opens appetite. Not ephedra.",
+        "ja": "軽く寒を散じ、胃を開く。麻黄の代わりではない。"
+      }
+    },
+    {
+      "id": "bingtang",
+      "name_key": "FOOD_BINGTANG_NAME",
+      "desc_key": "FOOD_BINGTANG_DESC",
+      "name": {
+        "zh": "冰糖",
+        "en": "Rock sugar",
+        "ja": "氷糖"
+      },
+      "desc": {
+        "zh": "甘缓。过甜对痰湿不稳。",
+        "en": "Sweet and mild. Too sweet unsettles phlegm-damp.",
+        "ja": "甘く緩やか。甘過ぎは痰湿に不穏。"
+      }
+    }
+  ],
+  "lifestyle_cues": [
+    {
+      "id": "less_worry",
+      "label_key": "FOOD_CUE_LESS_WORRY",
+      "line_key": "FOOD_CUE_LESS_WORRY_LINE",
+      "label": {
+        "zh": "少思虑",
+        "en": "Worry less",
+        "ja": "思い悩みを少なく"
+      },
+      "line": {
+        "zh": "夜里少转念头，胃气才肯下来。",
+        "en": "Fewer circling thoughts at night — then stomach qi can settle.",
+        "ja": "夜に思いを巡らすな。胃気が下りる。"
+      }
+    },
+    {
+      "id": "rest_wind",
+      "label_key": "FOOD_CUE_REST_WIND",
+      "line_key": "FOOD_CUE_REST_WIND_LINE",
+      "label": {
+        "zh": "避风歇息",
+        "en": "Rest out of the wind",
+        "ja": "風を避けて休む"
+      },
+      "line": {
+        "zh": "肩背别再灌江风。",
+        "en": "Don't let river wind keep hitting the shoulders.",
+        "ja": "肩背に川風を入れ続けるな。"
+      }
+    },
+    {
+      "id": "no_late_lunch",
+      "label_key": "FOOD_CUE_NO_LATE_LUNCH",
+      "line_key": "FOOD_CUE_NO_LATE_LUNCH_LINE",
+      "label": {
+        "zh": "勿过午不食硬扛",
+        "en": "Don't tough out skipped midday meals",
+        "ja": "午を過ぎて食べない我慢はするな"
+      },
+      "line": {
+        "zh": "饥一阵饱一阵，膳也难养。",
+        "en": "Feast-or-famine makes even good food hard to nourish.",
+        "ja": "飢えと満の波では、膳も養いにくい。"
+      }
+    }
+  ],
+  "settle": {
+    "hint_key": "FOOD_SETTLE_HINT",
+    "slow_key": "FOOD_SETTLE_SLOW",
+    "light_key": "FOOD_SETTLE_LIGHT",
+    "unsteady_key": "FOOD_SETTLE_UNSTEADY",
+    "table_weak_key": "FOOD_SETTLE_TABLE_WEAK",
+    "hint": {
+      "zh": "食疗偏慢、偏温。不是开挂。",
+      "en": "Food therapy leans slow and warm — not a cheat.",
+      "ja": "食療は遅く、温かい。チートではない。"
+    },
+    "slow": {
+      "zh": "向愈偏慢，但温分尚可。",
+      "en": "Recovery is slow, but the warmth holds.",
+      "ja": "快方は遅いが、温は足りる。"
+    },
+    "light": {
+      "zh": "轻养得住。再观两日。",
+      "en": "Light care is holding. Watch another day or two.",
+      "ja": "軽い養いが効いている。あと二日見よう。"
+    },
+    "unsteady": {
+      "zh": "补得太猛，或寒热乱搭。稳分下去了。",
+      "en": "Tonify ran hot, or cold and heat were mixed poorly. Steady score dropped.",
+      "ja": "補が強すぎるか、寒熱が乱れた。穏点が下がった。"
+    },
+    "table_weak": {
+      "zh": "表寒还在门外，单靠粥枣偏慢。",
+      "en": "Exterior cold is still at the door — porridge and dates alone are slow.",
+      "ja": "表寒はまだ戸口。粥と棗だけでは遅い。"
+    }
+  },
+  "combo_hints": [
+    {
+      "id": "zaolian",
+      "foods": [
+        "hongzao",
+        "lianzi",
+        "zhou_di"
+      ],
+      "key": "FOOD_COMBO_ZAOLIAN",
+      "text": {
+        "zh": "红枣 + 莲子 + 粥 → 安神健脾慢愈",
+        "en": "Dates + lotus + porridge → calm spleen, slow mend",
+        "ja": "紅棗＋蓮子＋粥 → 安神健脾のゆっくり快方"
+      }
+    },
+    {
+      "id": "jiangzhou",
+      "foods": [
+        "shengjiang",
+        "zhou_di"
+      ],
+      "key": "FOOD_COMBO_JIANGZHOU",
+      "text": {
+        "zh": "生姜 + 粥 → 轻寒不适",
+        "en": "Ginger + porridge → light chill discomfort",
+        "ja": "生姜＋粥 → 軽い寒の不快"
+      }
+    },
+    {
+      "id": "shanzao",
+      "foods": [
+        "shanyao",
+        "hongzao"
+      ],
+      "key": "FOOD_COMBO_SHANZAO",
+      "text": {
+        "zh": "山药 + 枣 → 脾虚气弱印象",
+        "en": "Yam + dates → spleen-qi soft impression",
+        "ja": "山薬＋棗 → 脾虚気弱の印象"
+      }
+    }
+  ],
+  "i18n_keys_hint": [
+    "FOOD_*_NAME",
+    "FOOD_*_DESC",
+    "FOOD_CUE_*",
+    "FOOD_SETTLE_*",
+    "MENTOR_FOOD_1",
+    "STORE_NOT_MEDICAL"
+  ]
+}

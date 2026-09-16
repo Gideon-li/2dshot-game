@@ -119,3 +119,12 @@ API / 本地模型失败或无网：`ask_wrappers` 套锚。`{sym}` 只填锚，
 - 三页短 id：`hanre_xushi` / `tenq_song` / `pulse_names`（字段 `theory` → `theory.*`）；正文优先 i18n `*_key`。
 - 问舟：`mentor_su.loft_lines`（中英日）。页脚复用 `STORE_NOT_MEDICAL` / `BOOT_DISCLAIMER_*`。
 - 不写方药医嘱、不报诊断名。
+
+## V130 食疗入门
+
+路径：`patients/food_script.json`（与 i18n `FOOD_*` / `MENTOR_FOOD_*` 对齐）
+
+- 6 卡：`zhou_di` / `hongzao` / `lianzi` / `shanyao` / `shengjiang` / `bingtang`（名+短描述，中英日 + `*_key`）
+- 3 劝说：`less_worry` / `rest_wind` / `no_late_lunch`（标签+句）
+- 结算口味：`FOOD_SETTLE_*`；问舟主句 `MENTOR_FOOD_1`「先养胃气」
+- 声明复用 `STORE_NOT_MEDICAL`。不写替代就医、不写疗效承诺。
