@@ -24,15 +24,24 @@
 
 三案各 10 条问舟边界：`mentor.case_cues.<case_id>.lines`（中英日）。缺诊催句：`mentor.exam_missing_cues`。
 
-## 三张病人身份包
+## 四张病人身份包
 
 | id | 人 | 年龄 / 身份 / 地域 | 原型语气 | 本局病机（内部） | 求医动机 |
 | --- | --- | --- | --- | --- | --- |
 | `char_porter` | 赵阿福 | 34 / 码头脚夫 / 江南水乡 | 樵夫脚夫 | `fenghan_biao` | 夜里江风灌进来，明天还要扛货 |
 | `char_clerk` | 沈清荷 | 27 / 县衙书办 / 江南县城 | 书生账房 | `ganyu_qizhi` | 案牍堆着，夜里睡不实，求一口气顺 |
 | `char_copyist` | 周婆婆 | 61 / 抄经香铺老人 / 内陆小镇 | 老人 | `yinxu_neire` | 夜里抄经眼干喉干，想睡安一点好继续写 |
+| `char_xiuniang` | **周绣娘** | 28 / 绣坊主事 / 青石镇 | 绣娘织妇 | `xuexu_ganyu` | 睡不好、头沉；活做到一半针停在手里 |
 
 每人含：`personality` / `voice` / `motive` / `taboos` / `conceal` / `opening` / `ask_wrappers` / `dodge` / `pathogenesis_notes`。
+
+### V133 周绣娘要点
+
+- 表面头痛失眠；**忌日真句**需问到因/情志类才给（胸口如压绣架）；永不主动报证型名。
+- 信任 `play.trust.xiuniang`：夸绣/不问女儿私 → 升；当着「女儿」追问私 → 降。
+- 合法开放解：酸枣仁汤思路 / 神门·三阴交 / 情志起居（忌日前勿急绣、留灯勿独熬）/ 枣莲粥慢温；抓住郁或血虚一面并护胃即可。
+- 达标 settle → `play.flags.town_permit` + 问舟旁白；**不做**出镇旅行、情缘、女儿高热同诊。
+- i18n：`other-systems/i18n/XIUNIANG-KEYS.md`。
 
 ## 问诊边界（病人 + 本地模型 / 远程开发 / 离线回退）
 
@@ -144,4 +153,10 @@ API / 本地模型失败或无网：`ask_wrappers` 套锚。`{sym}` 只填锚，
 - 三拍：倾听 3 选 1（`listen_desk_night`=`anchor`，`listen_flank`=`off`，`listen_cheer_up`=`bad`）→ 6 卡 → 可选收束
 - 6 卡 id：`walk_ease` / `less_desk` / `vent_rest` / `warm_calm` / `no_scold` / `no_harsh_tonify`
 - 清荷 `COUNSEL_QINGHE_1..3`；问舟主句 `MENTOR_EMOTION_1`
-- 不写替代就医、不点破证型名、不新开周绣娘/情缘。
+- 不写替代就医、不点破证型名、不做情缘；周绣娘已为第四病人（V133），女儿高热案仍不做。
+
+剧本交付：
+- `patients/slice_characters.json` v8 → `char_xiuniang`（opening/wrappers/dodge/忌日真句/mentor/复诊）
+- `patients/xiuniang_script.json` → 忌日/出镇旁白/专属卡索引
+- `patients/emotion_script.json` → `no_rush_embroider` / `leave_lamp_on`（键映射 COUNSEL_NO_RUSH_EMBROIDERY_* / COUNSEL_LAMP_COMPANY_*）
+- `patients/revisit_script.json` → `xuexu_ganyu` 四 flavor

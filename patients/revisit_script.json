@@ -1,7 +1,7 @@
 {
   "id": "mo-wen-qi-huang-revisit-script",
   "project": "墨问岐黄",
-  "version": 1,
+  "version": 2,
   "task": "DEV-TASKS-V127",
   "notes": {
     "no_llm": true,
@@ -142,6 +142,32 @@
           "zh": "越来越燥。盗汗还在，睡不实。不好意思又来烦您。",
           "en": "Drier than before. Night sweat stays; sleep will not hold. Sorry to trouble you again.",
           "ja": "前より燥くなった。盗汗も残り、眠りが浅い。またお手数をかけてすみません。"
+        }
+      }
+    },
+    "xuexu_ganyu": {
+      "character_id": "char_xiuniang",
+      "name_zh": "周绣娘",
+      "flavors": {
+        "good": {
+          "zh": "小先生……夜里静些了。针还能走完一朵。忌日也过了。",
+          "en": "Physician… nights are quieter. The needle can finish a flower. The memorial day has passed.",
+          "ja": "小先生……夜が静かになった。針で一輪までいける。忌日も過ぎた。"
+        },
+        "slow": {
+          "zh": "好一点，慢。头还沉，绣到中途仍会停一下。",
+          "en": "A little better, slowly. Head still heavy; mid-stitch it still pauses.",
+          "ja": "少し楽だが遅い。頭はまだ重い。途中でまた止まる。"
+        },
+        "over": {
+          "zh": "药太沉，人发空，头更昏。绣架都懒得碰。",
+          "en": "The herbs sat too heavy — emptied, dizzier. I barely touch the frame.",
+          "ja": "薬が重すぎて空になった。頭がより暈い。繡架に触る気もない。"
+        },
+        "mis": {
+          "zh": "胸口还像压着架。忌日近的那几天更醒。",
+          "en": "The chest still feels framed. Near the memorial days I wake even more.",
+          "ja": "胸はまだ架に圧されるよう。忌日が近い日は余計に覚める。"
         }
       }
     }

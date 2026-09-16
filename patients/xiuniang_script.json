@@ -1,0 +1,169 @@
+{
+  "id": "mo-wen-qi-huang-xiuniang-script",
+  "project": "墨问岐黄",
+  "version": 1,
+  "task": "DEV-TASKS-V133",
+  "notes": {
+    "no_romance_arc": true,
+    "no_daughter_fever": true,
+    "no_zhengxing_name": true,
+    "no_medical_advice": true,
+    "disclaimer_keys": [
+      "STORE_NOT_MEDICAL",
+      "BOOT_DISCLAIMER_*"
+    ],
+    "case_id": "xuexu_ganyu",
+    "character_id": "char_xiuniang",
+    "card_ids_logic": [
+      "no_rush_embroider",
+      "leave_lamp_on"
+    ],
+    "i18n_key_map": {
+      "no_rush_embroider": "COUNSEL_NO_RUSH_EMBROIDERY_*",
+      "leave_lamp_on": "COUNSEL_LAMP_COMPANY_*"
+    }
+  },
+  "character_ref": "patients/slice_characters.json → char_xiuniang",
+  "opening": {
+    "zh": "睡不好。头也沉。做活做到一半，针会停在手里。",
+    "en": "Sleep won't hold. The head feels heavy. Mid-stitch, the needle stops in my hand.",
+    "ja": "眠れない。頭も重い。仕事の途中で、針が手の中で止まる。"
+  },
+  "memorial": {
+    "line": {
+      "zh": "……亡夫忌日近了。胸口像压着绣架。",
+      "en": "…My late husband's memorial day is near. The chest feels like an embroidery frame pressing down.",
+      "ja": "……亡き夫の忌日が近い。胸が繡架に圧されるよう。"
+    },
+    "hint": {
+      "zh": "问到因、或夜里心事，才可能听见忌日。",
+      "en": "Ask onset or what weighs at night — then the memorial day may surface.",
+      "ja": "因や夜の心事を問うて、初めて忌日が聞こえるかも。"
+    },
+    "unlocked": {
+      "zh": "她把真句说出来了。",
+      "en": "She spoke the true line.",
+      "ja": "彼女が本音を言った。"
+    },
+    "line_key": "XIUNIANG_MEMORIAL_LINE",
+    "chest_frame": {
+      "zh": "胸口如压绣架",
+      "en": "Chest as if under an embroidery frame",
+      "ja": "胸が繡架に圧されるよう"
+    },
+    "wake_sangeng": {
+      "zh": "三更易醒",
+      "en": "Wakes easily at the third watch",
+      "ja": "三更に目覚めやすい"
+    }
+  },
+  "mentor": {
+    "lines": [
+      {
+        "key": "MENTOR_XIUNIANG_1",
+        "text": {
+          "zh": "她要强。真句不会主动送上门。",
+          "en": "She is strong-willed. The true line won't walk in on its own.",
+          "ja": "彼女は気丈だ。本音は自ら来ない。"
+        }
+      },
+      {
+        "key": "MENTOR_XIUNIANG_2",
+        "text": {
+          "zh": "忌日近了没有——你问了吗。",
+          "en": "Is a memorial day near — did you ask?",
+          "ja": "忌日は近いか——問うたか。"
+        }
+      }
+    ],
+    "town_permit": {
+      "key": "MENTOR_TOWN_PERMIT",
+      "text": {
+        "zh": "这案稳了。出镇许可，我写下。",
+        "en": "This case holds. I'll write the town-leave permit.",
+        "ja": "この案は落ち着いた。出鎮許可を記す。"
+      }
+    }
+  },
+  "town_permit": {
+    "title": {
+      "zh": "出镇许可",
+      "en": "Town-leave permit",
+      "ja": "出鎮許可"
+    },
+    "grant": {
+      "zh": "出镇许可已记。",
+      "en": "Town-leave permit recorded.",
+      "ja": "出鎮許可を記した。"
+    },
+    "hint": {
+      "zh": "卷一达标后记旗。暂不开放大地图。",
+      "en": "Flag after volume-one clear. No overland map yet.",
+      "ja": "巻一达标後に旗。大地図はまだない。"
+    },
+    "flag": "play.flags.town_permit"
+  },
+  "emotion_cards": [
+    {
+      "id": "no_rush_embroider",
+      "kind": "good",
+      "case_exclusive": "xuexu_ganyu",
+      "name_key": "COUNSEL_NO_RUSH_EMBROIDERY_NAME",
+      "desc_key": "COUNSEL_NO_RUSH_EMBROIDERY_DESC",
+      "name": {
+        "zh": "忌日前勿承急绣",
+        "en": "No rush embroidery before the memorial day",
+        "ja": "忌日の前に急ぎの繡を請けない"
+      },
+      "desc": {
+        "zh": "急活用别人顶。她自己留一口气。",
+        "en": "Let others take rush work. She keeps one breath for herself.",
+        "ja": "急ぎは他に任せる。彼女は息を一つ残す。"
+      }
+    },
+    {
+      "id": "leave_lamp_on",
+      "kind": "good",
+      "case_exclusive": "xuexu_ganyu",
+      "name_key": "COUNSEL_LAMP_COMPANY_NAME",
+      "desc_key": "COUNSEL_LAMP_COMPANY_DESC",
+      "name": {
+        "zh": "屋内留灯勿独熬",
+        "en": "Leave a lamp; don't sit up alone",
+        "ja": "室内に灯を残し、独り熬るな"
+      },
+      "desc": {
+        "zh": "灯还在，人就不那么空。",
+        "en": "While the lamp stays, the room feels less empty.",
+        "ja": "灯があれば、部屋はそれほど空かない。"
+      }
+    }
+  ],
+  "settle": {
+    "ok": {
+      "zh": "郁与血虚，抓住一面并护胃，即可。",
+      "en": "Catch either stagnation or blood vacuity, and guard the stomach — enough.",
+      "ja": "鬱か血虚、一面を掴み胃を護れば足りる。"
+    },
+    "mis": {
+      "zh": "峻清或重镇，次日恐头昏回访。",
+      "en": "Harsh clearing or heavy sedating — next day may bring dizzy revisit.",
+      "ja": "峻清や重鎮は、翌日めまいの再診になり得る。"
+    }
+  },
+  "gift_hint": {
+    "zh": "好回访：艾叶帕（叙事）。温分微加可选。",
+    "en": "Good revisit: mugwort kerchief (story). Tiny warmth bonus optional.",
+    "ja": "良い再診：艾葉の帕（物語）。温の微加点は任意。"
+  },
+  "demo_hint": {
+    "zh": "也可接周绣娘（情志主线案）。",
+    "en": "You may also see Zhou Xiuniang (emotion main case).",
+    "ja": "周繡娘も診られる（情志の主線案）。"
+  },
+  "acu_teach": {
+    "zh": "本案可取神门、三阴交。",
+    "en": "This case may use Shenmen and Sanyinjiao.",
+    "ja": "本案では神門・三陰交が使える。"
+  }
+}

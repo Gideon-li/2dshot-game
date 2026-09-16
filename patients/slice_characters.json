@@ -1,13 +1,15 @@
 {
   "id": "mo-wen-qi-huang-slice-characters",
   "project": "墨问岐黄",
-  "version": 7,
+  "version": 8,
   "based_on": [
     "design-pack 03 人物志 v1.1",
     "15 十问与问舟 v1.10",
     "DEV-TASKS-V119",
     "DEV-TASKS-V119 (江晚/苏问舟/小荷/三病人)",
-    "DEV-TASKS-V120"
+    "DEV-TASKS-V120",
+    "DEV-TASKS-V133",
+    "logic/XIUNIAN-CASE-V133.md"
   ],
   "notes": {
     "not_quiz": true,
@@ -38,7 +40,8 @@
     "product_copy": "Default apprentice 江晚 (apprentice_jiang). 林晚/apprentice_lin = legacy alias in notes only. Never primary.",
     "art_brief": "立绘/锚点学徒一律画江晚，不要画回林晚。",
     "v120": "mentor cues all interrogatives; xiaohe waiting/cabinet >=3; followup one line per case; no diagnosis/formula in mentor cues",
-    "v120_proxy": "pharmacy_kid.proxy_diagnosis.enabled=false"
+    "v120_proxy": "pharmacy_kid.proxy_diagnosis.enabled=false",
+    "v133": "char_xiuniang / xuexu_ganyu; memorial on yin; trust; town_permit narration"
   },
   "inquiry_rules": {
     "zh": [
@@ -542,6 +545,57 @@
             "寒熱と汗、その二扉は開いたか？"
           ]
         }
+      },
+      "xuexu_ganyu": {
+        "priority_ten_ask": [
+          "因",
+          "情志",
+          "睡",
+          "胸"
+        ],
+        "lines": {
+          "zh": [
+            "她要强。真句不会主动送上门。",
+            "忌日近了没有——你问了吗。",
+            "睡不好——是睡不着，还是三更易醒？",
+            "胸口沉不沉？像不像压着什么？",
+            "绣活做到一半针停，你问过为什么停吗？",
+            "从什么时候加重的——有没有日子近了？",
+            "唇淡眶青你望见了吗？还是只听她说头沉？",
+            "弦细按了吗？脉枕还空着吗？",
+            "女儿的私事，你追了没有？追了就先退半步。",
+            "这一问补上了吗？"
+          ],
+          "en": [
+            "She is strong-willed. The true line won't walk in on its own.",
+            "Is a memorial day near — did you ask?",
+            "Poor sleep — cannot fall in, or wakes at the third watch?",
+            "Is the chest heavy — as if something sits on it?",
+            "Needle stops mid-stitch — did you ask why it stops?",
+            "Since when did it worsen — is a day drawing near?",
+            "Did you see pale lips and dark orbits, or only hear 'heavy head'?",
+            "Have you felt wiry-thin? Is the pulse pillow still empty?",
+            "Did you pry into her daughter's private life? If so, step back.",
+            "Is that question in yet?"
+          ],
+          "ja": [
+            "彼女は気丈だ。本音は自ら来ない。",
+            "忌日は近いか——問うたか。",
+            "眠れない——入れないのか、三更に覚めるのか？",
+            "胸は重いか？何かに圧されているようか？",
+            "繡の途中で針が止まる——なぜ止まるか聞いたか？",
+            "いつから重くなった——近い日はあるか？",
+            "唇が淡く眶が青いのを望んだか？頭が重いとだけ聞いたか？",
+            "弦細は按じたか？脈枕はまだ空か？",
+            "娘の私事を追ったか？追ったなら半歩退け。",
+            "この問いは入ったか？"
+          ]
+        },
+        "town_permit_line": {
+          "zh": "这案稳了。出镇许可，我写下。",
+          "en": "This case holds. I'll write the town-leave permit.",
+          "ja": "この案は落ち着いた。出鎮許可を記す。"
+        }
       }
     },
     "i18n_keys_hint": [
@@ -988,6 +1042,186 @@
         "en": "Tonight while copying — is the back still damp? If it is, set the brush down first.",
         "ja": "今夜の写経、背はまだ湿るか？湿ったら先に筆を置け。"
       }
+    },
+    {
+      "id": "char_xiuniang",
+      "case_id": "xuexu_ganyu",
+      "name": {
+        "zh": "周绣娘",
+        "en": "Zhou Xiuniang",
+        "ja": "周繡娘"
+      },
+      "age": 28,
+      "gender": "female",
+      "identity": {
+        "zh": "绣坊主事",
+        "en": "Embroidery workshop keeper",
+        "ja": "繡坊の主事"
+      },
+      "region": {
+        "zh": "青石镇",
+        "en": "Qingshi town",
+        "ja": "青石鎮"
+      },
+      "prototype_tone": "绣娘织妇",
+      "address_player": {
+        "zh": "小先生",
+        "en": "young physician",
+        "ja": "小先生"
+      },
+      "personality": {
+        "zh": "要强、轻声。先说别人的活，再说自己的身体。夸绣工会松一点；追问女儿私则收口。",
+        "en": "Strong-willed, soft-spoken. Talks others' work before her own body. Praise of her stitch loosens her; prying about her daughter shuts her down.",
+        "ja": "気丈で声が低い。まず他人の仕事、それから自分の体。繡を褒められると少し緩む。娘の私事を追われると口を閉ざす。"
+      },
+      "voice": {
+        "zh": "轻，短。说到一半针会停。被戳破时改谈绣活与邻里。",
+        "en": "Light, short. Mid-sentence the needle stops. When cornered, switches to embroidery and neighbors.",
+        "ja": "軽く短い。途中で針が止まる。突かれると繡と近所の話に逃げる。"
+      },
+      "motive": {
+        "zh": "睡不好、头沉，活做到一半针停在手里。想把夜里安一点，好把绣活做完——不是来对题。",
+        "en": "Sleep won't hold; the head is heavy; mid-stitch the needle stops. She wants quieter nights so the work can finish — not a quiz.",
+        "ja": "眠れず頭が重い。仕事の途中で針が止まる。夜を少し静かにし、繡を終えたい。試験ではない。"
+      },
+      "taboos": {
+        "zh": [
+          "不主动报证型名、方名",
+          "不主动说亡夫忌日（须问到因/情志）",
+          "当着「女儿」追问私 → 信任降、躲闪",
+          "不接恋爱线；女儿高热同诊不做"
+        ],
+        "en": [
+          "never volunteers pattern or formula names",
+          "never volunteers the late husband's memorial day (needs onset/emotion ask)",
+          "prying about her daughter → trust drop + dodge",
+          "no romance arc; no daughter-fever co-consult"
+        ],
+        "ja": [
+          "証型名も方名も自ら言わない",
+          "亡夫の忌日は自ら言わない（因／情志の問いが要る）",
+          "娘の私事を追うと信頼が下がり、逃げる",
+          "恋愛ルートなし。娘の高熱同診なし"
+        ]
+      },
+      "conceal": {
+        "zh": "先说睡不好、头沉、针停手里。忌日真句藏到问「因」才给。",
+        "en": "Leads with poor sleep, heavy head, needle stopping mid-work. The memorial-day truth waits for an onset ask.",
+        "ja": "まず眠れない、頭が重い、針が止まる。忌日の本音は『因』を問われてから。"
+      },
+      "pathogenesis_notes": {
+        "internal_only": true,
+        "case_id": "xuexu_ganyu",
+        "lived": {
+          "zh": [
+            "三更易醒",
+            "胸口如压绣架",
+            "头沉",
+            "活做到一半针停在手里",
+            "睡不好",
+            "唇淡眶青（望诊可见，她不自报）"
+          ],
+          "en": [
+            "wakes easily at the third watch",
+            "chest as if under an embroidery frame",
+            "heavy head",
+            "needle stops mid-stitch",
+            "sleep won't hold",
+            "pale lips, dark orbits (visible on look; she won't name them)"
+          ],
+          "ja": [
+            "三更に目覚めやすい",
+            "胸が繡架に圧されるよう",
+            "頭が重い",
+            "仕事の途中で針が止まる",
+            "眠れない",
+            "唇が淡く眶が青い（望診；自らは言わない）"
+          ]
+        },
+        "how_they_talk_about_it": {
+          "zh": "用睡眠、头沉、绣针停手来说；忌日一句只在问到因/心事时吐。不说标准证型名。",
+          "en": "Speaks in sleep, heavy head, stalled needle; memorial-day line only when asked onset/what weighs. Never textbook pattern names.",
+          "ja": "睡眠、頭の重さ、針が止まる話。忌日は因／心事を問われてから。標準の証名は言わない。"
+        }
+      },
+      "opening": {
+        "zh": "睡不好。头也沉。做活做到一半，针会停在手里。",
+        "en": "Sleep won't hold. The head feels heavy. Mid-stitch, the needle stops in my hand.",
+        "ja": "眠れない。頭も重い。仕事の途中で、針が手の中で止まる。"
+      },
+      "ask_wrappers": {
+        "zh": [
+          "……{sym}。绣到一半就这样。",
+          "夜里{sym}。白天还得把活做完。",
+          "小先生，{sym}。不是大病，只是耽误活。",
+          "邻里的急绣我能推，{sym}。",
+          "头沉的时候，{sym}。"
+        ],
+        "en": [
+          "…{sym}. Mid-stitch it goes like that.",
+          "At night {sym}. By day the work still waits.",
+          "Physician — {sym}. Nothing grave; it just slows the work.",
+          "I can pass rush orders to neighbors, and still {sym}.",
+          "When the head is heavy, {sym}."
+        ],
+        "ja": [
+          "……{sym}。繡の途中でこうなる。",
+          "夜は{sym}。昼は仕事を終えねば。",
+          "小先生、{sym}。大病ではない。仕事が遅れるだけ。",
+          "急ぎの繡は近所に回せるが、{sym}。",
+          "頭が重いとき、{sym}。"
+        ]
+      },
+      "dodge": {
+        "zh": "我不是来对那些名目的。你问夜里醒几次、胸口沉不沉、针为什么停——我再说。",
+        "en": "I did not come to match names. Ask how often I wake, if the chest feels heavy, why the needle stops — then I will answer.",
+        "ja": "呼び名を合わせに来たのではない。夜に何度起きるか、胸が重いか、なぜ針が止まるかなら答える。"
+      },
+      "dodge_daughter_privacy": {
+        "zh": "……女儿的事，不必问。问我的头和夜里吧。",
+        "en": "…Leave my daughter out of it. Ask about my head and the nights.",
+        "ja": "……娘のことは聞かなくてよい。頭と夜のことを聞いてくれ。"
+      },
+      "memorial_truth": {
+        "flag": "play.flags.xiuniang_death_day_told",
+        "need_ten_q": [
+          "yin"
+        ],
+        "optional_ten_q": [
+          "qingzhi"
+        ],
+        "never_volunteer": true,
+        "line_key": "XIUNIANG_MEMORIAL_LINE",
+        "line": {
+          "zh": "……亡夫忌日近了。胸口像压着绣架。",
+          "en": "…My late husband's memorial day is near. The chest feels like an embroidery frame pressing down.",
+          "ja": "……亡き夫の忌日が近い。胸が繡架に圧されるよう。"
+        },
+        "hint_key": "XIUNIANG_MEMORIAL_HINT",
+        "unlocked_key": "XIUNIANG_MEMORIAL_UNLOCKED"
+      },
+      "praise_embroidery_ack": {
+        "zh": "……手倒还稳。你看见了。",
+        "en": "…The hand is still steady. You noticed.",
+        "ja": "……手はまだ稳だ。見てくれた。"
+      },
+      "seat": 3,
+      "ink": [
+        0.32,
+        0.28,
+        0.3
+      ],
+      "art_hint": {
+        "zh": "二十八，寡。青布裙，指甲彩线，背过直。Q 版平涂，齐 V126.1。",
+        "en": "Twenty-eight, widowed. Blue cloth skirt, colored thread under the nails, back too straight. Q flat color, match V126.1.",
+        "ja": "二十八、寡。青布の裙、爪に色糸、背がまっすぐすぎる。Q平塗り、V126.1に揃える。"
+      },
+      "portrait_ref": "ui/characters/zhou_xiuniang.png",
+      "followup": {
+        "zh": "忌日过了没有？夜里针还停不停？停了就别硬绣。",
+        "en": "Has the memorial day passed? Does the needle still stop at night? If it does, do not force the stitch.",
+        "ja": "忌日は過ぎたか？夜に針はまだ止まるか？止まったら無理に繡るな。"
+      }
     }
   ],
   "pharmacy_kid": {
@@ -1200,6 +1434,11 @@
       "zh": "今夜抄经时，后背还潮不潮？潮了就先歇笔。",
       "en": "Tonight while copying — is the back still damp? If it is, set the brush down first.",
       "ja": "今夜の写経、背はまだ湿るか？湿ったら先に筆を置け。"
+    },
+    "xuexu_ganyu": {
+      "zh": "忌日过了没有？夜里针还停不停？停了就别硬绣。",
+      "en": "Has the memorial day passed? Does the needle still stop at night? If it does, do not force the stitch.",
+      "ja": "忌日は過ぎたか？夜に針はまだ止まるか？止まったら無理に繡るな。"
     }
   },
   "revisit_lines": {
@@ -1267,6 +1506,28 @@
         "zh": "越来越燥。盗汗还在，睡不实。不好意思又来烦您。",
         "en": "Drier than before. Night sweat stays; sleep will not hold. Sorry to trouble you again.",
         "ja": "前より燥くなった。盗汗も残り、眠りが浅い。またお手数をかけてすみません。"
+      }
+    },
+    "xuexu_ganyu": {
+      "good": {
+        "zh": "小先生……夜里静些了。针还能走完一朵。忌日也过了。",
+        "en": "Physician… nights are quieter. The needle can finish a flower. The memorial day has passed.",
+        "ja": "小先生……夜が静かになった。針で一輪までいける。忌日も過ぎた。"
+      },
+      "slow": {
+        "zh": "好一点，慢。头还沉，绣到中途仍会停一下。",
+        "en": "A little better, slowly. Head still heavy; mid-stitch it still pauses.",
+        "ja": "少し楽だが遅い。頭はまだ重い。途中でまた止まる。"
+      },
+      "over": {
+        "zh": "药太沉，人发空，头更昏。绣架都懒得碰。",
+        "en": "The herbs sat too heavy — emptied, dizzier. I barely touch the frame.",
+        "ja": "薬が重すぎて空になった。頭がより暈い。繡架に触る気もない。"
+      },
+      "mis": {
+        "zh": "胸口还像压着架。忌日近的那几天更醒。",
+        "en": "The chest still feels framed. Near the memorial days I wake even more.",
+        "ja": "胸はまだ架に圧されるよう。忌日が近い日は余計に覚める。"
       }
     }
   },
