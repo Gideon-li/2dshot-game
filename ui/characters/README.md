@@ -13,3 +13,14 @@
 透明底 PNG；高约 512～768；明快 Q；禁止林晚。运行时优先单人图，缺则回退 `ui/apprentice.png` / `ui/patients-three.png`。
 
 V126.1：画风统一为 2D 明快 Q 平涂；见 `_proof_v126_1.png`。旧版备份 `_prev_v126/`。
+
+## V134
+
+| 角色 | id | 文件 |
+| --- | --- | --- |
+| 刘禾青 | char_zoufan | ui/characters/liu_heqing.png (alias zoufan.png) |
+| 顾宴余 | char_yanhou | ui/characters/gu_yanyu.png (alias yanhou.png) |
+| 林阿婶 | char_yaoqin | ui/characters/lin_ashen.png (alias yaoqin.png) |
+
+证印：ui/seals/fengre_biao.png / shiji.png / pixu_shikun.png
+

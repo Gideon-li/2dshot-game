@@ -61,3 +61,7 @@ V126.1 画风统一：四立绘同套 2D 明快 Q 平涂（婆婆去 3D；江晚
 ## V133 周绣娘
 
 `characters/zhou_xiuniang.png`（齐 V126.1 平涂）；可选 `props/aiye_pa.png` 艾叶帕。
+
+## V134 青石扩容
+
+三立绘：//；证印 。

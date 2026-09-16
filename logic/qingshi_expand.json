@@ -1,0 +1,139 @@
+{
+  "id": "qingshi_expand_v134",
+  "version": 134,
+  "rules_ref": "slice_logic.json → qingshi_expand_rules",
+  "lock_doc": "logic/QINGSHI-EXPAND-V134.md",
+  "cases": [
+    "fengre_biao",
+    "shiji",
+    "pixu_shikun"
+  ],
+  "characters": [
+    "char_zoufan",
+    "char_yanhou",
+    "char_yaoqin"
+  ],
+  "seals": {
+    "key": "play.seals",
+    "on_settle_if_rank_at_least": "clear",
+    "write_case_id": true,
+    "ui_flash_keys": [
+      "seal.fengre_biao",
+      "seal.shiji",
+      "seal.pixu_shikun"
+    ],
+    "note": "本档只亮这3枚"
+  },
+  "waiting": {
+    "max_seats": 4,
+    "pool_includes_old_four": true,
+    "weights": {
+      "base": {
+        "fengre_biao": 0.35,
+        "shiji": 0.4,
+        "pixu_shikun": 0.35
+      },
+      "with_town_permit_mult": 1.8,
+      "without_permit": {
+        "shiji_teach_once": true,
+        "shiji_weight": 0.25,
+        "fengre_biao": 0.05,
+        "pixu_shikun": 0.05
+      }
+    },
+    "rotation": "A-D seats; overflow rotates in pool"
+  },
+  "cross_mistreat": {
+    "fengre_as_fenghan": {
+      "if_case": "fengre_biao",
+      "if_herbs_any": [
+        "mahuang",
+        "guizhi"
+      ],
+      "penalty": "mistreat + stability",
+      "revisit": "热更重/咽更疼"
+    },
+    "fenghan_as_fengre": {
+      "if_case": "fenghan_biao",
+      "if_herbs_any": [
+        "jinyinhua",
+        "lianqiao"
+      ],
+      "already_in_common_mistreat": true,
+      "note": "保持旧案误治；LOGIC 短注对照"
+    }
+  },
+  "acu_case_temp_open": {
+    "fengre_biao": [
+      "quchi",
+      "hegu"
+    ],
+    "pixu_shikun": [
+      "sanyinjiao"
+    ],
+    "note": "via acu_intro_rules.case_temp_open；不永久扩 vol1_open_ids"
+  },
+  "legal_paths_summary": {
+    "fengre_biao": {
+      "formula": "jinyinhua+lianqiao+bohe+gancao (±xingren)",
+      "acupuncture": [
+        "quchi+hegu",
+        "hegu+fengchi"
+      ],
+      "food": [
+        "zhou_di+bingtang",
+        "zhou_di+lianzi"
+      ],
+      "emotion": "rarely; solo_cap slight"
+    },
+    "shiji": {
+      "formula": "baizhu+fuling+shengjiang+zhiqiao+shanzha",
+      "acupuncture": [
+        "zusanli",
+        "zusanli+neiguan"
+      ],
+      "food": [
+        "zhou_di+shengjiang less_overeating",
+        "zhou_di+shanyao"
+      ],
+      "emotion": "low fit"
+    },
+    "pixu_shikun": {
+      "formula": "baizhu+fuling+shanyao+gancao (±zexie)",
+      "acupuncture": [
+        "zusanli moxa",
+        "zusanli+sanyinjiao",
+        "zusanli+hegu"
+      ],
+      "food": [
+        "zhou_di+shanyao+hongzao"
+      ],
+      "emotion": "slight calm_shen only"
+    }
+  },
+  "new_herb": {
+    "id": "shanzha",
+    "actions": [
+      "digest_food",
+      "move_qi",
+      "open_chest"
+    ],
+    "forage": false,
+    "note": "保和消导；仅 shiji 必需"
+  },
+  "smoke": {
+    "tag": "qingshi_expand_ok",
+    "require_each_case_legal_settle": true,
+    "also": "SMOKE PASS"
+  },
+  "do_not": [
+    "十二满编",
+    "陈半仙",
+    "萨米尔",
+    "小儿",
+    "五方",
+    "romance",
+    "Steam",
+    "J/T"
+  ]
+}

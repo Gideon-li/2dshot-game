@@ -110,3 +110,12 @@
 
 ### 逻辑 / 剧本
 - 案与信任旗已由 `XIUNIAN-CASE-V133.md` 锁；本包不重复改向量。
+
+---
+
+## 9. V134 addendum · 同屏轮换（不扩位）
+
+日期：2026-09-16  
+**不改**上文 A–D 脚底 / 热区 / 坐诊椅。池扩至 7 人时，大厅仍最多显示 4 席；策略为 **轮换填 A–D**，不加 `WAIT_E`。
+
+全规则、7 ids、补位与可选「还有 N 人候诊」标签：见 **`scene-slice/WAITING-ROTATE-V134.md`** 与 `scene-slice/waiting/WAITING_ROTATE_V134.png`（镜像 `ui/waiting/`）。冒烟：`qingshi_expand_ok`。

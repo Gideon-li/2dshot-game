@@ -763,3 +763,40 @@ DEMO_HINT_XIUNIANG,也可接周绣娘（情志主线案）。,You may also see Z
 ACU_SHENMEN_NAME,神门 Shén Mén,Shenmen (HT7),神門（しんもん）
 ACU_SANYINJIAO_NAME,三阴交 Sān Yīn Jiāo,Sanyinjiao (SP6),三陰交（さんいんこう）
 ACU_TEACH_XIUNIANG,本案可取神门、三阴交。,This case may use Shenmen and Sanyinjiao.,本案では神門・三陰交が使える。
+SEAL_TITLE,证印,Pattern seals,証印
+SEAL_HINT,治好一类，亮一枚。不上诊断名。,"Clear a pattern class, light a seal. No diagnosis names on HUD.",一類を治せば一枚。診断名は出さない。
+SEAL_FLASH,证印亮起：{name},Seal lit: {name},証印が点く：{name}
+SEAL_FENGRE_BIAO,风热,Wind-heat,風熱
+SEAL_SHIJI,食积,Food stagnation,食積
+SEAL_PIXU_SHIKUN,脾虚湿困,Spleen vacuity with damp encumbrance,脾虚湿困
+SEAL_UNLOCKED,已识,Known,識
+SEAL_LOCKED,未亮,Unlit,未点
+CHAR_ZOUFAN_NAME,刘禾青,Liu Heqing,劉禾青
+CHAR_ZOUFAN_SHORT,走贩,Street vendor,走販
+CHAR_ZOUFAN_TITLE,镇口走贩少年,Town-gate peddler youth,鎮口の走販の少年
+ZOUFAN_OPENING,嗓子火辣辣的。头也热。货还要往镇里送。,Throat burns. Head feels hot. Still got to haul goods into town.,喉が熱い。頭も熱い。荷はまだ鎮へ運ぶ。
+ZOUFAN_WAIT,候诊——走贩少年。,Waiting — the peddler youth.,待ち——走販の少年。
+FOLLOWUP_FENGRE_BIAO,禾青说咽痛松些了。别再当风寒大补。,Heqing says the throat eased. Don't treat it as wind-cold and tonify.,禾青は咽が少し楽だと言う。風寒の大補にするな。
+CASE_FENGRE_HINT,热象偏多，与风寒不同。,More heat signs — not the same as wind-cold.,熱象が多い。風寒とは違う。
+CASE_FENGRE_MIS_COLD,当风寒去补了。热更闷。,Treated as wind-cold and tonified. Heat feels more stuck.,風寒として補った。熱がさらに悶える。
+CHAR_YANHOU_NAME,顾宴余,Gu Yanyu,顧宴余
+CHAR_YANHOU_SHORT,宴后,After banquet,宴後
+CHAR_YANHOU_TITLE,宴后熟人,Banquet acquaintance,宴のあとの知人
+YANHOU_OPENING,昨晚席上吃猛了。脘胀、嗳气，不想动。,"Ate too hard at last night's table. Epigastrium full, belching, no urge to move.",昨夜の席で食べ過ぎた。脘が張り、噯気。動きたくない。
+YANHOU_WAIT,候诊——宴后熟人。,Waiting — the banquet acquaintance.,待ち——宴後の知人。
+FOLLOWUP_SHIJI,宴余说胀松了些。先别峻下。,Yanyu says the fullness eased. Don't purge harshly yet.,宴余は張りが少し楽だと言う。まず峻下するな。
+CASE_SHIJI_HINT,先问饮食。消导宜轻。,Ask diet first. Digestion guidance stays light.,まず飲食を問え。消導は軽く。
+CASE_SHIJI_MIS_HARSH,峻下太猛。人虚了一截。,Purged too hard. Vacuity took a bite.,峻下が強すぎた。虚が一段ついた。
+CHAR_YAOQIN_NAME,林阿婶,Aunt Lin,林のおば
+CHAR_YAOQIN_SHORT,药亲,Herb kin,薬縁
+CHAR_YAOQIN_TITLE,药农亲友,Herb farmer's kin,薬農の親類
+YAOQIN_OPENING,身子困重，吃不下。苔腻那味，阿桂也闻过。,Body feels heavy and dull; can't eat much. That greasy-coating feel — A'gui smelled it too.,体が重く困る。食べられない。膩苔の匂い、阿桂も嗅いだ。
+YAOQIN_WAIT,候诊——药农亲友。,Waiting — the herb farmer's kin.,待ち——薬農の親類。
+FOLLOWUP_PIXU_SHIKUN,阿婶说困轻了些。粥养比猛补稳。,Auntie says the heaviness eased. Porridge care beats harsh tonify.,おばは困が少し楽だと言う。粥養の方が猛補より穏。
+CASE_PIXU_HINT,困重纳差，宜健脾化湿。,"Heavy body, poor appetite — support spleen, transform damp.",困重・納差。健脾化湿がよい。
+CASE_PIXU_MIS_TONIFY,补得太腻。湿更困。,Tonified too richly. Damp feels heavier.,補が膩すぎた。湿がさらに困る。
+WAIT_POOL_HINT,候诊最多四席，其余轮换进池。,At most four seats; the rest rotate in the pool.,待ち席は最大四。残りは池で輪替。
+DEMO_HINT_EXPAND,出镇许可后，新案更常出现。,"After town-leave permit, new cases show up more often.",出鎮許可のあと、新案がよく出る。
+MENTOR_EXPAND_1,风热和风寒，别穿一件衣。,Wind-heat and wind-cold do not wear the same coat.,風熱と風寒は、同じ衣を着るな。
+MENTOR_EXPAND_2,食积先问昨夕吃了什么。,"For food stagnation, first ask what last evening held.",食積はまず昨夕に何を食べたか問え。
+MENTOR_EXPAND_3,困重的人，猛补像往泥里浇油。,"For the heavy and dulled, harsh tonify is oil into mud.",困重の人に猛補は、泥に油を注ぐよう。

@@ -54,8 +54,11 @@ score (UI) = M_final / 100
 | `ganyu_qizhi` | 肝郁气滞 | 肝郁血虚 | 弦 | 胸、饮食、旧病、因 |
 | `yinxu_neire` | 阴虚内热 | 肾阴虚 | 细数 | 汗、渴、寒热、旧病 |
 | `xuexu_ganyu` | 血虚肝郁（绣架压胸） | 血虚肝郁 | 弦细 | 因、胸、汗、旧病 |
+| `fengre_biao` | 风热束表 | 风热表证 | 浮数 | 寒热、汗、头身、渴 |
+| `shiji` | 食积 | 食积气滞 | 滑 | 饮食、胸、便、因 |
+| `pixu_shikun` | 脾虚湿困 | 脾虚湿困 | 濡 | 饮食、头身、便、汗 |
 
-人物：赵阿福 / 沈清荷 / 周婆婆 / **周绣娘**（`bind_character_id` 已填）。问诊咬 `inquiry_anchor`，禁止 `never_say`。V133 细则见下节。
+人物：赵阿福 / 沈清荷 / 周婆婆 / 周绣娘 / **走贩** / **宴后熟人** / **药农亲友**（`bind_character_id` 已填）。问诊咬 `inquiry_anchor`，禁止 `never_say`。V133 / V134 细则见下节。
 
 ## 熟练度
 
@@ -214,3 +217,15 @@ API：`MentorCues.next(case, exams, asked_ten_q_ids, cues_emitted)`。
 - 抓郁或血虚一面并护胃即可；误治峻清/重镇 → 回访头昏。
 - 冒烟：`xiuniang_case_ok` + `SMOKE PASS`。怎么跑：`XIUNIAN-CASE.md`。
 
+
+## V134 青石镇诊案扩容
+
+见 `QINGSHI-EXPAND-V134.md` + `qingshi_expand.json` / `qingshi_expand_rules`。怎么跑：`QINGSHI-EXPAND.md`。
+
+- +3 案 +3 人：`fengre_biao`/`char_zoufan`，`shiji`/`char_yanhou`，`pixu_shikun`/`char_yaoqin`；旧四人保留（共 7）。
+- 新药：`shanzha`（`digest_food`；不采）。
+- 穴：`acu_intro_rules.case_temp_open.fengre_biao` → `quchi`+`hegu`；`pixu_shikun` → `sanyinjiao`；**不**永久扩 `vol1_open_ids`。
+- 证印：settle rank≥`clear` → `play.seals[]` 写案 id；本档只亮 3 枚 UI。
+- 候诊：仍 4 席 A–D；有 `town_permit` 三新案权重 ×1.8；无 permit 可偶遇一次 `shiji` 教学。
+- **风热/风寒误叉**：风热误用麻黄/桂枝 → mistreat + 稳罚、回访热更重/咽更疼；风寒误用金银花/连翘 → 旧案 `common_mistreat` 保持（表寒更闭）。
+- 冒烟：`qingshi_expand_ok`（三案各 ≥1 合法 settle）+ `SMOKE PASS`。
