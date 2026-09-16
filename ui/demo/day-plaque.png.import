@@ -2,12 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dkwjn2r01n6ac"
-valid=false
+uid="uid://you73rh5yk73"
+path="res://.godot/imported/day-plaque.png-75f8ebb88fb83762f97eeaa81354ced3.ctex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
 source_file="res://ui/demo/day-plaque.png"
+dest_files=["res://.godot/imported/day-plaque.png-75f8ebb88fb83762f97eeaa81354ced3.ctex"]
 
 [params]
 

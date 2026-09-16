@@ -2,12 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b5qvpfyai7dp5"
-valid=false
+uid="uid://dfl5enhvn5ms1"
+path="res://.godot/imported/demo-guide-chrome.png-7f62afe086a5cde00a03e2332f493664.ctex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
 source_file="res://ui/demo/demo-guide-chrome.png"
+dest_files=["res://.godot/imported/demo-guide-chrome.png-7f62afe086a5cde00a03e2332f493664.ctex"]
 
 [params]
 

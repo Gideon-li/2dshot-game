@@ -629,14 +629,17 @@ func _rebuild_dock() -> void:
 			day_lab = day_lab.replace("{n}", str(day_n))
 		var day_row := HBoxContainer.new()
 		day_row.add_theme_constant_override("separation", 8)
-		if ResourceLoader.exists("res://ui/demo/day-plaque.png"):
-			var dp := TextureRect.new()
-			dp.texture = load("res://ui/demo/day-plaque.png")
-			dp.custom_minimum_size = Vector2(36, 28)
-			dp.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-			dp.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-			dp.mouse_filter = Control.MOUSE_FILTER_IGNORE
-			day_row.add_child(dp)
+		var plaque_path := "res://ui/demo/day-plaque.png"
+		if ResourceLoader.exists(plaque_path):
+			var plaque_res = ResourceLoader.load(plaque_path)
+			if plaque_res is Texture2D:
+				var dp := TextureRect.new()
+				dp.texture = plaque_res
+				dp.custom_minimum_size = Vector2(36, 28)
+				dp.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+				dp.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+				dp.mouse_filter = Control.MOUSE_FILTER_IGNORE
+				day_row.add_child(dp)
 		day_row.add_child(UiKit.ink_label(day_lab, 14, UiKit.SEAL))
 		col.add_child(day_row)
 		var slot_row := HBoxContainer.new()
@@ -672,9 +675,12 @@ func _rebuild_dock() -> void:
 				var done: bool = DemoDay.is_step_done(sid2) or (sid2 == "morning_consult" and DemoDay.is_step_done("treat"))
 				var line := HBoxContainer.new()
 				line.add_theme_constant_override("separation", 4)
+				var check_res = null
 				if done and ResourceLoader.exists("res://ui/demo/demo-check.png"):
+					check_res = ResourceLoader.load("res://ui/demo/demo-check.png")
+				if done and check_res is Texture2D:
 					var ck := TextureRect.new()
-					ck.texture = load("res://ui/demo/demo-check.png")
+					ck.texture = check_res
 					ck.custom_minimum_size = Vector2(16, 16)
 					ck.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 					ck.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
