@@ -1,6 +1,6 @@
 {
   "id": "xinglin-mowen-slice-logic",
-  "version": 8,
+  "version": 9,
   "project": "墨问岐黄 / 杏林墨问",
   "scope": "vertical_slice",
   "notes": {
@@ -29,7 +29,8 @@
     "v124": "process fields: needs_process/method/raw→processed; quality ok|ok_ish; evening -1; raw cannot enter bowl; 十八反 not unlocked by processing",
     "v125": "acu intro: hegu needle + zusanli moxa; teach_vol1 lock; tolerance hit rules",
     "v127": "revisit day cycle: play.day, due_day=treated+1, FIFO 1, revisit_consult FSM, observe_no_med; no LLM",
-    "v128": "sun_dry playable; mudanpi teaching sun-dry; flip+progress; STATION_DRY not placeholder"
+    "v128": "sun_dry playable; mudanpi teaching sun-dry; flip+progress; STATION_DRY not placeholder",
+    "v129": "codex night read; 3 pages; night slot -1; theory flags for tenq/pulse UI"
   },
   "exam_ids": [
     "wang",
@@ -3535,7 +3536,8 @@
     "art": "implement three pulse.visual profiles; formula plate is a drop target; points are on-body",
     "prototype": "load this json; drag/tap not OptionButton; Qwen uses inquiry_anchor+never_say; API fail uses inquiry_anchor; BEFORE confirm formula call incompat.check; ask panel shows ten_questions.items quick bar; score via scoring.formula M with J=T=1",
     "scoring_gd": "prefer M_final/100 as score; keep process_mult; emit M,C,B,A_prime,U,J,T in result for debug HUD off",
-    "v120_prototype": "MentorCues.next respects max 2; settlement UI reads settlement_display keys from evaluate; write play.pending_revisits on settle; pharmacy_kid.proxy_diagnosis.enabled stays false; J=T=1"
+    "v120_prototype": "MentorCues.next respects max 2; settlement UI reads settlement_display keys from evaluate; write play.pending_revisits on settle; pharmacy_kid.proxy_diagnosis.enabled stays false; J=T=1",
+    "codex": "pulse HUD uses descriptive text until theory.pulse_names; then may show pulse.zh / standard name"
   },
   "incompat": {
     "id": "incompat_lock_v114",
@@ -3898,6 +3900,11 @@
           "hanre",
           "han"
         ]
+      },
+      "classic_line": {
+        "requires_theory_node": "theory.tenq_song",
+        "source": "theory_nodes['theory.tenq_song'].classic_lines_slice",
+        "when_locked": "show short ask only"
       }
     },
     "i18n_keys": [
@@ -4618,5 +4625,190 @@
       ]
     },
     "contracts_prototype": "Save play.day; on settle write pending with flavor_kind+due_day; next_day_open increments day and seats FIFO due; revisit_consult allows formula|acu|observe_no_med; no LLM"
+  },
+  "codex": {
+    "id": "codex_night_v129",
+    "scene": "loft",
+    "cam": "CAM_LOFT",
+    "enter_from": [
+      "clinic",
+      "side_room"
+    ],
+    "pages": [
+      {
+        "id": "page_hanre_xushi",
+        "theory_node": "theory.hanre_xushi",
+        "title": {
+          "zh": "寒热虚实",
+          "en": "Cold·Heat·Deficiency·Excess",
+          "ja": "寒熱虚実"
+        },
+        "unlock_shows": "settlement_or_mentor_four_word_hint",
+        "body_placeholder": true,
+        "order": 1
+      },
+      {
+        "id": "page_tenq_song",
+        "theory_node": "theory.tenq_song",
+        "title": {
+          "zh": "十问歌 · 残句",
+          "en": "Ten Questions · fragment",
+          "ja": "十問歌・残句"
+        },
+        "unlock_shows": "ten_questions.classic_line_beside_button",
+        "body_placeholder": true,
+        "order": 2
+      },
+      {
+        "id": "page_pulse_names",
+        "theory_node": "theory.pulse_names",
+        "title": {
+          "zh": "脉语 · 弦",
+          "en": "Pulse words · wiry",
+          "ja": "脈語・弦"
+        },
+        "unlock_shows": "pulse_hud.standard_name",
+        "slice_lock_pulse": "xian",
+        "body_placeholder": true,
+        "order": 3
+      }
+    ],
+    "page_count_slice": 3,
+    "script_ref": "patients/codex_script.json (剧本补)",
+    "footer_disclaimer_key": "DISCLAIMER_CULTURE_NOT_MEDICAL"
+  },
+  "theory_nodes": {
+    "theory.hanre_xushi": {
+      "from_page": "page_hanre_xushi",
+      "ui": {
+        "where": [
+          "settlement_flavor_ marginal",
+          "mentor_optional"
+        ],
+        "show": "four_word_intuition_zh_en_ja",
+        "never_diagnosis_name": true,
+        "example_zh": "寒热虚实 · 先分个大概"
+      }
+    },
+    "theory.tenq_song": {
+      "from_page": "page_tenq_song",
+      "ui": {
+        "where": [
+          "ten_questions.items[].classic_line"
+        ],
+        "show_if_unlocked": true,
+        "hide_if_locked": "short_ask_only"
+      },
+      "classic_lines_slice": {
+        "寒热": {
+          "zh": "一问寒热二问汗",
+          "en": "First cold and heat, then sweat.",
+          "ja": "一に寒熱、二に汗"
+        },
+        "汗": {
+          "zh": "二问汗",
+          "en": "Second, ask of sweat.",
+          "ja": "二に汗を問う"
+        }
+      }
+    },
+    "theory.pulse_names": {
+      "from_page": "page_pulse_names",
+      "ui": {
+        "where": [
+          "pulse.quality_label"
+        ],
+        "locked": "descriptive_only",
+        "unlocked": "standard_name",
+        "slice_focus": "xian"
+      },
+      "pulse_id_map": {
+        "xian": {
+          "zh": "弦",
+          "en": "wiry",
+          "ja": "弦",
+          "locked_desc_zh": "如按琴弦"
+        },
+        "fu_jin": {
+          "zh": "浮紧",
+          "en": "floating-tight",
+          "ja": "浮緊"
+        },
+        "xi_shu": {
+          "zh": "细数",
+          "en": "thin-rapid",
+          "ja": "細数"
+        }
+      }
+    }
+  },
+  "codex_night_rules": {
+    "id": "codex_night_rules_v129",
+    "time": {
+      "enter_costs": {
+        "slot": "night",
+        "amount": 1
+      },
+      "save_path": "play.time_slots.night",
+      "review_free": true,
+      "no_night_hint_i18n": "NIGHT_READ_NEED_SLOT",
+      "early_rest_to_night_allowed": true,
+      "note": "已读页复习不扣夜格"
+    },
+    "unlock": {
+      "on_comprehend": [
+        "append play.codex_unlocked page_id",
+        "append play.theory_nodes node_id"
+      ],
+      "no_complex_prereq": true,
+      "stamp": "识"
+    },
+    "read_api": {
+      "fn": "CodexNight.has_node(play, 'theory.tenq_song') -> bool",
+      "tenq_classic_visible": "has_node(theory.tenq_song)",
+      "pulse_name_visible": "has_node(theory.pulse_names)",
+      "hanre_hint_visible": "has_node(theory.hanre_xushi)"
+    },
+    "fsm": {
+      "states": {
+        "loft_idle": {
+          "enter": "show desk/shelf; pages list"
+        },
+        "page_reading": {
+          "enter": "show body text; Comprehend button"
+        },
+        "page_review": {
+          "enter": "same page; no night cost"
+        }
+      },
+      "actions": {
+        "open_page": "page_reading if unread else page_review",
+        "comprehend": "unlock nodes; return loft_idle",
+        "leave_loft": "clinic_idle"
+      }
+    },
+    "link_day": {
+      "after_night_read": "may call next_day_open later; not forced"
+    },
+    "smoke": {
+      "tag": "codex_night_ok",
+      "steps": [
+        "enter loft; night -= 1",
+        "comprehend one page",
+        "save has codex_unlocked + theory_nodes",
+        "UI flag readable for that node"
+      ]
+    },
+    "contracts_prototype": "GameFlow.go_loft; deduct night unless review; on comprehend write codex_unlocked & theory_nodes; TenQuestions/PulseWave read CodexNight.has_node for classic/name",
+    "i18n_keys": [
+      "CODEX_TITLE",
+      "CODEX_COMPREHEND",
+      "CODEX_REVIEW",
+      "NIGHT_READ_NEED_SLOT",
+      "THEORY_HANRE",
+      "THEORY_TENQ",
+      "THEORY_PULSE",
+      "NIGHT_READ_ENTER"
+    ]
   }
 }

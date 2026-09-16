@@ -520,6 +520,16 @@ func advance_clinic_day() -> Dictionary:
 	var d := _ensure_day(play) + 1
 	play["day"] = d
 	play["clinic_day"] = d
+	if Codex and Codex.has_method("reset_night_for_new_day"):
+		Codex.reset_night_for_new_day(play)
+	else:
+		var slots: Dictionary = play.get("time_slots", {}) if typeof(play.get("time_slots", {})) == TYPE_DICTIONARY else {}
+		slots["morning"] = 1
+		slots["afternoon"] = 1
+		slots["evening"] = 1
+		slots["night"] = 1
+		play["time_slots"] = slots
+		play["time_slot"] = "morning"
 	Save.data["play"] = play
 	Save.write_slot()
 	var pulled := peek_due_revisit()
@@ -764,6 +774,27 @@ func go_process() -> void:
 func leave_process() -> void:
 	if Process:
 		Process.leave_process()
+
+
+func go_loft() -> Dictionary:
+	if fsm_state != "clinic_idle":
+		return {"ok": false, "reason": "busy"}
+	if Codex:
+		return Codex.try_go_loft()
+	return {"ok": false}
+
+
+func rest_into_night() -> Dictionary:
+	if fsm_state != "clinic_idle":
+		return {"ok": false, "reason": "busy"}
+	if Codex:
+		return Codex.rest_into_night()
+	return {"ok": false}
+
+
+func leave_loft() -> void:
+	if Codex:
+		Codex.leave_loft()
 
 
 func herb_stock(hid: String) -> int:
@@ -1651,6 +1682,58 @@ func run_slice_smoke() -> int:
 	is_revisit_visit = saved_revisit_flag
 	active_revisit = saved_active
 	last_result = saved_last
+
+
+	# V129 night-read loft: enter → unlock one page → save has theory node
+	var play_cx0: Dictionary = _play().duplicate(true)
+	var saved_fsm_cx := fsm_state
+	fsm_state = "clinic_idle"
+	var play_cx := _play()
+	play_cx["codex_unlocked"] = []
+	play_cx["theory_nodes"] = []
+	var slots_cx: Dictionary = play_cx.get("time_slots", {}) if typeof(play_cx.get("time_slots", {})) == TYPE_DICTIONARY else {}
+	slots_cx["night"] = 1
+	play_cx["time_slots"] = slots_cx
+	if str(play_cx.get("time_slot", "")) == "night_spent":
+		play_cx["time_slot"] = "evening"
+	Save.data["play"] = play_cx
+	if Codex == null:
+		fails.append("Codex autoload missing")
+	else:
+		var ent: Dictionary = Codex.try_go_loft(false)
+		if not bool(ent.get("ok", false)):
+			fails.append("codex enter loft failed: %s" % str(ent.get("reason", ent.get("tip", ""))))
+		if fsm_state != "loft_reading":
+			fails.append("expected loft_reading fsm, got %s" % fsm_state)
+		if not Codex.is_night_spent():
+			fails.append("night slot should be spent on loft enter")
+		var ur: Dictionary = Codex.unlock_page("tenq_song")
+		if not bool(ur.get("ok", false)):
+			fails.append("unlock tenq_song failed")
+		if "tenq_song" not in Codex.unlocked_pages():
+			fails.append("codex_unlocked missing tenq_song")
+		if not Codex.has_theory("theory.tenq_song"):
+			fails.append("theory_nodes missing theory.tenq_song")
+		# Persist shape
+		var saved_nodes: Array = _play().get("theory_nodes", [])
+		if "theory.tenq_song" not in saved_nodes:
+			fails.append("save play.theory_nodes missing theory.tenq_song")
+		# Review unlock should not require night and should be free
+		var ur2: Dictionary = Codex.unlock_page("tenq_song")
+		if not bool(ur2.get("review", false)):
+			fails.append("re-insight should be review")
+		# Visible unlock helpers
+		if Codex.tenq_quote().strip_edges() == "":
+			fails.append("tenq quote empty")
+		Codex.unlock_page("pulse_names")
+		var pname := Codex.pulse_standard_name("xian")
+		if pname.strip_edges() == "":
+			fails.append("pulse standard name should show after unlock")
+		print("codex_night_ok")
+		# Leave loft state for restore
+		fsm_state = "clinic_idle"
+	Save.data["play"] = play_cx0
+	fsm_state = saved_fsm_cx
 
 	# V126: character portraits by id (prefer ui/characters/*.png)
 	var portrait_ids: Array = ["apprentice_jiang", "char_porter", "char_clerk", "char_copyist"]

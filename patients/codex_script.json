@@ -1,0 +1,85 @@
+{
+  "id": "mo-wen-qi-huang-codex-night",
+  "project": "墨问岐黄",
+  "version": 1,
+  "task": "DEV-TASKS-V129",
+  "notes": {
+    "no_medical_advice": true,
+    "disclaimer_keys": ["BOOT_DISCLAIMER_*", "STORE_NOT_MEDICAL", "DISCLAIMER"],
+    "night_slot": 1,
+    "review_free": true,
+    "slice": "3 pages; unlock on insight; CAM_LOFT"
+  },
+  "mentor_su": {
+    "id": "mentor_su",
+    "clickable": false,
+    "loft_lines": {
+      "zh": ["阁楼的字，认一个是一个。"],
+      "en": ["In the loft, each character you recognize counts."],
+      "ja": ["阁楼の字は、一つ識れば一つ。"]
+    }
+  },
+  "pages": [
+    {
+      "id": "hanre_xushi",
+      "theory": "theory.hanre_xushi",
+      "order": 1,
+      "title_key": "CODEX_PAGE_HANRE_TITLE",
+      "body_key": "CODEX_PAGE_HANRE_BODY",
+      "insight_key": "CODEX_PAGE_HANRE_INSIGHT",
+      "title": {
+        "zh": "寒热虚实",
+        "en": "Cold, heat, vacuity, repletion",
+        "ja": "寒熱虚実"
+      },
+      "body": {
+        "zh": "先辨寒热，再问虚实。热者清之，寒者温之；虚则补之，实则泻之。此四字是门，不是方名。",
+        "en": "First tell cold from heat, then vacuity from repletion. Clear heat, warm cold; tonify vacuity, drain repletion. Four words are a doorway — not a formula name.",
+        "ja": "まず寒熱を分かち、ついで虚実を問う。熱は清め、寒は温め、虚は補い、実は瀉す。四字は門であり、方名ではない。"
+      }
+    },
+    {
+      "id": "tenq_song",
+      "theory": "theory.tenq_song",
+      "order": 2,
+      "title_key": "CODEX_PAGE_TENQ_TITLE",
+      "body_key": "CODEX_PAGE_TENQ_BODY",
+      "insight_key": "CODEX_PAGE_TENQ_INSIGHT",
+      "quote_key": "CODEX_PAGE_TENQ_QUOTE",
+      "title": {
+        "zh": "十问歌 · 残句",
+        "en": "Ten Questions Song · Fragment",
+        "ja": "十問歌・残句"
+      },
+      "body": {
+        "zh": "一问寒热二问汗，三问头身四问便，五问饮食六问胸，七聋八渴俱当辨，九问旧病十问因，再兼服药参机变。",
+        "en": "First cold and heat, then sweat; head and body, then stool and urine; diet, then chest; hearing and thirst; past illness and onset — and weigh the medicines already taken.",
+        "ja": "一に寒熱、二に汗。三に頭身、四に二便。五に飲食、六に胸。七聾八渇、みな辨ぜよ。九に旧病、十に因。服药をあわせ機変を参ず。"
+      },
+      "quote": {
+        "zh": "一问寒热二问汗……",
+        "en": "First cold and heat, then sweat…",
+        "ja": "一に寒熱、二に汗……"
+      }
+    },
+    {
+      "id": "pulse_names",
+      "theory": "theory.pulse_names",
+      "order": 3,
+      "title_key": "CODEX_PAGE_PULSE_TITLE",
+      "body_key": "CODEX_PAGE_PULSE_BODY",
+      "insight_key": "CODEX_PAGE_PULSE_INSIGHT",
+      "pulse_focus": "xian",
+      "title": {
+        "zh": "脉语 · 弦",
+        "en": "Pulse words · Wiry",
+        "ja": "脈語・弦"
+      },
+      "body": {
+        "zh": "弦脉端直以长，如按琴弦。先识其名，再合病机；未识名时，只记手下的感觉。",
+        "en": "A wiry pulse is straight and long, like pressing a zither string. Learn the name, then join it to the pattern; before the name, trust only the feel under the fingers.",
+        "ja": "弦脈は端直にして長く、琴弦を按するがごとし。まず名を識り、のちに病機に合わせよ。名を知らぬときは、手下の感じだけを記せ。"
+      }
+    }
+  ]
+}

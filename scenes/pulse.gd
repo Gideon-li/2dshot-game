@@ -56,6 +56,11 @@ func apply_pulse(pulse: Dictionary) -> void:
 	$Caption.text = tr("EXAM_PULSE")
 	_show_overlay(str(pulse.get("id", "fu_jin")))
 	var felt := UiKit.loc_text(pulse, "")
+	var pid := str(pulse.get("id", ""))
+	if Codex and Codex.has_theory("theory.pulse_names"):
+		var std := Codex.pulse_standard_name(pid)
+		if std != "":
+			felt = "%s · %s" % [std, felt if felt != "" else Codex.pulse_desc(pid)]
 	if has_node("Quality"):
 		$Quality.text = felt
 	elif felt != "":

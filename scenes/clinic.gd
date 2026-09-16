@@ -20,6 +20,7 @@ const HOTSPOTS := {
 	"Area_花窗2": "window2",
 	"Area_调剂台": "formula",
 	"Area_针灸榻": "needle",
+	"Area_阁楼": "loft",
 }
 
 const ACU_NORM := {
@@ -65,6 +66,7 @@ var _last_mentor_shown: String = ""
 
 func _ready() -> void:
 	AudioHub.enter_clinic()
+	_ensure_loft_nodes()
 	_wire_areas()
 	_build_drawers()
 	_build_acupoints()
@@ -142,7 +144,8 @@ func _follow_hero() -> void:
 
 func _switch_camera(cam_name: String) -> void:
 	_cam_name = cam_name
-	for n in ["CAM_HERO", "CAM_ASK", "CAM_PULSE", "CAM_FORMULA", "CAM_NEEDLE", "CAM_RESULT"]:
+	_ensure_loft_nodes()
+	for n in ["CAM_HERO", "CAM_ASK", "CAM_PULSE", "CAM_FORMULA", "CAM_NEEDLE", "CAM_RESULT", "CAM_LOFT"]:
 		var cam := get_node_or_null(n) as Camera2D
 		if cam == null:
 			continue
@@ -237,6 +240,10 @@ func _handle_hotspot(kind: String) -> void:
 		"needle":
 			AudioHub.play_one("needle")
 			_open_acu_body_map()
+		"loft":
+			_switch_camera("CAM_LOFT")
+			if str(GameFlow.fsm_state) == "clinic_idle":
+				_do_go_loft()
 
 
 func _pick_at(index: int) -> void:
@@ -590,7 +597,7 @@ func _rebuild_dock() -> void:
 		_dock.anchor_left = 0.0
 		_dock.anchor_right = 0.0
 		_dock.offset_left = 16
-		_dock.offset_top = -210
+		_dock.offset_top = -260
 		_dock.offset_right = 640
 		_dock.offset_bottom = -36
 		_dock.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -631,6 +638,21 @@ func _rebuild_dock() -> void:
 			process_b.text = "去炮制院"
 		process_b.pressed.connect(func() -> void: GameFlow.go_process())
 		col.add_child(process_b)
+		var loft_b := UiKit.make_button("NIGHT_READ_ENTER", true)
+		if loft_b.text == "NIGHT_READ_ENTER" or loft_b.text == "":
+			loft_b.text = "上阁楼"
+		loft_b.pressed.connect(func() -> void: _do_go_loft())
+		col.add_child(loft_b)
+		if Codex and Codex.is_night_spent() and not Codex.has_any_unlock():
+			var tip := tr("NIGHT_READ_NO_NIGHT")
+			if tip == "NIGHT_READ_NO_NIGHT" or tip == "":
+				tip = "今夜的夜格用尽了。明日再来，或提前歇息进夜。"
+			col.add_child(UiKit.ink_label(tip, 12, UiKit.INK_MUTED))
+			var rest_b := UiKit.make_button("NIGHT_READ_REST_EARLY", true)
+			if rest_b.text == "NIGHT_READ_REST_EARLY" or rest_b.text == "":
+				rest_b.text = "提前歇息进夜"
+			rest_b.pressed.connect(func() -> void: _do_rest_into_night())
+			col.add_child(rest_b)
 		# 小荷候诊口吻（不可点、不代诊）
 		if not CaseDB.pharmacy_kid_is_clickable():
 			if _xiaohe_idle_line == "":
@@ -720,6 +742,50 @@ func _sync_revisit_badge() -> void:
 			badge.visible = true
 		elif badge:
 			badge.visible = false
+
+
+
+func _ensure_loft_nodes() -> void:
+	## V129: CAM_LOFT + loft hotspot (clinic corner entry).
+	if not has_node("CAM_LOFT"):
+		var cam := Camera2D.new()
+		cam.name = "CAM_LOFT"
+		cam.position = Vector2(420, 360)
+		cam.zoom = Vector2(1.15, 1.15)
+		cam.enabled = false
+		add_child(cam)
+	var areas := get_node_or_null("Areas")
+	if areas and not areas.has_node("Area_阁楼"):
+		var area := Area2D.new()
+		area.name = "Area_阁楼"
+		area.position = Vector2(360, 520)
+		var cs := CollisionShape2D.new()
+		var circ := CircleShape2D.new()
+		circ.radius = 70.0
+		cs.shape = circ
+		area.add_child(cs)
+		areas.add_child(area)
+
+
+func _do_go_loft() -> void:
+	if str(GameFlow.fsm_state) != "clinic_idle":
+		return
+	var r: Dictionary = {}
+	if GameFlow.has_method("go_loft"):
+		r = GameFlow.go_loft()
+	elif Codex:
+		r = Codex.try_go_loft()
+	if not bool(r.get("ok", false)):
+		_rebuild_dock()
+
+
+func _do_rest_into_night() -> void:
+	if str(GameFlow.fsm_state) != "clinic_idle":
+		return
+	if GameFlow.has_method("rest_into_night"):
+		GameFlow.rest_into_night()
+	elif Codex:
+		Codex.rest_into_night()
 
 
 func _do_next_day() -> void:
@@ -832,6 +898,10 @@ func _fill_exam_dock(col: VBoxContainer) -> void:
 		if who == "":
 			who = "苏问舟"
 		col.add_child(_chrome_row("res://ui/chrome/mentor-bubbles.png", "%s：%s" % [who, mentor_line], UiKit.SEAL))
+		if Codex and Codex.has_theory("theory.hanre_xushi"):
+			var note := Codex.hanre_note()
+			if note != "":
+				col.add_child(UiKit.ink_label(note, 12, UiKit.INK_MUTED))
 		if GameFlow.has_method("consume_mentor_chime") and GameFlow.consume_mentor_chime():
 			if "这一问有了" in mentor_line:
 				AudioHub.play_one("stamp-ok")
@@ -841,6 +911,14 @@ func _fill_exam_dock(col: VBoxContainer) -> void:
 	var focus := str(GameFlow.exam_focus)
 	if focus == "qie":
 		# Text clues only. Art team owns 脉纹 on the pillow; no pulse.tscn / encyclopedia.
+		var pulse_meta: Dictionary = GameFlow.pulse_for_current() if GameFlow.current_patient_id != "" else {}
+		var pid_pulse := str(pulse_meta.get("id", ""))
+		if Codex and Codex.has_theory("theory.pulse_names"):
+			var std := Codex.pulse_standard_name(pid_pulse)
+			if std != "":
+				col.add_child(UiKit.ink_label("%s · %s" % [std, Codex.pulse_desc(pid_pulse)], 14, UiKit.SEAL))
+			else:
+				col.add_child(UiKit.ink_label(tr("THEORY_PULSE_NAMES"), 13, UiKit.SEAL))
 		for line in _clue_lines("qie"):
 			col.add_child(UiKit.ink_label("· " + line, 14))
 		if _clue_lines("qie").is_empty():
@@ -880,6 +958,10 @@ func _fill_ask_dock(col: VBoxContainer) -> void:
 		_append_chat(str(d.get("q", "")), str(d.get("a", "")))
 	# 「十问」shortcut bar — song labels from ten_questions.json; no encyclopedia.
 	col.add_child(UiKit.ink_label(tr("TENQ_BAR_TITLE"), 12, UiKit.INK_MUTED))
+	if Codex and Codex.has_theory("theory.tenq_song"):
+		var quote := Codex.tenq_quote()
+		if quote != "":
+			col.add_child(UiKit.ink_label(quote, 12, UiKit.SEAL))
 	var tenq := HFlowContainer.new()
 	tenq.add_theme_constant_override("h_separation", 4)
 	tenq.add_theme_constant_override("v_separation", 4)
@@ -1185,6 +1267,9 @@ func _paint_hint() -> void:
 	match _hover:
 		"pulse":
 			_hint.text = tr("HINT_PULSE")
+		"loft":
+			var ht := tr("NIGHT_READ_ENTER")
+			_hint.text = ht if ht != "NIGHT_READ_ENTER" else "上阁楼"
 		"window2":
 			_hint.text = tr("HINT_LOOK")
 		"incense":

@@ -520,3 +520,52 @@ PROCESS_STATION_ACTIVE,当前工位,Current station,今の工位
 PROCESS_STATION_SUN_READY,晒架可用。,The drying rack is ready.,干し棚が使える。
 MENTOR_PROCESS_SUN,晒药要动手翻，不是挂机等条。,Sun-drying needs your hands — not idling on a bar.,晒薬は手で裏返す。バー待ちではない。
 XIAOHE_PROCESS_SUN,翻！别烤糊了——晒糊也算。,Flip! Don't toast it — sun-scorch counts too.,裏返せ！焦がすな——日で焦げるのも同じ。
+NIGHT_READ_TITLE,夜读,Night reading,夜読
+NIGHT_READ_ENTER,上阁楼,To the loft,阁楼へ
+NIGHT_READ_EXIT,下楼回诊室,Back to the clinic,診察室へ下りる
+NIGHT_READ_HINT,残烛下翻几页。学的是叫出名，不是背题库。,Flip a few pages by the candle. Learn names — not a quiz bank.,残燭の下で数頁。名を呼べるように。問題集ではない。
+NIGHT_READ_COST,耗夜格 1,Costs 1 night slot,夜枠 1
+NIGHT_READ_NO_NIGHT,今夜的夜格用尽了。明日再来，或提前歇息进夜。,"No night slot left. Come tomorrow, or rest early into night.",今夜の夜枠がない。明日来るか、先に休んで夜へ。
+NIGHT_READ_REST_EARLY,提前歇息进夜,Rest early into night,先に休んで夜へ
+NIGHT_READ_REVIEW,复习（不耗夜格）,Review (no night cost),復習（夜枠なし）
+NIGHT_READ_REVIEW_HINT,已读之页可再翻，不扣夜格。,Revisit unlocked pages free of night cost.,読んだ頁は再び開ける。夜枠は減らない。
+NIGHT_READ_DONE,今夜读到这里。,Enough for tonight.,今夜はここまで。
+NIGHT_READ_CANDLE,残烛,Waning candle,残燭
+CODEX_TITLE,墨问医典 · 残页,Ink Codex · Fragments,墨問医典・残頁
+CODEX_COVER,医典,Codex,医典
+CODEX_PAGE,第 {n} 页,Page {n},第 {n} 頁
+CODEX_OPEN,翻开,Open,開く
+CODEX_NEXT,下一页,Next page,次の頁
+CODEX_PREV,上一页,Previous page,前の頁
+CODEX_INSIGHT,领悟,Take insight,领悟
+CODEX_INSIGHT_OK,记下了。,Noted.,覚えた。
+CODEX_UNLOCKED,已识,Known,識
+CODEX_LOCKED,未读,Unread,未読
+CODEX_SEAL,识,Known,識
+CODEX_EMPTY,今夜还没有翻开的页。,No page opened tonight yet.,今夜まだ頁を開いていない。
+CODEX_FOOTER_HINT,页脚声明复用文化学习键，勿改措辞。,Footer reuses the cultural-learning disclaimer keys; do not reword.,フッターは文化学習の声明キーを再利用。措辞を変えない。
+CODEX_PAGE_HANRE_TITLE,寒热虚实,"Cold, heat, vacuity, repletion",寒熱虚実
+CODEX_PAGE_HANRE_BODY,先辨寒热，再问虚实。热者清之，寒者温之；虚则补之，实则泻之。此四字是门，不是方名。,"First tell cold from heat, then vacuity from repletion. Clear heat, warm cold; tonify vacuity, drain repletion. Four words are a doorway — not a formula name.",まず寒熱を分かち、ついで虚実を問う。熱は清め、寒は温め、虚は補い、実は瀉す。四字は門であり、方名ではない。
+CODEX_PAGE_HANRE_INSIGHT,问舟旁可显四字直觉短注。,A four-word intuition note may appear beside the mentor.,問舟の傍に四字の短い注が出る。
+CODEX_PAGE_TENQ_TITLE,十问歌 · 残句,Ten Questions Song · Fragment,十問歌・残句
+CODEX_PAGE_TENQ_BODY,一问寒热二问汗，三问头身四问便，五问饮食六问胸，七聋八渴俱当辨，九问旧病十问因，再兼服药参机变。,"First cold and heat, then sweat; head and body, then stool and urine; diet, then chest; hearing and thirst; past illness and onset — and weigh the medicines already taken.",一に寒熱、二に汗。三に頭身、四に二便。五に飲食、六に胸。七聾八渇、みな辨ぜよ。九に旧病、十に因。服药をあわせ機変を参ず。
+CODEX_PAGE_TENQ_INSIGHT,十问旁可显原典一句。,A classic line may show beside the Ten Questions.,十問の傍に原典の一句が出る。
+CODEX_PAGE_TENQ_QUOTE,一问寒热二问汗……,"First cold and heat, then sweat…",一に寒熱、二に汗……
+CODEX_PAGE_PULSE_TITLE,脉语 · 弦,Pulse words · Wiry,脈語・弦
+CODEX_PAGE_PULSE_BODY,弦脉端直以长，如按琴弦。先识其名，再合病机；未识名时，只记手下的感觉。,"A wiry pulse is straight and long, like pressing a zither string. Learn the name, then join it to the pattern; before the name, trust only the feel under the fingers.",弦脈は端直にして長く、琴弦を按するがごとし。まず名を識り、のちに病機に合わせよ。名を知らぬときは、手下の感じだけを記せ。
+CODEX_PAGE_PULSE_INSIGHT,脉象旁可显示标准脉名。,Standard pulse names may appear beside the pulse exam.,脈象の傍に標準の脈名が出る。
+THEORY_TITLE,理论节点,Theory nodes,理論ノード
+THEORY_HANRE_XUSHI,寒热虚实,Cold–heat / vacuity–repletion,寒熱虚実
+THEORY_HANRE_XUSHI_NOTE,寒热虚实，先辨门户。,"Cold, heat, vacuity, repletion — first tell the door.",寒熱虚実、まず門を辨ぜよ。
+THEORY_TENQ_SONG,十问歌,Ten Questions Song,十問歌
+THEORY_TENQ_SONG_NOTE,十问在歌里，不在百科。,"The ten questions live in the song, not an encyclopedia.",十問は歌にあり、百科にはない。
+THEORY_PULSE_NAMES,脉名,Pulse names,脈名
+THEORY_PULSE_NAMES_NOTE,弦如按琴弦。,Wiry — like a zither string.,弦は琴弦を按するがごとし。
+THEORY_UNLOCKED,节点已开：{name},Node unlocked: {name},ノード開放：{name}
+THEORY_LOCKED_HINT,夜读后方显。,Shows after night reading.,夜読のあとで見える。
+PULSE_NAME_XIAN,弦,Wiry,弦
+PULSE_NAME_FU,浮,Floating,浮
+PULSE_DESC_XIAN,如按琴弦,Like pressing a zither string,琴弦を按するがごとし
+PULSE_DESC_FU,如木浮水,Like wood on water,木が水に浮かぶがごとし
+MENTOR_LOFT_1,阁楼的字，认一个是一个。,"In the loft, each character you recognize counts.",阁楼の字は、一つ識れば一つ。
+MENTOR_LOFT_2,别把残页当成开方说明书。,Don't treat a fragment as a prescription manual.,残頁を処方の説明書にするな。

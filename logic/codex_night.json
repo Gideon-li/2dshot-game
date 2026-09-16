@@ -1,0 +1,109 @@
+{
+  "id": "codex_night_v129",
+  "pages": [
+    {
+      "id": "page_hanre_xushi",
+      "theory_node": "theory.hanre_xushi",
+      "title": {
+        "zh": "寒热虚实",
+        "en": "Cold·Heat·Deficiency·Excess",
+        "ja": "寒熱虚実"
+      },
+      "unlock_shows": "settlement_or_mentor_four_word_hint",
+      "body_placeholder": true,
+      "order": 1
+    },
+    {
+      "id": "page_tenq_song",
+      "theory_node": "theory.tenq_song",
+      "title": {
+        "zh": "十问歌 · 残句",
+        "en": "Ten Questions · fragment",
+        "ja": "十問歌・残句"
+      },
+      "unlock_shows": "ten_questions.classic_line_beside_button",
+      "body_placeholder": true,
+      "order": 2
+    },
+    {
+      "id": "page_pulse_names",
+      "theory_node": "theory.pulse_names",
+      "title": {
+        "zh": "脉语 · 弦",
+        "en": "Pulse words · wiry",
+        "ja": "脈語・弦"
+      },
+      "unlock_shows": "pulse_hud.standard_name",
+      "slice_lock_pulse": "xian",
+      "body_placeholder": true,
+      "order": 3
+    }
+  ],
+  "theory_nodes": {
+    "theory.hanre_xushi": {
+      "from_page": "page_hanre_xushi",
+      "ui": {
+        "where": [
+          "settlement_flavor_ marginal",
+          "mentor_optional"
+        ],
+        "show": "four_word_intuition_zh_en_ja",
+        "never_diagnosis_name": true,
+        "example_zh": "寒热虚实 · 先分个大概"
+      }
+    },
+    "theory.tenq_song": {
+      "from_page": "page_tenq_song",
+      "ui": {
+        "where": [
+          "ten_questions.items[].classic_line"
+        ],
+        "show_if_unlocked": true,
+        "hide_if_locked": "short_ask_only"
+      },
+      "classic_lines_slice": {
+        "寒热": {
+          "zh": "一问寒热二问汗",
+          "en": "First cold and heat, then sweat.",
+          "ja": "一に寒熱、二に汗"
+        },
+        "汗": {
+          "zh": "二问汗",
+          "en": "Second, ask of sweat.",
+          "ja": "二に汗を問う"
+        }
+      }
+    },
+    "theory.pulse_names": {
+      "from_page": "page_pulse_names",
+      "ui": {
+        "where": [
+          "pulse.quality_label"
+        ],
+        "locked": "descriptive_only",
+        "unlocked": "standard_name",
+        "slice_focus": "xian"
+      },
+      "pulse_id_map": {
+        "xian": {
+          "zh": "弦",
+          "en": "wiry",
+          "ja": "弦",
+          "locked_desc_zh": "如按琴弦"
+        },
+        "fu_jin": {
+          "zh": "浮紧",
+          "en": "floating-tight",
+          "ja": "浮緊"
+        },
+        "xi_shu": {
+          "zh": "细数",
+          "en": "thin-rapid",
+          "ja": "細数"
+        }
+      }
+    }
+  },
+  "rules_ref": "slice_logic.json → codex_night_rules",
+  "lock_doc": "logic/CODEX-NIGHT-V129.md"
+}

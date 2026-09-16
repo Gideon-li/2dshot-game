@@ -152,3 +152,18 @@ API：`MentorCues.next(case, exams, asked_ten_q_ids, cues_emitted)`。
 - 玩法：翻晒主动 ≥1 + 日照进度；品质 `ok` / `ok_ish`。
 - 工位 `STATION_DRY` / `CAM_DRY`。暮格、托盘拦截、十八反、LLM 不改。
 - 冒烟：`process_sun_ok`。锁见 `PROCESS-SUN-V128.md`。
+
+
+## V129 夜读医典
+
+见 `CODEX-NIGHT-V129.md` + `codex_night.json` / `codex_night_rules`。
+
+| 页 | 节点 | 解锁后可见 |
+| --- | --- | --- |
+| 寒热虚实 | `theory.hanre_xushi` | 结算/旁白四字直觉（非诊断名） |
+| 十问歌残句 | `theory.tenq_song` | 十问旁原典一句 |
+| 脉语弦 | `theory.pulse_names` | 脉象标准名（未解锁只用描写） |
+
+- 进阁楼耗 **夜格 1**；复习已读不扣。
+- 存档：`play.codex_unlocked[]`、`play.theory_nodes[]`。
+- 冒烟：`codex_night_ok`。不改 LLM/炮制/针灸。

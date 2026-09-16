@@ -57,3 +57,10 @@
 - `play.day`（与 `clinic_day` 同义）：次日开馆 +1。
 - `pending_revisits[]`：须含 `treated_at_day`、`due_day`、`flavor_kind`、`consumed`。
 - 开馆 FIFO 入座复诊；消费后 `consumed=true`。不接 LLM。
+
+
+## V129 增补
+
+- `time_slots.night`：进阁楼夜读耗 1；复习已读页不扣。
+- `codex_unlocked[]`：已领悟页 id。
+- `theory_nodes[]`：已解锁节点（`theory.hanre_xushi` / `tenq_song` / `pulse_names`）。
