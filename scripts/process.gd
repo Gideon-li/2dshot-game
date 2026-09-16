@@ -43,9 +43,11 @@ func _ensure_play_fields() -> void:
 	if typeof(play.get("herb_items")) != TYPE_ARRAY:
 		play["herb_items"] = []
 	if typeof(play.get("time_slots")) != TYPE_DICTIONARY:
-		play["time_slots"] = {"morning": 1, "afternoon": 1, "evening": 1}
+		play["time_slots"] = {"morning": 1, "afternoon": 1, "evening": 1, "night": 1}
 	elif not (play["time_slots"] as Dictionary).has("evening"):
 		(play["time_slots"] as Dictionary)["evening"] = 1
+	if not (play["time_slots"] as Dictionary).has("night"):
+		(play["time_slots"] as Dictionary)["night"] = 1
 	_migrate_stock_shape(play)
 	Save.data["play"] = play
 
