@@ -23,6 +23,16 @@ static func evaluate(case_data: Dictionary, exams_done: Dictionary, path: String
 			natures.append(str(item.get("nature", "neutral")))
 			zheng += int(item.get("zheng_cost", 0))
 			onset_vals.append(_onset_num(str(item.get("onset", "medium"))))
+		elif path == "food":
+			item = CaseDB.food_item(id) if CaseDB.has_method("food_item") else {}
+			if item.is_empty():
+				for row in CaseDB.pack.get("food_items", []):
+					if typeof(row) == TYPE_DICTIONARY and str(row.get("id", "")) == id:
+						item = row
+						break
+			natures.append(str(item.get("nature", "neutral")))
+			zheng += int(item.get("zheng_cost", 0))
+			onset_vals.append(_onset_num(str(item.get("onset", "slow"))))
 		else:
 			item = CaseDB.point(id)
 		if item.is_empty():
@@ -54,6 +64,9 @@ static func evaluate(case_data: Dictionary, exams_done: Dictionary, path: String
 			overtreat = true
 		if ids.size() > int(scoring.get("overtreat", {}).get("if_herb_count_gt", 8)):
 			overtreat = true
+	elif path == "food":
+		if ids.size() > 3:
+			overtreat = true
 	else:
 		if ids.size() > int(scoring.get("overtreat", {}).get("if_point_count_gt", 5)):
 			overtreat = true
@@ -63,6 +76,14 @@ static func evaluate(case_data: Dictionary, exams_done: Dictionary, path: String
 	var mis_pen := float(scoring.get("mistreat", {}).get("penalty", 0.35)) if mistreat else 0.0
 	var over_pen := float(scoring.get("overtreat", {}).get("penalty", 0.12)) if overtreat else 0.0
 	var score := pattern * process_mult - mis_pen - over_pen + float(speed.get("mod", 0.0))
+	if path == "food":
+		var cue := str(opts.get("lifestyle_cue", ""))
+		for row in CaseDB.pack.get("food_therapy_rules", {}).get("lifestyle_cues", []):
+			if typeof(row) == TYPE_DICTIONARY and str(row.get("id", "")) == cue:
+				score += float(row.get("warm_bonus", 0.0))
+				break
+		if ids.has("bingtang"):
+			score -= 0.05
 	score = clampf(score, 0.0, 1.0)
 	var rank := _rank(scoring, score)
 	if mistreat:

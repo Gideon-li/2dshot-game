@@ -1,0 +1,173 @@
+{
+  "id": "food_therapy_v130",
+  "path": "food",
+  "food_items": [
+    {
+      "id": "zhou_di",
+      "zh": "粳米粥底",
+      "en": "Rice congee base",
+      "ja": "粳米の粥底",
+      "tags": [
+        "warm",
+        "neutralish",
+        "protect_middle",
+        "bland"
+      ],
+      "nature": "neutral",
+      "actions": [
+        "tonify_spleen",
+        "harmonize",
+        "tonify_qi"
+      ],
+      "funcs": {
+        "补气": 0.4,
+        "补阴": 0.1
+      },
+      "temp": 0,
+      "onset": "slow",
+      "zheng_cost": 0,
+      "role": "base"
+    },
+    {
+      "id": "hongzao",
+      "zh": "红枣",
+      "en": "Red jujube",
+      "ja": "赤棗",
+      "tags": [
+        "warm",
+        "sweet",
+        "tonify",
+        "blood"
+      ],
+      "nature": "warm",
+      "actions": [
+        "tonify_qi",
+        "nourish_blood",
+        "harmonize",
+        "calm_shen"
+      ],
+      "funcs": {
+        "补气": 0.5,
+        "补血": 0.4,
+        "安神": 0.3
+      },
+      "temp": 1,
+      "onset": "slow",
+      "zheng_cost": 0,
+      "role": "add"
+    },
+    {
+      "id": "lianzi",
+      "zh": "莲子",
+      "en": "Lotus seed",
+      "ja": "蓮子",
+      "tags": [
+        "neutral",
+        "sweet",
+        "tonify_spleen",
+        "calm"
+      ],
+      "nature": "neutral",
+      "actions": [
+        "tonify_spleen",
+        "calm_shen",
+        "astringe",
+        "tonify_qi"
+      ],
+      "funcs": {
+        "补气": 0.4,
+        "安神": 0.5,
+        "收涩": 0.3
+      },
+      "temp": 0,
+      "onset": "slow",
+      "zheng_cost": 0,
+      "role": "add"
+    },
+    {
+      "id": "shanyao",
+      "zh": "山药",
+      "en": "Chinese yam",
+      "ja": "山薬",
+      "tags": [
+        "neutral",
+        "sweet",
+        "tonify_spleen",
+        "yin_light"
+      ],
+      "nature": "neutral",
+      "actions": [
+        "tonify_qi",
+        "nourish_yin",
+        "tonify_spleen"
+      ],
+      "funcs": {
+        "补气": 0.6,
+        "补阴": 0.3
+      },
+      "temp": 0,
+      "onset": "slow",
+      "zheng_cost": 0,
+      "role": "add",
+      "note": "可与采药白名单山药呼应；教学膳卡独立库存"
+    },
+    {
+      "id": "shengjiang",
+      "zh": "生姜",
+      "en": "Fresh ginger",
+      "ja": "生姜",
+      "tags": [
+        "warm",
+        "pungent",
+        "light_exterior",
+        "appetite"
+      ],
+      "nature": "warm",
+      "actions": [
+        "warm_middle",
+        "release_exterior",
+        "stop_vomit"
+      ],
+      "funcs": {
+        "温里": 0.5,
+        "解表": 0.25,
+        "止咳": 0.1
+      },
+      "temp": 1,
+      "onset": "medium",
+      "zheng_cost": 0,
+      "role": "add",
+      "note": "轻散寒/开胃，勿当麻黄用",
+      "not_a_mahuang": true
+    },
+    {
+      "id": "bingtang",
+      "zh": "冰糖",
+      "en": "Rock sugar",
+      "ja": "氷糖",
+      "tags": [
+        "sweet",
+        "gentle",
+        "damp_caution"
+      ],
+      "nature": "neutral",
+      "actions": [
+        "harmonize",
+        "tonify_qi"
+      ],
+      "funcs": {
+        "补气": 0.2
+      },
+      "temp": 0,
+      "onset": "slow",
+      "zheng_cost": 0,
+      "role": "sweetener",
+      "stability_penalty_if_tags": [
+        "damp"
+      ],
+      "note": "甘缓；痰湿印象扣稳"
+    }
+  ],
+  "rules_ref": "slice_logic.json → food_therapy_rules",
+  "lock_doc": "logic/FOOD-THERAPY-V130.md"
+}

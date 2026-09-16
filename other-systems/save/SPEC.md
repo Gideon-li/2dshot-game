@@ -64,3 +64,8 @@
 - `time_slots.night`：进阁楼夜读耗 1；复习已读页不扣。
 - `codex_unlocked[]`：已领悟页 id。
 - `theory_nodes[]`：已解锁节点（`theory.hanre_xushi` / `tenq_song` / `pulse_names`）。
+
+
+## V130 增补
+
+- `play.food_stock`：食疗教学库存（可无限）；不与 `herb_stock` 互通。

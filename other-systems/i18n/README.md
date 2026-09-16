@@ -12,3 +12,4 @@ Godot 工程翻译源：`locale/xinglin.csv`（与本目录 `ui.csv` 同步）�
 - v1.27：`REVISIT_*` / `NEXT_DAY` 复诊日循环（见 `REVISIT-KEYS.md`）
 - v1.28：晒药 `PROCESS_SUN_FLIP/DONE/HINT` 等（见 `PROCESS-SUN-KEYS.md`）
 - v1.29：夜读 `CODEX_*` / `THEORY_*` / `NIGHT_READ_*`（见 `CODEX-KEYS.md`）
+- v1.30：食疗 `FOOD_*`（见 `FOOD-KEYS.md`）

@@ -167,3 +167,15 @@ API：`MentorCues.next(case, exams, asked_ten_q_ids, cues_emitted)`。
 - 进阁楼耗 **夜格 1**；复习已读不扣。
 - 存档：`play.codex_unlocked[]`、`play.theory_nodes[]`。
 - 冒烟：`codex_night_ok`。不改 LLM/炮制/针灸。
+
+
+## V130 食疗入门
+
+见 `FOOD-THERAPY-V130.md` + `food_therapy.json`。
+
+- path=`food`；处治 `ACTION_FOOD`；膳盏 1～3 卡。
+- 六卡：`zhou_di` / `hongzao` / `lianzi` / `shanyao` / `shengjiang` / `bingtang`。
+- 教学库存 `play.food_stock`，不污染药柜。
+- 劝说可选：`less_worry` | `rest_wind` | `no_late_lunch`（温分小加）。
+- 慢愈示例：枣莲粥 → 气郁/轻虚可向愈慢档；风寒单走食疗准偏低。
+- `evaluate(..., path="food")`；冒烟 `food_therapy_ok`。

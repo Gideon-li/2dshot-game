@@ -21,6 +21,8 @@ var fsm_state: String = "clinic_idle"
 var seen: Array[String] = []
 var case_order: Array[String] = []
 var tray_herbs: Array[String] = []
+var food_tray: Array[String] = []
+var lifestyle_cue: String = ""
 var selected_points: Array[String] = []
 ## V125 session-only acupoint memory (not written to Save).
 var acu_known: Array[String] = []
@@ -86,6 +88,8 @@ func start_patient(patient_id: String) -> void:
 	exam_focus = ""
 	last_result = {}
 	tray_herbs.clear()
+	food_tray.clear()
+	lifestyle_cue = ""
 	selected_points.clear()
 	acu_known.clear()
 	acu_practiced.clear()
@@ -738,6 +742,52 @@ func do_exam(exam: String) -> void:
 func exam_done(exam: String) -> bool:
 	return bool(exams.get(exam, false)) or exam in completed_exams
 
+
+func enter_food() -> void:
+	if current_patient_id == "":
+		return
+	open_treatment()
+	food_tray.clear()
+	lifestyle_cue = ""
+	fsm_state = "food_crafting"
+	fsm_changed.emit(fsm_state)
+
+
+func open_food() -> void:
+	enter_food()
+	_go("res://scenes/food.tscn")
+
+
+func add_food(fid: String) -> bool:
+	if fsm_state != "food_crafting":
+		return false
+	fid = str(fid)
+	if fid == "" or fid in food_tray:
+		return false
+	if food_tray.size() >= 3:
+		return false
+	food_tray.append(fid)
+	return true
+
+
+func remove_food(fid: String) -> void:
+	food_tray.erase(str(fid))
+
+
+func set_lifestyle_cue(cue: String) -> void:
+	lifestyle_cue = str(cue).strip_edges()
+
+
+func can_confirm_food() -> bool:
+	return fsm_state == "food_crafting" and food_tray.size() >= 1 and food_tray.size() <= 3
+
+
+func confirm_food() -> Dictionary:
+	if not can_confirm_food():
+		return {}
+	return _settle_inplace("food", food_tray.duplicate(), {"lifestyle_cue": lifestyle_cue})
+
+
 func enter_formula() -> void:
 	if current_patient_id == "":
 		return
@@ -1122,9 +1172,9 @@ func confirm_needling() -> Dictionary:
 	var ids: Array = acu_practiced.duplicate() if not acu_practiced.is_empty() else selected_points.duplicate()
 	return _settle_inplace("acupuncture", ids)
 
-func _settle_inplace(path: String, ids: Array) -> Dictionary:
+func _settle_inplace(path: String, ids: Array, opts: Dictionary = {}) -> Dictionary:
 	var case_data: Dictionary = CaseDB.case_for_patient(current_patient_id)
-	var raw: Dictionary = Scoring.evaluate(case_data, exams, path, ids)
+	var raw: Dictionary = Scoring.evaluate(case_data, exams, path, ids, opts)
 	var rank_id := str(raw.get("rank_id", "none"))
 	var rank_dict := {}
 	for r in CaseDB.pack.get("scoring", {}).get("player_facing_ranks", []):
@@ -1558,6 +1608,25 @@ func run_slice_smoke() -> int:
 	play_p["herb_inventory"] = inv_p0
 	play_p["process_quality"] = pq0
 	Save.data["play"] = play_p
+
+	# V130 food therapy: zao-lian porridge on ganyu/clerk
+	var food_ids: Array = ["hongzao", "lianzi", "zhou_di"]
+	var case_food: Dictionary = CaseDB.case_for_patient("char_clerk")
+	if case_food.is_empty():
+		case_food = CaseDB.case_for_patient("ganyu_qizhi")
+	var exams_food := {"wang": true, "wen_listen": true, "wen_ask": true, "qie": true}
+	var food_r: Dictionary = Scoring.evaluate(case_food, exams_food, "food", food_ids, {"lifestyle_cue": "less_worry"})
+	print("food_therapy score=", food_r.get("score"), " rank=", food_r.get("rank_id"))
+	if float(food_r.get("score", 0.0)) < 0.45:
+		fails.append("zao-lian porridge score too weak %.2f" % float(food_r.get("score", 0.0)))
+	var rank_f := str(food_r.get("rank_id", ""))
+	if rank_f not in ["toward_heal", "work", "clear", "slight"]:
+		fails.append("food path unexpected rank %s" % rank_f)
+	# Ensure formula path still works (no regress)
+	var form_r: Dictionary = Scoring.evaluate(CaseDB.case_for_patient("char_porter"), exams_food, "formula", ["mahuang", "guizhi", "xingren", "gancao"])
+	if float(form_r.get("score", 0.0)) < 0.5:
+		fails.append("formula path regressed after food")
+	print("food_therapy_ok")
 
 	# V125 acupuncture intro short loop
 	var hegu_pos := Vector2(0.08, 0.46)

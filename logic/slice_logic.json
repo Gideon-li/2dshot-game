@@ -1,6 +1,6 @@
 {
   "id": "xinglin-mowen-slice-logic",
-  "version": 9,
+  "version": 10,
   "project": "墨问岐黄 / 杏林墨问",
   "scope": "vertical_slice",
   "notes": {
@@ -30,7 +30,8 @@
     "v125": "acu intro: hegu needle + zusanli moxa; teach_vol1 lock; tolerance hit rules",
     "v127": "revisit day cycle: play.day, due_day=treated+1, FIFO 1, revisit_consult FSM, observe_no_med; no LLM",
     "v128": "sun_dry playable; mudanpi teaching sun-dry; flip+progress; STATION_DRY not placeholder",
-    "v129": "codex night read; 3 pages; night slot -1; theory flags for tenq/pulse UI"
+    "v129": "codex night read; 3 pages; night slot -1; theory flags for tenq/pulse UI",
+    "v130": "food therapy path=food; 6 cards; lifestyle_cue; teaching stock; food_therapy_ok"
   },
   "exam_ids": [
     "wang",
@@ -2695,6 +2696,41 @@
           "mis"
         ],
         "observe_close_line_key": "revisit.fenghan_biao.observe_close"
+      },
+      "legal_food_examples": [
+        {
+          "foods": [
+            "shengjiang",
+            "zhou_di"
+          ],
+          "onset": "medium",
+          "note": "轻寒不适，准偏低温尚可"
+        },
+        {
+          "foods": [
+            "shengjiang",
+            "zhou_di",
+            "hongzao"
+          ],
+          "onset": "slow",
+          "note": "仍偏慢，不可当麻黄汤"
+        }
+      ],
+      "food_fit": {
+        "preferred_actions": [
+          "warm_middle",
+          "release_exterior",
+          "harmonize"
+        ],
+        "preferred_tags": [
+          "warm",
+          "protect_middle"
+        ],
+        "discouraged_tags": [
+          "heavy_tonify"
+        ],
+        "solo_food_cap_rank": "work",
+        "solo_food_note": "风寒表实单走食疗：准偏低、温可尚可"
       }
     },
     {
@@ -2987,6 +3023,41 @@
           "mis"
         ],
         "observe_close_line_key": "revisit.ganyu_qizhi.observe_close"
+      },
+      "legal_food_examples": [
+        {
+          "foods": [
+            "hongzao",
+            "lianzi",
+            "zhou_di"
+          ],
+          "onset": "slow",
+          "note": "枣莲粥 · 慢愈安神健脾线",
+          "target_rank": "toward_heal"
+        },
+        {
+          "foods": [
+            "hongzao",
+            "zhou_di"
+          ],
+          "onset": "slow",
+          "note": "轻线"
+        }
+      ],
+      "food_fit": {
+        "preferred_actions": [
+          "calm_shen",
+          "tonify_spleen",
+          "harmonize",
+          "nourish_blood"
+        ],
+        "preferred_tags": [
+          "calm",
+          "tonify_spleen",
+          "sweet"
+        ],
+        "discouraged_tags": [],
+        "solo_food_cap_rank": "toward_heal"
       }
     },
     {
@@ -3281,6 +3352,44 @@
           "mis"
         ],
         "observe_close_line_key": "revisit.yinxu_neire.observe_close"
+      },
+      "legal_food_examples": [
+        {
+          "foods": [
+            "shanyao",
+            "hongzao",
+            "zhou_di"
+          ],
+          "onset": "slow",
+          "note": "脾肾轻养慢线",
+          "target_rank": "toward_heal"
+        },
+        {
+          "foods": [
+            "shanyao",
+            "lianzi",
+            "zhou_di"
+          ],
+          "onset": "slow",
+          "note": "清补"
+        }
+      ],
+      "food_fit": {
+        "preferred_actions": [
+          "nourish_yin",
+          "tonify_spleen",
+          "tonify_qi",
+          "harmonize"
+        ],
+        "preferred_tags": [
+          "yin_light",
+          "protect_middle",
+          "neutral"
+        ],
+        "discouraged_tags": [
+          "pungent_strong"
+        ],
+        "solo_food_cap_rank": "toward_heal"
       }
     }
   ],
@@ -3402,6 +3511,14 @@
           5
         ],
         "legal_example_bonus": 0.08
+      },
+      "food_path": {
+        "required_cover_weight": 0.35,
+        "preferred_cover_weight": 0.35,
+        "tag_weight": 0.2,
+        "example_bonus": 0.1,
+        "legal_example_key": "legal_food_examples",
+        "foods_key": "foods"
       }
     },
     "speed": {
@@ -4636,41 +4753,53 @@
     ],
     "pages": [
       {
-        "id": "page_hanre_xushi",
+        "id": "hanre_xushi",
         "theory_node": "theory.hanre_xushi",
         "title": {
           "zh": "寒热虚实",
-          "en": "Cold·Heat·Deficiency·Excess",
+          "en": "Cold, heat, vacuity, repletion",
           "ja": "寒熱虚実"
         },
         "unlock_shows": "settlement_or_mentor_four_word_hint",
-        "body_placeholder": true,
-        "order": 1
+        "body_placeholder": false,
+        "order": 1,
+        "id_aliases": [
+          "page_hanre_xushi"
+        ],
+        "theory": "theory.hanre_xushi"
       },
       {
-        "id": "page_tenq_song",
+        "id": "tenq_song",
         "theory_node": "theory.tenq_song",
         "title": {
           "zh": "十问歌 · 残句",
-          "en": "Ten Questions · fragment",
+          "en": "Ten Questions Song · Fragment",
           "ja": "十問歌・残句"
         },
         "unlock_shows": "ten_questions.classic_line_beside_button",
-        "body_placeholder": true,
-        "order": 2
+        "body_placeholder": false,
+        "order": 2,
+        "id_aliases": [
+          "page_tenq_song"
+        ],
+        "theory": "theory.tenq_song"
       },
       {
-        "id": "page_pulse_names",
+        "id": "pulse_names",
         "theory_node": "theory.pulse_names",
         "title": {
           "zh": "脉语 · 弦",
-          "en": "Pulse words · wiry",
+          "en": "Pulse words · Wiry",
           "ja": "脈語・弦"
         },
         "unlock_shows": "pulse_hud.standard_name",
         "slice_lock_pulse": "xian",
-        "body_placeholder": true,
-        "order": 3
+        "body_placeholder": false,
+        "order": 3,
+        "id_aliases": [
+          "page_pulse_names"
+        ],
+        "theory": "theory.pulse_names"
       }
     ],
     "page_count_slice": 3,
@@ -4679,7 +4808,7 @@
   },
   "theory_nodes": {
     "theory.hanre_xushi": {
-      "from_page": "page_hanre_xushi",
+      "from_page": "hanre_xushi",
       "ui": {
         "where": [
           "settlement_flavor_ marginal",
@@ -4691,7 +4820,7 @@
       }
     },
     "theory.tenq_song": {
-      "from_page": "page_tenq_song",
+      "from_page": "tenq_song",
       "ui": {
         "where": [
           "ten_questions.items[].classic_line"
@@ -4713,7 +4842,7 @@
       }
     },
     "theory.pulse_names": {
-      "from_page": "page_pulse_names",
+      "from_page": "pulse_names",
       "ui": {
         "where": [
           "pulse.quality_label"
@@ -4810,5 +4939,290 @@
       "THEORY_PULSE",
       "NIGHT_READ_ENTER"
     ]
+  },
+  "food_items": [
+    {
+      "id": "zhou_di",
+      "zh": "粳米粥底",
+      "en": "Rice congee base",
+      "ja": "粳米の粥底",
+      "tags": [
+        "warm",
+        "neutralish",
+        "protect_middle",
+        "bland"
+      ],
+      "nature": "neutral",
+      "actions": [
+        "tonify_spleen",
+        "harmonize",
+        "tonify_qi"
+      ],
+      "funcs": {
+        "补气": 0.4,
+        "补阴": 0.1
+      },
+      "temp": 0,
+      "onset": "slow",
+      "zheng_cost": 0,
+      "role": "base"
+    },
+    {
+      "id": "hongzao",
+      "zh": "红枣",
+      "en": "Red jujube",
+      "ja": "赤棗",
+      "tags": [
+        "warm",
+        "sweet",
+        "tonify",
+        "blood"
+      ],
+      "nature": "warm",
+      "actions": [
+        "tonify_qi",
+        "nourish_blood",
+        "harmonize",
+        "calm_shen"
+      ],
+      "funcs": {
+        "补气": 0.5,
+        "补血": 0.4,
+        "安神": 0.3
+      },
+      "temp": 1,
+      "onset": "slow",
+      "zheng_cost": 0,
+      "role": "add"
+    },
+    {
+      "id": "lianzi",
+      "zh": "莲子",
+      "en": "Lotus seed",
+      "ja": "蓮子",
+      "tags": [
+        "neutral",
+        "sweet",
+        "tonify_spleen",
+        "calm"
+      ],
+      "nature": "neutral",
+      "actions": [
+        "tonify_spleen",
+        "calm_shen",
+        "astringe",
+        "tonify_qi"
+      ],
+      "funcs": {
+        "补气": 0.4,
+        "安神": 0.5,
+        "收涩": 0.3
+      },
+      "temp": 0,
+      "onset": "slow",
+      "zheng_cost": 0,
+      "role": "add"
+    },
+    {
+      "id": "shanyao",
+      "zh": "山药",
+      "en": "Chinese yam",
+      "ja": "山薬",
+      "tags": [
+        "neutral",
+        "sweet",
+        "tonify_spleen",
+        "yin_light"
+      ],
+      "nature": "neutral",
+      "actions": [
+        "tonify_qi",
+        "nourish_yin",
+        "tonify_spleen"
+      ],
+      "funcs": {
+        "补气": 0.6,
+        "补阴": 0.3
+      },
+      "temp": 0,
+      "onset": "slow",
+      "zheng_cost": 0,
+      "role": "add",
+      "note": "可与采药白名单山药呼应；教学膳卡独立库存"
+    },
+    {
+      "id": "shengjiang",
+      "zh": "生姜",
+      "en": "Fresh ginger",
+      "ja": "生姜",
+      "tags": [
+        "warm",
+        "pungent",
+        "light_exterior",
+        "appetite"
+      ],
+      "nature": "warm",
+      "actions": [
+        "warm_middle",
+        "release_exterior",
+        "stop_vomit"
+      ],
+      "funcs": {
+        "温里": 0.5,
+        "解表": 0.25,
+        "止咳": 0.1
+      },
+      "temp": 1,
+      "onset": "medium",
+      "zheng_cost": 0,
+      "role": "add",
+      "note": "轻散寒/开胃，勿当麻黄用",
+      "not_a_mahuang": true
+    },
+    {
+      "id": "bingtang",
+      "zh": "冰糖",
+      "en": "Rock sugar",
+      "ja": "氷糖",
+      "tags": [
+        "sweet",
+        "gentle",
+        "damp_caution"
+      ],
+      "nature": "neutral",
+      "actions": [
+        "harmonize",
+        "tonify_qi"
+      ],
+      "funcs": {
+        "补气": 0.2
+      },
+      "temp": 0,
+      "onset": "slow",
+      "zheng_cost": 0,
+      "role": "sweetener",
+      "stability_penalty_if_tags": [
+        "damp"
+      ],
+      "note": "甘缓；痰湿印象扣稳"
+    }
+  ],
+  "food_therapy_rules": {
+    "id": "food_therapy_rules_v130",
+    "path": "food",
+    "action_id": "ACTION_FOOD",
+    "bowl": {
+      "min_cards": 1,
+      "max_cards": 3,
+      "reject_4th": true,
+      "no_score_beyond_3": true
+    },
+    "stock": {
+      "save_path": "play.food_stock",
+      "teaching_unlimited": true,
+      "does_not_touch": [
+        "play.herb_stock",
+        "play.herb_items",
+        "play.herb_inventory"
+      ],
+      "note": "教学库存，不污染药柜"
+    },
+    "card_ids": [
+      "zhou_di",
+      "hongzao",
+      "lianzi",
+      "shanyao",
+      "shengjiang",
+      "bingtang"
+    ],
+    "classic_hints": [
+      {
+        "foods": [
+          "hongzao",
+          "lianzi",
+          "zhou_di"
+        ],
+        "zh": "枣莲粥 · 安神健脾慢愈",
+        "toggle": "FOOD_HINT_TOGGLE"
+      },
+      {
+        "foods": [
+          "shengjiang",
+          "zhou_di"
+        ],
+        "zh": "姜粥 · 轻寒不适"
+      },
+      {
+        "foods": [
+          "shanyao",
+          "hongzao"
+        ],
+        "zh": "山药红枣 · 脾虚气弱印象"
+      }
+    ],
+    "lifestyle_cues": [
+      {
+        "id": "less_worry",
+        "zh": "少思虑",
+        "en": "Worry less",
+        "ja": "思い悩みを少なく",
+        "warm_bonus": 0.04,
+        "suits_cases": [
+          "ganyu_qizhi"
+        ]
+      },
+      {
+        "id": "rest_wind",
+        "zh": "避风歇息",
+        "en": "Rest out of the wind",
+        "ja": "風を避けて休む",
+        "warm_bonus": 0.04,
+        "suits_cases": [
+          "fenghan_biao"
+        ]
+      },
+      {
+        "id": "no_late_lunch",
+        "zh": "勿过午不食太过",
+        "en": "Do not skip meals past noon too often",
+        "ja": "午後の食事を抜きすぎない",
+        "warm_bonus": 0.03,
+        "suits_cases": [
+          "yinxu_neire",
+          "ganyu_qizhi"
+        ]
+      }
+    ],
+    "lifestyle_optional": true,
+    "scoring": {
+      "path": "food",
+      "reuse_M_formula": true,
+      "C_from": "cover food_items.actions vs case.food_fit.preferred_actions + tags",
+      "B_from": "hit legal_food_examples → ~70; else 0",
+      "A_prime_from": "lifestyle match + damp sugar penalty + over-tonify",
+      "U_from": "1–3 cards base 80; 0 or >3 capped",
+      "onset": "usually slow → speed_id slow ok for low urgency",
+      "fenghan_solo_cap": "cap rank at work unless example hit with exterior light",
+      "bingtang_damp_stability": -0.05,
+      "J": 1.0,
+      "T": 1.0
+    },
+    "incompat": {
+      "slice_six_no_fan_wei_pair": true,
+      "future": "汤底若扩展反畏对，走 incompat 硬锁"
+    },
+    "smoke": {
+      "tag": "food_therapy_ok",
+      "case": "ganyu_qizhi or yinxu_neire",
+      "bowl": [
+        "hongzao",
+        "lianzi",
+        "zhou_di"
+      ],
+      "cue": "less_worry optional",
+      "expect_rank_at_least": "clear",
+      "prefer": "toward_heal"
+    },
+    "contracts_prototype": "ACTION_FOOD → food bowl 1–3 from food_items; stock play.food_stock teaching; Scoring.evaluate(..., path='food', ids=food_ids, opts={lifestyle_cue}); does not mutate herb_stock"
   }
 }

@@ -556,6 +556,8 @@ func _on_fsm(state: String) -> void:
 				_apply_portraits()
 		"formula_crafting":
 			_switch_camera("CAM_FORMULA")
+		"food_crafting":
+			_switch_camera("CAM_ASK")
 		"needling":
 			_switch_camera("CAM_NEEDLE")
 		"settling":
@@ -684,6 +686,8 @@ func _rebuild_dock() -> void:
 		_fill_exam_dock(col)
 	elif st == "formula_crafting":
 		_fill_formula_dock(col)
+	elif st == "food_crafting":
+		_fill_food_dock(col)
 	elif st == "needling":
 		_fill_needle_dock(col)
 	elif st == "settling":
@@ -871,6 +875,17 @@ func _fill_revisit_dock(col: VBoxContainer) -> void:
 		_open_acu_body_map()
 	)
 	row.add_child(nb)
+	var food_b := UiKit.make_button("ACTION_FOOD", true)
+	if food_b.text == "ACTION_FOOD" or food_b.text == "":
+		food_b.text = "食疗"
+	food_b.pressed.connect(func() -> void:
+		if GameFlow.has_method("open_food"):
+			GameFlow.open_food()
+		elif GameFlow.has_method("enter_food"):
+			GameFlow.enter_food()
+			get_tree().change_scene_to_file("res://scenes/food.tscn")
+	)
+	row.add_child(food_b)
 	var ob := UiKit.make_button("REVISIT_OBSERVE", true)
 	if ob.text == "REVISIT_OBSERVE" or ob.text == "":
 		ob.text = "观察勿药"
@@ -941,8 +956,17 @@ func _fill_exam_dock(col: VBoxContainer) -> void:
 		_open_acu_body_map()
 	)
 	row.add_child(nb)
+	var food_b := UiKit.make_button("ACTION_FOOD", true)
+	if food_b.text == "ACTION_FOOD" or food_b.text == "":
+		food_b.text = "食疗"
+	food_b.pressed.connect(func() -> void:
+		if GameFlow.has_method("open_food"):
+			GameFlow.open_food()
+	)
+	row.add_child(food_b)
 
 
+func 
 func _fill_ask_dock(col: VBoxContainer) -> void:
 	var scroll := ScrollContainer.new()
 	scroll.custom_minimum_size = Vector2(0, 70)
@@ -1045,6 +1069,36 @@ func _on_fanwei_locked(reason: String) -> void:
 		else:
 			_hint.text = reason
 	_rebuild_dock()
+
+
+
+func _fill_food_dock(col: VBoxContainer) -> void:
+	col.add_child(UiKit.ink_label(tr("FOOD_HINT"), 13, UiKit.INK_MUTED))
+	var names: Array[String] = []
+	for fid in GameFlow.food_tray:
+		names.append(CaseDB.food_name(str(fid)))
+	col.add_child(UiKit.ink_label(("、".join(PackedStringArray(names)) if names else tr("FOOD_BOWL_EMPTY")) + (" · %s" % GameFlow.lifestyle_cue if GameFlow.lifestyle_cue != "" else ""), 14))
+	var row := HBoxContainer.new()
+	col.add_child(row)
+	var open_b := UiKit.make_button("FOOD_ENTER", true)
+	open_b.pressed.connect(func() -> void:
+		if GameFlow.has_method("open_food"):
+			GameFlow.open_food()
+		else:
+			get_tree().change_scene_to_file("res://scenes/food.tscn")
+	)
+	row.add_child(open_b)
+	var ok := UiKit.make_button("FOOD_SUBMIT", true)
+	ok.disabled = not GameFlow.can_confirm_food()
+	ok.pressed.connect(func() -> void: GameFlow.confirm_food())
+	row.add_child(ok)
+	var back := UiKit.make_button("TREAT_BACK")
+	back.pressed.connect(func() -> void:
+		GameFlow.open_treatment()
+		_switch_camera("CAM_ASK")
+		_rebuild_dock()
+	)
+	row.add_child(back)
 
 
 func _fill_formula_dock(col: VBoxContainer) -> void:

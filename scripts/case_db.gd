@@ -408,6 +408,50 @@ func herb_name(id: String) -> String:
 	return UiKit.loc_text(herb(id), id)
 
 
+func food_item(id: String) -> Dictionary:
+	for row in pack.get("food_items", []):
+		if typeof(row) == TYPE_DICTIONARY and str(row.get("id", "")) == id:
+			return row
+	return {}
+
+
+func food_name(id: String) -> String:
+	var item := food_item(id)
+	if item.is_empty():
+		return id
+	var key := "FOOD_%s_NAME" % id.to_upper()
+	var trn := TranslationServer.translate(key)
+	if trn != key and trn != "":
+		return trn
+	var loc := GameFlow.loc() if GameFlow else "zh"
+	for k in [loc, "zh", "en"]:
+		if item.has(k) and str(item.get(k, "")).strip_edges() != "":
+			return str(item.get(k))
+		if typeof(item.get("name")) == TYPE_DICTIONARY and str(item["name"].get(k, "")) != "":
+			return str(item["name"][k])
+	return str(item.get("name", id))
+
+
+func food_desc(id: String) -> String:
+	var item := food_item(id)
+	var key := "FOOD_%s_DESC" % id.to_upper()
+	var trn := TranslationServer.translate(key)
+	if trn != key and trn != "":
+		return trn
+	var loc := GameFlow.loc() if GameFlow else "zh"
+	var d: Variant = item.get("desc", item.get("blurb", {}))
+	if typeof(d) == TYPE_DICTIONARY:
+		return str(d.get(loc, d.get("zh", "")))
+	return str(d)
+
+
+func lifestyle_cues() -> Array:
+	var rules: Dictionary = pack.get("food_therapy_rules", {})
+	var arr: Variant = rules.get("lifestyle_cues", [])
+	return arr if typeof(arr) == TYPE_ARRAY else []
+
+
+
 func point_name(id: String) -> String:
 	var p := point(id)
 	if p.is_empty():

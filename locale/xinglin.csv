@@ -569,3 +569,50 @@ PULSE_DESC_XIAN,如按琴弦,Like pressing a zither string,琴弦を按するが
 PULSE_DESC_FU,如木浮水,Like wood on water,木が水に浮かぶがごとし
 MENTOR_LOFT_1,阁楼的字，认一个是一个。,"In the loft, each character you recognize counts.",阁楼の字は、一つ識れば一つ。
 MENTOR_LOFT_2,别把残页当成开方说明书。,Don't treat a fragment as a prescription manual.,残頁を処方の説明書にするな。
+ACTION_FOOD,食疗,Food therapy,食療
+FOOD_TITLE,食疗,Food therapy,食療
+FOOD_SUBTITLE,轻、养、护胃。不是大补通关。,"Light, nourishing, stomach-guarding — not a tonify-to-win button.",軽く、養い、胃を護る。大補で通関ではない。
+FOOD_ENTER,摆膳盏,Set the meal bowl,膳盞を並べる
+FOOD_EXIT,回处治,Back to treatment,処治へ戻る
+FOOD_HINT,拖 1～3 味入盏。选食材像摆碗。,Drag 1–3 into the bowl. Lay cards like setting a dish.,1〜3 味を盞へ。器を並べるように。
+FOOD_BOWL,膳盏,Meal bowl,膳盞
+FOOD_BOWL_EMPTY,盏还空着。,The bowl is still empty.,盞がまだ空だ。
+FOOD_BOWL_FULL,最多三味。多了不加分。,Three is enough. More won't score.,最大三味。多くても加点なし。
+FOOD_SUBMIT,进病程,Send to course,経過へ
+FOOD_NEED_CARD,先放至少一味。,Add at least one item first.,まず一味以上入れよ。
+FOOD_STOCK_TEACH,教学膳材，不扣药柜。,Teaching pantry — does not take from the herb cabinet.,教材の膳材。薬櫃は減らさない。
+FOOD_ZHOU_DI_NAME,粳米粥底,Japonica rice porridge base,粳米の粥底
+FOOD_ZHOU_DI_DESC,护中。万膳之底。,Guards the center. Base of many meals.,中を護る。万膳の底。
+FOOD_HONGZAO_NAME,红枣,Red dates,紅棗
+FOOD_HONGZAO_DESC,甘温安神，缓补。,Sweet-warm; calms and tonifies gently.,甘温で安神。緩補。
+FOOD_LIANZI_NAME,莲子,Lotus seeds,蓮子
+FOOD_LIANZI_DESC,健脾宁心，宜慢养。,Supports spleen and calms the heart — slow care.,脾を健やかにし心を寧んず。ゆっくり養う。
+FOOD_SHANYAO_NAME,山药,Chinese yam,山薬
+FOOD_SHANYAO_DESC,益气养阴，不峻。,Benefits qi and yin without harshness.,気を益し陰を養う。峻ではない。
+FOOD_SHENGJIANG_NAME,生姜,Fresh ginger,生姜
+FOOD_SHENGJIANG_DESC,轻散寒、开胃。勿当麻黄用。,Gently disperses cold and opens appetite. Not ephedra.,軽く寒を散じ、胃を開く。麻黄の代わりではない。
+FOOD_BINGTANG_NAME,冰糖,Rock sugar,氷糖
+FOOD_BINGTANG_DESC,甘缓。过甜对痰湿不稳。,Sweet and mild. Too sweet unsettles phlegm-damp.,甘く緩やか。甘過ぎは痰湿に不穏。
+FOOD_COMBO_HINT_TITLE,经典组合（非唯一解）,Classic combos (not the only answer),古典の組み合わせ（唯一解ではない）
+FOOD_COMBO_ZAOLIAN,红枣 + 莲子 + 粥 → 安神健脾慢愈,"Dates + lotus + porridge → calm spleen, slow recovery",紅棗＋蓮子＋粥 → 安神健脾の慢愈
+FOOD_COMBO_JIANGZHOU,生姜 + 粥 → 轻寒不适,Ginger + porridge → light cold discomfort,生姜＋粥 → 軽い寒の不調
+FOOD_COMBO_SHANZAO,山药 + 枣 → 脾虚气弱印象,Yam + date → spleen qi weakness impression,山薬＋棗 → 脾虚気弱の印象
+FOOD_COMBO_TOGGLE,组合提示,Combo hints,組み合わせ提示
+FOOD_COMBO_HIDE,收起提示,Hide hints,提示をしまう
+FOOD_CUE_TITLE,起居一句（可选）,One lifestyle line (optional),起居の一句（任意）
+FOOD_CUE_SKIP,不选劝说,Skip advice,劝说なし
+FOOD_CUE_LESS_WORRY,少思虑,Worry less,思い悩みを少なく
+FOOD_CUE_LESS_WORRY_LINE,夜里少转念头，胃气才肯下来。,Fewer circling thoughts at night — then stomach qi can settle.,夜に思いを巡らすな。胃気が下りる。
+FOOD_CUE_REST_WIND,避风歇息,Rest out of the wind,風を避けて休む
+FOOD_CUE_REST_WIND_LINE,肩背别再灌江风。,Don't let river wind keep hitting the shoulders.,肩背に川風を入れ続けるな。
+FOOD_CUE_NO_LATE_LUNCH,勿过午不食硬扛,Don't tough out skipped midday meals,午を過ぎて食べない我慢はするな
+FOOD_CUE_NO_LATE_LUNCH_LINE,饥一阵饱一阵，膳也难养。,Feast-or-famine makes even good food hard to nourish.,飢えと満の波では、膳も養いにくい。
+FOOD_SETTLE_HINT,食疗偏慢、偏温。不是开挂。,Food therapy leans slow and warm — not a cheat.,食療は遅く、温かい。チートではない。
+FOOD_SETTLE_SLOW,向愈偏慢，但温分尚可。,"Recovery is slow, but the warmth holds.",快方は遅いが、温は足りる。
+FOOD_SETTLE_LIGHT,轻养得住。再观两日。,Light care is holding. Watch another day or two.,軽い養いが効いている。あと二日見よう。
+FOOD_SETTLE_UNSTEADY,补得太猛，或寒热乱搭。稳分下去了。,"Tonify ran hot, or cold and heat were mixed poorly. Steady score dropped.",補が強すぎるか、寒熱が乱れた。穏点が下がった。
+FOOD_SETTLE_TABLE_WEAK,表寒还在门外，单靠粥枣偏慢。,Exterior cold is still at the door — porridge and dates alone are slow.,表寒はまだ戸口。粥と棗だけでは遅い。
+FOOD_PATH_TAG,食疗,Food therapy,食療
+MENTOR_FOOD_1,先养胃气。,Nourish stomach qi first.,まず胃気を養え。
+MENTOR_FOOD_2,大补不是美德。,Heavy tonification is not a virtue.,大補は美徳ではない。
+MENTOR_FOOD,先养胃气。,Nourish stomach qi first.,まず胃気を養え。

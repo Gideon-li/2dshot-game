@@ -1,5 +1,5 @@
 {
-  "version": 7,
+  "version": 8,
   "disclaimer_accepted": false,
   "locale": "zh",
   "audio": {
@@ -46,6 +46,14 @@
     "process_quality": {},
     "day": 1,
     "codex_unlocked": [],
-    "theory_nodes": []
+    "theory_nodes": [],
+    "food_stock": {
+      "zhou_di": 99,
+      "hongzao": 99,
+      "lianzi": 99,
+      "shanyao": 99,
+      "shengjiang": 99,
+      "bingtang": 99
+    }
   }
 }
