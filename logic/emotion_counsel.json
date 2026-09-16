@@ -1,5 +1,5 @@
 {
-  "id": "emotion_counsel_v132",
+  "id": "emotion_counsel_v132_v133",
   "path": "emotion",
   "counsel_cards": [
     {
@@ -106,6 +106,44 @@
       "warm": -0.1,
       "stability_penalty": 0.08,
       "note": "误卡"
+    },
+    {
+      "id": "no_rush_embroider",
+      "zh": "忌日前勿承急绣",
+      "en": "No rush embroidery before the anniversary",
+      "ja": "忌日前は急ぎの刺繍を請けない",
+      "kind": "good",
+      "actions": [
+        "soothe_liver",
+        "calm_shen",
+        "harmonize"
+      ],
+      "tags": [
+        "embroider",
+        "rest"
+      ],
+      "onset": "slow",
+      "warm": 0.05,
+      "note": "V133 周绣娘专属"
+    },
+    {
+      "id": "leave_lamp_on",
+      "zh": "屋内留灯勿独熬",
+      "en": "Leave a lamp on; don’t sit up alone",
+      "ja": "室内に灯を残し、独りで熬らない",
+      "kind": "good",
+      "actions": [
+        "calm_shen",
+        "harmonize",
+        "nourish_blood"
+      ],
+      "tags": [
+        "lamp",
+        "night"
+      ],
+      "onset": "slow",
+      "warm": 0.05,
+      "note": "V133 周绣娘专属"
     }
   ],
   "rules_ref": "slice_logic.json → emotion_counsel_rules",
@@ -113,5 +151,13 @@
   "teach": {
     "case_id": "ganyu_qizhi",
     "character_id": "char_clerk"
+  },
+  "xiuniang": {
+    "case_id": "xuexu_ganyu",
+    "character_id": "char_xiuniang",
+    "extra_cards": [
+      "no_rush_embroider",
+      "leave_lamp_on"
+    ]
   }
 }

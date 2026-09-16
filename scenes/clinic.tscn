@@ -203,6 +203,9 @@ position = Vector2(545, 290)
 [node name="Patient2" type="Node2D" parent="L5_characters"]
 position = Vector2(300, 340)
 
+[node name="Patient3" type="Node2D" parent="L5_characters"]
+position = Vector2(685, 290)
+
 [node name="L6_fx_light" type="Node2D" parent="."]
 z_index = 6
 
@@ -256,6 +259,16 @@ monitorable = true
 metadata/hotspot = "stool_b"
 
 [node name="Collision" type="CollisionShape2D" parent="Areas/Area_候诊凳B"]
+shape = SubResource("Circ_bench")
+
+[node name="Area_候诊凳D" type="Area2D" parent="Areas"]
+position = Vector2(685, 255)
+input_pickable = true
+monitoring = true
+monitorable = true
+metadata/hotspot = "stool_d"
+
+[node name="Collision" type="CollisionShape2D" parent="Areas/Area_候诊凳D"]
 shape = SubResource("Circ_bench")
 
 [node name="Area_病人椅" type="Area2D" parent="Areas"]

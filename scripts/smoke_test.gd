@@ -5,10 +5,10 @@ extends Node
 
 func _ready() -> void:
 	var fails: PackedStringArray = []
-	if CaseDB.patients.size() != 3:
-		fails.append("expected 3 patients, got %d" % CaseDB.patients.size())
-	if CaseDB.cases_by_id.size() != 3:
-		fails.append("expected 3 cases")
+	if CaseDB.patients.size() < 4:
+		fails.append("expected >=4 patients, got %d" % CaseDB.patients.size())
+	if CaseDB.cases_by_id.size() < 4:
+		fails.append("expected >=4 cases (incl. xuexu_ganyu)")
 	if CaseDB.herbs_by_id.size() < 20:
 		fails.append("herb tray too small")
 	var exams_all := {"wang": true, "wen_listen": true, "wen_ask": true, "qie": true}

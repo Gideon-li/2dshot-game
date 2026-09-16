@@ -1,0 +1,15 @@
+# V133 周绣娘 / 忌日 / 信任 / 出镇
+
+| 组 | 键 |
+| --- | --- |
+| 角色 | `CHAR_XIUNIANG_*`、`XIUNIANG_OPENING/WAIT/SEAT` |
+| 忌日 | `XIUNIANG_MEMORIAL_*`、`CHEST_FRAME`、`WAKE_SANGENG` |
+| 信任 | `TRUST_*`、`TRUST_XIUNIANG` |
+| 出镇 | `TOWN_PERMIT_*`、`MENTOR_TOWN_PERMIT` |
+| 情志专属 | `COUNSEL_NO_RUSH_EMBROIDERY_*`、`COUNSEL_LAMP_COMPANY_*` |
+| 结算/回访 | `FOLLOWUP_XUEXU_GANYU`、`XIUNIANG_SETTLE_*`、`GIFT_HINT` |
+| 穴 | `ACU_SHENMEN_NAME`、`ACU_SANYINJIAO_NAME`、`ACU_TEACH_XIUNIANG` |
+| Demo | `DEMO_HINT_XIUNIANG` |
+| 免责 | **不改** |
+
+四人表：`patients/SCRIPT.md` 已扩为四病人。

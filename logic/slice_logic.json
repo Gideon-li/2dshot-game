@@ -1,6 +1,6 @@
 {
   "id": "xinglin-mowen-slice-logic",
-  "version": 12,
+  "version": 13,
   "project": "墨问岐黄 / 杏林墨问",
   "scope": "vertical_slice",
   "notes": {
@@ -19,7 +19,9 @@
     "yaotong_hook": "小荷",
     "split_files": [
       "logic/ten_questions.json",
-      "logic/fanwei_pairs.json"
+      "logic/fanwei_pairs.json",
+      "logic/xiuniang_case.json",
+      "logic/emotion_counsel.json"
     ],
     "v120": "mentor_cue wiring ≤2/visit; settlement_display; revisit save hook; xiaohe proxy off",
     "JT": "J=T=1 keep",
@@ -33,7 +35,8 @@
     "v129": "codex night read; 3 pages; night slot -1; theory flags for tenq/pulse UI",
     "v130": "food therapy path=food; 6 cards; lifestyle_cue; teaching stock; food_therapy_ok",
     "v131": "demo day glue: time_slots single truth, demo_guide checklist, demo_day_ok",
-    "v132": "emotion counsel path=emotion; 6 cards; ganyu teach; offline option tree"
+    "v132": "emotion counsel path=emotion; 6 cards; ganyu teach; offline option tree",
+    "v133": "xiuniang xuexu_ganyu; suanzaoren/chuanxiong(+longgu/muli mistreat); shenmen+sanyinjiao case_temp_open; trust/town_permit; emotion 2 cards; xiuniang_case_ok"
   },
   "exam_ids": [
     "wang",
@@ -1982,6 +1985,212 @@
         "teaching": false,
         "warning": null
       }
+    },
+    {
+      "id": "suanzaoren",
+      "zh": "酸枣仁",
+      "en": "Sour jujube seed",
+      "ja": "酸棗仁",
+      "nature": "neutral",
+      "flavor": [
+        "sweet",
+        "sour"
+      ],
+      "direction": "none",
+      "actions": [
+        "calm_shen",
+        "nourish_blood",
+        "astringe_yin"
+      ],
+      "zheng_cost": 0,
+      "onset": "medium",
+      "temp": 0,
+      "funcs": {
+        "安神": 0.8,
+        "补血": 0.5,
+        "收涩": 0.4
+      },
+      "incompat_group": [],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平",
+      "forage": {
+        "enabled": false
+      },
+      "process": {
+        "needs_process": false,
+        "process_method": null,
+        "process_methods": [],
+        "raw_id": "suanzaoren",
+        "processed_id": "suanzaoren",
+        "state_model": "ready",
+        "default_state_on_forage_or_cabinet": "processed",
+        "teaching": false,
+        "warning": null
+      },
+      "note": "酸枣仁汤君药；切片不采"
+    },
+    {
+      "id": "chuanxiong",
+      "zh": "川芎",
+      "en": "Chuanxiong",
+      "ja": "川芎",
+      "nature": "warm",
+      "flavor": [
+        "pungent"
+      ],
+      "direction": "float",
+      "actions": [
+        "move_blood",
+        "move_qi",
+        "clear_head"
+      ],
+      "zheng_cost": 1,
+      "onset": "medium",
+      "temp": 1,
+      "funcs": {
+        "活血": 0.7,
+        "理气": 0.6,
+        "疏风": 0.3
+      },
+      "incompat_group": [],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平",
+      "forage": {
+        "enabled": false
+      },
+      "process": {
+        "needs_process": false,
+        "process_method": null,
+        "process_methods": [],
+        "raw_id": "chuanxiong",
+        "processed_id": "chuanxiong",
+        "state_model": "ready",
+        "default_state_on_forage_or_cabinet": "processed",
+        "teaching": false,
+        "warning": null
+      },
+      "note": "酸枣仁汤臣；切片不采"
+    },
+    {
+      "id": "longgu",
+      "zh": "龙骨",
+      "en": "Dragon bone",
+      "ja": "竜骨",
+      "nature": "neutral",
+      "flavor": [
+        "sweet",
+        "astringent"
+      ],
+      "direction": "down",
+      "actions": [
+        "calm_shen",
+        "astringe",
+        "heavy_settle"
+      ],
+      "zheng_cost": 2,
+      "onset": "fast",
+      "temp": 0,
+      "funcs": {
+        "安神": 0.9,
+        "收涩": 0.7
+      },
+      "incompat_group": [],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平",
+      "forage": {
+        "enabled": false
+      },
+      "process": {
+        "needs_process": false,
+        "process_method": null,
+        "process_methods": [],
+        "raw_id": "longgu",
+        "processed_id": "longgu",
+        "state_model": "ready",
+        "default_state_on_forage_or_cabinet": "processed",
+        "teaching": false,
+        "warning": null
+      },
+      "note": "重镇；仅 common_mistreat，非法合法例"
+    },
+    {
+      "id": "muli",
+      "zh": "牡蛎",
+      "en": "Oyster shell",
+      "ja": "牡蠣",
+      "nature": "cool",
+      "flavor": [
+        "salty",
+        "astringent"
+      ],
+      "direction": "down",
+      "actions": [
+        "calm_shen",
+        "astringe",
+        "soften_hardness"
+      ],
+      "zheng_cost": 2,
+      "onset": "fast",
+      "temp": -1,
+      "funcs": {
+        "安神": 0.85,
+        "收涩": 0.75,
+        "平肝": 0.3
+      },
+      "incompat_group": [],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平",
+      "forage": {
+        "enabled": false
+      },
+      "process": {
+        "needs_process": false,
+        "process_method": null,
+        "process_methods": [],
+        "raw_id": "muli",
+        "processed_id": "muli",
+        "state_model": "ready",
+        "default_state_on_forage_or_cabinet": "processed",
+        "teaching": false,
+        "warning": null
+      },
+      "note": "重镇；仅 common_mistreat"
     }
   ],
   "acupoints": [
@@ -2290,7 +2499,16 @@
         "jing_r": 0.055
       },
       "pinyin": "Sānyīnjiāo",
-      "vol1_selectable": false
+      "vol1_selectable": false,
+      "case_temp_open": [
+        "xuexu_ganyu"
+      ],
+      "note": "卷一默认锁；xuexu_ganyu 案临时开（与夜读教学可并存）",
+      "body_pos": {
+        "x": 0.36,
+        "y": 0.68
+      },
+      "body_pos_note": "provisional; runtime may override from acupuncture.gd"
     },
     {
       "id": "shenshu",
@@ -2414,6 +2632,49 @@
       },
       "pinyin": "Mìngmén",
       "vol1_selectable": false
+    },
+    {
+      "id": "shenmen",
+      "zh": "神门",
+      "en": "Shenmen",
+      "ja": "神門",
+      "region": "wrist",
+      "actions": [
+        "calm_shen",
+        "nourish_blood",
+        "open_heart"
+      ],
+      "temp": 0,
+      "funcs": {
+        "安神": 0.8,
+        "补血": 0.4
+      },
+      "prefer": "针",
+      "method": "needle",
+      "teach_vol1": false,
+      "vol1_selectable": false,
+      "tolerance": {
+        "center_r": 0.025,
+        "jing_r": 0.055
+      },
+      "pinyin": "Shénmén",
+      "body_pos": {
+        "x": 0.1,
+        "y": 0.48
+      },
+      "body_pos_note": "provisional wrist UV; runtime may override from acupuncture.gd POINT_POS",
+      "needle": {
+        "deqi_modes_slice": [
+          "even"
+        ],
+        "deqi_required": true,
+        "retry_on_fail": 1,
+        "ink_halo": true
+      },
+      "case_temp_open": [
+        "xuexu_ganyu"
+      ],
+      "note": "卷一默认锁；xuexu_ganyu 案临时开"
     }
   ],
   "cases": [
@@ -3452,6 +3713,409 @@
         "solo_cap_rank": "slight",
         "note": "非气郁案单走情志：准偏低"
       }
+    },
+    {
+      "id": "xuexu_ganyu",
+      "internal_name_zh": "血虚肝郁（绣架压胸）",
+      "bind_character_id": "char_xiuniang",
+      "urgency": "low",
+      "zheng_qi": 0.7,
+      "primary_exams": [
+        "wen_ask",
+        "qie"
+      ],
+      "pulse": {
+        "id": "xian_xi",
+        "zh": "弦细",
+        "en": "wiry-thin",
+        "ja": "弦細",
+        "rate_bpm": 74,
+        "visual": {
+          "depth": 0.5,
+          "amplitude": 0.35,
+          "tension": 0.95,
+          "width": 0.2,
+          "smoothness": 0.15,
+          "note_for_art": "弦而细：绷直但线窄，深度中层。截图用：细墨弦，不要粗浮紧。"
+        }
+      },
+      "required_actions": [
+        "soothe_liver",
+        "nourish_blood"
+      ],
+      "required_cover_mode": "any_one_plus_protect_middle",
+      "required_actions_note": "抓住郁(soothe_liver)或血虚(nourish_blood)一面即可；护胃(tonify_spleen/harmonize)加分；评分允许部分覆盖及格",
+      "preferred_actions": [
+        "calm_shen",
+        "tonify_spleen",
+        "nourish_blood",
+        "soothe_liver",
+        "harmonize"
+      ],
+      "preferred_natures": [
+        "neutral",
+        "slightly_warm",
+        "cool"
+      ],
+      "forbidden_actions": [
+        "clear_heat",
+        "resolve_toxin",
+        "induce_sweat",
+        "restore_yang"
+      ],
+      "forbidden_note": "峻清实热 / 发汗 / 回阳禁；重镇龙牡见 over_treat / common_mistreat",
+      "over_treat_actions": [
+        "calm_shen",
+        "astringe",
+        "heavy_settle"
+      ],
+      "over_treat_zheng_cost": 8,
+      "over_treat_note": "重镇/峻敛安神 → 快高稳低、回访头昏",
+      "clues": {
+        "wang": {
+          "unlocks": [
+            "lip_pale",
+            "orbit_qing",
+            "nail_thread",
+            "back_too_straight"
+          ],
+          "zh": [
+            "唇色偏淡",
+            "眶下略青",
+            "指甲缝还留着绣线",
+            "背挺得太直，像在架子前坐久了"
+          ],
+          "en": [
+            "lips a little pale",
+            "faint blue under the eyes",
+            "embroidery thread still in the nail crease",
+            "back too straight—long hours at the frame"
+          ],
+          "ja": [
+            "唇がやや淡い",
+            "目の下がうっすら青",
+            "爪の隙間に刺繍糸",
+            "背がまっすぐすぎる——枠の前で長く座った印象"
+          ]
+        },
+        "wen_listen": {
+          "unlocks": [
+            "soft_voice",
+            "speaks_of_others_first"
+          ],
+          "zh": [
+            "声音轻",
+            "先替别人说话，少提自己"
+          ],
+          "en": [
+            "soft voice",
+            "speaks of others first, little of herself"
+          ],
+          "ja": [
+            "声が細い",
+            "先に他人の話をし、自分のことは少ない"
+          ]
+        },
+        "wen_ask": {
+          "unlocks": [
+            "surface_headache",
+            "insomnia",
+            "needle_stops_mid_work"
+          ],
+          "inquiry_anchor": [
+            "三更易醒",
+            "胸口如压绣架",
+            "头沉",
+            "活做到一半针停在手里",
+            "睡不好"
+          ],
+          "truth_unlock": {
+            "need_ten_q_ids": [
+              "yin"
+            ],
+            "need_ten_q_any_optional": [
+              "qingzhi"
+            ],
+            "flag": "play.flags.xiuniang_death_day_told",
+            "truth_anchors": [
+              "忌日那天更睡不着",
+              "屋里太黑就心慌"
+            ],
+            "never_volunteer": true,
+            "note": "仅十问问到因/情志类才给忌日真句；永不主动报证型名"
+          },
+          "never_say": [
+            "血虚肝郁",
+            "神不守舍",
+            "酸枣仁汤",
+            "证型",
+            "血虚",
+            "肝郁",
+            "绣架压胸"
+          ]
+        },
+        "qie": {
+          "unlocks": [
+            "pulse_xian_xi"
+          ],
+          "zh": [
+            "脉弦而细，按之绷直线窄"
+          ],
+          "en": [
+            "wiry yet thin—straight string, narrow line"
+          ],
+          "ja": [
+            "脈は弦で細い——まっすぐで線が狭い"
+          ]
+        }
+      },
+      "legal_formula_examples": [
+        {
+          "herbs": [
+            "suanzaoren",
+            "zhimu",
+            "fuling",
+            "chuanxiong",
+            "gancao"
+          ],
+          "onset": "medium",
+          "note": "酸枣仁汤思路"
+        },
+        {
+          "herbs": [
+            "suanzaoren",
+            "fuling",
+            "gancao"
+          ],
+          "onset": "slow",
+          "note": "轻安神养血线"
+        }
+      ],
+      "legal_point_examples": [
+        {
+          "points": [
+            "shenmen",
+            "sanyinjiao"
+          ],
+          "onset": "medium",
+          "note": "本案临时开穴"
+        },
+        {
+          "points": [
+            "shenmen",
+            "sanyinjiao",
+            "zusanli"
+          ],
+          "onset": "medium",
+          "note": "加足三里护胃"
+        }
+      ],
+      "legal_food_examples": [
+        {
+          "foods": [
+            "hongzao",
+            "lianzi",
+            "zhou_di"
+          ],
+          "onset": "slow",
+          "note": "枣莲粥 · 慢愈安神健脾线",
+          "target_rank": "toward_heal"
+        },
+        {
+          "foods": [
+            "hongzao",
+            "zhou_di"
+          ],
+          "onset": "slow",
+          "note": "轻线"
+        }
+      ],
+      "legal_emotion_examples": [
+        {
+          "listen": "anchor_match",
+          "cards": [
+            "no_rush_embroider",
+            "leave_lamp_on"
+          ],
+          "close": "optional",
+          "target_rank": "toward_heal",
+          "note": "忌日前勿急绣 + 留灯勿独熬"
+        },
+        {
+          "listen": "anchor_match",
+          "cards": [
+            "no_rush_embroider"
+          ],
+          "target_rank": "clear",
+          "note": "单专属卡也可慢愈线"
+        },
+        {
+          "listen": "anchor_match",
+          "cards": [
+            "warm_calm",
+            "leave_lamp_on"
+          ],
+          "target_rank": "toward_heal",
+          "note": "共享池香暖 + 留灯"
+        }
+      ],
+      "common_mistreat": [
+        {
+          "herbs": [
+            "jinyinhua",
+            "lianqiao"
+          ],
+          "why": "当实热峻清，虚更伤"
+        },
+        {
+          "herbs": [
+            "longgu",
+            "muli"
+          ],
+          "why": "重镇龙牡猛安神 → 快高稳低、次日头昏"
+        },
+        {
+          "herbs": [
+            "mahuang"
+          ],
+          "why": "发汗耗气，弦细更虚"
+        }
+      ],
+      "settlement_flavor": {
+        "good": {
+          "zh": "胸口那架绣松了半寸，夜里能多睡一截。",
+          "en": "The frame on her chest eases half an inch; night sleep lengthens.",
+          "ja": "胸の刺繍枠が半寸ほど緩み、夜が少し眠れる。"
+        },
+        "slow": {
+          "zh": "头沉还在退，忌日前先别赶活。",
+          "en": "The heavy head is backing off—don’t rush work before the anniversary.",
+          "ja": "頭の重さは退く。忌日前は急がない。"
+        },
+        "over": {
+          "zh": "镇得太重，人发懵，头昏得站不稳。",
+          "en": "Settled too hard; dizzy, unsteady on her feet.",
+          "ja": "鎮めすぎてぼんやりし、頭がくらくらする。"
+        },
+        "mis": {
+          "zh": "药走错路，头更昏，绣针仍停在半途。",
+          "en": "Wrong path—dizzier still; the needle stays mid-stitch.",
+          "ja": "薬が外れ、頭がさらに昏い。針は途中のまま。"
+        }
+      },
+      "engine": {
+        "syndrome_bucket": "血虚肝郁",
+        "R_need": {
+          "安神": 0.85,
+          "补血": 0.8,
+          "疏肝": 0.7
+        },
+        "R_temp": 0,
+        "B_ok_formula_names": [
+          "酸枣仁汤"
+        ],
+        "B_ok_examples": "legal_formula_examples / legal_point_examples / legal_food_examples / legal_emotion_examples",
+        "master_zang": "肝",
+        "tier": "jing",
+        "ten_q_priority": [
+          "因",
+          "胸",
+          "汗",
+          "旧病"
+        ]
+      },
+      "ten_q_priority": [
+        "因",
+        "胸",
+        "汗",
+        "旧病"
+      ],
+      "ten_q_priority_ids": [
+        "yin",
+        "xiong",
+        "han",
+        "jiubing"
+      ],
+      "revisit": {
+        "enabled": true,
+        "delay_days": 1,
+        "read_on_next_clinic_enter": false,
+        "template_key": "revisit.xuexu_ganyu",
+        "from_rank": {
+          "toward_heal": "good",
+          "clear": "good",
+          "work": "slow",
+          "slight": "slow",
+          "none": "mis"
+        },
+        "lines_fallback": {
+          "good": {
+            "zh": "胸口那架绣松了半寸，夜里能多睡一截。",
+            "en": "The frame on her chest eases half an inch; night sleep lengthens.",
+            "ja": "胸の刺繍枠が半寸ほど緩み、夜が少し眠れる。"
+          },
+          "slow": {
+            "zh": "头沉还在退，忌日前先别赶活。",
+            "en": "The heavy head is backing off—don’t rush work before the anniversary.",
+            "ja": "頭の重さは退く。忌日前は急がない。"
+          },
+          "over": {
+            "zh": "镇得太重，人发懵，头昏得站不稳。",
+            "en": "Settled too hard; dizzy, unsteady on her feet.",
+            "ja": "鎮めすぎてぼんやりし、頭がくらくらする。"
+          },
+          "mis": {
+            "zh": "药走错路，头更昏，绣针仍停在半途。",
+            "en": "Wrong path—dizzier still; the needle stays mid-stitch.",
+            "ja": "薬が外れ、頭がさらに昏い。針は途中のまま。"
+          }
+        },
+        "note": "剧本可覆盖 patients.*.revisit_lines；误/过治回访须带头昏印象",
+        "seat_on_due": true,
+        "flavor_keys": [
+          "good",
+          "slow",
+          "over",
+          "mis"
+        ],
+        "observe_close_line_key": "revisit.xuexu_ganyu.observe_close"
+      },
+      "food_fit": {
+        "preferred_actions": [
+          "calm_shen",
+          "tonify_spleen",
+          "harmonize",
+          "nourish_blood"
+        ],
+        "preferred_tags": [
+          "calm",
+          "tonify_spleen",
+          "sweet",
+          "blood"
+        ],
+        "discouraged_tags": [
+          "light_exterior"
+        ],
+        "solo_food_cap_rank": "toward_heal"
+      },
+      "emotion_fit": {
+        "preferred_actions": [
+          "soothe_liver",
+          "calm_shen",
+          "harmonize",
+          "nourish_blood"
+        ],
+        "preferred_cards": [
+          "no_rush_embroider",
+          "leave_lamp_on",
+          "warm_calm",
+          "vent_rest"
+        ],
+        "penalty_cards": [
+          "no_scold",
+          "no_harsh_tonify"
+        ]
+      }
     }
   ],
   "scoring": {
@@ -3722,10 +4386,11 @@
   "contracts": {
     "script": "fill bind_character_id; keep inquiry_anchor and never_say; 苏问舟旁白键值另表；ten_q_priority 供催问",
     "art": "implement three pulse.visual profiles; formula plate is a drop target; points are on-body",
-    "prototype": "load this json; drag/tap not OptionButton; Qwen uses inquiry_anchor+never_say; API fail uses inquiry_anchor; BEFORE confirm formula call incompat.check; ask panel shows ten_questions.items quick bar; score via scoring.formula M with J=T=1",
+    "prototype": "load this json; drag/tap not OptionButton; Qwen uses inquiry_anchor+never_say; API fail uses inquiry_anchor; BEFORE confirm formula call incompat.check; ask panel shows ten_questions.items quick bar; score via scoring.formula M with J=T=1; V133: load xuexu_ganyu + xiuniang_case_rules; case_temp_open shenmen/sanyinjiao; trust play.trust.xiuniang; town_permit on clear+death_day; emotion extra cards; smoke xiuniang_case_ok",
     "scoring_gd": "prefer M_final/100 as score; keep process_mult; emit M,C,B,A_prime,U,J,T in result for debug HUD off",
     "v120_prototype": "MentorCues.next respects max 2; settlement UI reads settlement_display keys from evaluate; write play.pending_revisits on settle; pharmacy_kid.proxy_diagnosis.enabled stays false; J=T=1",
-    "codex": "pulse HUD uses descriptive text until theory.pulse_names; then may show pulse.zh / standard name"
+    "codex": "pulse HUD uses descriptive text until theory.pulse_names; then may show pulse.zh / standard name",
+    "v133_prototype": "char_xiuniang / xuexu_ganyu; truth on ten_q yin(+qingzhi); settle legal path → optional town_permit if death_day_told & rank>=clear; acu_intro_rules.case_temp_open; Scoring paths formula|acupuncture|emotion|food"
   },
   "incompat": {
     "id": "incompat_lock_v114",
@@ -4636,6 +5301,10 @@
       "zusanli": {
         "x": 0.38,
         "y": 0.72
+      },
+      "shenmen": {
+        "x": 0.1,
+        "y": 0.48
       }
     },
     "hit": {
@@ -4727,7 +5396,25 @@
       "ACU_MOXA_ZHUANG",
       "ACU_MISS_JING",
       "ACU_TEACH_LOCK"
-    ]
+    ],
+    "case_temp_open": {
+      "xuexu_ganyu": [
+        "shenmen",
+        "sanyinjiao"
+      ]
+    },
+    "case_temp_open_note": "不永久写入 vol1_open_ids；仅当 bind case 为 key 时临时可选",
+    "shenmen_needle": {
+      "point_id": "shenmen",
+      "method": "needle",
+      "deqi": {
+        "slice_mode": "even",
+        "success_if": "rhythm_in_window AND hit!=miss",
+        "fail_retry": 1,
+        "fx": "ink_halo"
+      },
+      "note": "结构镜像 hegu；本案临时开"
+    }
   },
   "revisit_day_rules": {
     "id": "revisit_day_rules_v127",
@@ -5243,7 +5930,8 @@
         "ja": "思い悩みを少なく",
         "warm_bonus": 0.04,
         "suits_cases": [
-          "ganyu_qizhi"
+          "ganyu_qizhi",
+          "xuexu_ganyu"
         ]
       },
       {
@@ -5700,6 +6388,44 @@
       "warm": -0.1,
       "stability_penalty": 0.08,
       "note": "误卡"
+    },
+    {
+      "id": "no_rush_embroider",
+      "zh": "忌日前勿承急绣",
+      "en": "No rush embroidery before the anniversary",
+      "ja": "忌日前は急ぎの刺繍を請けない",
+      "kind": "good",
+      "actions": [
+        "soothe_liver",
+        "calm_shen",
+        "harmonize"
+      ],
+      "tags": [
+        "embroider",
+        "rest"
+      ],
+      "onset": "slow",
+      "warm": 0.05,
+      "note": "V133 周绣娘专属"
+    },
+    {
+      "id": "leave_lamp_on",
+      "zh": "屋内留灯勿独熬",
+      "en": "Leave a lamp on; don’t sit up alone",
+      "ja": "室内に灯を残し、独りで熬らない",
+      "kind": "good",
+      "actions": [
+        "calm_shen",
+        "harmonize",
+        "nourish_blood"
+      ],
+      "tags": [
+        "lamp",
+        "night"
+      ],
+      "onset": "slow",
+      "warm": 0.05,
+      "note": "V133 周绣娘专属"
     }
   ],
   "emotion_counsel_rules": {
@@ -5728,6 +6454,8 @@
           "less_desk",
           "vent_rest",
           "warm_calm",
+          "no_rush_embroider",
+          "leave_lamp_on",
           "no_scold",
           "no_harsh_tonify"
         ],
@@ -5752,7 +6480,8 @@
       "J": 1.0,
       "T": 1.0,
       "fenghan_solo_cap_rank": "slight",
-      "ganyu_legal_target": "toward_heal"
+      "ganyu_legal_target": "toward_heal",
+      "xuexu_legal_target": "toward_heal"
     },
     "legal_examples_ganyu": [
       {
@@ -5810,7 +6539,128 @@
       "COUNSEL_VENT_REST",
       "COUNSEL_WARM_CALM",
       "COUNSEL_NO_SCOLD",
-      "COUNSEL_NO_HARSH"
+      "COUNSEL_NO_HARSH",
+      "COUNSEL_NO_RUSH_EMBROIDER",
+      "COUNSEL_LEAVE_LAMP_ON"
+    ],
+    "xiuniang_case": {
+      "case_id": "xuexu_ganyu",
+      "character_id": "char_xiuniang",
+      "extra_cards": [
+        "no_rush_embroider",
+        "leave_lamp_on"
+      ],
+      "note": "本案可用 2 专属卡 + 共享池；教学锚仍可走 ganyu"
+    },
+    "legal_examples_xuexu_ganyu": [
+      {
+        "listen": "anchor_match",
+        "cards": [
+          "no_rush_embroider",
+          "leave_lamp_on"
+        ],
+        "close": "optional",
+        "target_rank": "toward_heal",
+        "note": "忌日前勿急绣 + 留灯勿独熬"
+      },
+      {
+        "listen": "anchor_match",
+        "cards": [
+          "no_rush_embroider"
+        ],
+        "target_rank": "clear",
+        "note": "单专属卡也可慢愈线"
+      },
+      {
+        "listen": "anchor_match",
+        "cards": [
+          "warm_calm",
+          "leave_lamp_on"
+        ],
+        "target_rank": "toward_heal",
+        "note": "共享池香暖 + 留灯"
+      }
     ]
+  },
+  "xiuniang_case_rules": {
+    "id": "xiuniang_case_rules_v133",
+    "case_id": "xuexu_ganyu",
+    "character_id": "char_xiuniang",
+    "trust": {
+      "key": "play.trust.xiuniang",
+      "init": 0.35,
+      "min": 0,
+      "max": 1,
+      "deltas": [
+        {
+          "id": "ask_daughter_privacy",
+          "delta": -0.15,
+          "note": "当着女儿追问私"
+        },
+        {
+          "id": "praise_embroidery",
+          "delta": 0.08
+        },
+        {
+          "id": "gentle_no_pry",
+          "delta": 0.05
+        },
+        {
+          "id": "unlock_death_day",
+          "delta": 0.1
+        },
+        {
+          "id": "scold_qingzhi",
+          "delta": -0.12
+        }
+      ]
+    },
+    "truth": {
+      "flag": "play.flags.xiuniang_death_day_told",
+      "need_ten_q_any": [
+        "yin"
+      ],
+      "need_ten_q_any_optional": [
+        "qingzhi"
+      ],
+      "never_volunteer": true
+    },
+    "town_permit": {
+      "flag": "play.flags.town_permit",
+      "on_settle_if": {
+        "death_day_told": true,
+        "rank_at_least": "clear"
+      },
+      "mentor_line_key": "mentor.town_permit",
+      "note": "存档布尔即可；不做五方地图"
+    },
+    "acu_case_unlock": {
+      "when_case": "xuexu_ganyu",
+      "open_ids": [
+        "shenmen",
+        "sanyinjiao"
+      ],
+      "note": "卷一穴锁时本案临时开；可与夜读教学并存"
+    },
+    "emotion_extra_cards": [
+      "no_rush_embroider",
+      "leave_lamp_on"
+    ],
+    "smoke": {
+      "tag": "xiuniang_case_ok",
+      "require": [
+        "death_day_told",
+        "legal_settle_any_path"
+      ],
+      "paths_ok": [
+        "formula",
+        "acupuncture",
+        "emotion",
+        "food"
+      ],
+      "prefer_rank": "toward_heal"
+    },
+    "split_file": "logic/xiuniang_case.json",
+    "lock_doc": "logic/XIUNIAN-CASE-V133.md"
   }
 }

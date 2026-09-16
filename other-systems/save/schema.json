@@ -1,5 +1,5 @@
 {
-  "version": 9,
+  "version": 10,
   "disclaimer_accepted": false,
   "locale": "zh",
   "audio": {
@@ -59,6 +59,13 @@
       "enabled": true,
       "steps_done": [],
       "dismissed": false
+    },
+    "trust": {
+      "xiuniang": 0.35
+    },
+    "flags": {
+      "xiuniang_death_day_told": false,
+      "town_permit": false
     }
   }
 }

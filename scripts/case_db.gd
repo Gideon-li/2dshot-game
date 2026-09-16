@@ -458,11 +458,22 @@ func counsel_card(id: String) -> Dictionary:
 	return {}
 
 
+func counsel_i18n_stem(id: String) -> String:
+	## Card ids are short; some text keys use longer stems (V133).
+	match id:
+		"no_rush_embroider":
+			return "NO_RUSH_EMBROIDERY"
+		"leave_lamp_on":
+			return "LAMP_COMPANY"
+		_:
+			return id.to_upper()
+
+
 func counsel_name(id: String) -> String:
 	var item := counsel_card(id)
 	if item.is_empty():
 		return id
-	var key := "COUNSEL_%s_NAME" % id.to_upper()
+	var key := "COUNSEL_%s_NAME" % counsel_i18n_stem(id)
 	var trn := TranslationServer.translate(key)
 	if trn != key and trn != "":
 		return trn
@@ -477,7 +488,7 @@ func counsel_name(id: String) -> String:
 
 func counsel_desc(id: String) -> String:
 	var item := counsel_card(id)
-	var key := "COUNSEL_%s_DESC" % id.to_upper()
+	var key := "COUNSEL_%s_DESC" % counsel_i18n_stem(id)
 	var trn := TranslationServer.translate(key)
 	if trn != key and trn != "":
 		return trn
@@ -570,6 +581,26 @@ func _builtin_patients() -> Array:
 				"ja": ["お尋ねくださり。{sym}。", "年のせいか、{sym}。大層なことではない。", "言いづらいのですが……{sym}。"],
 			},
 			"ink": [0.38, 0.26, 0.24],
+		},
+		{
+			"id": "char_xiuniang",
+			"case_id": "xuexu_ganyu",
+			"age": 28,
+			"seat": 3,
+			"name": {"zh": "周绣娘", "en": "Zhou Xiuniang", "ja": "周繡娘"},
+			"identity": {"zh": "绣坊主事", "en": "Embroidery workshop keeper", "ja": "繡坊の主事"},
+			"region": {"zh": "青石镇", "en": "Qingshi town", "ja": "青石鎮"},
+			"personality": {"zh": "要强、轻声、先说别人。", "en": "Strong-willed, soft-spoken; speaks of others first.", "ja": "気丈、声は細い。まず他人の話。"},
+			"opening": {"zh": "睡不好。头也沉。做活做到一半，针会停在手里。", "en": "Sleep won't hold. The head feels heavy. Mid-stitch, the needle stops in my hand.", "ja": "眠れない。頭も重い。仕事の途中で、針が手の中で止まる。"},
+			"dodge": {"zh": "那些名目我不会。你问睡得着吗、胸口沉不沉、针停不停，我还能答。", "en": "I don't know those book names. Ask sleep, chest heaviness, whether the needle stops.", "ja": "呼び名は知らん。眠れるか、胸が沈むか、針が止まるかなら答える。"},
+			"death_day_line": {"zh": "……亡夫忌日近了。胸口像压着绣架。", "en": "…My late husband's memorial day is near. The chest feels like an embroidery frame pressing down.", "ja": "……亡き夫の忌日が近い。胸が繡架に圧されるよう。"},
+			"dodge_daughter": {"zh": "……女儿的事，莫问。她还小。", "en": "…Don't ask about my daughter. She's still young.", "ja": "……娘のことは聞かないで。まだ小さい。"},
+			"ask_wrappers": {
+				"zh": ["……{sym}。说了也轻。", "就这些——{sym}。", "针停在手里的时候，{sym}。"],
+				"en": ["…{sym}. Softly said.", "Just that — {sym}.", "When the needle stops, {sym}."],
+				"ja": ["……{sym}。声は細い。", "そのくらい——{sym}。", "針が止まると、{sym}。"],
+			},
+			"ink": [0.32, 0.28, 0.34],
 		},
 	]
 

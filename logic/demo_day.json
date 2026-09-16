@@ -77,5 +77,45 @@
       "slot_desync": "demo_day_ok: button enable != time_slots"
     },
     "also_require": "existing SMOKE PASS rings still green"
-  }
+  },
+  "ui_steps_from_script": [
+    {
+      "id": "morning_treat",
+      "logic_ids": [
+        "morning_consult",
+        "treat"
+      ]
+    },
+    {
+      "id": "afternoon_forage",
+      "logic_ids": [
+        "afternoon_forage"
+      ]
+    },
+    {
+      "id": "evening_process",
+      "logic_ids": [
+        "evening_process"
+      ]
+    },
+    {
+      "id": "night_codex",
+      "logic_ids": [
+        "night_codex"
+      ]
+    },
+    {
+      "id": "next_day",
+      "logic_ids": [
+        "next_day_open"
+      ]
+    },
+    {
+      "id": "revisit",
+      "logic_ids": [
+        "next_day_revisit"
+      ]
+    }
+  ],
+  "script_ref": "patients/demo_script.json"
 }

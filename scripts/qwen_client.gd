@@ -215,10 +215,31 @@ static func wants_diagnosis_name(question: String, case_data: Dictionary) -> boo
 
 
 static func template_reply(question: String, character: Dictionary, case_data: Dictionary) -> String:
+	# V133 周绣娘：忌日真句 / 女儿隐私躲闪（由 GameFlow 闸）
+	if Engine.get_main_loop() != null and Engine.get_main_loop().root != null:
+		var gf = Engine.get_main_loop().root.get_node_or_null("/root/GameFlow")
+		if gf != null and gf.has_method("maybe_handle_xiuniang_ask"):
+			var special: String = gf.maybe_handle_xiuniang_ask(question)
+			if special.strip_edges() != "":
+				return special
 	var ask: Dictionary = case_data.get("clues", {}).get("wen_ask", {})
 	var anchors: Array = ask.get("inquiry_anchor", [])
 	if wants_diagnosis_name(question, case_data):
 		return UiKit.loc_text(character.get("dodge", {}), "")
+	# If death-day already unlocked and this is yin ten-q prompt, prefer truth line.
+	if str(character.get("id", "")) == "char_xiuniang" or str(case_data.get("id", "")) == "xuexu_ganyu":
+		var gf2 = null
+		if Engine.get_main_loop() != null and Engine.get_main_loop().root != null:
+			gf2 = Engine.get_main_loop().root.get_node_or_null("/root/GameFlow")
+		if gf2 != null and gf2.has_method("xiuniang_death_day_told") and gf2.xiuniang_death_day_told():
+			var qn := question
+			var yin_prompt := false
+			for tok in ["因", "忌日", "什么时候", "什麼時候", "started", "onset", "memorial"]:
+				if qn.find(tok) >= 0:
+					yin_prompt = true
+					break
+			if yin_prompt and gf2.has_method("xiuniang_death_day_line"):
+				return gf2.xiuniang_death_day_line()
 	var picked := _pick_anchors(question, anchors)
 	var wrap_key := loc_key()
 	var wrappers: Array = character.get("ask_wrappers", {}).get(wrap_key, [])

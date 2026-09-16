@@ -16,3 +16,8 @@
 | `icons/no_harsh_tonify.png` | 勿峻补镇坠（误卡） |
 
 path 锁 **`emotion`**（文件名可含 counsel，勿当 evaluate path）。入口：`ACTION_EMOTION`。
+
+## V133 绣娘专属卡
+
+| `icons/no_rush_embroider.png` | 忌日前勿急绣 |
+| `icons/leave_lamp_on.png` | 屋内留灯勿独熬 |

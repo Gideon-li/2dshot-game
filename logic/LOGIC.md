@@ -46,15 +46,16 @@ score (UI) = M_final / 100
 
 任意顺序。缺一仍可开方/扎针，评分打折。见 `fsm`。
 
-## 三张病机表
+## 病机表（切片）
 
 | id | 内部名（勿上 HUD） | 引擎桶 | 脉 | 十问优先 |
 | --- | --- | --- | --- | --- |
 | `fenghan_biao` | 风寒束表 | 风寒表实 | 浮紧 | 寒热、汗、头身、因 |
 | `ganyu_qizhi` | 肝郁气滞 | 肝郁血虚 | 弦 | 胸、饮食、旧病、因 |
 | `yinxu_neire` | 阴虚内热 | 肾阴虚 | 细数 | 汗、渴、寒热、旧病 |
+| `xuexu_ganyu` | 血虚肝郁（绣架压胸） | 血虚肝郁 | 弦细 | 因、胸、汗、旧病 |
 
-人物：赵阿福 / 沈清荷 / 周婆婆（`bind_character_id` 已填）。问诊咬 `inquiry_anchor`，禁止 `never_say`。
+人物：赵阿福 / 沈清荷 / 周婆婆 / **周绣娘**（`bind_character_id` 已填）。问诊咬 `inquiry_anchor`，禁止 `never_say`。V133 细则见下节。
 
 ## 熟练度
 
@@ -199,3 +200,17 @@ API：`MentorCues.next(case, exams, asked_ten_q_ids, cues_emitted)`。
 - 三拍：listen → 1～2 张 `counsel_cards` → 可选 close。
 - 六卡：`walk_ease` / `less_desk` / `vent_rest` / `warm_calm` / `no_scold` / `no_harsh_tonify`（后两张惩罚）。
 - 离线选项树；`evaluate(path="emotion")`；冒烟 `emotion_counsel_ok`。
+
+
+## V133 周绣娘 · 血虚肝郁案
+
+见 `XIUNIAN-CASE-V133.md` + `xiuniang_case.json` / `xiuniang_case_rules`。
+
+- 第四病人 `char_xiuniang`；案 **`xuexu_ganyu`**（勿用 shen_bushe）；内部名「血虚肝郁（绣架压胸）」不上 HUD。
+- 新药：`suanzaoren` / `chuanxiong`（合法）；`longgu` / `muli`（仅 mistreat）。
+- 新穴：`shenmen`（针、得气结构镜像合谷）；`sanyinjiao` 本案临时开。`acu_intro_rules.case_temp_open.xuexu_ganyu` → 两穴；**不**永久进 `vol1_open_ids`。
+- 信任 `play.trust.xiuniang`；忌日旗 `play.flags.xiuniang_death_day_told`（十问 `yin`）；出镇 `play.flags.town_permit`（达标 settle）。
+- 情志专属卡：`no_rush_embroider` / `leave_lamp_on`（亦写入 `emotion_counsel.json`）。
+- 抓郁或血虚一面并护胃即可；误治峻清/重镇 → 回访头昏。
+- 冒烟：`xiuniang_case_ok` + `SMOKE PASS`。怎么跑：`XIUNIAN-CASE.md`。
+

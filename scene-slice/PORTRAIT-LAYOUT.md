@@ -113,3 +113,14 @@ CAM_ASK 构图：病人上半身可读即可；单人立绘在问诊里用半身
 
 ### 角色开发
 - 按 id `load`；Sprite/TextureRect 底对齐；缺图回退；冒烟 `portrait_swap_ok`。
+
+
+## 7. V133 addendum · 候诊第 4 槽（周绣娘）
+
+日期：2026-09-16  
+**不改**上文 V126 核心表（坐诊椅、PortraitFrame、江晚锚点、A/B/旁位既有坐标）。
+
+- 新候诊 home：`WAIT_D` / `Patient3` / `char_xiuniang` 脚底 **(685, 290)**（同排东延 B；热区 `(640, 220, 90, 70)` 或 r=90）。
+- 坐诊仍 **(1040, 590)**；四人共用同一 PortraitFrame，按 id 换贴图。
+- 案 id：`xuexu_ganyu`；冒烟：`xiuniang_case_ok`。
+- 全表、避让、参考图：见 **`scene-slice/WAITING-SLOT4-V133.md`** 与 `scene-slice/waiting/WAITING_SLOT4.png`（镜像 `ui/waiting/`）。

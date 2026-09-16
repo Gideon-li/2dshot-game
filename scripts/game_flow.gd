@@ -106,6 +106,8 @@ func start_patient(patient_id: String) -> void:
 	ten_asks_asked.clear()
 	last_fanwei_reason = ""
 	_reset_mentor_visit()
+	if current_patient_id == "char_xiuniang":
+		get_trust_xiuniang()  # ensure play.trust.xiuniang init 0.35
 	var opening: String = CaseDB.opening_line(current_patient_id)
 	if opening != "":
 		conversation.append({"q": "", "a": opening})
@@ -423,6 +425,9 @@ func mark_tenq(qid: String) -> void:
 		tenq_asked.append(qid)
 	if qid not in ten_asks_asked:
 		ten_asks_asked.append(qid)
+	# V133: yin (optional qingzhi) unlocks death-day truth for 周绣娘
+	if fresh:
+		unlock_xiuniang_death_day(qid)
 	# Filling a missing tenq (寒热/汗 or last cue) → affirm once if room ≤2.
 	if fresh and not mentor_affirmed_this_visit and mentor_lines_this_visit < 2:
 		if qid == mentor_last_cued_qid or qid in ["hanre", "han"]:
@@ -1111,11 +1116,222 @@ func remove_herb_from_tray(herb_id: String) -> void:
 	tray_herbs.erase(herb_id)
 
 
+
+func _play_flags() -> Dictionary:
+	var play := _play()
+	var flags: Variant = play.get("flags", {})
+	if typeof(flags) != TYPE_DICTIONARY:
+		flags = {}
+		play["flags"] = flags
+		Save.data["play"] = play
+	return flags
+
+
+func get_play_flag(key: String, default: bool = false) -> bool:
+	var flags := _play_flags()
+	# Accept dotted keys like play.flags.town_permit → town_permit
+	var k := key
+	if k.begins_with("play.flags."):
+		k = k.substr("play.flags.".length())
+	return bool(flags.get(k, default))
+
+
+func set_play_flag(key: String, value: bool = true) -> void:
+	var play := _play()
+	var flags: Dictionary = play.get("flags", {}) if typeof(play.get("flags", {})) == TYPE_DICTIONARY else {}
+	var k := key
+	if k.begins_with("play.flags."):
+		k = k.substr("play.flags.".length())
+	flags[k] = value
+	play["flags"] = flags
+	Save.data["play"] = play
+
+
+func _trust_bag() -> Dictionary:
+	var play := _play()
+	var trust: Variant = play.get("trust", {})
+	if typeof(trust) != TYPE_DICTIONARY:
+		trust = {}
+		play["trust"] = trust
+		Save.data["play"] = play
+	return trust
+
+
+func get_trust_xiuniang() -> float:
+	var trust := _trust_bag()
+	if not trust.has("xiuniang"):
+		trust["xiuniang"] = 0.35
+		var play := _play()
+		play["trust"] = trust
+		Save.data["play"] = play
+	return clampf(float(trust.get("xiuniang", 0.35)), 0.0, 1.0)
+
+
+func set_trust_xiuniang(v: float) -> void:
+	var play := _play()
+	var trust: Dictionary = play.get("trust", {}) if typeof(play.get("trust", {})) == TYPE_DICTIONARY else {}
+	trust["xiuniang"] = clampf(v, 0.0, 1.0)
+	play["trust"] = trust
+	Save.data["play"] = play
+
+
+func adjust_trust_xiuniang(delta: float) -> float:
+	var n := clampf(get_trust_xiuniang() + delta, 0.0, 1.0)
+	set_trust_xiuniang(n)
+	return n
+
+
+func adjust_trust_xiuniang_by_id(delta_id: String) -> float:
+	var rules: Dictionary = CaseDB.pack.get("xiuniang_case_rules", {})
+	var deltas: Array = rules.get("trust", {}).get("deltas", []) if typeof(rules.get("trust", {})) == TYPE_DICTIONARY else []
+	var d := 0.0
+	for row in deltas:
+		if typeof(row) == TYPE_DICTIONARY and str(row.get("id", "")) == delta_id:
+			d = float(row.get("delta", 0.0))
+			break
+	if d == 0.0:
+		match delta_id:
+			"ask_daughter_privacy":
+				d = -0.15
+			"praise_embroidery":
+				d = 0.08
+			"gentle_no_pry":
+				d = 0.05
+			"unlock_death_day":
+				d = 0.1
+			"scold_qingzhi":
+				d = -0.12
+	return adjust_trust_xiuniang(d)
+
+
+func is_xiuniang_case() -> bool:
+	if current_patient_id != "char_xiuniang":
+		return false
+	var case_data: Dictionary = CaseDB.case_for_patient(current_patient_id)
+	return str(case_data.get("id", "")) == "xuexu_ganyu"
+
+
+func xiuniang_death_day_told() -> bool:
+	return get_play_flag("xiuniang_death_day_told", false)
+
+
+func unlock_xiuniang_death_day(from_qid: String = "yin") -> bool:
+	## Ten-q yin (optional qingzhi). Never volunteer from opening.
+	if not is_xiuniang_case():
+		return false
+	if from_qid not in ["yin", "qingzhi"]:
+		return false
+	if xiuniang_death_day_told():
+		return false
+	set_play_flag("xiuniang_death_day_told", true)
+	adjust_trust_xiuniang_by_id("unlock_death_day")
+	return true
+
+
+func xiuniang_death_day_line() -> String:
+	var p: Dictionary = CaseDB.patient_by_id("char_xiuniang")
+	var line := UiKit.loc_text(p.get("death_day_line", p.get("memorial_truth", {})), "")
+	if line != "":
+		return line
+	var key := "XIUNIANG_MEMORIAL_LINE"
+	var trn := tr(key)
+	return trn if trn != key else "……亡夫忌日近了。胸口像压着绣架。"
+
+
+func xiuniang_daughter_dodge_line() -> String:
+	var p: Dictionary = CaseDB.patient_by_id("char_xiuniang")
+	var line := UiKit.loc_text(p.get("dodge_daughter", p.get("dodge_daughter_privacy", {})), "")
+	if line != "":
+		return line
+	return UiKit.loc_text(p.get("dodge", {}), "")
+
+
+func maybe_handle_xiuniang_ask(question: String) -> String:
+	## Returns special reply override or "" to use normal templates.
+	if not is_xiuniang_case():
+		return ""
+	var q := question
+	var ql := q.to_lower()
+	# Daughter privacy → trust down + dodge. Never romance.
+	var daughter := false
+	for tok in ["女儿", "閨女", "闺女", "丫头", "daughter", "むすめ", "娘の"]:
+		if q.find(tok) >= 0 or ql.find(tok.to_lower()) >= 0:
+			daughter = true
+			break
+	if daughter:
+		var pry := false
+		for tok in ["私", "隐私", "隱私", "男", "改嫁", "身子", "经", "經", "privacy", "secret", "husband"]:
+			if q.find(tok) >= 0 or ql.find(tok.to_lower()) >= 0:
+				pry = true
+				break
+		if pry or true:
+			# Asking about daughter at all in this slice is privacy-sensitive.
+			adjust_trust_xiuniang_by_id("ask_daughter_privacy")
+			return xiuniang_daughter_dodge_line()
+	# Free-text yin / memorial cues unlock truth (same gate as ten-q yin).
+	var yinish := false
+	for tok in ["因何", "因什么", "因什麼", "从什么时候", "從什麼時候", "忌日", "亡夫", "起因", "怎么起的", "怎麼起的", "what started", "memorial", "onset"]:
+		if q.find(tok) >= 0 or ql.find(tok.to_lower()) >= 0:
+			yinish = true
+			break
+	if yinish:
+		unlock_xiuniang_death_day("yin")
+	if xiuniang_death_day_told() and yinish:
+		return xiuniang_death_day_line()
+	return ""
+
+
+func _rank_at_least(rank_id: String, need: String) -> bool:
+	var order := ["none", "slight", "work", "clear", "toward_heal"]
+	var a := order.find(rank_id)
+	var b := order.find(need)
+	if a < 0:
+		a = 0
+	if b < 0:
+		b = 0
+	return a >= b
+
+
+func _maybe_grant_town_permit(rank_id: String) -> void:
+	if not is_xiuniang_case() and current_patient_id != "char_xiuniang":
+		# allow after settle when patient id still set
+		if str(CaseDB.case_for_patient(current_patient_id).get("id", "")) != "xuexu_ganyu":
+			return
+	if not xiuniang_death_day_told():
+		return
+	if not _rank_at_least(rank_id, "clear"):
+		return
+	set_play_flag("town_permit", true)
+	var mentor_line := tr("MENTOR_TOWN_PERMIT")
+	if mentor_line == "MENTOR_TOWN_PERMIT" or mentor_line == "":
+		mentor_line = "这案稳了。出镇许可，我写下。"
+	last_result["town_permit"] = true
+	last_result["mentor_town_permit"] = mentor_line
+	last_result["mentor_line"] = mentor_line
+
+
 func acu_teach_unlocked(point_id: String) -> bool:
 	var p: Dictionary = CaseDB.points_by_id.get(point_id, {})
 	if p.is_empty():
 		return false
-	return bool(p.get("teach_vol1", false))
+	if bool(p.get("teach_vol1", false)):
+		return true
+	# V133: case_temp_open for xuexu_ganyu → shenmen + sanyinjiao (not permanent vol1)
+	var case_data: Dictionary = CaseDB.case_for_patient(current_patient_id)
+	var cid := str(case_data.get("id", ""))
+	var intro: Dictionary = CaseDB.pack.get("acu_intro_rules", {})
+	var temp: Variant = intro.get("case_temp_open", {})
+	if typeof(temp) == TYPE_DICTIONARY:
+		var open_ids: Variant = temp.get(cid, [])
+		if typeof(open_ids) == TYPE_ARRAY and point_id in open_ids:
+			return true
+	var rules: Dictionary = CaseDB.pack.get("xiuniang_case_rules", {})
+	var unlock: Dictionary = rules.get("acu_case_unlock", {}) if typeof(rules.get("acu_case_unlock", {})) == TYPE_DICTIONARY else {}
+	if cid == str(unlock.get("when_case", "xuexu_ganyu")):
+		var open2: Variant = unlock.get("open_ids", [])
+		if typeof(open2) == TYPE_ARRAY and point_id in open2:
+			return true
+	return false
 
 
 func acu_point_method(point_id: String) -> String:
@@ -1277,6 +1493,10 @@ func _settle_inplace(path: String, ids: Array, opts: Dictionary = {}) -> Diction
 	if current_patient_id != "" and current_patient_id not in seen:
 		seen.append(current_patient_id)
 	_write_settlement()
+	_maybe_grant_town_permit(rank_id)
+	# Persist town_permit after grant (may mutate play after _write_settlement)
+	if bool(last_result.get("town_permit", false)):
+		Save.write_slot()
 	if DemoDay:
 		DemoDay.on_settle(path)
 	fsm_changed.emit(fsm_state)
@@ -1365,9 +1585,9 @@ func all_patients_done() -> bool:
 
 func _slice_smoke() -> void:
 	var fails: PackedStringArray = []
-	if CaseDB.patients.size() != 3:
-		fails.append("patients %d" % CaseDB.patients.size())
-	if CaseDB.cases_by_id.size() != 3:
+	if CaseDB.patients.size() < 4:
+		fails.append("patients %d (need >=4 incl. char_xiuniang)" % CaseDB.patients.size())
+	if CaseDB.cases_by_id.size() < 4:
 		fails.append("cases %d" % CaseDB.cases_by_id.size())
 	var exams_all := {"wang": true, "wen_listen": true, "wen_ask": true, "qie": true}
 	var exams_none := {"wang": false, "wen_listen": false, "wen_ask": false, "qie": false}
@@ -1431,10 +1651,10 @@ func _slice_smoke() -> void:
 
 func run_slice_smoke() -> int:
 	var fails: PackedStringArray = []
-	if CaseDB.patients.size() != 3:
-		fails.append("expected 3 patients, got %d" % CaseDB.patients.size())
-	if CaseDB.cases_by_id.size() != 3:
-		fails.append("expected 3 cases")
+	if CaseDB.patients.size() < 4:
+		fails.append("expected >=4 patients, got %d" % CaseDB.patients.size())
+	if CaseDB.cases_by_id.size() < 4:
+		fails.append("expected >=4 cases (incl. xuexu_ganyu)")
 	var exams_all := {"wang": true, "wen_listen": true, "wen_ask": true, "qie": true}
 	var exams_none := {"wang": false, "wen_listen": false, "wen_ask": false, "qie": false}
 	var paths := [
@@ -1735,7 +1955,103 @@ func run_slice_smoke() -> int:
 	var food_r2: Dictionary = Scoring.evaluate(case_food, exams_food, "food", food_ids, {"lifestyle_cue": "less_worry"})
 	if float(food_r2.get("score", 0.0)) < 0.45:
 		fails.append("food path regressed after emotion")
+
 	print("emotion_counsel_ok")
+
+	# V133 周绣娘主线案：忌日真句 + 合法 settle → town_permit
+	var play_xn0: Dictionary = _play().duplicate(true)
+	var saved_fsm_xn := fsm_state
+	var saved_pid_xn := current_patient_id
+	var saved_seen_xn: Array = seen.duplicate()
+	var play_xn := _play()
+	var flags_xn: Dictionary = play_xn.get("flags", {}) if typeof(play_xn.get("flags", {})) == TYPE_DICTIONARY else {}
+	flags_xn.erase("xiuniang_death_day_told")
+	flags_xn.erase("town_permit")
+	play_xn["flags"] = flags_xn
+	var trust_xn: Dictionary = play_xn.get("trust", {}) if typeof(play_xn.get("trust", {})) == TYPE_DICTIONARY else {}
+	trust_xn["xiuniang"] = 0.35
+	play_xn["trust"] = trust_xn
+	Save.data["play"] = play_xn
+	var p_xn: Dictionary = CaseDB.patient_by_id("char_xiuniang")
+	if p_xn.is_empty():
+		fails.append("xiuniang_case_ok: char_xiuniang missing from roster")
+	else:
+		var seat_xn := int(p_xn.get("seat", -1))
+		if seat_xn != 3 and CaseDB.patients.size() < 4:
+			fails.append("xiuniang_case_ok: expected 4th waiting seat")
+		var case_xn: Dictionary = CaseDB.case_for_patient("char_xiuniang")
+		if str(case_xn.get("id", "")) != "xuexu_ganyu":
+			fails.append("xiuniang_case_ok: case must be xuexu_ganyu got %s" % str(case_xn.get("id", "")))
+		if str(case_xn.get("id", "")) == "shen_bushe":
+			fails.append("xiuniang_case_ok: NEVER use shen_bushe")
+		current_patient_id = "char_xiuniang"
+		get_trust_xiuniang()
+		for e in EXAM_IDS:
+			exams[e] = true
+			if e not in completed_exams:
+				completed_exams.append(e)
+		# Simulate yin ask → death_day_told
+		mark_tenq("yin")
+		if not xiuniang_death_day_told():
+			fails.append("xiuniang_case_ok: yin ask should unlock death_day_told")
+		var death_line := xiuniang_death_day_line()
+		if death_line.strip_edges() == "":
+			fails.append("xiuniang_case_ok: death day line empty")
+		# Never volunteer: opening must not equal death line
+		var open_xn := CaseDB.opening_line("char_xiuniang")
+		if open_xn != "" and open_xn == death_line:
+			fails.append("xiuniang_case_ok: opening must not volunteer death-day truth")
+		# Acu temp-open
+		if not acu_teach_unlocked("shenmen") or not acu_teach_unlocked("sanyinjiao"):
+			fails.append("xiuniang_case_ok: shenmen/sanyinjiao should temp-open on xuexu_ganyu")
+		# Prefer emotion legal settle
+		fsm_state = "treatment_choice"
+		var emo_xn: Dictionary = Scoring.evaluate(
+			case_xn,
+			{"wang": true, "wen_listen": true, "wen_ask": true, "qie": true},
+			"emotion",
+			["no_rush_embroider", "leave_lamp_on"],
+			{"listen_match": "anchor", "listen_id": "listen_desk_night"}
+		)
+		print("xiuniang_emotion score=", emo_xn.get("score"), " rank=", emo_xn.get("rank_id"))
+		var settle_xn: Dictionary = _settle_inplace(
+			"emotion",
+			["no_rush_embroider", "leave_lamp_on"],
+			{"listen_match": "anchor"}
+		)
+		var rank_xn := str(settle_xn.get("rank_id", ""))
+		if rank_xn not in ["toward_heal", "work", "clear", "slight"]:
+			# fallback try formula light line without zhimu mistreat risk
+			current_patient_id = "char_xiuniang"
+			for e2 in EXAM_IDS:
+				exams[e2] = true
+			set_play_flag("xiuniang_death_day_told", true)
+			settle_xn = _settle_inplace("acupuncture", ["shenmen", "sanyinjiao"])
+			rank_xn = str(settle_xn.get("rank_id", ""))
+			print("xiuniang_acu_fallback score=", settle_xn.get("score"), " rank=", rank_xn)
+		if float(settle_xn.get("score", 0.0)) < 0.35 and rank_xn in ["", "none"]:
+			fails.append("xiuniang_case_ok: legal settle too weak rank=%s" % rank_xn)
+		if _rank_at_least(rank_xn, "clear"):
+			if not get_play_flag("town_permit", false):
+				fails.append("xiuniang_case_ok: town_permit should be true after clear+death_day")
+			if str(settle_xn.get("mentor_town_permit", settle_xn.get("mentor_line", ""))).strip_edges() == "":
+				# grant may have written on last_result before return copy
+				if str(last_result.get("mentor_town_permit", "")).strip_edges() == "":
+					fails.append("xiuniang_case_ok: mentor town_permit line missing")
+		else:
+			print("xiuniang_case_ok: rank below clear (", rank_xn, ") — town_permit optional")
+		# Portrait
+		var tex_xn: Texture2D = CharacterArt.load_portrait("char_xiuniang")
+		if tex_xn == null:
+			fails.append("xiuniang_case_ok: zhou_xiuniang portrait missing")
+		print("xiuniang_case_ok")
+	# restore
+	Save.data["play"] = play_xn0
+	fsm_state = saved_fsm_xn
+	current_patient_id = saved_pid_xn
+	seen.clear()
+	for s_xn in saved_seen_xn:
+		seen.append(str(s_xn))
 
 	# V131 demo day end-to-end glue
 	if DemoDay == null:

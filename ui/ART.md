@@ -57,3 +57,7 @@ V126.1 画风统一：四立绘同套 2D 明快 Q 平涂（婆婆去 3D；江晚
 ## V132 情志
 
 见 `emotion/EMOTION.md`：疏导 UI、ACTION_EMOTION、六卡图标；复用清荷立绘。
+
+## V133 周绣娘
+
+`characters/zhou_xiuniang.png`（齐 V126.1 平涂）；可选 `props/aiye_pa.png` 艾叶帕。

@@ -81,7 +81,7 @@ func _refresh() -> void:
 	var m_raw := float(r.get("M", r.get("score", r.get("pattern", 0.0))))
 	var fit_pct := int(round(m_raw * 100.0)) if m_raw <= 1.0001 else int(round(m_raw))
 	_fit.text = "M  %d" % fit_pct
-	var chips := Scoring.axis_chips(r) if Scoring.has_method("axis_chips") else ""
+	var chips := Scoring.axis_chips(r)
 	if chips != "":
 		_fit.text = "%s\n%s" % [_fit.text, chips]
 	_speed.text = "%s %.2f · %s %.2f · %s %.2f · %s %.2f    %s  %s" % [
@@ -108,6 +108,14 @@ func _refresh() -> void:
 		fu = CaseDB.followup_template(GameFlow.current_patient_id)
 	_followup.visible = fu != ""
 	_followup.text = ("%s：%s" % [tr("FOLLOWUP_TITLE"), fu]) if fu != "" else ""
+	var mentor_tp := str(r.get("mentor_town_permit", r.get("mentor_line", ""))).strip_edges()
+	if mentor_tp != "" and bool(r.get("town_permit", false)):
+		var who := CaseDB.mentor_name() if CaseDB else "苏问舟"
+		if _followup.text != "":
+			_followup.text = "%s\n%s：%s" % [_followup.text, who, mentor_tp]
+		else:
+			_followup.visible = true
+			_followup.text = "%s：%s" % [who, mentor_tp]
 	var foot := find_child("ScoreFoot", true, false) as Label
 	if foot:
 		foot.text = tr("BOOT_DISCLAIMER_FOOTER")

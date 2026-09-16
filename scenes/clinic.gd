@@ -210,6 +210,9 @@ func _handle_hotspot(kind: String) -> void:
 		"stool_b":
 			_switch_camera("CAM_ASK")
 			_pick_at(1)
+		"stool_d":
+			_switch_camera("CAM_ASK")
+			_pick_at(3)
 		"chair":
 			_switch_camera("CAM_ASK")
 			if GameFlow.current_patient_id != "":
@@ -276,11 +279,16 @@ func _label_patients() -> void:
 	var chars := get_node_or_null("L5_characters")
 	if chars == null:
 		return
+	var wait_homes := [Vector2(405, 290), Vector2(545, 290), Vector2(300, 340), Vector2(685, 290)]
 	for i in CaseDB.patients.size():
 		var p: Dictionary = CaseDB.patients[i]
 		var node := chars.get_node_or_null("Patient%d" % i) as Node2D
 		if node == null:
-			continue
+			node = Node2D.new()
+			node.name = "Patient%d" % i
+			var home: Vector2 = wait_homes[i] if i < wait_homes.size() else Vector2(685 + 40 * (i - 3), 290)
+			node.position = home
+			chars.add_child(node)
 		node.set_meta("pid", str(p.get("id", "")))
 		node.set_meta("home", node.position)
 		node.y_sort_enabled = true
@@ -1374,7 +1382,7 @@ func _build_hud() -> void:
 	var row := HBoxContainer.new()
 	row.name = "Patients"
 	row.position = Vector2(24, 50)
-	row.size = Vector2(920, 64)
+	row.size = Vector2(1100, 64)
 	row.add_theme_constant_override("separation", 8)
 	row.mouse_filter = Control.MOUSE_FILTER_STOP
 	bar.add_child(row)
@@ -1383,7 +1391,7 @@ func _build_hud() -> void:
 		var pid := str(p.get("id", ""))
 		var card := Button.new()
 		card.name = pid
-		card.custom_minimum_size = Vector2(200, 56)
+		card.custom_minimum_size = Vector2(170, 56) if CaseDB.patients.size() >= 4 else Vector2(200, 56)
 		card.set_meta("pid", pid)
 		UiKit.style_button(card, false)
 		card.pressed.connect(_on_pick.bind(pid))

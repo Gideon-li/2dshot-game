@@ -1,0 +1,105 @@
+{
+  "id": "xiuniang_case_v133",
+  "rules_ref": "slice_logic.json → xiuniang_case_rules",
+  "lock_doc": "logic/XIUNIAN-CASE-V133.md",
+  "case_id": "xuexu_ganyu",
+  "character_id": "char_xiuniang",
+  "trust": {
+    "key": "play.trust.xiuniang",
+    "init": 0.35,
+    "min": 0,
+    "max": 1,
+    "deltas": [
+      {
+        "id": "ask_daughter_privacy",
+        "delta": -0.15,
+        "note": "当着女儿追问私"
+      },
+      {
+        "id": "praise_embroidery",
+        "delta": 0.08
+      },
+      {
+        "id": "gentle_no_pry",
+        "delta": 0.05
+      },
+      {
+        "id": "unlock_death_day",
+        "delta": 0.1
+      },
+      {
+        "id": "scold_qingzhi",
+        "delta": -0.12
+      }
+    ]
+  },
+  "truth": {
+    "flag": "play.flags.xiuniang_death_day_told",
+    "need_ten_q_any": [
+      "yin"
+    ],
+    "need_ten_q_any_optional": [
+      "qingzhi"
+    ],
+    "never_volunteer": true
+  },
+  "town_permit": {
+    "flag": "play.flags.town_permit",
+    "on_settle_if": {
+      "death_day_told": true,
+      "rank_at_least": "clear"
+    },
+    "mentor_line_key": "mentor.town_permit",
+    "note": "存档布尔即可；不做五方地图"
+  },
+  "acu_case_unlock": {
+    "when_case": "xuexu_ganyu",
+    "open_ids": [
+      "shenmen",
+      "sanyinjiao"
+    ],
+    "note": "卷一穴锁时本案临时开；可与夜读教学并存"
+  },
+  "emotion_extra_cards": [
+    "no_rush_embroider",
+    "leave_lamp_on"
+  ],
+  "smoke": {
+    "tag": "xiuniang_case_ok",
+    "require": [
+      "death_day_told",
+      "legal_settle_any_path"
+    ],
+    "paths_ok": [
+      "formula",
+      "acupuncture",
+      "emotion",
+      "food"
+    ],
+    "prefer_rank": "toward_heal"
+  },
+  "legal_paths_summary": {
+    "formula": "suanzaoren汤思路",
+    "acupuncture": [
+      "shenmen",
+      "sanyinjiao"
+    ],
+    "emotion": [
+      "no_rush_embroider",
+      "leave_lamp_on"
+    ],
+    "food": [
+      "hongzao",
+      "lianzi",
+      "zhou_di"
+    ]
+  },
+  "do_not": [
+    "romance",
+    "daughter_fever_case",
+    "forced_menses_detail",
+    "chen_banxian",
+    "five_town_travel_map",
+    "case_id_shen_bushe"
+  ]
+}

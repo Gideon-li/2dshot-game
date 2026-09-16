@@ -6,6 +6,7 @@
 | 赵阿福 | `char_porter` | `ui/characters/zhao_afu.png` |
 | 沈清荷 | `char_clerk` | `ui/characters/shen_qinghe.png` |
 | 周婆婆 | `char_copyist` | `ui/characters/zhou_popo.png` |
+| 周绣娘 | `char_xiuniang` | `ui/characters/zhou_xiuniang.png` |
 | 小荷（选做） | `pharmacy_kid_xiaohe` | `ui/characters/xiaohe.png` |
 | 苏问舟（选做头像） | `mentor_su` | `ui/characters/su_wenzhou.png` |
 

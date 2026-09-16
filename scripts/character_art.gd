@@ -8,6 +8,7 @@ const PATHS := {
 	"char_porter": "res://ui/characters/zhao_afu.png",
 	"char_clerk": "res://ui/characters/shen_qinghe.png",
 	"char_copyist": "res://ui/characters/zhou_popo.png",
+	"char_xiuniang": "res://ui/characters/zhou_xiuniang.png",
 	"pharmacy_kid_xiaohe": "res://ui/characters/xiaohe.png",
 	"mentor_su": "res://ui/characters/su_wenzhou.png",
 }
@@ -16,7 +17,7 @@ const FALLBACK_APPRENTICE := "res://ui/apprentice.png"
 const FALLBACK_PATIENTS := "res://ui/patients-three.png"
 
 ## Equal horizontal thirds for porter / clerk / copyist.
-const PATIENT_ORDER := ["char_porter", "char_clerk", "char_copyist"]
+const PATIENT_ORDER := ["char_porter", "char_clerk", "char_copyist", "char_xiuniang"]
 
 static var _warned: Dictionary = {}
 
@@ -48,7 +49,8 @@ static func _fallback(id: String) -> Texture2D:
 			return load(FALLBACK_APPRENTICE) as Texture2D
 		return null
 	var idx := PATIENT_ORDER.find(id)
-	if idx < 0:
+	# Sheet only covers first three; xiuniang and later need single-file portraits.
+	if idx < 0 or idx >= 3:
 		return null
 	if not ResourceLoader.exists(FALLBACK_PATIENTS):
 		return null

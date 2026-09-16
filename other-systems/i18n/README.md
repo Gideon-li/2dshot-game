@@ -15,3 +15,4 @@ Godot 工程翻译源：`locale/xinglin.csv`（与本目录 `ui.csv` 同步）�
 - v1.30：食疗 `FOOD_*`（见 `FOOD-KEYS.md`）
 - v1.31：Demo 日环 `DEMO_*` / `DAY_*` / `SLOT_*`（见 `DEMO-KEYS.md`）
 - v1.32：情志 `EMOTION_*` / `COUNSEL_*`（见 `EMOTION-KEYS.md`）
+- v1.33：周绣娘 `XIUNIANG_*` / `TRUST_*` / `TOWN_PERMIT_*`（见 `XIUNIANG-KEYS.md`）
