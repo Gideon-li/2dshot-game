@@ -1,0 +1,200 @@
+{
+  "id": "qingshi_expand3_v136",
+  "version": 136,
+  "rules_ref": "slice_logic.json → qingshi_expand3_rules",
+  "lock_doc": "logic/QINGSHI-EXPAND3-V136.md",
+  "cases": [
+    "yinxu_zaoke",
+    "shire_xiazhu",
+    "waishang_zhongtong"
+  ],
+  "characters": [
+    "char_tanfu",
+    "char_tianhan",
+    "char_mujiang"
+  ],
+  "seals": {
+    "key": "play.seals",
+    "on_settle_if_rank_at_least": "clear",
+    "write_case_id": true,
+    "ui_flash_keys": [
+      "seal.yinxu_zaoke",
+      "seal.shire_xiazhu",
+      "seal.waishang_zhongtong"
+    ],
+    "expand_ui_flash_keys_total_9": [
+      "seal.fengre_biao",
+      "seal.shiji",
+      "seal.pixu_shikun",
+      "seal.yangxu_weihan",
+      "seal.xueyu_qing",
+      "seal.shushi",
+      "seal.yinxu_zaoke",
+      "seal.shire_xiazhu",
+      "seal.waishang_zhongtong"
+    ],
+    "old_four_also_write": [
+      "fenghan_biao",
+      "ganyu_qizhi",
+      "yinxu_neire",
+      "xuexu_ganyu"
+    ],
+    "seal_wall_ids": [
+      "fengre_biao",
+      "shiji",
+      "pixu_shikun",
+      "yangxu_weihan",
+      "xueyu_qing",
+      "shushi",
+      "yinxu_zaoke",
+      "shire_xiazhu",
+      "waishang_zhongtong",
+      "fenghan_biao",
+      "ganyu_qizhi",
+      "yinxu_neire",
+      "xuexu_ganyu"
+    ],
+    "note": "本档+3 expand 印；与 V134/135 共9枚 expand 小印；旧四案 settle≥clear 亦写 play.seals；阴虚内热≠阴虚燥咳分两印；不设小儿格"
+  },
+  "waiting": {
+    "max_seats": 4,
+    "pool_includes_old_ten": true,
+    "weights": {
+      "base": {
+        "yinxu_zaoke": 0.35,
+        "shire_xiazhu": 0.35,
+        "waishang_zhongtong": 0.35
+      },
+      "with_town_permit_mult": 1.8,
+      "without_permit": {
+        "yinxu_zaoke_teach_once": true,
+        "yinxu_zaoke_weight": 0.25,
+        "shire_xiazhu": 0.05,
+        "waishang_zhongtong": 0.05
+      }
+    },
+    "rotation": "A-D seats; overflow rotates in pool"
+  },
+  "cross_mistreat": {
+    "zaoke_as_neire_bitter": {
+      "if_case": "yinxu_zaoke",
+      "if_herbs_any_pairs": [
+        [
+          "zhimu",
+          "huangbai"
+        ]
+      ],
+      "if_herbs_any": [
+        "mahuang"
+      ],
+      "penalty": "mistreat + stability",
+      "revisit": "咽更干/咳更紧",
+      "note": "燥咳当内热苦寒堆，或麻黄温散"
+    },
+    "shire_warm_tonify": {
+      "if_case": "shire_xiazhu",
+      "if_herbs_any_pairs": [
+        [
+          "fuzi",
+          "ganjiang"
+        ]
+      ],
+      "penalty": "mistreat + stability",
+      "revisit": "下困更重",
+      "note": "湿热误温补"
+    },
+    "waishang_harsh_break": {
+      "if_case": "waishang_zhongtong",
+      "note": "外伤猛破：同血瘀忌寒清堆；现池无红花桃仁，勿重剂破血",
+      "if_herbs_any": [
+        "jinyinhua",
+        "lianqiao",
+        "huangbai"
+      ],
+      "penalty": "mistreat + stability",
+      "revisit": "肿痛更明显"
+    }
+  },
+  "distinguish_note": {
+    "yinxu_zaoke_vs_yinxu_neire": "燥咳=肺阴干咳少痰咽干（麦冬润肺方）；内热=肾阴虚热五心烦热盗汗（六味/知柏）。分两印。"
+  },
+  "acu_case_temp_open": {
+    "yinxu_zaoke": [
+      "taixi",
+      "lieque"
+    ],
+    "shire_xiazhu": [
+      "sanyinjiao"
+    ],
+    "waishang_zhongtong": [],
+    "note": "via acu_intro_rules.case_temp_open；不永久扩 vol1_open_ids（仍 hegu/zusanli）"
+  },
+  "legal_paths_summary": {
+    "yinxu_zaoke": {
+      "formula": "maidong+shudi+gancao; zhimu+shudi+maidong+gancao",
+      "acupuncture": [
+        "taixi",
+        "taixi+lieque"
+      ],
+      "food": [
+        "zhou_di+bingtang",
+        "zhou_di+lianzi"
+      ],
+      "emotion": "low; calm_shen light"
+    },
+    "shire_xiazhu": {
+      "formula": "huangbai+zexie+fuling (±yiyiren)",
+      "acupuncture": [
+        "sanyinjiao sparse",
+        "zusanli optional"
+      ],
+      "food": [
+        "zhou_di+lianzi",
+        "zhou_di+bingtang"
+      ],
+      "emotion": "low"
+    },
+    "waishang_zhongtong": {
+      "formula": "danggui+chuanxiong+baishao (±gancao)",
+      "acupuncture": [
+        "hegu",
+        "neiguan light"
+      ],
+      "food": [
+        "zhou_di+hongzao mild"
+      ],
+      "emotion": "warm_calm / vent_rest auxiliary"
+    }
+  },
+  "new_herbs": [
+    {
+      "id": "maidong",
+      "forage": false,
+      "note": "肺阴润燥"
+    },
+    {
+      "id": "yiyiren",
+      "forage": false,
+      "note": "清利湿热可选"
+    }
+  ],
+  "smoke": {
+    "tag": "qingshi_expand3_ok",
+    "require_each_case_legal_settle": true,
+    "also": "SMOKE PASS; do not regress expand/expand2"
+  },
+  "do_not": [
+    "小儿",
+    "小儿惊啼",
+    "陈半仙",
+    "萨米尔",
+    "五方",
+    "romance",
+    "血腥外伤",
+    "暴露",
+    "Steam",
+    "J/T",
+    "shire_xiaZhu"
+  ],
+  "split_file": "logic/qingshi_expand3.json"
+}

@@ -135,7 +135,7 @@ func _refresh() -> void:
 	var foot := find_child("ScoreFoot", true, false) as Label
 	if foot:
 		foot.text = tr("BOOT_DISCLAIMER_FOOTER")
-	# V134/V135 seal flash (qingshi_expand/expand2 script flash_lines / SEAL_FLASH)
+	# V134/V135/V136 seal flash (qingshi_expand/expand2/expand3 script flash_lines / SEAL_FLASH)
 	var seal_id := str(r.get("seal_id", "")).strip_edges()
 	var seal_line := str(r.get("seal_flash", "")).strip_edges()
 	if seal_line == "" and seal_id != "" and CaseDB.has_method("seal_flash_line"):
@@ -147,6 +147,25 @@ func _refresh() -> void:
 		var tex: Texture2D = CharacterArt.load_seal(seal_id) if seal_id != "" else null
 		_seal_icon.texture = tex
 		_seal_icon.visible = tex != null
+	# Optional seal-wall count under flash (V136)
+	var wall_hint := find_child("SealWallHint", true, false) as Label
+	if wall_hint == null and _seal_flash and _seal_flash.get_parent():
+		wall_hint = UiKit.ink_label("", 12, UiKit.INK_MUTED)
+		wall_hint.name = "SealWallHint"
+		wall_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		_seal_flash.get_parent().add_child(wall_hint)
+	if wall_hint:
+		var sn := GameFlow.get_seals().size() if GameFlow.has_method("get_seals") else 0
+		if sn > 0:
+			var ht := tr("SEAL_COUNT_HINT")
+			if ht == "SEAL_COUNT_HINT" or ht == "":
+				ht = "已亮 %d / 9 枚青石证印。" % sn
+			else:
+				ht = ht.replace("{n}", str(sn))
+			wall_hint.text = ht
+			wall_hint.visible = true
+		else:
+			wall_hint.visible = false
 	UiKit.refresh_i18n_buttons(self)
 
 

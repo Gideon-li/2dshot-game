@@ -1336,9 +1336,13 @@ func grant_seal(case_id: String) -> bool:
 func _maybe_grant_seal(rank_id: String) -> void:
 	var rules: Dictionary = CaseDB.qingshi_expand_rules() if CaseDB.has_method("qingshi_expand_rules") else {}
 	var rules2: Dictionary = CaseDB.qingshi_expand2_rules() if CaseDB.has_method("qingshi_expand2_rules") else {}
+	var rules3: Dictionary = CaseDB.qingshi_expand3_rules() if CaseDB.has_method("qingshi_expand3_rules") else {}
 	var seals_cfg: Dictionary = rules.get("seals", {}) if typeof(rules.get("seals", {})) == TYPE_DICTIONARY else {}
 	if seals_cfg.is_empty() and typeof(rules2.get("seals", {})) == TYPE_DICTIONARY:
 		seals_cfg = rules2.get("seals", {})
+	if typeof(rules3.get("seals", {})) == TYPE_DICTIONARY and not (rules3.get("seals", {}) as Dictionary).is_empty():
+		# Prefer expand3 seals cfg (rank threshold + old_four_also_write)
+		seals_cfg = rules3.get("seals", {})
 	var need := str(seals_cfg.get("on_settle_if_rank_at_least", "clear"))
 	if not _rank_at_least(rank_id, need):
 		return
@@ -1355,6 +1359,19 @@ func _maybe_grant_seal(rank_id: String) -> void:
 			var sx := str(x)
 			if sx not in allowed:
 				allowed.append(sx)
+	var a3: Variant = rules3.get("cases", ["yinxu_zaoke", "shire_xiazhu", "waishang_zhongtong"])
+	if typeof(a3) == TYPE_ARRAY:
+		for x in a3:
+			var sx3 := str(x)
+			if sx3 not in allowed:
+				allowed.append(sx3)
+	# Old four also write play.seals on clear+ (V136)
+	var old4: Variant = seals_cfg.get("old_four_also_write", ["fenghan_biao", "ganyu_qizhi", "yinxu_neire", "xuexu_ganyu"])
+	if typeof(old4) == TYPE_ARRAY:
+		for x in old4:
+			var sox := str(x)
+			if sox not in allowed:
+				allowed.append(sox)
 	if cid not in allowed:
 		return
 	if grant_seal(cid):
@@ -1363,18 +1380,21 @@ func _maybe_grant_seal(rank_id: String) -> void:
 			set_play_flag("shiji_teach_seen", true)
 		if cid == "yangxu_weihan":
 			set_play_flag("yangxu_weihan_teach_seen", true)
+		if cid == "yinxu_zaoke":
+			set_play_flag("yinxu_zaoke_teach_seen", true)
 
 
 func refresh_waiting_seats(force: bool = false) -> void:
-	## Fill ≤4 hall seats from weighted pool. Does not force all 10 on stage.
+	## Fill ≤4 hall seats from weighted pool. Does not force all 13 on stage.
 	if not force and not waiting_seat_ids.is_empty():
 		return
 	var permit := get_play_flag("town_permit", false)
 	var shiji_seen := get_play_flag("shiji_teach_seen", false)
 	var yangxu_seen := get_play_flag("yangxu_weihan_teach_seen", false)
+	var zaoke_seen := get_play_flag("yinxu_zaoke_teach_seen", false)
 	var exclude: Array = []
 	# Prefer unseen for hall; still allow seen if pool thin
-	var picked: PackedStringArray = CaseDB.pick_waiting_seats(permit, shiji_seen, exclude, null, yangxu_seen)
+	var picked: PackedStringArray = CaseDB.pick_waiting_seats(permit, shiji_seen, exclude, null, yangxu_seen, zaoke_seen)
 	if picked.is_empty():
 		# Fallback: first max seats of PATIENT_ORDER present in CaseDB
 		var max_n := CaseDB.waiting_max_seats() if CaseDB.has_method("waiting_max_seats") else 4
@@ -2427,6 +2447,158 @@ func run_slice_smoke() -> int:
 	seen.clear()
 	for s_q2 in saved_seen_q2:
 		seen.append(str(s_q2))
+	refresh_waiting_seats(true)
+
+	# V136 青石诊案再扩 expand3：三新案各 ≥1 合法 settle；池 13 / 席 ≤4；旧四案亦可写印
+	var play_q3_0: Dictionary = _play().duplicate(true)
+	var saved_fsm_q3 := fsm_state
+	var saved_pid_q3 := current_patient_id
+	var saved_seen_q3: Array = seen.duplicate()
+	var play_q3 := _play()
+	play_q3["seals"] = []
+	var flags_q3: Dictionary = play_q3.get("flags", {}) if typeof(play_q3.get("flags", {})) == TYPE_DICTIONARY else {}
+	flags_q3["town_permit"] = true
+	flags_q3["shiji_teach_seen"] = false
+	flags_q3["yangxu_weihan_teach_seen"] = false
+	flags_q3["yinxu_zaoke_teach_seen"] = false
+	play_q3["flags"] = flags_q3
+	Save.data["play"] = play_q3
+	refresh_waiting_seats(true)
+	if waiting_seat_ids.size() > CaseDB.waiting_max_seats():
+		fails.append("qingshi_expand3_ok: waiting seats %d > max" % waiting_seat_ids.size())
+	if waiting_seat_ids.size() < 1:
+		fails.append("qingshi_expand3_ok: waiting pool empty")
+	var pool_q3 := CaseDB.waiting_pool_ids()
+	if pool_q3.size() < 13:
+		fails.append("qingshi_expand3_ok: pool size %d < 13 got=%s" % [pool_q3.size(), str(pool_q3)])
+	for need_pid3 in ["char_tanfu", "char_tianhan", "char_mujiang"]:
+		if CaseDB.patient_by_id(need_pid3).is_empty():
+			fails.append("qingshi_expand3_ok: missing %s" % need_pid3)
+	for need_case3 in ["yinxu_zaoke", "shire_xiazhu", "waishang_zhongtong"]:
+		if not CaseDB.cases_by_id.has(need_case3):
+			fails.append("qingshi_expand3_ok: missing case %s" % need_case3)
+	for art_pid3 in ["char_tanfu", "char_tianhan", "char_mujiang"]:
+		if CharacterArt.load_portrait(art_pid3) == null:
+			fails.append("qingshi_expand3_ok: portrait missing %s" % art_pid3)
+	for seal_art3 in ["yinxu_zaoke", "shire_xiazhu", "waishang_zhongtong", "fenghan_biao", "ganyu_qizhi", "yinxu_neire", "xuexu_ganyu"]:
+		if CharacterArt.load_seal(seal_art3) == null:
+			fails.append("qingshi_expand3_ok: seal texture missing %s" % seal_art3)
+	if CharacterArt.load_seal_wall() == null:
+		fails.append("qingshi_expand3_ok: seal_wall_9 missing")
+	# Herbs
+	for need_herb in ["maidong", "yiyiren"]:
+		if not CaseDB.herbs_by_id.has(need_herb):
+			fails.append("qingshi_expand3_ok: herb missing %s" % need_herb)
+	# Temp-open acu
+	current_patient_id = "char_tanfu"
+	if not acu_teach_unlocked("taixi") or not acu_teach_unlocked("lieque"):
+		fails.append("qingshi_expand3_ok: zaoke should temp-open taixi+lieque")
+	current_patient_id = "char_tianhan"
+	if not acu_teach_unlocked("sanyinjiao"):
+		fails.append("qingshi_expand3_ok: shire should temp-open sanyinjiao")
+	# Mistreat hooks
+	var mis_zk: Dictionary = Scoring.evaluate(
+		CaseDB.case_for_patient("char_tanfu"),
+		{"wang": true, "wen_listen": true, "wen_ask": true, "qie": true},
+		"formula",
+		["zhimu", "huangbai", "gancao"]
+	)
+	if not bool(mis_zk.get("mistreat", false)):
+		fails.append("qingshi_expand3_ok: zaoke+zhimu/huangbai should mistreat")
+	var mis_zk_mh: Dictionary = Scoring.evaluate(
+		CaseDB.case_for_patient("char_tanfu"),
+		{"wang": true, "wen_listen": true, "wen_ask": true, "qie": true},
+		"formula",
+		["mahuang", "gancao"]
+	)
+	if not bool(mis_zk_mh.get("mistreat", false)):
+		fails.append("qingshi_expand3_ok: zaoke+mahuang should mistreat")
+	var mis_sr: Dictionary = Scoring.evaluate(
+		CaseDB.case_for_patient("char_tianhan"),
+		{"wang": true, "wen_listen": true, "wen_ask": true, "qie": true},
+		"formula",
+		["fuzi", "ganjiang", "gancao"]
+	)
+	if not bool(mis_sr.get("mistreat", false)):
+		fails.append("qingshi_expand3_ok: shire+fuzi/ganjiang should mistreat")
+	var mis_ws: Dictionary = Scoring.evaluate(
+		CaseDB.case_for_patient("char_mujiang"),
+		{"wang": true, "wen_listen": true, "wen_ask": true, "qie": true},
+		"formula",
+		["jinyinhua", "lianqiao", "huangbai"]
+	)
+	if not bool(mis_ws.get("mistreat", false)):
+		fails.append("qingshi_expand3_ok: waishang+寒清猛破 should mistreat")
+	# Three legal settles (avoid zhimu on zaoke — Scoring any-herb mistreat vs pair lock)
+	var legal_rows3 := [
+		["char_tanfu", "formula", ["maidong", "shudi", "gancao"], "yinxu_zaoke"],
+		["char_tianhan", "formula", ["huangbai", "zexie", "fuling"], "shire_xiazhu"],
+		["char_mujiang", "formula", ["danggui", "chuanxiong", "baishao"], "waishang_zhongtong"],
+	]
+	for row_q3 in legal_rows3:
+		var pid_q3 := str(row_q3[0])
+		var path_q3 := str(row_q3[1])
+		var ids_q3: Array = row_q3[2]
+		var expect_case3 := str(row_q3[3])
+		current_patient_id = pid_q3
+		for e_q3 in EXAM_IDS:
+			exams[e_q3] = true
+			if e_q3 not in completed_exams:
+				completed_exams.append(e_q3)
+		fsm_state = "treatment_choice"
+		var settle_q3: Dictionary = _settle_inplace(path_q3, ids_q3)
+		var rank_q3 := str(settle_q3.get("rank_id", ""))
+		print("qingshi3_settle ", pid_q3, " ", path_q3, " rank=", rank_q3, " score=", settle_q3.get("score"), " mistreat=", settle_q3.get("mistreat"))
+		if bool(settle_q3.get("mistreat", false)):
+			fails.append("qingshi_expand3_ok: legal path mistreat on %s" % pid_q3)
+		if not _rank_at_least(rank_q3, "clear"):
+			if pid_q3 == "char_tanfu":
+				settle_q3 = _settle_inplace("acupuncture", ["taixi", "lieque"])
+			elif pid_q3 == "char_tianhan":
+				settle_q3 = _settle_inplace("acupuncture", ["sanyinjiao", "zusanli"])
+			else:
+				settle_q3 = _settle_inplace("acupuncture", ["hegu"])
+			rank_q3 = str(settle_q3.get("rank_id", ""))
+			print("qingshi3_settle_fallback ", pid_q3, " rank=", rank_q3)
+		if not _rank_at_least(rank_q3, "clear"):
+			fails.append("qingshi_expand3_ok: legal settle need rank>=clear got %s on %s" % [rank_q3, pid_q3])
+		elif expect_case3 not in get_seals():
+			fails.append("qingshi_expand3_ok: settle clear but seal not written for %s" % expect_case3)
+	for need_seal3 in ["yinxu_zaoke", "shire_xiazhu", "waishang_zhongtong"]:
+		if need_seal3 not in get_seals():
+			fails.append("qingshi_expand3_ok: seals missing %s got=%s" % [need_seal3, str(get_seals())])
+	# Old four seal path (fenghan clear → write seal; yinxu_neire ≠ yinxu_zaoke)
+	current_patient_id = "char_porter"
+	for e_of in EXAM_IDS:
+		exams[e_of] = true
+		if e_of not in completed_exams:
+			completed_exams.append(e_of)
+	fsm_state = "treatment_choice"
+	var settle_old: Dictionary = _settle_inplace("formula", ["mahuang", "guizhi", "xingren", "gancao"])
+	var rank_old := str(settle_old.get("rank_id", ""))
+	print("qingshi3_old_four_settle char_porter rank=", rank_old, " seals=", get_seals())
+	if _rank_at_least(rank_old, "clear") and "fenghan_biao" not in get_seals():
+		fails.append("qingshi_expand3_ok: old four fenghan_biao seal not written on clear")
+	# Distinguish: neire and zaoke are separate seal ids
+	if "yinxu_zaoke" in get_seals() and "yinxu_neire" in get_seals() and "yinxu_zaoke" == "yinxu_neire":
+		fails.append("qingshi_expand3_ok: zaoke/neire seal ids collided")
+	for cid_flash3 in ["yinxu_zaoke", "shire_xiazhu", "waishang_zhongtong"]:
+		var fl3 := CaseDB.seal_flash_line(cid_flash3)
+		if fl3.strip_edges() == "":
+			fails.append("qingshi_expand3_ok: seal flash empty for %s" % cid_flash3)
+		var tex3: Texture2D = CharacterArt.load_seal(cid_flash3)
+		if tex3 == null:
+			fails.append("qingshi_expand3_ok: seal flash texture null for %s" % cid_flash3)
+	print("qingshi3_seals=", get_seals())
+	print("qingshi3_waiting=", waiting_seat_ids)
+	print("qingshi3_pool_n=", CaseDB.waiting_pool_ids().size())
+	print("qingshi_expand3_ok")
+	Save.data["play"] = play_q3_0
+	fsm_state = saved_fsm_q3
+	current_patient_id = saved_pid_q3
+	seen.clear()
+	for s_q3 in saved_seen_q3:
+		seen.append(str(s_q3))
 	refresh_waiting_seats(true)
 
 

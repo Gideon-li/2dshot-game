@@ -803,7 +803,7 @@ MENTOR_EXPAND_3,困重的人，猛补像往泥里浇油。,"For the heavy and du
 SEAL_YANGXU_WEIHAN,阳虚畏寒,Yang vacuity with aversion to cold,陽虚畏寒
 SEAL_XUEYU_QING,血瘀轻证,Mild blood stasis,血瘀軽証
 SEAL_SHUSHI,暑湿,Summerheat-damp,暑湿
-SEAL_COUNT_HINT,已亮 {n} / 6 枚小印。十二墙以后再说。,{n} of 6 small seals lit. The twelve-wall comes later.,小印 {n} / 6。十二の壁は後。
+SEAL_COUNT_HINT,已亮 {n} / 9 枚青石证印。不设小儿格。,{n} of 9 Qingshi seals lit. No child slot.,青石証印 {n} / 9。小児枠なし。
 CHAR_DANFU_NAME,韩担夫,Han Danfu,韓担夫
 CHAR_DANFU_SHORT,担夫,Porter,担夫
 CHAR_DANFU_TITLE,老担夫 / 夜市摊主,Old porter / night-stall keeper,老担夫／夜市の店主
@@ -832,3 +832,39 @@ MENTOR_EXPAND2_1,畏寒的人，清药像往炉里泼水。,"For someone who fea
 MENTOR_EXPAND2_2,刺痛固定，先别谈大破血。,Fixed stabbing pain — don't rush to heavy blood-breaking.,刺痛が固定なら、まず大破血を語るな。
 MENTOR_EXPAND2_3,暑湿粘着，纯燥会伤津。,Summerheat-damp sticks; pure dryness wounds fluids.,暑湿は粘る。純燥は津を傷る。
 DEMO_HINT_EXPAND2,证印可亮到六枚。十二墙尚未开。,Seals can light up to six. The twelve-wall is not open yet.,証印は六枚まで。十二の壁はまだない。
+SEAL_WALL_TITLE,青石证印,Qingshi seals,青石証印
+SEAL_FENGHAN_BIAO,风寒,Wind-cold,風寒
+SEAL_GANYU_QIZHI,气郁,Qi stagnation,気鬱
+SEAL_YINXU_NEIRE,阴虚内热,Yin vacuity with internal heat,陰虚内熱
+SEAL_XUEXU_GANYU,血虚肝郁,Blood vacuity with liver qi stagnation,血虚肝鬱
+SEAL_YINXU_ZAOKE,阴虚燥咳,Yin vacuity dry cough,陰虚燥咳
+SEAL_SHIRE_XIAZHU,湿热下注,Damp-heat pouring downward,湿熱下注
+SEAL_WAISHANG_ZHONGTONG,外伤肿痛,Trauma swelling-pain,外傷腫痛
+CHAR_TANFU_NAME,秋炭妇,Qiu Tanfu,秋炭婦
+CHAR_TANFU_SHORT,炭妇,Charcoal seller,炭売り
+CHAR_TANFU_TITLE,秋日抄书 / 卖炭妇,Autumn copyist / charcoal seller,秋の写字／炭売り
+TANFU_OPENING,干咳少痰，喉咙干。秋风一吹更咳。,"Dry cough, little phlegm, throat dry. Autumn wind makes it worse.",乾いた咳で痰が少ない。喉が乾く。秋風でさらに咳る。
+TANFU_WAIT,候诊——卖炭妇。,Waiting — the charcoal seller.,待ち——炭売り。
+FOLLOWUP_YINXU_ZAOKE,炭妇说咽干松些了。别再堆苦寒。,Tanfu says the throat dryness eased. Don't pile bitter-cold again.,炭婦は咽の乾きが少し楽だと言う。苦寒を重ねるな。
+CASE_ZAOKE_HINT,偏肺燥咳。与内热案不同。滋阴润燥，勿苦寒过剂。,"More lung-dry cough — not the same as internal-heat. Enrich yin, moisten dryness; don't overdo bitter-cold.",肺燥の咳寄り。内熱案とは違う。滋陰潤燥。苦寒の過剤はだめ。
+CASE_ZAOKE_MIS_BITTER,苦寒堆多了。咳更紧、人更干。,"Too much bitter-cold. Cough tighter, body drier.",苦寒を重ね過ぎた。咳がつよく、人がさらに乾く。
+CHAR_TIANHAN_NAME,何田汉,He Tianhan,何田漢
+CHAR_TIANHAN_SHORT,田汉,Field hand,田仕事
+CHAR_TIANHAN_TITLE,田埂劳作镇民,Field-work townsman,田埂の労作の鎮民
+TIANHAN_OPENING,下边困热、发沉。走路也不得劲。话说到这儿就行。,"A heavy, muggy discomfort below. Walking feels off. That's enough said.",下が重く蒸れる。歩きも冴えない。話はここまででよい。
+TIANHAN_WAIT,候诊——田埂劳作。,Waiting — the field hand.,待ち——田仕事。
+FOLLOWUP_SHIRE_XIAZHU,田汉说困热轻了些。清淡比温补稳。,Tianhan says the heavy heat eased. Light clearing beats warm tonify.,田漢は困熱が少し楽だと言う。淡い清の方が温補より穏。
+CASE_SHIRE_HINT,困热下重。清利宜轻。文案克制，不谈暴露。,Heavy muggy discomfort downward. Clear-drain lightly. Keep copy restrained — no exposure talk.,下が重く蒸れる。清利は軽く。文案は控えめ。暴露は語らない。
+CASE_SHIRE_MIS_WARM,温补太腻。困热更缠。,Warm tonify too rich. The muggy heaviness sticks worse.,温補が膩すぎた。困熱がさらに纏う。
+CHAR_MUJIANG_NAME,陆木匠,Lu Mujiang,陸木匠
+CHAR_MUJIANG_SHORT,木匠,Carpenter,木匠
+CHAR_MUJIANG_TITLE,跌仆木匠 / 码头碰伤,Carpenter after a bump / dock bruise,転んだ木匠／波止場の打撲
+MUJIANG_OPENING,碰了一下，那处青肿，按着胀痛。,"Took a bump — bluish swelling there, tender and full when pressed.",ぶつかった。あそこに青腫れ。押すと脹れて痛い。
+MUJIANG_WAIT,候诊——木匠。,Waiting — the carpenter.,待ち——木匠。
+FOLLOWUP_WAISHANG_ZHONGTONG,木匠说肿松些了。别再猛破。,Mujiang says the swelling eased. No fierce breaking again.,木匠は腫れが少し引いたと言う。猛破はするな。
+CASE_WAISHANG_HINT,局部肿痛轻证。活血消肿宜轻。无血腥描写。,"Local swelling-pain, mild. Move blood and reduce swelling lightly. No bloody wording.",局所の腫れ痛みの軽証。活血消腫は軽く。血腥い描写なし。
+CASE_WAISHANG_MIS_BREAK,破得太猛。人空、处更不适。,Broke too hard. Feels empty; the spot hurts worse.,破が強すぎた。空になり、その箇所がさらにつらい。
+MENTOR_EXPAND3_1,燥咳和内热，别穿一件衣。,Dry cough and internal heat do not wear the same coat.,燥咳と内熱は、同じ衣を着るな。
+MENTOR_EXPAND3_2,下边的困热，话说满就失礼。,"For muggy heaviness below, saying too much is rude.",下の困熱は、言い過ぎると失礼だ。
+MENTOR_EXPAND3_3,碰伤看青肿，不看热闹。,"For a bump, watch the bruise — not the spectacle.",打撲は青腫れを見よ。騒ぎを見るな。
+DEMO_HINT_EXPAND3,青石证印可亮到九枚。小儿格不做。,Qingshi seals can light up to nine. No child slot.,青石証印は九枚まで。小児枠は作らない。

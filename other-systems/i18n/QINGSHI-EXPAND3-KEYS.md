@@ -1,0 +1,15 @@
+# V136 青石再扩键（+3 → 共 13 人 / 9 印 · 除小儿）
+
+承 V134/V135 风格。湿热文案克制；外伤无血腥。
+
+| 组 | 键 |
+| --- | --- |
+| 印墙 | `SEAL_WALL_TITLE`、`SEAL_COUNT_HINT`（9）、旧四 `SEAL_FENGHAN_BIAO/GANYU_QIZHI/YINXU_NEIRE/XUEXU_GANYU` |
+| 新三印 | `SEAL_YINXU_ZAOKE` / `SEAL_SHIRE_XIAZHU` / `SEAL_WAISHANG_ZHONGTONG` |
+| 炭妇·燥咳 | `CHAR_TANFU_*`、`TANFU_*`、`FOLLOWUP_YINXU_ZAOKE`、`CASE_ZAOKE_*` |
+| 田汉·湿热 | `CHAR_TIANHAN_*`、`TIANHAN_*`、`FOLLOWUP_SHIRE_XIAZHU`、`CASE_SHIRE_*`（克制） |
+| 木匠·外伤 | `CHAR_MUJIANG_*`、`MUJIANG_*`、`FOLLOWUP_WAISHANG_ZHONGTONG`、`CASE_WAISHANG_*`（无血腥） |
+| 旁白 | `MENTOR_EXPAND3_1..3`、`DEMO_HINT_EXPAND3` |
+| 免责 | **不改** |
+
+十三人表：`patients/SCRIPT.md`。锁：`logic/QINGSHI-EXPAND3-V136.md`。

@@ -1,6 +1,6 @@
 {
   "id": "xinglin-mowen-slice-logic",
-  "version": 15,
+  "version": 16,
   "project": "墨问岐黄 / 杏林墨问",
   "scope": "vertical_slice",
   "notes": {
@@ -38,7 +38,8 @@
     "v132": "emotion counsel path=emotion; 6 cards; ganyu teach; offline option tree",
     "v133": "xiuniang xuexu_ganyu; suanzaoren/chuanxiong(+longgu/muli mistreat); shenmen+sanyinjiao case_temp_open; trust/town_permit; emotion 2 cards; xiuniang_case_ok",
     "v134": "qingshi +3 cases fengre_biao/shiji/pixu_shikun; chars zoufan/yanhou/yaoqin; shanzha digest_food; seals play.seals; waiting weights+permit; quchi/sanyinjiao case_temp_open; qingshi_expand_ok; cross mistreat 风热↔风寒",
-    "v135": "qingshi expand2 +3 cases yangxu_weihan/xueyu_qing/shushi; chars danfu/bashi/jiaoli; guanyuan moxa case_temp; seals UI 6; waiting yangxu_weihan_teach_once; mistreat 阳虚误清/血瘀猛破/暑湿纯燥; qingshi_expand2_ok; no permanent vol1_open expand"
+    "v135": "qingshi expand2 +3 cases yangxu_weihan/xueyu_qing/shushi; chars danfu/bashi/jiaoli; guanyuan moxa case_temp; seals UI 6; waiting yangxu_weihan_teach_once; mistreat 阳虚误清/血瘀猛破/暑湿纯燥; qingshi_expand2_ok; no permanent vol1_open expand",
+    "v136": "qingshi expand3 +3 cases yinxu_zaoke/shire_xiazhu/waishang_zhongtong; chars tanfu/tianhan/mujiang; maidong+yiyiren forage false; seals UI +3→9 expand + old_four_also_write; waiting yinxu_zaoke_teach_once; mistreat 燥咳苦寒/湿热温补/外伤猛破; taixi+lieque/sanyinjiao case_temp_open; qingshi_expand3_ok; vol1_open still hegu/zusanli; no pediatric"
   },
   "exam_ids": [
     "wang",
@@ -1782,6 +1783,110 @@
         "teaching": false,
         "warning": null
       }
+    },
+    {
+      "id": "maidong",
+      "zh": "麦冬",
+      "en": "Ophiopogon",
+      "ja": "麦門冬",
+      "nature": "slightly_cold",
+      "flavor": [
+        "sweet",
+        "slightly_bitter"
+      ],
+      "direction": "none",
+      "actions": [
+        "nourish_yin",
+        "stop_cough",
+        "clear_heat"
+      ],
+      "zheng_cost": 0,
+      "onset": "medium",
+      "temp": -1,
+      "funcs": {
+        "补阴": 0.8,
+        "止咳": 0.65,
+        "清热": 0.4
+      },
+      "incompat_group": [],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平",
+      "forage": {
+        "enabled": false
+      },
+      "process": {
+        "needs_process": false,
+        "process_method": null,
+        "process_methods": [],
+        "raw_id": "maidong",
+        "processed_id": "maidong",
+        "state_model": "ready",
+        "default_state_on_forage_or_cabinet": "processed",
+        "teaching": false,
+        "warning": null
+      },
+      "note": "肺阴润燥轻药；切片不采；阴虚燥咳合法方用"
+    },
+    {
+      "id": "yiyiren",
+      "zh": "薏苡仁",
+      "en": "Coix seed",
+      "ja": "薏苡仁",
+      "nature": "cool",
+      "flavor": [
+        "sweet",
+        "bland"
+      ],
+      "direction": "down",
+      "actions": [
+        "drain_damp",
+        "tonify_spleen",
+        "clear_heat"
+      ],
+      "zheng_cost": 0,
+      "onset": "medium",
+      "temp": -1,
+      "funcs": {
+        "利水": 0.75,
+        "补气": 0.45,
+        "清热": 0.35
+      },
+      "incompat_group": [],
+      "season_organs": {},
+      "season_boost": {
+        "春": 1.0,
+        "夏": 1.0,
+        "长夏": 1.0,
+        "秋": 1.0,
+        "冬": 1.0
+      },
+      "region_tags": [],
+      "climate_fit": [],
+      "role_default": "平",
+      "forage": {
+        "enabled": false
+      },
+      "process": {
+        "needs_process": false,
+        "process_method": null,
+        "process_methods": [],
+        "raw_id": "yiyiren",
+        "processed_id": "yiyiren",
+        "state_model": "ready",
+        "default_state_on_forage_or_cabinet": "processed",
+        "teaching": false,
+        "warning": null
+      },
+      "note": "清利湿热轻药；切片不采；湿热下注合法方可选"
     },
     {
       "id": "huangbai",
@@ -6242,6 +6347,1010 @@
         "solo_cap_rank": "slight",
         "note": "情志非主路径"
       }
+    },
+    {
+      "id": "yinxu_zaoke",
+      "internal_name_zh": "阴虚燥咳",
+      "bind_character_id": "char_tanfu",
+      "urgency": "medium",
+      "zheng_qi": 0.55,
+      "primary_exams": [
+        "wen_ask",
+        "wen_listen",
+        "qie"
+      ],
+      "pulse": {
+        "id": "xi",
+        "zh": "细",
+        "en": "thin",
+        "ja": "細",
+        "rate_bpm": 76,
+        "visual": {
+          "depth": 0.4,
+          "amplitude": 0.26,
+          "tension": 0.35,
+          "width": 0.2,
+          "smoothness": 0.35,
+          "note_for_art": "细、略浮、干涩感；勿做成阴虚内热那种细数疾跳（婆婆案）。截图用：细墨线偏浅、少滑。"
+        }
+      },
+      "required_actions": [
+        "nourish_yin"
+      ],
+      "preferred_actions": [
+        "clear_heat",
+        "clear_deficiency_heat",
+        "stop_cough",
+        "calm_shen",
+        "harmonize"
+      ],
+      "preferred_natures": [
+        "cool",
+        "neutral",
+        "slightly_cold"
+      ],
+      "forbidden_actions": [
+        "warm_yang",
+        "induce_sweat",
+        "restore_yang"
+      ],
+      "over_treat_actions": [
+        "clear_heat",
+        "clear_deficiency_heat"
+      ],
+      "over_treat_zheng_cost": 4,
+      "clues": {
+        "wang": {
+          "unlocks": [
+            "dry_lips",
+            "thin_flush_light",
+            "tongue_dry_little_coat"
+          ],
+          "zh": [
+            "唇干、面色不润",
+            "舌偏干、苔少"
+          ],
+          "en": [
+            "dry lips, complexion not moist",
+            "tongue dry, little coat"
+          ],
+          "ja": [
+            "唇が乾き、潤いが薄い",
+            "舌が乾き、苔が少ない"
+          ]
+        },
+        "wen_listen": {
+          "unlocks": [
+            "dry_cough_sound",
+            "thin_voice"
+          ],
+          "zh": [
+            "干咳声，痰不多",
+            "嗓子发紧发干"
+          ],
+          "en": [
+            "dry cough, little phlegm",
+            "throat sounds tight and dry"
+          ],
+          "ja": [
+            "乾いた咳、痰は少ない",
+            "喉がつっぱって乾く"
+          ]
+        },
+        "wen_ask": {
+          "unlocks": [
+            "dry_cough",
+            "scant_phlegm",
+            "dry_throat",
+            "night_cough"
+          ],
+          "inquiry_anchor": [
+            "干咳，痰少或无痰",
+            "咽干、想润一润",
+            "入夜咳更醒目",
+            "秋燥或抄书久坐后加重",
+            "不主诉五心烦热（那是另一类）"
+          ],
+          "never_say": [
+            "阴虚燥咳",
+            "沙参麦冬",
+            "阴虚内热",
+            "六味地黄",
+            "知柏地黄",
+            "肺燥"
+          ]
+        },
+        "qie": {
+          "unlocks": [
+            "pulse_xi_dry"
+          ],
+          "zh": [
+            "脉细，略带干涩，不甚数"
+          ],
+          "en": [
+            "thin pulse with a dry feel, not very rapid"
+          ],
+          "ja": [
+            "脈は細く乾き気味、あまり数でない"
+          ]
+        }
+      },
+      "legal_formula_examples": [
+        {
+          "herbs": [
+            "maidong",
+            "shudi",
+            "gancao"
+          ],
+          "onset": "medium",
+          "note": "滋阴润肺轻方；偏肺燥咳，勿当六味肾阴套"
+        },
+        {
+          "herbs": [
+            "zhimu",
+            "shudi",
+            "maidong",
+            "gancao"
+          ],
+          "onset": "medium",
+          "note": "知母轻清虚热+麦冬润燥；勿叠黄柏苦寒当内热"
+        }
+      ],
+      "legal_point_examples": [
+        {
+          "points": [
+            "taixi"
+          ],
+          "onset": "slow",
+          "note": "太溪滋阴；本案临时开"
+        },
+        {
+          "points": [
+            "taixi",
+            "lieque"
+          ],
+          "onset": "medium",
+          "note": "太溪+列缺：滋阴兼宣肺止咳轻配；列缺临时开"
+        }
+      ],
+      "common_mistreat": [
+        {
+          "herbs": [
+            "zhimu",
+            "huangbai"
+          ],
+          "why": "当阴虚内热苦寒堆：燥咳更伤胃津，咳干不润"
+        },
+        {
+          "herbs": [
+            "mahuang"
+          ],
+          "why": "温散发汗伤阴，干咳咽干更重"
+        },
+        {
+          "herbs": [
+            "fuzi",
+            "ganjiang"
+          ],
+          "why": "温阳助燥"
+        }
+      ],
+      "settlement_flavor": {
+        "good": {
+          "zh": "津上来了，干咳松了半截。",
+          "en": "Fluids rise; the dry cough eases by half.",
+          "ja": "津が上り、乾咳が半分ほどける。"
+        },
+        "slow": {
+          "zh": "阴在润，咳还要养几天。",
+          "en": "Yin is moistening; the cough needs days.",
+          "ja": "陰は潤うが、咳は日が要る。"
+        },
+        "over": {
+          "zh": "苦寒清过了，胃先干、咳更呛。",
+          "en": "Cleared too bitter-cold; stomach dries, cough harsher.",
+          "ja": "苦寒が過ぎ、胃が乾き咳がきつくなる。"
+        },
+        "mis": {
+          "zh": "越温越燥，咽更干、咳更紧。",
+          "en": "The more warmed, the drier the throat and tighter the cough.",
+          "ja": "温めるほど燥き、喉が乾き咳が緊くなる。"
+        }
+      },
+      "engine": {
+        "syndrome_bucket": "肺阴虚燥咳",
+        "R_need": {
+          "补阴": 1.0,
+          "止咳": 0.55,
+          "清热": 0.25
+        },
+        "R_temp": -1,
+        "B_ok_formula_names": [
+          "麦冬熟地甘",
+          "知母麦冬轻方"
+        ],
+        "B_ok_examples": "legal_formula_examples / legal_point_examples",
+        "master_zang": "肺",
+        "tier": "jing",
+        "ten_q_priority": [
+          "汗",
+          "渴",
+          "寒热",
+          "旧病"
+        ],
+        "distinguish_from": "yinxu_neire"
+      },
+      "ten_q_priority": [
+        "汗",
+        "渴",
+        "寒热",
+        "旧病"
+      ],
+      "ten_q_priority_ids": [
+        "han",
+        "ke",
+        "hanre",
+        "jiubing"
+      ],
+      "revisit": {
+        "enabled": true,
+        "delay_days": 1,
+        "read_on_next_clinic_enter": false,
+        "template_key": "revisit.yinxu_zaoke",
+        "from_rank": {
+          "toward_heal": "good",
+          "clear": "good",
+          "work": "slow",
+          "slight": "slow",
+          "none": "mis"
+        },
+        "lines_fallback": {
+          "good": {
+            "zh": "津上来了，干咳松了半截。",
+            "en": "Fluids rise; the dry cough eases by half.",
+            "ja": "津が上り、乾咳が半分ほどける。"
+          },
+          "slow": {
+            "zh": "阴在润，咳还要养几天。",
+            "en": "Yin is moistening; the cough needs days.",
+            "ja": "陰は潤うが、咳は日が要る。"
+          },
+          "over": {
+            "zh": "苦寒清过了，胃先干、咳更呛。",
+            "en": "Cleared too bitter-cold; stomach dries, cough harsher.",
+            "ja": "苦寒が過ぎ、胃が乾き咳がきつくなる。"
+          },
+          "mis": {
+            "zh": "越温越燥，咽更干、咳更紧。",
+            "en": "The more warmed, the drier the throat and tighter the cough.",
+            "ja": "温めるほど燥き、喉が乾き咳が緊くなる。"
+          }
+        },
+        "note": "剧本可覆盖；误当内热苦寒堆或麻黄发汗须带回访咽干咳紧",
+        "seat_on_due": true,
+        "flavor_keys": [
+          "good",
+          "slow",
+          "over",
+          "mis"
+        ],
+        "observe_close_line_key": "revisit.yinxu_zaoke.observe_close"
+      },
+      "legal_food_examples": [
+        {
+          "foods": [
+            "zhou_di",
+            "bingtang"
+          ],
+          "onset": "slow",
+          "note": "冰糖粥轻润（无梨项时替代）"
+        },
+        {
+          "foods": [
+            "zhou_di",
+            "lianzi"
+          ],
+          "onset": "slow",
+          "note": "莲子粥轻清"
+        }
+      ],
+      "food_fit": {
+        "preferred_actions": [
+          "nourish_yin",
+          "harmonize",
+          "calm_shen"
+        ],
+        "preferred_tags": [
+          "yin_light",
+          "cool_light",
+          "porridge"
+        ],
+        "discouraged_tags": [
+          "warm_pungent",
+          "dry_harsh"
+        ],
+        "solo_food_cap_rank": "toward_heal",
+        "solo_food_note": "燥咳可单走轻润粥，准中等"
+      },
+      "legal_emotion_examples": [],
+      "emotion_fit": {
+        "preferred_actions": [
+          "calm_shen",
+          "harmonize"
+        ],
+        "solo_cap_rank": "slight",
+        "note": "情志非主；安神轻辅"
+      },
+      "distinguish_note": "≠ yinxu_neire：本案偏肺燥干咳少痰咽干；婆婆案偏肾阴虚热/五心烦热盗汗。合法方用麦冬润肺，勿套六味/知柏。"
+    },
+    {
+      "id": "shire_xiazhu",
+      "internal_name_zh": "湿热下注",
+      "bind_character_id": "char_tianhan",
+      "urgency": "medium",
+      "zheng_qi": 0.65,
+      "primary_exams": [
+        "wen_ask",
+        "wang",
+        "qie"
+      ],
+      "pulse": {
+        "id": "hua_shu",
+        "zh": "滑数",
+        "en": "slippery-rapid",
+        "ja": "滑数",
+        "rate_bpm": 86,
+        "visual": {
+          "depth": 0.38,
+          "amplitude": 0.55,
+          "tension": 0.3,
+          "width": 0.5,
+          "smoothness": 0.75,
+          "note_for_art": "滑而偏数；与暑湿濡数区分：更滑利、略有力。截图用：墨带滑快，勿弦紧。"
+        }
+      },
+      "required_actions": [
+        "clear_heat",
+        "drain_damp"
+      ],
+      "preferred_actions": [
+        "dry_damp",
+        "tonify_spleen",
+        "harmonize"
+      ],
+      "preferred_natures": [
+        "cold",
+        "cool",
+        "slightly_cold"
+      ],
+      "forbidden_actions": [
+        "warm_yang",
+        "restore_yang",
+        "warm_interior"
+      ],
+      "over_treat_actions": [
+        "clear_heat",
+        "drain_damp",
+        "dry_damp"
+      ],
+      "over_treat_zheng_cost": 4,
+      "clues": {
+        "wang": {
+          "unlocks": [
+            "heavy_lower",
+            "tongue_yellow_greasy_light",
+            "sticky_look"
+          ],
+          "zh": [
+            "下身困重感、步态略滞",
+            "舌苔黄腻偏薄"
+          ],
+          "en": [
+            "heavy below, gait a bit sticky",
+            "thin yellow greasy coat"
+          ],
+          "ja": [
+            "下半身が重く歩みが滞る",
+            "苔が薄黄膩"
+          ]
+        },
+        "wen_listen": {
+          "unlocks": [
+            "lazy_heavy_voice"
+          ],
+          "zh": [
+            "说话带困，不想多动"
+          ],
+          "en": [
+            "voice heavy, little urge to move"
+          ],
+          "ja": [
+            "声が重く、動きたがらない"
+          ]
+        },
+        "wen_ask": {
+          "unlocks": [
+            "lower_heaviness",
+            "short_dark_urine_impression",
+            "sticky_heat"
+          ],
+          "inquiry_anchor": [
+            "下身困热、沉重",
+            "小便短赤印象（点到为止）",
+            "口苦或粘腻",
+            "田埂劳作后更明显",
+            "问寒热与汗，勿追问暴露部位"
+          ],
+          "never_say": [
+            "湿热下注",
+            "四妙",
+            "龙胆泻肝",
+            "真实泌尿",
+            "脚气方名",
+            "下焦湿热"
+          ]
+        },
+        "qie": {
+          "unlocks": [
+            "pulse_hua_shu"
+          ],
+          "zh": [
+            "脉滑数，往来流利偏快"
+          ],
+          "en": [
+            "slippery-rapid—rolling and a bit fast"
+          ],
+          "ja": [
+            "脈は滑数、流利でやや速い"
+          ]
+        }
+      },
+      "legal_formula_examples": [
+        {
+          "herbs": [
+            "huangbai",
+            "zexie",
+            "fuling"
+          ],
+          "onset": "medium",
+          "note": "清利湿热轻方；文案克制"
+        },
+        {
+          "herbs": [
+            "huangbai",
+            "zexie",
+            "fuling",
+            "yiyiren"
+          ],
+          "onset": "medium",
+          "note": "加薏苡仁渗湿健脾轻配"
+        }
+      ],
+      "legal_point_examples": [
+        {
+          "points": [
+            "sanyinjiao"
+          ],
+          "onset": "medium",
+          "note": "本案临时开三阴交；针宜少"
+        },
+        {
+          "points": [
+            "zusanli",
+            "sanyinjiao"
+          ],
+          "onset": "slow",
+          "note": "足三里可选护中 + 三阴交"
+        }
+      ],
+      "common_mistreat": [
+        {
+          "herbs": [
+            "fuzi",
+            "ganjiang"
+          ],
+          "why": "纯温补：热湿更恋下，困重短赤印象加重"
+        },
+        {
+          "herbs": [
+            "mahuang"
+          ],
+          "why": "发汗伤正，湿热不去"
+        },
+        {
+          "herbs": [
+            "shudi"
+          ],
+          "why": "滋腻碍湿"
+        }
+      ],
+      "settlement_flavor": {
+        "good": {
+          "zh": "下困退了，人清爽些。",
+          "en": "Heaviness below eases; feels clearer.",
+          "ja": "下の重さが退き、清々しい。"
+        },
+        "slow": {
+          "zh": "湿热在化，困还要几天。",
+          "en": "Damp-heat easing; heaviness takes days.",
+          "ja": "湿熱は化けるが、重さは日が要る。"
+        },
+        "over": {
+          "zh": "清利太过，人空乏、口更干。",
+          "en": "Cleared/drained too hard; emptied, mouth drier.",
+          "ja": "清利しすぎて空乏、口が乾く。"
+        },
+        "mis": {
+          "zh": "温补一压，困热更恋下。",
+          "en": "Warm tonics made the sticky heat cling below.",
+          "ja": "温補で粘熱が下に残る。"
+        }
+      },
+      "engine": {
+        "syndrome_bucket": "湿热下注",
+        "R_need": {
+          "清热": 0.95,
+          "祛湿": 1.0,
+          "健脾": 0.35
+        },
+        "R_temp": -1,
+        "B_ok_formula_names": [
+          "黄柏泽泻茯苓轻方"
+        ],
+        "B_ok_examples": "legal_formula_examples / legal_point_examples",
+        "master_zang": "脾",
+        "tier": "jing",
+        "ten_q_priority": [
+          "寒热",
+          "便",
+          "汗",
+          "头身"
+        ]
+      },
+      "ten_q_priority": [
+        "寒热",
+        "便",
+        "汗",
+        "头身"
+      ],
+      "ten_q_priority_ids": [
+        "hanre",
+        "bian",
+        "han",
+        "toushen"
+      ],
+      "revisit": {
+        "enabled": true,
+        "delay_days": 1,
+        "read_on_next_clinic_enter": false,
+        "template_key": "revisit.shire_xiazhu",
+        "from_rank": {
+          "toward_heal": "good",
+          "clear": "good",
+          "work": "slow",
+          "slight": "slow",
+          "none": "mis"
+        },
+        "lines_fallback": {
+          "good": {
+            "zh": "下困退了，人清爽些。",
+            "en": "Heaviness below eases; feels clearer.",
+            "ja": "下の重さが退き、清々しい。"
+          },
+          "slow": {
+            "zh": "湿热在化，困还要几天。",
+            "en": "Damp-heat easing; heaviness takes days.",
+            "ja": "湿熱は化けるが、重さは日が要る。"
+          },
+          "over": {
+            "zh": "清利太过，人空乏、口更干。",
+            "en": "Cleared/drained too hard; emptied, mouth drier.",
+            "ja": "清利しすぎて空乏、口が乾く。"
+          },
+          "mis": {
+            "zh": "温补一压，困热更恋下。",
+            "en": "Warm tonics made the sticky heat cling below.",
+            "ja": "温補で粘熱が下に残る。"
+          }
+        },
+        "note": "剧本可覆盖；误用附姜纯温补须带回访下困加重；文案保持克制",
+        "seat_on_due": true,
+        "flavor_keys": [
+          "good",
+          "slow",
+          "over",
+          "mis"
+        ],
+        "observe_close_line_key": "revisit.shire_xiazhu.observe_close"
+      },
+      "legal_food_examples": [
+        {
+          "foods": [
+            "zhou_di",
+            "lianzi"
+          ],
+          "onset": "slow",
+          "note": "清淡莲粥"
+        },
+        {
+          "foods": [
+            "zhou_di",
+            "bingtang"
+          ],
+          "onset": "slow",
+          "note": "轻清粥；勿厚腻"
+        }
+      ],
+      "food_fit": {
+        "preferred_actions": [
+          "clear_heat",
+          "drain_damp",
+          "tonify_spleen",
+          "harmonize"
+        ],
+        "preferred_tags": [
+          "cool_light",
+          "bland",
+          "porridge"
+        ],
+        "discouraged_tags": [
+          "warm_pungent",
+          "heavy_tonify"
+        ],
+        "solo_food_cap_rank": "work",
+        "solo_food_note": "湿热单走食疗：清淡可温分，准偏低"
+      },
+      "legal_emotion_examples": [],
+      "emotion_fit": {
+        "preferred_actions": [],
+        "solo_cap_rank": "slight",
+        "note": "情志低；非主路径"
+      }
+    },
+    {
+      "id": "waishang_zhongtong",
+      "internal_name_zh": "外伤肿痛",
+      "bind_character_id": "char_mujiang",
+      "urgency": "medium",
+      "zheng_qi": 0.75,
+      "primary_exams": [
+        "wang",
+        "wen_ask",
+        "qie"
+      ],
+      "pulse": {
+        "id": "xian",
+        "zh": "弦",
+        "en": "wiry",
+        "ja": "弦",
+        "rate_bpm": 72,
+        "visual": {
+          "depth": 0.42,
+          "amplitude": 0.48,
+          "tension": 0.65,
+          "width": 0.32,
+          "smoothness": 0.35,
+          "note_for_art": "略弦轻涩感；勿做成血瘀弦涩重滞。截图用：墨线略紧，勿断续狠涩。"
+        }
+      },
+      "required_actions": [
+        "move_blood"
+      ],
+      "preferred_actions": [
+        "move_qi",
+        "nourish_blood",
+        "harmonize",
+        "calm_shen"
+      ],
+      "preferred_natures": [
+        "warm",
+        "neutral"
+      ],
+      "forbidden_actions": [
+        "clear_heat",
+        "resolve_toxin",
+        "cool_blood"
+      ],
+      "over_treat_actions": [
+        "move_blood"
+      ],
+      "over_treat_zheng_cost": 5,
+      "clues": {
+        "wang": {
+          "unlocks": [
+            "local_bruise_q",
+            "guard_limb",
+            "tongue_normalish"
+          ],
+          "zh": [
+            "局部淤青肿痛（Q版）",
+            "护着碰伤处，不愿用力"
+          ],
+          "en": [
+            "local Q-style bruise and swelling",
+            "guards the bumped spot"
+          ],
+          "ja": [
+            "局所の痣と腫れ（Q版）",
+            "ぶつけた所をかばう"
+          ]
+        },
+        "wen_listen": {
+          "unlocks": [
+            "wince_voice"
+          ],
+          "zh": [
+            "说话偶带憋一下",
+            "搬动时轻嘶"
+          ],
+          "en": [
+            "voice catches once",
+            "a light hiss when moving"
+          ],
+          "ja": [
+            "声が一度詰まる",
+            "動かすと軽く息を止める"
+          ]
+        },
+        "wen_ask": {
+          "unlocks": [
+            "local_swell_pain",
+            "bump_fall",
+            "worse_on_move"
+          ],
+          "inquiry_anchor": [
+            "某处碰伤后肿痛",
+            "按着醒目、活动时加重",
+            "跌仆或木作时撞到",
+            "无开放创面、不谈血腥",
+            "旧伤或胸口偶闷可附带"
+          ],
+          "never_say": [
+            "骨折手术级",
+            "血腥",
+            "开放创面",
+            "血府逐瘀",
+            "破血重剂",
+            "外伤肿痛"
+          ]
+        },
+        "qie": {
+          "unlocks": [
+            "pulse_xian_light"
+          ],
+          "zh": [
+            "脉弦，力度不重"
+          ],
+          "en": [
+            "wiry pulse, not heavy"
+          ],
+          "ja": [
+            "脈は弦、力は重くない"
+          ]
+        }
+      },
+      "legal_formula_examples": [
+        {
+          "herbs": [
+            "danggui",
+            "chuanxiong",
+            "baishao"
+          ],
+          "onset": "medium",
+          "note": "养血活血消肿轻方；同血瘀轻路径，勿猛破"
+        },
+        {
+          "herbs": [
+            "danggui",
+            "chuanxiong",
+            "baishao",
+            "gancao"
+          ],
+          "onset": "slow",
+          "note": "加甘草缓中更稳"
+        }
+      ],
+      "legal_point_examples": [
+        {
+          "points": [
+            "hegu"
+          ],
+          "onset": "medium",
+          "note": "合谷轻通；局部穴/灸慎用；可记阿是但不新增穴 id"
+        },
+        {
+          "points": [
+            "neiguan"
+          ],
+          "onset": "slow",
+          "note": "内关轻安抚理气；勿重刺局部"
+        }
+      ],
+      "common_mistreat": [
+        {
+          "herbs": [
+            "jinyinhua",
+            "lianqiao",
+            "huangbai"
+          ],
+          "why": "寒清堆：血更凝，肿痛滞留"
+        },
+        {
+          "herbs": [
+            "fuzi",
+            "ganjiang"
+          ],
+          "why": "燥烈温：假缓解后更滞"
+        }
+      ],
+      "settlement_flavor": {
+        "good": {
+          "zh": "淤青在化，肿痛退了半截。",
+          "en": "Bruise easing; swelling-pain half gone.",
+          "ja": "痣がほどけ、腫れ痛みが半分退く。"
+        },
+        "slow": {
+          "zh": "血在活，肿处还要养几天。",
+          "en": "Blood is moving; the swell needs days.",
+          "ja": "血は巡るが、腫れは日が要る。"
+        },
+        "over": {
+          "zh": "活血太猛，人空、痛处反跳。",
+          "en": "Moved blood too hard; emptied, pain rebounds.",
+          "ja": "活血しすぎて空になり、痛みが跳ねる。"
+        },
+        "mis": {
+          "zh": "药不对路，肿痛更明显了。",
+          "en": "Wrong path; swell-pain feels clearer.",
+          "ja": "薬が合わず、腫れ痛みが目立つ。"
+        }
+      },
+      "engine": {
+        "syndrome_bucket": "外伤肿痛轻",
+        "R_need": {
+          "活血": 1.0,
+          "养血": 0.55,
+          "理气": 0.45
+        },
+        "R_temp": 1,
+        "B_ok_formula_names": [
+          "当归川芎芍轻方"
+        ],
+        "B_ok_examples": "legal_formula_examples / legal_point_examples",
+        "master_zang": "肝",
+        "tier": "jing",
+        "ten_q_priority": [
+          "头身",
+          "旧病",
+          "因",
+          "胸"
+        ]
+      },
+      "ten_q_priority": [
+        "头身",
+        "旧病",
+        "因",
+        "胸"
+      ],
+      "ten_q_priority_ids": [
+        "toushen",
+        "jiubing",
+        "yin",
+        "xiong"
+      ],
+      "revisit": {
+        "enabled": true,
+        "delay_days": 1,
+        "read_on_next_clinic_enter": false,
+        "template_key": "revisit.waishang_zhongtong",
+        "from_rank": {
+          "toward_heal": "good",
+          "clear": "good",
+          "work": "slow",
+          "slight": "slow",
+          "none": "mis"
+        },
+        "lines_fallback": {
+          "good": {
+            "zh": "淤青在化，肿痛退了半截。",
+            "en": "Bruise easing; swelling-pain half gone.",
+            "ja": "痣がほどけ、腫れ痛みが半分退く。"
+          },
+          "slow": {
+            "zh": "血在活，肿处还要养几天。",
+            "en": "Blood is moving; the swell needs days.",
+            "ja": "血は巡るが、腫れは日が要る。"
+          },
+          "over": {
+            "zh": "活血太猛，人空、痛处反跳。",
+            "en": "Moved blood too hard; emptied, pain rebounds.",
+            "ja": "活血しすぎて空になり、痛みが跳ねる。"
+          },
+          "mis": {
+            "zh": "药不对路，肿痛更明显了。",
+            "en": "Wrong path; swell-pain feels clearer.",
+            "ja": "薬が合わず、腫れ痛みが目立つ。"
+          }
+        },
+        "note": "剧本可覆盖；猛破/寒清堆须带回访肿痛加重；文案无血腥",
+        "seat_on_due": true,
+        "flavor_keys": [
+          "good",
+          "slow",
+          "over",
+          "mis"
+        ],
+        "observe_close_line_key": "revisit.waishang_zhongtong.observe_close"
+      },
+      "legal_food_examples": [
+        {
+          "foods": [
+            "zhou_di",
+            "hongzao"
+          ],
+          "onset": "slow",
+          "note": "温润护中；食疗非主"
+        },
+        {
+          "foods": [
+            "zhou_di",
+            "shengjiang"
+          ],
+          "onset": "slow",
+          "note": "轻度温通"
+        }
+      ],
+      "food_fit": {
+        "preferred_actions": [
+          "harmonize",
+          "nourish_blood",
+          "warm_middle"
+        ],
+        "preferred_tags": [
+          "warm",
+          "mild",
+          "protect_middle"
+        ],
+        "discouraged_tags": [
+          "cold_clear",
+          "heavy_break"
+        ],
+        "solo_food_cap_rank": "slight",
+        "solo_food_note": "外伤轻证单走食疗：仅温润，准偏低"
+      },
+      "legal_emotion_examples": [
+        {
+          "listen": "anchor_match",
+          "cards": [
+            "warm_calm"
+          ],
+          "close": "optional",
+          "target_rank": "slight",
+          "note": "安抚；情志辅线"
+        },
+        {
+          "listen": "anchor_match",
+          "cards": [
+            "vent_rest",
+            "warm_calm"
+          ],
+          "target_rank": "work",
+          "note": "倾诉停歇+香暖；非主路径"
+        }
+      ],
+      "emotion_fit": {
+        "preferred_actions": [
+          "calm_shen",
+          "harmonize",
+          "soothe_liver"
+        ],
+        "preferred_cards": [
+          "warm_calm",
+          "vent_rest"
+        ],
+        "solo_cap_rank": "work",
+        "note": "情志安抚为辅 OK"
+      }
     }
   ],
   "scoring": {
@@ -7544,7 +8653,15 @@
       ],
       "shushi": [
         "quchi"
-      ]
+      ],
+      "yinxu_zaoke": [
+        "taixi",
+        "lieque"
+      ],
+      "shire_xiazhu": [
+        "sanyinjiao"
+      ],
+      "waishang_zhongtong": []
     },
     "case_temp_open_note": "不永久写入 vol1_open_ids；仅当 bind case 为 key 时临时可选",
     "shenmen_needle": {
@@ -8901,7 +10018,7 @@
         "seal.xueyu_qing",
         "seal.shushi"
       ],
-      "note": "V134 3枚 + V135 3枚 = 共6枚小印；不做十二墙"
+      "note": "V134 3枚 + V135 3枚 = 共6枚小印；V136 expand3 再+3 共9 expand 印，且旧四案亦写 play.seals（见 qingshi_expand3_rules.seals）"
     },
     "waiting": {
       "max_seats": 4,
@@ -9052,6 +10169,205 @@
       "romance",
       "Steam",
       "J/T"
+    ]
+  },
+  "qingshi_expand3_rules": {
+    "id": "qingshi_expand3_v136",
+    "version": 136,
+    "cases": [
+      "yinxu_zaoke",
+      "shire_xiazhu",
+      "waishang_zhongtong"
+    ],
+    "characters": [
+      "char_tanfu",
+      "char_tianhan",
+      "char_mujiang"
+    ],
+    "seals": {
+      "key": "play.seals",
+      "on_settle_if_rank_at_least": "clear",
+      "write_case_id": true,
+      "ui_flash_keys": [
+        "seal.yinxu_zaoke",
+        "seal.shire_xiazhu",
+        "seal.waishang_zhongtong"
+      ],
+      "expand_ui_flash_keys_total_9": [
+        "seal.fengre_biao",
+        "seal.shiji",
+        "seal.pixu_shikun",
+        "seal.yangxu_weihan",
+        "seal.xueyu_qing",
+        "seal.shushi",
+        "seal.yinxu_zaoke",
+        "seal.shire_xiazhu",
+        "seal.waishang_zhongtong"
+      ],
+      "old_four_also_write": [
+        "fenghan_biao",
+        "ganyu_qizhi",
+        "yinxu_neire",
+        "xuexu_ganyu"
+      ],
+      "seal_wall_ids": [
+        "fengre_biao",
+        "shiji",
+        "pixu_shikun",
+        "yangxu_weihan",
+        "xueyu_qing",
+        "shushi",
+        "yinxu_zaoke",
+        "shire_xiazhu",
+        "waishang_zhongtong",
+        "fenghan_biao",
+        "ganyu_qizhi",
+        "yinxu_neire",
+        "xuexu_ganyu"
+      ],
+      "note": "本档+3 expand 印；与 V134/135 共9枚 expand 小印；旧四案 settle≥clear 亦写 play.seals；阴虚内热≠阴虚燥咳分两印；不设小儿格"
+    },
+    "waiting": {
+      "max_seats": 4,
+      "pool_includes_old_ten": true,
+      "weights": {
+        "base": {
+          "yinxu_zaoke": 0.35,
+          "shire_xiazhu": 0.35,
+          "waishang_zhongtong": 0.35
+        },
+        "with_town_permit_mult": 1.8,
+        "without_permit": {
+          "yinxu_zaoke_teach_once": true,
+          "yinxu_zaoke_weight": 0.25,
+          "shire_xiazhu": 0.05,
+          "waishang_zhongtong": 0.05
+        }
+      },
+      "rotation": "A-D seats; overflow rotates in pool"
+    },
+    "cross_mistreat": {
+      "zaoke_as_neire_bitter": {
+        "if_case": "yinxu_zaoke",
+        "if_herbs_any_pairs": [
+          [
+            "zhimu",
+            "huangbai"
+          ]
+        ],
+        "if_herbs_any": [
+          "mahuang"
+        ],
+        "penalty": "mistreat + stability",
+        "revisit": "咽更干/咳更紧",
+        "note": "燥咳当内热苦寒堆，或麻黄温散"
+      },
+      "shire_warm_tonify": {
+        "if_case": "shire_xiazhu",
+        "if_herbs_any_pairs": [
+          [
+            "fuzi",
+            "ganjiang"
+          ]
+        ],
+        "penalty": "mistreat + stability",
+        "revisit": "下困更重",
+        "note": "湿热误温补"
+      },
+      "waishang_harsh_break": {
+        "if_case": "waishang_zhongtong",
+        "note": "外伤猛破：同血瘀忌寒清堆；现池无红花桃仁，勿重剂破血",
+        "if_herbs_any": [
+          "jinyinhua",
+          "lianqiao",
+          "huangbai"
+        ],
+        "penalty": "mistreat + stability",
+        "revisit": "肿痛更明显"
+      }
+    },
+    "distinguish_note": {
+      "yinxu_zaoke_vs_yinxu_neire": "燥咳=肺阴干咳少痰咽干（麦冬润肺方）；内热=肾阴虚热五心烦热盗汗（六味/知柏）。分两印。"
+    },
+    "acu_case_temp_open": {
+      "yinxu_zaoke": [
+        "taixi",
+        "lieque"
+      ],
+      "shire_xiazhu": [
+        "sanyinjiao"
+      ],
+      "waishang_zhongtong": [],
+      "note": "via acu_intro_rules.case_temp_open；不永久扩 vol1_open_ids（仍 hegu/zusanli）"
+    },
+    "legal_paths_summary": {
+      "yinxu_zaoke": {
+        "formula": "maidong+shudi+gancao; zhimu+shudi+maidong+gancao",
+        "acupuncture": [
+          "taixi",
+          "taixi+lieque"
+        ],
+        "food": [
+          "zhou_di+bingtang",
+          "zhou_di+lianzi"
+        ],
+        "emotion": "low; calm_shen light"
+      },
+      "shire_xiazhu": {
+        "formula": "huangbai+zexie+fuling (±yiyiren)",
+        "acupuncture": [
+          "sanyinjiao sparse",
+          "zusanli optional"
+        ],
+        "food": [
+          "zhou_di+lianzi",
+          "zhou_di+bingtang"
+        ],
+        "emotion": "low"
+      },
+      "waishang_zhongtong": {
+        "formula": "danggui+chuanxiong+baishao (±gancao)",
+        "acupuncture": [
+          "hegu",
+          "neiguan light"
+        ],
+        "food": [
+          "zhou_di+hongzao mild"
+        ],
+        "emotion": "warm_calm / vent_rest auxiliary"
+      }
+    },
+    "new_herbs": [
+      {
+        "id": "maidong",
+        "forage": false,
+        "note": "肺阴润燥"
+      },
+      {
+        "id": "yiyiren",
+        "forage": false,
+        "note": "清利湿热可选"
+      }
+    ],
+    "smoke": {
+      "tag": "qingshi_expand3_ok",
+      "require_each_case_legal_settle": true,
+      "also": "SMOKE PASS; do not regress expand/expand2"
+    },
+    "split_file": "logic/qingshi_expand3.json",
+    "lock_doc": "logic/QINGSHI-EXPAND3-V136.md",
+    "do_not": [
+      "小儿",
+      "小儿惊啼",
+      "陈半仙",
+      "萨米尔",
+      "五方",
+      "romance",
+      "血腥外伤",
+      "暴露",
+      "Steam",
+      "J/T",
+      "shire_xiaZhu"
     ]
   }
 }

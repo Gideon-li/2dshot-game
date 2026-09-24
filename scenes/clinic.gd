@@ -808,6 +808,12 @@ func _rebuild_dock() -> void:
 			col.add_child(rest_b)
 		loft_b.pressed.connect(func() -> void: _do_go_loft())
 		col.add_child(loft_b)
+		# V136 optional 青石证印 wall entry
+		var seal_b := UiKit.make_button("SEAL_WALL_TITLE", false)
+		if seal_b.text == "SEAL_WALL_TITLE" or seal_b.text == "":
+			seal_b.text = "青石证印"
+		seal_b.pressed.connect(func() -> void: _show_seal_wall())
+		col.add_child(seal_b)
 		if not CaseDB.pharmacy_kid_is_clickable():
 			if _xiaohe_idle_line == "":
 				_xiaohe_idle_line = CaseDB.pharmacy_kid_line("waiting")
@@ -849,6 +855,93 @@ func _clue_lines(exam_id: String) -> PackedStringArray:
 		return GameFlow.exam_clues(exam_id)
 	return PackedStringArray()
 
+
+
+
+func _show_seal_wall() -> void:
+	## Optional V136 seal wall overlay (nine expand seals + count hint). Soft-load texture.
+	var hud := get_node_or_null("UI/Hud") as Control
+	if hud == null:
+		return
+	var existing := hud.get_node_or_null("SealWallOverlay")
+	if existing:
+		existing.queue_free()
+		return
+	var overlay := Panel.new()
+	overlay.name = "SealWallOverlay"
+	overlay.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
+	overlay.custom_minimum_size = Vector2(420, 480)
+	overlay.offset_left = -210
+	overlay.offset_right = 210
+	overlay.offset_top = -240
+	overlay.offset_bottom = 240
+	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	overlay.add_theme_stylebox_override("panel", UiKit.paper_style(UiKit.PAPER, UiKit.LINE, 6))
+	var v := VBoxContainer.new()
+	v.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	v.offset_left = 12
+	v.offset_right = -12
+	v.offset_top = 10
+	v.offset_bottom = -10
+	v.add_theme_constant_override("separation", 8)
+	overlay.add_child(v)
+	v.add_child(UiKit.ink_label(tr("SEAL_WALL_TITLE"), 18, UiKit.SEAL))
+	var n := 0
+	if GameFlow.has_method("get_seals"):
+		n = GameFlow.get_seals().size()
+	var hint := tr("SEAL_COUNT_HINT")
+	if hint == "SEAL_COUNT_HINT" or hint == "":
+		hint = "已亮 %d / 9 枚青石证印。不设小儿格。" % n
+	else:
+		hint = hint.replace("{n}", str(n))
+	v.add_child(UiKit.ink_label(hint, 13, UiKit.INK_MUTED))
+	var wall: Texture2D = CharacterArt.load_seal_wall() if CharacterArt else null
+	if wall:
+		var trc := TextureRect.new()
+		trc.texture = wall
+		trc.custom_minimum_size = Vector2(360, 360)
+		trc.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		trc.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		trc.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		v.add_child(trc)
+	# Tiny grid of earned seals
+	var grid := HFlowContainer.new()
+	grid.add_theme_constant_override("h_separation", 6)
+	grid.add_theme_constant_override("v_separation", 6)
+	v.add_child(grid)
+	var wall_ids: Array = []
+	if CaseDB.has_method("qingshi_expand3_rules"):
+		var seals_cfg: Dictionary = CaseDB.qingshi_expand3_rules().get("seals", {})
+		var ids_v: Variant = seals_cfg.get("seal_wall_ids", [])
+		if typeof(ids_v) == TYPE_ARRAY:
+			for x in ids_v:
+				wall_ids.append(str(x))
+	if wall_ids.is_empty():
+		wall_ids = ["fengre_biao", "shiji", "pixu_shikun", "yangxu_weihan", "xueyu_qing", "shushi", "yinxu_zaoke", "shire_xiazhu", "waishang_zhongtong"]
+	var earned: Array = GameFlow.get_seals() if GameFlow.has_method("get_seals") else []
+	for cid in wall_ids:
+		var cell := TextureRect.new()
+		cell.custom_minimum_size = Vector2(36, 36)
+		cell.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		cell.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		var tex: Texture2D = CharacterArt.load_seal(str(cid))
+		if tex and str(cid) in earned:
+			cell.texture = tex
+			cell.modulate = Color(1, 1, 1, 1)
+		elif tex:
+			cell.texture = tex
+			cell.modulate = Color(1, 1, 1, 0.22)
+		cell.tooltip_text = tr("SEAL_%s" % str(cid).to_upper())
+		grid.add_child(cell)
+	var close_b := UiKit.make_button("ACTION_BACK", false)
+	if close_b.text.begins_with("ACTION_"):
+		close_b.text = "收起"
+	close_b.pressed.connect(func() -> void:
+		if is_instance_valid(overlay):
+			overlay.queue_free()
+	)
+	v.add_child(close_b)
+	hud.add_child(overlay)
 
 
 func _chrome_row(tex_path: String, text: String, color: Color) -> HBoxContainer:

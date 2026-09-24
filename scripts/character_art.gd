@@ -1,6 +1,6 @@
 class_name CharacterArt
 extends RefCounted
-## V126/V134/V135: per-id portraits under ui/characters/. Fallback to apprentice.png / patients-three thirds.
+## V126/V134/V135/V136: per-id portraits under ui/characters/. Fallback to apprentice.png / patients-three thirds.
 
 const PATHS := {
 	"apprentice_jiang": "res://ui/characters/jiang_wan.png",
@@ -15,23 +15,38 @@ const PATHS := {
 	"char_danfu": "res://ui/characters/han_danfu.png",
 	"char_bashi": "res://ui/characters/ma_bashi.png",
 	"char_jiaoli": "res://ui/characters/xia_jiaoli.png",
+	"char_tanfu": "res://ui/characters/qiu_tanfu.png",
+	"char_tianhan": "res://ui/characters/he_tianhan.png",
+	"char_mujiang": "res://ui/characters/lu_mujiang.png",
 	"pharmacy_kid_xiaohe": "res://ui/characters/xiaohe.png",
 	"mentor_su": "res://ui/characters/su_wenzhou.png",
 }
 
 const SEAL_PATHS := {
+	# Expand 9 (V134–V136)
 	"fengre_biao": "res://ui/seals/fengre_biao.png",
 	"shiji": "res://ui/seals/shiji.png",
 	"pixu_shikun": "res://ui/seals/pixu_shikun.png",
 	"yangxu_weihan": "res://ui/seals/yangxu_weihan.png",
 	"xueyu_qing": "res://ui/seals/xueyu_qing.png",
 	"shushi": "res://ui/seals/shushi.png",
+	"yinxu_zaoke": "res://ui/seals/yinxu_zaoke.png",
+	"shire_xiazhu": "res://ui/seals/shire_xiazhu.png",
+	"waishang_zhongtong": "res://ui/seals/waishang_zhongtong.png",
+	# Old four (also write play.seals on clear+)
+	"fenghan_biao": "res://ui/seals/fenghan_biao.png",
+	"ganyu_qizhi": "res://ui/seals/ganyu_qizhi.png",
+	"yinxu_neire": "res://ui/seals/yinxu_neire.png",
+	"xuexu_ganyu": "res://ui/seals/xuexu_ganyu.png",
 }
+
+const SEAL_WALL_PATH := "res://ui/seals/seal_wall_9.png"
+const SEAL_WALL_FRAME_PATH := "res://ui/seals/seal_wall_frame.png"
 
 const FALLBACK_APPRENTICE := "res://ui/apprentice.png"
 const FALLBACK_PATIENTS := "res://ui/patients-three.png"
 
-## Full Qingshi pool (10). Hall seats are max 4 via waiting rotation — not all forced on stage.
+## Full Qingshi pool (13). Hall seats are max 4 via waiting rotation — not all forced on stage.
 const PATIENT_ORDER := [
 	"char_porter",
 	"char_clerk",
@@ -43,11 +58,15 @@ const PATIENT_ORDER := [
 	"char_danfu",
 	"char_bashi",
 	"char_jiaoli",
+	"char_tanfu",
+	"char_tianhan",
+	"char_mujiang",
 ]
 
 const OLD_FOUR := ["char_porter", "char_clerk", "char_copyist", "char_xiuniang"]
 const NEW_THREE := ["char_zoufan", "char_yanhou", "char_yaoqin"]
 const EXPAND2_THREE := ["char_danfu", "char_bashi", "char_jiaoli"]
+const EXPAND3_THREE := ["char_tanfu", "char_tianhan", "char_mujiang"]
 const WAITING_MAX_SEATS := 4
 
 static var _warned: Dictionary = {}
@@ -90,6 +109,14 @@ static func load_portrait(id: String) -> Texture2D:
 
 static func load_seal(case_id: String) -> Texture2D:
 	return _load_texture_file(seal_path(case_id))
+
+
+static func load_seal_wall() -> Texture2D:
+	## Optional nine-seal wall art (V136). Soft-load; null if missing.
+	var tex := _load_texture_file(SEAL_WALL_PATH)
+	if tex != null:
+		return tex
+	return _load_texture_file(SEAL_WALL_FRAME_PATH)
 
 
 static func has_single_file(id: String) -> bool:

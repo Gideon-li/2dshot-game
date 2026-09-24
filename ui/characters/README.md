@@ -33,3 +33,13 @@ V126.1：画风统一为 2D 明快 Q 平涂；见 `_proof_v126_1.png`。旧版�
 | 夏脚力 | char_jiaoli | xia_jiaoli.png (alias jiaoli.png) |
 
 证印新增：yangxu_weihan / xueyu_qing / shushi（与 V134 共 6 枚）
+
+## V136
+
+| 角色 | id | 文件 |
+| --- | --- | --- |
+| 邱炭夫 | char_tanfu | qiu_tanfu.png (alias tanfu.png) |
+| 何田汉 | char_tianhan | he_tianhan.png (alias tianhan.png) |
+| 陆木匠 | char_mujiang | lu_mujiang.png (alias mujiang.png) |
+
+证印新增：yinxu_zaoke / shire_xiazhu / waishang_zhongtong（expand 共 9）；旧四案印：fenghan_biao / ganyu_qizhi / yinxu_neire / xuexu_ganyu；印墙 ui/seals/seal_wall_9.png

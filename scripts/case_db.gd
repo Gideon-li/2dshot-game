@@ -23,6 +23,7 @@ var process_pack: Dictionary = {}
 var process_by_id: Dictionary = {}
 var qingshi_expand_script: Dictionary = {}
 var qingshi_expand2_script: Dictionary = {}
+var qingshi_expand3_script: Dictionary = {}
 
 
 func _ready() -> void:
@@ -58,6 +59,7 @@ func _ready() -> void:
 	_load_process()
 	_load_qingshi_expand()
 	_load_qingshi_expand2()
+	_load_qingshi_expand3()
 
 
 
@@ -655,6 +657,105 @@ func _ensure_qingshi_expand2_roster() -> void:
 	patients.sort_custom(func(a, b): return int(a.get("seat", 0)) < int(b.get("seat", 0)))
 
 
+func _load_qingshi_expand3() -> void:
+	## Official V136 expand3 script when present; else empty + roster fallback (ids stable).
+	qingshi_expand3_script = _load_json("res://patients/qingshi_expand3_script.json")
+	_ensure_qingshi_expand3_roster()
+	_ensure_expand3_herbs()
+
+
+func _ensure_expand3_herbs() -> void:
+	## Wire maidong / yiyiren into herbs_by_id if logic lists them but pack missed a row.
+	var rules := qingshi_expand3_rules()
+	var rows: Variant = rules.get("new_herbs", [])
+	if typeof(rows) != TYPE_ARRAY:
+		return
+	for row in rows:
+		if typeof(row) != TYPE_DICTIONARY:
+			continue
+		var hid := str(row.get("id", "")).strip_edges()
+		if hid == "" or herbs_by_id.has(hid):
+			continue
+		# Minimal stub so formula tray / smoke can resolve id; prefer pack herbs when present.
+		herbs_by_id[hid] = {
+			"id": hid,
+			"zh": hid,
+			"en": hid,
+			"ja": hid,
+			"forage": bool(row.get("forage", false)),
+			"note": str(row.get("note", "")),
+		}
+
+
+func _ensure_qingshi_expand3_roster() -> void:
+	## V136 +3: prefer slice_characters / official expand3 script; else minimal i18n fallback.
+	## Do not invent graphic 湿热/外伤 copy — openings come from TANFU_/TIANHAN_/MUJIANG_OPENING keys.
+	var need := ["char_tanfu", "char_tianhan", "char_mujiang"]
+	var case_of := {"char_tanfu": "yinxu_zaoke", "char_tianhan": "shire_xiazhu", "char_mujiang": "waishang_zhongtong"}
+	var open_key := {"char_tanfu": "TANFU_OPENING", "char_tianhan": "TIANHAN_OPENING", "char_mujiang": "MUJIANG_OPENING"}
+	var name_key := {"char_tanfu": "CHAR_TANFU_NAME", "char_tianhan": "CHAR_TIANHAN_NAME", "char_mujiang": "CHAR_MUJIANG_NAME"}
+	var id_key := {"char_tanfu": "CHAR_TANFU_TITLE", "char_tianhan": "CHAR_TIANHAN_TITLE", "char_mujiang": "CHAR_MUJIANG_TITLE"}
+	var portraits := {
+		"char_tanfu": "ui/characters/qiu_tanfu.png",
+		"char_tianhan": "ui/characters/he_tianhan.png",
+		"char_mujiang": "ui/characters/lu_mujiang.png",
+	}
+	var seat_n := 10
+	for pid in need:
+		if patients_by_id.has(pid):
+			for row in qingshi_expand3_script.get("characters", []):
+				if typeof(row) == TYPE_DICTIONARY and str(row.get("id", "")) == pid:
+					var card_exist: Dictionary = patients_by_id[pid]
+					var por := str(row.get("portrait", ""))
+					if por != "":
+						card_exist["portrait_ref"] = por
+					var cid := str(row.get("case_id", ""))
+					if cid != "":
+						card_exist["case_id"] = cid
+			continue
+		var opening := tr(str(open_key.get(pid, "")))
+		if opening == str(open_key.get(pid, "")) or opening == "":
+			opening = ""
+		var nm := tr(str(name_key.get(pid, "")))
+		if nm == str(name_key.get(pid, "")):
+			nm = pid
+		var title := tr(str(id_key.get(pid, "")))
+		if title == str(id_key.get(pid, "")):
+			title = ""
+		var card := {
+			"id": pid,
+			"case_id": str(case_of.get(pid, "")),
+			"seat": seat_n,
+			"pool_only": true,
+			"name": {"zh": nm, "en": nm, "ja": nm},
+			"identity": {"zh": title, "en": title, "ja": title},
+			"opening": {"zh": opening, "en": opening, "ja": opening},
+			"portrait_ref": str(portraits.get(pid, "")),
+			"dodge": {
+				"zh": "我不是来对那些名目的。问身上的感觉就好。",
+				"en": "I did not come to match names. Ask what the body feels.",
+				"ja": "呼び名を合わせに来たのではない。体の感覚を問うてくれ。"
+			},
+			"ask_wrappers": {
+				"zh": ["……{sym}。", "小先生，{sym}。"],
+				"en": ["…{sym}.", "Physician — {sym}."],
+				"ja": ["……{sym}。", "小先生、{sym}。"],
+			},
+		}
+		for row in qingshi_expand3_script.get("characters", []):
+			if typeof(row) == TYPE_DICTIONARY and str(row.get("id", "")) == pid:
+				var por2 := str(row.get("portrait", ""))
+				if por2 != "":
+					card["portrait_ref"] = por2
+				var cid2 := str(row.get("case_id", ""))
+				if cid2 != "":
+					card["case_id"] = cid2
+		patients.append(card)
+		patients_by_id[pid] = card
+		seat_n += 1
+	patients.sort_custom(func(a, b): return int(a.get("seat", 0)) < int(b.get("seat", 0)))
+
+
 func qingshi_expand_rules() -> Dictionary:
 	var rules: Dictionary = pack.get("qingshi_expand_rules", {})
 	if rules.is_empty():
@@ -673,9 +774,18 @@ func qingshi_expand2_rules() -> Dictionary:
 	return rules
 
 
+func qingshi_expand3_rules() -> Dictionary:
+	var rules: Dictionary = pack.get("qingshi_expand3_rules", {})
+	if rules.is_empty():
+		var split: Dictionary = _load_json("res://logic/qingshi_expand3.json")
+		if not split.is_empty():
+			return split
+	return rules
+
+
 func seal_flash_line(case_id: String) -> String:
-	# Prefer expand2 flash when present, then V134 script, then i18n SEAL_* / SEAL_FLASH.
-	for script_pack in [qingshi_expand2_script, qingshi_expand_script]:
+	# Prefer expand3 → expand2 → V134 script, then i18n SEAL_* / SEAL_FLASH.
+	for script_pack in [qingshi_expand3_script, qingshi_expand2_script, qingshi_expand_script]:
 		if typeof(script_pack) != TYPE_DICTIONARY or script_pack.is_empty():
 			continue
 		var seals: Dictionary = script_pack.get("seals", {}) if typeof(script_pack.get("seals", {})) == TYPE_DICTIONARY else {}
@@ -706,17 +816,15 @@ func seal_flash_line(case_id: String) -> String:
 
 
 func waiting_max_seats() -> int:
-	var rules2 := qingshi_expand2_rules()
-	var waiting2: Dictionary = rules2.get("waiting", {}) if typeof(rules2.get("waiting", {})) == TYPE_DICTIONARY else {}
-	if waiting2.has("max_seats"):
-		return int(waiting2.get("max_seats", CharacterArt.WAITING_MAX_SEATS))
-	var rules := qingshi_expand_rules()
-	var waiting: Dictionary = rules.get("waiting", {}) if typeof(rules.get("waiting", {})) == TYPE_DICTIONARY else {}
-	return int(waiting.get("max_seats", CharacterArt.WAITING_MAX_SEATS))
+	for rules_x in [qingshi_expand3_rules(), qingshi_expand2_rules(), qingshi_expand_rules()]:
+		var waiting_x: Dictionary = rules_x.get("waiting", {}) if typeof(rules_x.get("waiting", {})) == TYPE_DICTIONARY else {}
+		if waiting_x.has("max_seats"):
+			return int(waiting_x.get("max_seats", CharacterArt.WAITING_MAX_SEATS))
+	return CharacterArt.WAITING_MAX_SEATS
 
 
 func waiting_pool_ids() -> PackedStringArray:
-	## Full roster (old four + V134 three + V135 three). Hall shows ≤ max seats.
+	## Full roster (old four + V134/V135/V136 threes = 13). Hall shows ≤ max seats.
 	var out := PackedStringArray()
 	# Prefer PATIENT_ORDER when present in CaseDB
 	for pid in CharacterArt.PATIENT_ORDER:
@@ -726,7 +834,7 @@ func waiting_pool_ids() -> PackedStringArray:
 		var pid := str(p.get("id", ""))
 		if pid != "" and pid not in out:
 			out.append(pid)
-	for rules in [qingshi_expand_rules(), qingshi_expand2_rules()]:
+	for rules in [qingshi_expand_rules(), qingshi_expand2_rules(), qingshi_expand3_rules()]:
 		var chars: Variant = rules.get("characters", [])
 		if typeof(chars) == TYPE_ARRAY:
 			for c in chars:
@@ -736,27 +844,32 @@ func waiting_pool_ids() -> PackedStringArray:
 	return out
 
 
-func waiting_weight_for(pid: String, has_town_permit: bool, shiji_teach_seen: bool, yangxu_teach_seen: bool = true) -> float:
+func waiting_weight_for(pid: String, has_town_permit: bool, shiji_teach_seen: bool, yangxu_teach_seen: bool = true, zaoke_teach_seen: bool = true) -> float:
 	var case_data := case_for_patient(pid)
 	var case_id := str(case_data.get("id", ""))
 	var rules := qingshi_expand_rules()
 	var rules2 := qingshi_expand2_rules()
+	var rules3 := qingshi_expand3_rules()
 	var waiting: Dictionary = rules.get("waiting", {}) if typeof(rules.get("waiting", {})) == TYPE_DICTIONARY else {}
 	var waiting2: Dictionary = rules2.get("waiting", {}) if typeof(rules2.get("waiting", {})) == TYPE_DICTIONARY else {}
+	var waiting3: Dictionary = rules3.get("waiting", {}) if typeof(rules3.get("waiting", {})) == TYPE_DICTIONARY else {}
 	var weights: Dictionary = waiting.get("weights", {}) if typeof(waiting.get("weights", {})) == TYPE_DICTIONARY else {}
 	var weights2: Dictionary = waiting2.get("weights", {}) if typeof(waiting2.get("weights", {})) == TYPE_DICTIONARY else {}
+	var weights3: Dictionary = waiting3.get("weights", {}) if typeof(waiting3.get("weights", {})) == TYPE_DICTIONARY else {}
 	var base: Dictionary = weights.get("base", {}) if typeof(weights.get("base", {})) == TYPE_DICTIONARY else {}
 	var base2: Dictionary = weights2.get("base", {}) if typeof(weights2.get("base", {})) == TYPE_DICTIONARY else {}
+	var base3: Dictionary = weights3.get("base", {}) if typeof(weights3.get("base", {})) == TYPE_DICTIONARY else {}
 	var without: Dictionary = weights.get("without_permit", {}) if typeof(weights.get("without_permit", {})) == TYPE_DICTIONARY else {}
 	var without2: Dictionary = weights2.get("without_permit", {}) if typeof(weights2.get("without_permit", {})) == TYPE_DICTIONARY else {}
-	var mult := float(weights2.get("with_town_permit_mult", weights.get("with_town_permit_mult", 1.8)))
+	var without3: Dictionary = weights3.get("without_permit", {}) if typeof(weights3.get("without_permit", {})) == TYPE_DICTIONARY else {}
+	var mult := float(weights3.get("with_town_permit_mult", weights2.get("with_town_permit_mult", weights.get("with_town_permit_mult", 1.8))))
 	# Old four: steady base so hall stays populated
 	if pid in CharacterArt.OLD_FOUR:
 		return 1.0
-	var w := float(base2.get(case_id, base.get(case_id, 0.2)))
+	var w := float(base3.get(case_id, base2.get(case_id, base.get(case_id, 0.2))))
 	if has_town_permit:
 		return w * mult
-	# without permit: low weights; shiji / yangxu teach-once boosts
+	# without permit: low weights; shiji / yangxu / zaoke teach-once boosts
 	if case_id == "shiji":
 		w = float(without.get("shiji_weight", 0.25))
 		if bool(without.get("shiji_teach_once", true)) and not shiji_teach_seen:
@@ -765,14 +878,20 @@ func waiting_weight_for(pid: String, has_town_permit: bool, shiji_teach_seen: bo
 		w = float(without2.get("yangxu_weihan_weight", 0.25))
 		if bool(without2.get("yangxu_weihan_teach_once", true)) and not yangxu_teach_seen:
 			w = maxf(w, 0.55)
+	elif case_id == "yinxu_zaoke":
+		w = float(without3.get("yinxu_zaoke_weight", 0.25))
+		if bool(without3.get("yinxu_zaoke_teach_once", true)) and not zaoke_teach_seen:
+			w = maxf(w, 0.55)
 	elif case_id in ["fengre_biao", "pixu_shikun"]:
 		w = float(without.get(case_id, 0.05))
 	elif case_id in ["xueyu_qing", "shushi"]:
 		w = float(without2.get(case_id, 0.05))
+	elif case_id in ["shire_xiazhu", "waishang_zhongtong"]:
+		w = float(without3.get(case_id, 0.05))
 	return w
 
 
-func pick_waiting_seats(has_town_permit: bool, shiji_teach_seen: bool, exclude: Array = [], rng: RandomNumberGenerator = null, yangxu_teach_seen: bool = true) -> PackedStringArray:
+func pick_waiting_seats(has_town_permit: bool, shiji_teach_seen: bool, exclude: Array = [], rng: RandomNumberGenerator = null, yangxu_teach_seen: bool = true, zaoke_teach_seen: bool = true) -> PackedStringArray:
 	## Weighted sample without replacement, size ≤ waiting_max_seats().
 	var max_n := waiting_max_seats()
 	var pool := waiting_pool_ids()
@@ -781,7 +900,7 @@ func pick_waiting_seats(has_town_permit: bool, shiji_teach_seen: bool, exclude: 
 	for pid in pool:
 		if str(pid) in exclude:
 			continue
-		var w := waiting_weight_for(str(pid), has_town_permit, shiji_teach_seen, yangxu_teach_seen)
+		var w := waiting_weight_for(str(pid), has_town_permit, shiji_teach_seen, yangxu_teach_seen, zaoke_teach_seen)
 		if w <= 0.0:
 			continue
 		candidates.append(str(pid))
@@ -825,6 +944,18 @@ func pick_waiting_seats(has_town_permit: bool, shiji_teach_seen: bool, exclude: 
 			picked[replace_i] = "char_danfu"
 		else:
 			picked.append("char_danfu")
+	# Guarantee zaoke teach-once (V136) if no permit and not yet seen
+	if not has_town_permit and not zaoke_teach_seen and "char_tanfu" not in picked and patients_by_id.has("char_tanfu"):
+		if picked.size() >= max_n:
+			var replace_z := picked.size() - 1
+			# Prefer not to overwrite other teach seats
+			while replace_z >= 0 and picked[replace_z] in ["char_yanhou", "char_danfu"]:
+				replace_z -= 1
+			if replace_z < 0:
+				replace_z = picked.size() - 1
+			picked[replace_z] = "char_tanfu"
+		else:
+			picked.append("char_tanfu")
 	return picked
 
 
