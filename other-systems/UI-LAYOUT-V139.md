@@ -29,7 +29,7 @@
 
 声明卡、「我已阅读」、`进入医馆`、设置：圆角/软边/暖纸色。V138 分区保留（店招完整、副标题不压牌）。免责键义不改。不做新 CG。
 
-其他要素已挂：`other-systems/BOOT-WARM-V139.md`。声明卡 / 进馆钮 / 「我已阅读」优先九宫格画片（`ui/boot/boot_panel_disclaimer.png`、`boot_btn_plate.png`、`boot_check_plate.png`）；齿轮能放下同一张按钮板时也用它。画片未入库时退回暖纸圆角（卡 16、按钮与设置面板 14）。分区数字与 `BOOT_DISCLAIMER_*` 未改。`ui/boot/v139_boot.png` 待角色侧在立绘合入后截。
+其他要素已挂：`other-systems/BOOT-WARM-V139.md`。声明卡 / 进馆钮 / 「我已阅读」用已入库的九宫格画片（`ui/boot/boot_panel_disclaimer.png`、`boot_btn_plate.png`、`boot_check_plate.png`，含 `.import`）；齿轮能放下同一张按钮板时也用它。缺文件才退回暖纸圆角。分区数字与 `BOOT_DISCLAIMER_*` 未改。`ui/boot/v139_boot.png` 待角色侧在立绘合入后截。
 
 ## D. 冒烟与交图
 

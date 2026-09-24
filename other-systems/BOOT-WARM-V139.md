@@ -22,7 +22,13 @@
 
 贴图缺失时才退回下面的暖纸 `StyleBoxFlat`（声明卡半径 16，按钮/设置面板 14，勾选芯片 12，边 `LINE_SOFT`）。有画片时以画片为准，不再用扁平面的半径去压角。
 
-查过 `origin/main` 与本分支：这三张 png **尚未入库**（`173f354` 之后也没有）。代码已按上述路径绑定；文件一落地就会吃到九宫格，不必再改分区。
+三张画片已在库内，并带与 `boot_hero.png.import` 相同的 Godot 纹理 sidecar：
+
+- `ui/boot/boot_panel_disclaimer.png`
+- `ui/boot/boot_btn_plate.png`
+- `ui/boot/boot_check_plate.png`
+
+新检出会直接走九宫格，不再退回扁平方盒。暖纸 `StyleBoxFlat` 只在对应 png 被拿掉时才用。分区数字不改。
 
 ## 圆角与颜色（无画片时的退路）
 
@@ -58,7 +64,7 @@
 
 ## 交图
 
-`ui/boot/v139_boot.png` **留给角色侧在立绘合入后拍**，本切片不挡。沿 `_cap_boot_only.gd` 的 OpenGL3 + 显示路径，输出改到 `res://ui/boot/v139_boot.png`（1280×720，locale `zh`，设置关）。画片若当时已在 `ui/boot/`，截图里应看到声明卡 / 进馆钮 / 勾选的圆角板，而不是纯扁平方盒。
+`ui/boot/v139_boot.png` **留给角色侧在立绘合入后拍**，本切片不挡。沿 `_cap_boot_only.gd` 的 OpenGL3 + 显示路径，输出改到 `res://ui/boot/v139_boot.png`（1280×720，locale `zh`，设置关）。画片已在 `ui/boot/`，截图里应看到声明卡 / 进馆钮 / 勾选的圆角板，而不是纯扁平方盒。
 
 建议合入说明：启动壳优先挂三张九宫格画片，没有文件才退回暖纸圆角；V138 分区与免责文案保持；`v139_boot.png` 等角色帧齐了再拍。
 
