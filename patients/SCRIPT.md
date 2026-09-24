@@ -24,7 +24,7 @@
 
 三案各 10 条问舟边界：`mentor.case_cues.<case_id>.lines`（中英日）。缺诊催句：`mentor.exam_missing_cues`。
 
-## 十张病人身份包
+## 十三张病人身份包
 
 | id | 人 | 年龄 / 身份 / 地域 | 原型语气 | 本局病机（内部） | 求医动机 |
 | --- | --- | --- | --- | --- | --- |
@@ -38,6 +38,9 @@
 | `char_danfu` | **韩担夫** | 55 / 老担夫·夜市摊 / 青石镇 | 担夫摊主 | `yangxu_weihan` | 天不冷也蜷，手脚凉，想偎炉 |
 | `char_bashi` | **马把式** | 38 / 车把式 / 青石镇 | 跌仆镇民 | `xueyu_qing` | 跌处刺痛固定、色暗 |
 | `char_jiaoli` | **夏脚力** | 29 / 夏日脚力·船工 / 青石码头 | 奔走脚力 | `shushi` | 身热汗粘，困痞 |
+| `char_tanfu` | **秋炭妇** | 46 / 秋日卖炭·抄书 / 青石镇 | 卖炭妇 | `yinxu_zaoke` | 干咳少痰咽干，秋风更咳 |
+| `char_tianhan` | **何田汉** | 40 / 田埂劳作 / 青石镇外 | 田作镇民 | `shire_xiazhu` | 下边困热发沉（文案克制） |
+| `char_mujiang` | **陆木匠** | 35 / 木匠·码头碰伤 / 青石镇 | 跌仆木匠 | `waishang_zhongtong` | 碰处青肿胀痛（无血腥） |
 
 每人含：`personality` / `voice` / `motive` / `taboos` / `conceal` / `opening` / `ask_wrappers` / `dodge` / `pathogenesis_notes`。
 
@@ -72,6 +75,19 @@
 - 证印共 6 枚（V134 三 + 本档三）；不做十二墙。
 - 无 permit：偶遇阳虚教学 1 次；血瘀/暑湿权重极低。
 - i18n：`other-systems/i18n/QINGSHI-EXPAND2-KEYS.md`；锁：`logic/QINGSHI-EXPAND2-V135.md`。
+
+### V136 青石再扩（+3 → 共 13 人 / 9 印 · 除小儿）
+
+| 案 id | 角色 id | 人 | 教学 |
+| --- | --- | --- | --- |
+| `yinxu_zaoke` | `char_tanfu` | 秋炭妇 | 肺燥咳；≠周婆婆内热；勿苦寒过剂 |
+| `shire_xiazhu` | `char_tianhan` | 何田汉 | 湿热下重；文案克制无暴露；勿纯温补 |
+| `waishang_zhongtong` | `char_mujiang` | 陆木匠 | 局部青肿轻证；无血腥；勿猛破 |
+
+- 证印 9 枚（含旧四案风寒/气郁/阴虚内热/血虚肝郁 + expand 六类中本档三新）；阴虚内热与燥咳分两印；**不设小儿格**。
+- 无 permit：偶遇燥咳教学 1 次。
+- i18n：`QINGSHI-EXPAND3-KEYS.md`；锁：`logic/QINGSHI-EXPAND3-V136.md`。
+
 
 
 
@@ -210,3 +226,11 @@ API / 本地模型失败或无网：`ask_wrappers` 套锚。`{sym}` 只填锚，
 - `qingshi_expand2_script.json` → 三新证印闪句
 - `revisit_script.json` → 三案四 flavor
 - 对话不报证型名；seals 共 6 枚。不做阴虚燥咳/湿热下注/外伤/小儿/陈半仙/萨米尔。
+
+## V136 补齐剩余青石证印（除小儿）
+
+十三人表：旧 10 + `char_tanfu`/`yinxu_zaoke`（秋炭妇）、`char_tianhan`/`shire_xiazhu`（何田汉）、`char_mujiang`/`waishang_zhongtong`（陆木匠）。
+
+- 燥咳 ≠ 周婆婆阴虚内热（分印）。
+- 湿热文案克制、无暴露；外伤只青肿、无血腥。
+- 交付：`slice_characters.json` v11、`qingshi_expand3_script.json`、`revisit_script.json` 三案四 flavor。

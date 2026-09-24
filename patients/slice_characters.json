@@ -1,7 +1,7 @@
 {
   "id": "mo-wen-qi-huang-slice-characters",
   "project": "墨问岐黄",
-  "version": 10,
+  "version": 11,
   "based_on": [
     "design-pack 03 人物志 v1.1",
     "15 十问与问舟 v1.10",
@@ -13,7 +13,9 @@
     "DEV-TASKS-V134",
     "logic/QINGSHI-EXPAND-V134.md",
     "DEV-TASKS-V135",
-    "logic/QINGSHI-EXPAND2-V135.md"
+    "logic/QINGSHI-EXPAND2-V135.md",
+    "DEV-TASKS-V136",
+    "logic/QINGSHI-EXPAND3-V136.md"
   ],
   "notes": {
     "not_quiz": true,
@@ -47,7 +49,8 @@
     "v120_proxy": "pharmacy_kid.proxy_diagnosis.enabled=false",
     "v133": "char_xiuniang / xuexu_ganyu; memorial on yin; trust; town_permit narration",
     "v134": "char_zoufan/yanhou/yaoqin +3 cases; seals; waiting rotate max 4",
-    "v135": "char_danfu/yangxu_weihan, char_bashi/xueyu_qing, char_jiaoli/shushi; seals to 6"
+    "v135": "char_danfu/yangxu_weihan, char_bashi/xueyu_qing, char_jiaoli/shushi; seals to 6",
+    "v136": "char_tanfu/yinxu_zaoke ≠ yinxu_neire; char_tianhan/shire restrained; char_mujiang/waishang no gore; seals expand9+old4"
   },
   "inquiry_rules": {
     "zh": [
@@ -786,6 +789,98 @@
             "渇いても飲まない——見分けたか？",
             "純な燥烈はするな。この問いは入ったか？",
             "暑さの走りあとより目立つか？"
+          ]
+        }
+      },
+      "yinxu_zaoke": {
+        "priority_ten_ask": [
+          "汗",
+          "渴",
+          "头身",
+          "因"
+        ],
+        "lines": {
+          "zh": [
+            "咳干不干？痰多不多？",
+            "咽干想润——你问到了吗？",
+            "和周婆婆那种心里发热，像不像？",
+            "秋风或久坐抄书后加重吗？",
+            "别堆苦寒。这一问补上了吗？"
+          ],
+          "en": [
+            "Is the cough dry? How much phlegm?",
+            "Throat dry, wants moisture — asked?",
+            "Does it look like Granny Zhou's inner heat, or not?",
+            "Worse in autumn wind or long copying?",
+            "Don't pile bitter-cold. Is that question in?"
+          ],
+          "ja": [
+            "咳は乾くか？痰は多いか？",
+            "咽が乾き潤したいか——聞いたか？",
+            "周ばあさんの内熱に似ているか？",
+            "秋風や写字の久坐で重くなるか？",
+            "苦寒を重ねるな。この問いは入ったか？"
+          ]
+        }
+      },
+      "shire_xiazhu": {
+        "priority_ten_ask": [
+          "寒热",
+          "汗",
+          "饮食",
+          "便"
+        ],
+        "lines": {
+          "zh": [
+            "困热沉在下边——话说到这儿就够。别追问暴露。",
+            "口苦或粘腻问到了吗？",
+            "田埂劳作后更明显吗？",
+            "别急着温补。这一问补上了吗？",
+            "寒热与汗，你分清了吗？"
+          ],
+          "en": [
+            "Heavy muggy below — enough said. Don't press exposure.",
+            "Bitter or greasy mouth — asked?",
+            "Clearer after field work?",
+            "Don't rush warm tonify. Is that question in?",
+            "Chill, heat, and sweat — clear?"
+          ],
+          "ja": [
+            "下が重く蒸れる——話はここまで。暴露を追うな。",
+            "口が苦いか膩いか、聞いたか？",
+            "田仕事のあとより目立つか？",
+            "温補を急ぐな。この問いは入ったか？",
+            "寒熱と汗は見分けたか？"
+          ]
+        }
+      },
+      "waishang_zhongtong": {
+        "priority_ten_ask": [
+          "头身",
+          "因",
+          "汗"
+        ],
+        "lines": {
+          "zh": [
+            "碰在哪儿？青肿不青肿？",
+            "按着胀痛、活动加重——问到了吗？",
+            "别问血腥，别猛破。这一问补上了吗？",
+            "木作还是码头撞的？",
+            "脉枕按了吗？"
+          ],
+          "en": [
+            "Where was the bump? Bluish swelling?",
+            "Tender fullness when pressed, worse with move — asked?",
+            "No gore talk, no fierce break. Is that question in?",
+            "Woodwork or dock bump?",
+            "Have you felt the pulse?"
+          ],
+          "ja": [
+            "どこをぶつかった？青腫れか？",
+            "押すと脹痛、動くと重い——聞いたか？",
+            "血腥を聞くな。猛破するな。この問いは入ったか？",
+            "木工か波止場か？",
+            "脈は按じたか？"
           ]
         }
       }
@@ -2287,6 +2382,447 @@
         "en": "Jiaoli says the stuffiness eased. Don't go pure harsh-dry.",
         "ja": "脚力は困痞が少し楽だと言う。純な燥烈はするな。"
       }
+    },
+    {
+      "id": "char_tanfu",
+      "case_id": "yinxu_zaoke",
+      "name": {
+        "zh": "秋炭妇",
+        "en": "Qiu Tanfu",
+        "ja": "秋炭婦"
+      },
+      "age": 46,
+      "gender": "female",
+      "identity": {
+        "zh": "秋日抄书 / 卖炭妇",
+        "en": "Autumn copyist / charcoal seller",
+        "ja": "秋の写字／炭売り"
+      },
+      "region": {
+        "zh": "青石镇",
+        "en": "Qingshi town",
+        "ja": "青石鎮"
+      },
+      "prototype_tone": "卖炭妇",
+      "address_player": {
+        "zh": "小大夫",
+        "en": "young doctor",
+        "ja": "小大夫"
+      },
+      "personality": {
+        "zh": "轻声、怕添麻烦。咳就咳，不爱把「内热」往自己身上套；秋风一来更醒。",
+        "en": "Soft-spoken, hates to impose. Cough is cough — she won't wear “inner heat” as a label; autumn wind wakes it.",
+        "ja": "声が小さく、遠慮深い。咳は咳。『内熱』を自分に当てたがらない。秋風で目立つ。"
+      },
+      "voice": {
+        "zh": "干，带一点沙。说到咽干会清嗓。",
+        "en": "Dry, a little scratchy. Clears her throat when dryness comes up.",
+        "ja": "乾いて少しかすれる。咽の乾きの話になると咳払いする。"
+      },
+      "motive": {
+        "zh": "干咳少痰、咽干，想润一点好卖炭抄书——不是来对周婆婆那种内热题。",
+        "en": "Dry cough, little phlegm, dry throat; wants a little moisture so charcoal selling and copying can go on — not Granny Zhou's inner-heat quiz.",
+        "ja": "乾咳・痰少・咽乾。少し潤して炭売りと写字を続けたい。周ばあさんの内熱の試験ではない。"
+      },
+      "taboos": {
+        "zh": [
+          "不主动报「阴虚燥咳」名",
+          "不与「阴虚内热」混谈五心烦热为主诉",
+          "忌苦寒堆、麻黄硬散"
+        ],
+        "en": [
+          "never volunteers yin-vacuity dry-cough names",
+          "won't lead with five-center heat like the inner-heat case",
+          "hates piled bitter-cold or mahuang hard scatter"
+        ],
+        "ja": [
+          "『陰虚燥咳』の名を自ら言わない",
+          "内熱案のように五心煩熱を主訴にしない",
+          "苦寒の重ねや麻黄の強散を嫌う"
+        ]
+      },
+      "conceal": {
+        "zh": "先说干咳、咽干、秋风。夜里咳她肯说；不主动讲手足心热。",
+        "en": "Leads with dry cough, throat dry, autumn wind. Night cough she'll admit; she won't volunteer palm-sole heat.",
+        "ja": "まず乾咳、咽乾、秋風。夜の咳は認める。手足の裏の熱は自ら言わない。"
+      },
+      "pathogenesis_notes": {
+        "internal_only": true,
+        "case_id": "yinxu_zaoke",
+        "distinguish_from": "yinxu_neire / char_copyist",
+        "lived": {
+          "zh": [
+            "干咳，痰少或无痰",
+            "咽干、想润一润",
+            "入夜咳更醒目",
+            "秋燥或抄书久坐后加重",
+            "不主诉五心烦热（那是另一类）"
+          ],
+          "en": [
+            "dry cough, little or no phlegm",
+            "throat dry, wants a little moisture",
+            "night cough more obvious",
+            "worse in autumn dryness or long copying",
+            "does not lead with five-center heat (that's another class)"
+          ],
+          "ja": [
+            "乾咳、痰が少ないか無し",
+            "咽が乾き、潤したい",
+            "夜の咳が目立つ",
+            "秋燥や写字の久坐で重くなる",
+            "五心煩熱を主訴にしない（別類）"
+          ]
+        },
+        "how_they_talk_about_it": {
+          "zh": "用干咳、咽干、秋风来说；明确不是周婆婆那路内热。不说沙参麦冬等方名。",
+          "en": "Speaks in dry cough, throat dryness, autumn wind — not Granny Zhou's inner-heat path. Never formula names.",
+          "ja": "乾咳、咽乾、秋風。周ばあさんの内熱ルートではない。方名は言わない。"
+        }
+      },
+      "opening": {
+        "zh": "干咳少痰，喉咙干。秋风一吹更咳。",
+        "en": "Dry cough, little phlegm, throat dry. Autumn wind makes it worse.",
+        "ja": "乾いた咳で痰が少ない。喉が乾く。秋風でさらに咳る。"
+      },
+      "ask_wrappers": {
+        "zh": [
+          "……{sym}。炭还要称。",
+          "小大夫，{sym}。别堆苦寒。",
+          "咽一干，{sym}。",
+          "秋风一吹，{sym}。",
+          "抄书坐久了，{sym}。"
+        ],
+        "en": [
+          "…{sym}. Charcoal still to weigh.",
+          "Doctor — {sym}. Don't pile bitter-cold.",
+          "When the throat dries, {sym}.",
+          "When autumn wind hits, {sym}.",
+          "After long copying, {sym}."
+        ],
+        "ja": [
+          "……{sym}。炭はまだ量る。",
+          "小大夫、{sym}。苦寒を重ねないで。",
+          "咽が乾くと、{sym}。",
+          "秋風が吹くと、{sym}。",
+          "写字で長く座ると、{sym}。"
+        ]
+      },
+      "dodge": {
+        "zh": "别给我按那些名目。你问咳干不干、痰多不多、咽润不润——我再说。不是那种心里发热的。",
+        "en": "Don't pin names on me. Ask if the cough is dry, how much phlegm, if the throat feels moist — then I'll answer. Not the kind that burns in the middle.",
+        "ja": "呼び名を当てるな。咳が乾くか、痰が多いか、咽が潤うかなら答える。中が熱い類ではない。"
+      },
+      "seat": 10,
+      "ink": [
+        0.32,
+        0.3,
+        0.28
+      ],
+      "art_hint": {
+        "zh": "四十六，卖炭妇。灰布裙、炭手、秋色浅墨。Q 平涂齐 V126.1。",
+        "en": "Forty-six, charcoal seller. Ash cloth skirt, charcoal-stained hands, autumn pale ink. Q flat V126.1.",
+        "ja": "四十六、炭売り。灰の裙、炭の手、秋の薄い墨。Q平塗り V126.1。"
+      },
+      "portrait_ref": "ui/characters/qiu_tanfu.png",
+      "followup": {
+        "zh": "炭妇说咽干松些了。别再堆苦寒。",
+        "en": "Tanfu says the throat dryness eased. Don't pile bitter-cold again.",
+        "ja": "炭婦は咽の乾きが少し楽だと言う。苦寒を重ねるな。"
+      }
+    },
+    {
+      "id": "char_tianhan",
+      "case_id": "shire_xiazhu",
+      "name": {
+        "zh": "何田汉",
+        "en": "He Tianhan",
+        "ja": "何田漢"
+      },
+      "age": 40,
+      "gender": "male",
+      "identity": {
+        "zh": "田埂劳作镇民",
+        "en": "Field-work townsman",
+        "ja": "田埂の労作の鎮民"
+      },
+      "region": {
+        "zh": "青石镇外田埂",
+        "en": "Field ridges outside Qingshi",
+        "ja": "青石鎮外の田埂"
+      },
+      "prototype_tone": "田作镇民",
+      "address_player": {
+        "zh": "小先生",
+        "en": "doc",
+        "ja": "小先生"
+      },
+      "personality": {
+        "zh": "木讷、怕羞。话只说到「下边困热」；不愿被追问细节。",
+        "en": "Laconic, shy. Stops at “heavy muggy discomfort below”; won't be pressed for details.",
+        "ja": "無口で照れる。『下が重く蒸れる』まで。細部を追われたくない。"
+      },
+      "voice": {
+        "zh": "短，含糊。说到下边会停住。",
+        "en": "Short, mumbled. Stops when “below” comes up.",
+        "ja": "短く曖昧。下の話になると止まる。"
+      },
+      "motive": {
+        "zh": "下边困热发沉，走路不得劲，想轻一点好下田——话说到这儿就行。",
+        "en": "Heavy muggy discomfort below, walking feels off; wants it lighter for the fields — that's enough said.",
+        "ja": "下が重く蒸れ、歩きが冴えない。少し楽にして田へ。話はここまで。"
+      },
+      "taboos": {
+        "zh": [
+          "不主动报「湿热下注」名",
+          "不谈暴露部位、不写脚气方名",
+          "忌温补腻补硬顶"
+        ],
+        "en": [
+          "never volunteers damp-heat-downward names",
+          "no exposure talk, no athlete's-foot formula names",
+          "hates rich warm tonify as a hard fix"
+        ],
+        "ja": [
+          "『湿熱下注』の名を自ら言わない",
+          "暴露部位や脚気の方名を語らない",
+          "膩い温補で無理に押すのを嫌う"
+        ]
+      },
+      "conceal": {
+        "zh": "先说困热、发沉、走路不得劲。小便短赤只点到为止。问寒热与汗即可，勿追问暴露。",
+        "en": "Leads with muggy heaviness and off walking. Short-red urine only in passing. Ask chill/heat and sweat; don't press exposed sites.",
+        "ja": "まず困熱・沈み・歩きの不調。小便短赤は触れるだけ。寒熱と汗を問え。暴露を追うな。"
+      },
+      "pathogenesis_notes": {
+        "internal_only": true,
+        "case_id": "shire_xiazhu",
+        "copy_restraint": "no exposure, no graphic lower-body detail",
+        "lived": {
+          "zh": [
+            "下身困热、沉重",
+            "小便短赤印象（点到为止）",
+            "口苦或粘腻",
+            "田埂劳作后更明显",
+            "问寒热与汗，勿追问暴露部位"
+          ],
+          "en": [
+            "heavy muggy discomfort below",
+            "short-red urine impression (touch lightly)",
+            "bitter or greasy mouth",
+            "clearer after field work",
+            "ask chill/heat and sweat; do not press exposed sites"
+          ],
+          "ja": [
+            "下が重く蒸れる",
+            "小便短赤の印象（軽く触れる）",
+            "口が苦いか膩い",
+            "田仕事のあとより目立つ",
+            "寒熱と汗を問う。暴露部位を追わない"
+          ]
+        },
+        "how_they_talk_about_it": {
+          "zh": "用困热、发沉、走路来说；话说到这儿就行。不说四妙等方名。",
+          "en": "Speaks in muggy heaviness and off walking — enough said. Never formula names.",
+          "ja": "困熱、沈み、歩き。話はここまで。方名は言わない。"
+        }
+      },
+      "opening": {
+        "zh": "下边困热、发沉。走路也不得劲。话说到这儿就行。",
+        "en": "A heavy, muggy discomfort below. Walking feels off. That's enough said.",
+        "ja": "下が重く蒸れる。歩きも冴えない。話はここまででよい。"
+      },
+      "ask_wrappers": {
+        "zh": [
+          "……{sym}。田还等着。",
+          "小先生，{sym}。别问太细。",
+          "下边一沉，{sym}。",
+          "干完一垄，{sym}。",
+          "口苦的时候，{sym}。"
+        ],
+        "en": [
+          "…{sym}. The field still waits.",
+          "Doc — {sym}. Don't ask too fine.",
+          "When it sinks below, {sym}.",
+          "After a ridge of work, {sym}.",
+          "When the mouth turns bitter, {sym}."
+        ],
+        "ja": [
+          "……{sym}。田が待っている。",
+          "小先生、{sym}。細かく聞かないで。",
+          "下が沈むと、{sym}。",
+          "一畝終えると、{sym}。",
+          "口が苦いとき、{sym}。"
+        ]
+      },
+      "dodge": {
+        "zh": "别给我按那些名目，也别追问那儿。你问困热沉不沉、口苦不苦、走路得不得劲——够了。",
+        "en": "Don't pin names on me, and don't press that spot. Ask if the heaviness is muggy, if the mouth is bitter, if walking feels off — enough.",
+        "ja": "呼び名を当てるな。あそこを追うな。困熱が沈むか、口が苦いか、歩きが冴えるか——それで足りる。"
+      },
+      "seat": 11,
+      "ink": [
+        0.3,
+        0.34,
+        0.28
+      ],
+      "art_hint": {
+        "zh": "四十，田埂劳作。短褐、泥边、神色含蓄。Q 平涂齐 V126.1。湿热文案克制。",
+        "en": "Forty, field hand. Short coat, mud hem, reserved look. Q flat V126.1. Keep damp-heat copy restrained.",
+        "ja": "四十、田仕事。短褐、裾に泥、表情は控えめ。Q平塗り V126.1。湿熱の文案は控えめ。"
+      },
+      "portrait_ref": "ui/characters/he_tianhan.png",
+      "followup": {
+        "zh": "田汉说困热轻了些。清淡比温补稳。",
+        "en": "Tianhan says the heavy heat eased. Light clearing beats warm tonify.",
+        "ja": "田漢は困熱が少し楽だと言う。淡い清の方が温補より穏。"
+      }
+    },
+    {
+      "id": "char_mujiang",
+      "case_id": "waishang_zhongtong",
+      "name": {
+        "zh": "陆木匠",
+        "en": "Lu Mujiang",
+        "ja": "陸木匠"
+      },
+      "age": 35,
+      "gender": "male",
+      "identity": {
+        "zh": "跌仆木匠 / 码头碰伤",
+        "en": "Carpenter after a bump / dock bruise",
+        "ja": "転んだ木匠／波止場の打撲"
+      },
+      "region": {
+        "zh": "青石镇·码头一带",
+        "en": "Qingshi town / dock",
+        "ja": "青石鎮・波止場あたり"
+      },
+      "prototype_tone": "跌仆木匠",
+      "address_player": {
+        "zh": "先生",
+        "en": "sir",
+        "ja": "先生"
+      },
+      "personality": {
+        "zh": "爽快、嫌啰嗦。碰伤就说青肿胀痛；不爱听血腥话。",
+        "en": "Blunt, hates fuss. Calls a bump bluish swelling-pain; won't sit through bloody talk.",
+        "ja": "さっぱりしてうるさいのを嫌う。打撲は青腫れ脹痛と言う。血腥い話は聞きたくない。"
+      },
+      "voice": {
+        "zh": "硬。说到伤处会按一下。",
+        "en": "Hard. Presses the spot when it comes up.",
+        "ja": "硬い。傷の話になるとそこを按える。"
+      },
+      "motive": {
+        "zh": "碰处青肿胀痛，想消一点好开工——不是来要猛破血，也不谈创面。",
+        "en": "Bluish swelling-pain from a bump; wants it down so work can start — not fierce blood-breaking, and no wound talk.",
+        "ja": "ぶつかったところが青腫れ脹痛。少し引かせて仕事したい。猛破血でも創面の話でもない。"
+      },
+      "taboos": {
+        "zh": [
+          "不写血腥、开放创面、手术级骨折",
+          "不主动报「外伤肿痛」方名",
+          "忌猛破血、寒清硬堆"
+        ],
+        "en": [
+          "no gore, open wounds, or surgical-fracture talk",
+          "never volunteers trauma-swelling formula names",
+          "hates fierce blood-breaking or piled cold-clear"
+        ],
+        "ja": [
+          "血腥・開放創・手術級骨折は書かない",
+          "外傷腫痛の方名を自ら言わない",
+          "猛破血や寒清の重ねを嫌う"
+        ]
+      },
+      "conceal": {
+        "zh": "先说碰了一下、青肿、按着胀痛。活动加重他肯说。不谈流血。",
+        "en": "Leads with a bump, bluish swelling, tender fullness. Worse with movement he'll admit. No bleeding talk.",
+        "ja": "まずぶつかった、青腫れ、押すと脹痛。動くと重くなるは認める。出血は語らない。"
+      },
+      "pathogenesis_notes": {
+        "internal_only": true,
+        "case_id": "waishang_zhongtong",
+        "no_gore": true,
+        "lived": {
+          "zh": [
+            "某处碰伤后肿痛",
+            "按着醒目、活动时加重",
+            "跌仆或木作时撞到",
+            "无开放创面、不谈血腥",
+            "旧伤或胸口偶闷可附带"
+          ],
+          "en": [
+            "swelling-pain after a local bump",
+            "clearer when pressed, worse with movement",
+            "hit during a fall or woodwork",
+            "no open wound, no gore",
+            "old bruise or occasional chest stuffiness may tag along"
+          ],
+          "ja": [
+            "どこかをぶつけて腫痛",
+            "押すと目立ち、動くと重い",
+            "転倒や木工で当たった",
+            "開放創なし、血腥なし",
+            "古い傷や胸の偶悶は付随可"
+          ]
+        },
+        "how_they_talk_about_it": {
+          "zh": "用青肿、胀痛、活动加重来说；不说血腥，不说破血重剂名。",
+          "en": "Speaks in bluish swelling, tender fullness, worse with move — no gore, no heavy blood-break names.",
+          "ja": "青腫れ、脹痛、動くと重い。血腥も破血重剤の名も言わない。"
+        }
+      },
+      "opening": {
+        "zh": "碰了一下，那处青肿，按着胀痛。",
+        "en": "Took a bump — bluish swelling there, tender and full when pressed.",
+        "ja": "ぶつかった。あそこに青腫れ。押すと脹れて痛い。"
+      },
+      "ask_wrappers": {
+        "zh": [
+          "……{sym}。活还等着开。",
+          "先生，{sym}。别猛破。",
+          "按着那儿，{sym}。",
+          "一抬手，{sym}。",
+          "码头上碰的，{sym}。"
+        ],
+        "en": [
+          "…{sym}. Work still waiting.",
+          "Sir — {sym}. Nothing fierce that breaks.",
+          "When I press that spot, {sym}.",
+          "When I lift the arm, {sym}.",
+          "Bumped at the dock — {sym}."
+        ],
+        "ja": [
+          "……{sym}。仕事が待っている。",
+          "先生、{sym}。猛破は要らない。",
+          "そこを按えると、{sym}。",
+          "腕を上げると、{sym}。",
+          "波止場でぶつかった、{sym}。"
+        ]
+      },
+      "dodge": {
+        "zh": "别给我按重剂名目，也别问血腥。你问肿不肿、按着痛不痛、活动加重不加重——我再说。",
+        "en": "Don't pin heavy formula names on me, and don't ask about blood. Ask if it swells, if press hurts, if move worsens — then I'll talk.",
+        "ja": "重剤の名を当てるな。血腥も聞くな。腫れるか、押して痛いか、動くと重いかなら話す。"
+      },
+      "seat": 12,
+      "ink": [
+        0.36,
+        0.3,
+        0.28
+      ],
+      "art_hint": {
+        "zh": "三十五，木匠。短褐、腕上淤青（非血痕）、木屑。Q 平涂齐 V126.1。无血腥。",
+        "en": "Thirty-five, carpenter. Short coat, bruise on the wrist (not blood), wood shavings. Q flat V126.1. No gore.",
+        "ja": "三十五、木匠。短褐、腕に青あざ（血痕ではない）、木屑。Q平塗り V126.1。血腥なし。"
+      },
+      "portrait_ref": "ui/characters/lu_mujiang.png",
+      "followup": {
+        "zh": "木匠说肿松些了。别再猛破。",
+        "en": "Mujiang says the swelling eased. No fierce breaking again.",
+        "ja": "木匠は腫れが少し引いたと言う。猛破はするな。"
+      }
     }
   ],
   "pharmacy_kid": {
@@ -2534,6 +3070,21 @@
       "zh": "脚力说困痞松些了。别纯用燥烈。",
       "en": "Jiaoli says the stuffiness eased. Don't go pure harsh-dry.",
       "ja": "脚力は困痞が少し楽だと言う。純な燥烈はするな。"
+    },
+    "yinxu_zaoke": {
+      "zh": "炭妇说咽干松些了。别再堆苦寒。",
+      "en": "Tanfu says the throat dryness eased. Don't pile bitter-cold again.",
+      "ja": "炭婦は咽の乾きが少し楽だと言う。苦寒を重ねるな。"
+    },
+    "shire_xiazhu": {
+      "zh": "田汉说困热轻了些。清淡比温补稳。",
+      "en": "Tianhan says the heavy heat eased. Light clearing beats warm tonify.",
+      "ja": "田漢は困熱が少し楽だと言う。淡い清の方が温補より穏。"
+    },
+    "waishang_zhongtong": {
+      "zh": "木匠说肿松些了。别再猛破。",
+      "en": "Mujiang says the swelling eased. No fierce breaking again.",
+      "ja": "木匠は腫れが少し引いたと言う。猛破はするな。"
     }
   },
   "revisit_lines": {
@@ -2755,6 +3306,72 @@
         "zh": "像燥烈硬逼的。津更伤，心里更痞。",
         "en": "Felt harsh-dry forced. Fluids worse; chest-gut more stuck.",
         "ja": "燥烈で無理したようだ。津がさらに傷み、痞えが強くなる。"
+      }
+    },
+    "yinxu_zaoke": {
+      "good": {
+        "zh": "小大夫，咽干松些了。咳也少。炭我还能称。",
+        "en": "Doctor — throat dryness eased. Less cough. I can still weigh charcoal.",
+        "ja": "小大夫、咽の乾きが少し楽だ。咳も少ない。炭も量れる。"
+      },
+      "slow": {
+        "zh": "好一点。秋风一吹仍干咳。",
+        "en": "A little better. Autumn wind still brings dry cough.",
+        "ja": "少し楽。秋風が吹くとまだ乾咳。"
+      },
+      "over": {
+        "zh": "清得太苦，胃先顶。咳倒轻，吃不下。",
+        "en": "Too bitter-clear — stomach folded first. Cough lighter, but I can't eat.",
+        "ja": "清が苦すぎて胃が先に参った。咳は軽いが食べられない。"
+      },
+      "mis": {
+        "zh": "像堆了苦寒。咽更干，人发空。",
+        "en": "Felt like piled bitter-cold. Throat drier; feels emptied.",
+        "ja": "苦寒を重ねたようだ。咽がより乾き、空になる。"
+      }
+    },
+    "shire_xiazhu": {
+      "good": {
+        "zh": "小先生，困热轻了些。走路顺一点。话说到这儿就行。",
+        "en": "Doc — the heavy heat eased. Walking a bit smoother. Enough said.",
+        "ja": "小先生、困熱が少し楽だ。歩きも少し楽。話はここまで。"
+      },
+      "slow": {
+        "zh": "好一点。下边仍沉，干完活更明显。",
+        "en": "A little better. Still heavy below; clearer after work.",
+        "ja": "少し楽。下はまだ沈む。仕事後より目立つ。"
+      },
+      "over": {
+        "zh": "清利太过，人发空。困是轻了，腿软。",
+        "en": "Cleared too hard — emptied. Heaviness lighter, but legs weak.",
+        "ja": "清利が過ぎて空になった。困は軽いが足が弱い。"
+      },
+      "mis": {
+        "zh": "像温补顶的。困热更缠。别再腻。",
+        "en": "Felt warm-tonified. Muggy heaviness sticks worse. Nothing rich again.",
+        "ja": "温補で押したようだ。困熱がさらに纏う。膩いのはもう要らない。"
+      }
+    },
+    "waishang_zhongtong": {
+      "good": {
+        "zh": "先生，肿松些了。按着不那么胀。活还能开。",
+        "en": "Sir — swelling eased. Less full when pressed. I can still start work.",
+        "ja": "先生、腫れが少し引いた。押してもそれほど脹れない。仕事も始められる。"
+      },
+      "slow": {
+        "zh": "好一点。抬手仍沉，青还在。",
+        "en": "A little better. Lifting still heavy; the blue is still there.",
+        "ja": "少し楽。腕を上げるとまだ沈む。青みは残る。"
+      },
+      "over": {
+        "zh": "破得太猛，人空、处更不适。",
+        "en": "Broke too hard — empty, and the spot hurts worse.",
+        "ja": "破が強すぎて空になり、その箇所がさらにつらい。"
+      },
+      "mis": {
+        "zh": "肿还在。像没碰着那处。别再猛。",
+        "en": "Swelling stays. Feels untouched. Nothing fierce again.",
+        "ja": "腫れは残る。触れてない感じ。猛いのはもう要らない。"
       }
     }
   },

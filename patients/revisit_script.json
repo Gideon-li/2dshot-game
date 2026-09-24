@@ -1,7 +1,7 @@
 {
   "id": "mo-wen-qi-huang-revisit-script",
   "project": "墨问岐黄",
-  "version": 4,
+  "version": 5,
   "task": "DEV-TASKS-V127",
   "notes": {
     "no_llm": true,
@@ -324,6 +324,84 @@
           "zh": "像燥烈硬逼的。津更伤，心里更痞。",
           "en": "Felt harsh-dry forced. Fluids worse; chest-gut more stuck.",
           "ja": "燥烈で無理したようだ。津がさらに傷み、痞えが強くなる。"
+        }
+      }
+    },
+    "yinxu_zaoke": {
+      "character_id": "char_tanfu",
+      "name_zh": "秋炭妇",
+      "flavors": {
+        "good": {
+          "zh": "小大夫，咽干松些了。咳也少。炭我还能称。",
+          "en": "Doctor — throat dryness eased. Less cough. I can still weigh charcoal.",
+          "ja": "小大夫、咽の乾きが少し楽だ。咳も少ない。炭も量れる。"
+        },
+        "slow": {
+          "zh": "好一点。秋风一吹仍干咳。",
+          "en": "A little better. Autumn wind still brings dry cough.",
+          "ja": "少し楽。秋風が吹くとまだ乾咳。"
+        },
+        "over": {
+          "zh": "清得太苦，胃先顶。咳倒轻，吃不下。",
+          "en": "Too bitter-clear — stomach folded first. Cough lighter, but I can't eat.",
+          "ja": "清が苦すぎて胃が先に参った。咳は軽いが食べられない。"
+        },
+        "mis": {
+          "zh": "像堆了苦寒。咽更干，人发空。",
+          "en": "Felt like piled bitter-cold. Throat drier; feels emptied.",
+          "ja": "苦寒を重ねたようだ。咽がより乾き、空になる。"
+        }
+      }
+    },
+    "shire_xiazhu": {
+      "character_id": "char_tianhan",
+      "name_zh": "何田汉",
+      "flavors": {
+        "good": {
+          "zh": "小先生，困热轻了些。走路顺一点。话说到这儿就行。",
+          "en": "Doc — the heavy heat eased. Walking a bit smoother. Enough said.",
+          "ja": "小先生、困熱が少し楽だ。歩きも少し楽。話はここまで。"
+        },
+        "slow": {
+          "zh": "好一点。下边仍沉，干完活更明显。",
+          "en": "A little better. Still heavy below; clearer after work.",
+          "ja": "少し楽。下はまだ沈む。仕事後より目立つ。"
+        },
+        "over": {
+          "zh": "清利太过，人发空。困是轻了，腿软。",
+          "en": "Cleared too hard — emptied. Heaviness lighter, but legs weak.",
+          "ja": "清利が過ぎて空になった。困は軽いが足が弱い。"
+        },
+        "mis": {
+          "zh": "像温补顶的。困热更缠。别再腻。",
+          "en": "Felt warm-tonified. Muggy heaviness sticks worse. Nothing rich again.",
+          "ja": "温補で押したようだ。困熱がさらに纏う。膩いのはもう要らない。"
+        }
+      }
+    },
+    "waishang_zhongtong": {
+      "character_id": "char_mujiang",
+      "name_zh": "陆木匠",
+      "flavors": {
+        "good": {
+          "zh": "先生，肿松些了。按着不那么胀。活还能开。",
+          "en": "Sir — swelling eased. Less full when pressed. I can still start work.",
+          "ja": "先生、腫れが少し引いた。押してもそれほど脹れない。仕事も始められる。"
+        },
+        "slow": {
+          "zh": "好一点。抬手仍沉，青还在。",
+          "en": "A little better. Lifting still heavy; the blue is still there.",
+          "ja": "少し楽。腕を上げるとまだ沈む。青みは残る。"
+        },
+        "over": {
+          "zh": "破得太猛，人空、处更不适。",
+          "en": "Broke too hard — empty, and the spot hurts worse.",
+          "ja": "破が強すぎて空になり、その箇所がさらにつらい。"
+        },
+        "mis": {
+          "zh": "肿还在。像没碰着那处。别再猛。",
+          "en": "Swelling stays. Feels untouched. Nothing fierce again.",
+          "ja": "腫れは残る。触れてない感じ。猛いのはもう要らない。"
         }
       }
     }

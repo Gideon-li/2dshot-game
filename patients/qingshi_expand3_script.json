@@ -1,0 +1,144 @@
+{
+  "id": "mo-wen-qi-huang-qingshi-expand3-script",
+  "project": "墨问岐黄",
+  "version": 1,
+  "task": "DEV-TASKS-V136",
+  "notes": {
+    "no_diagnosis_names_in_dialogue": true,
+    "yinxu_zaoke_ne_yinxu_neire": true,
+    "shire_copy_restrained": true,
+    "waishang_no_gore": true,
+    "seals_expand_plus_old4": true,
+    "disclaimer_keys": [
+      "STORE_NOT_MEDICAL",
+      "BOOT_DISCLAIMER_*"
+    ]
+  },
+  "characters": [
+    {
+      "id": "char_tanfu",
+      "case_id": "yinxu_zaoke",
+      "portrait": "ui/characters/qiu_tanfu.png"
+    },
+    {
+      "id": "char_tianhan",
+      "case_id": "shire_xiazhu",
+      "portrait": "ui/characters/he_tianhan.png"
+    },
+    {
+      "id": "char_mujiang",
+      "case_id": "waishang_zhongtong",
+      "portrait": "ui/characters/lu_mujiang.png"
+    }
+  ],
+  "distinguish": {
+    "yinxu_zaoke_vs_yinxu_neire": {
+      "zh": "燥咳主干咳咽干秋燥；内热（周婆婆）主夜里不安、手足心热。两印分开。",
+      "en": "Dry cough leads with dry cough and autumn throat dryness; inner heat (Granny Zhou) leads with restless nights and palm-sole heat. Two separate seals.",
+      "ja": "燥咳は乾咳・咽乾・秋燥が主。内熱（周ばあさん）は夜の不安・手足心熱が主。印は分ける。"
+    }
+  },
+  "seals": {
+    "flash_template": {
+      "zh": "证印亮起：{name}",
+      "en": "Seal lit: {name}",
+      "ja": "証印が点く：{name}"
+    },
+    "items": [
+      {
+        "case_id": "yinxu_zaoke",
+        "key": "seal.yinxu_zaoke",
+        "name_key": "SEAL_YINXU_ZAOKE",
+        "name": {
+          "zh": "阴虚燥咳",
+          "en": "Yin vacuity dry cough",
+          "ja": "陰虚燥咳"
+        },
+        "icon": "ui/seals/yinxu_zaoke.png"
+      },
+      {
+        "case_id": "shire_xiazhu",
+        "key": "seal.shire_xiazhu",
+        "name_key": "SEAL_SHIRE_XIAZHU",
+        "name": {
+          "zh": "湿热下注",
+          "en": "Damp-heat pouring downward",
+          "ja": "湿熱下注"
+        },
+        "icon": "ui/seals/shire_xiazhu.png"
+      },
+      {
+        "case_id": "waishang_zhongtong",
+        "key": "seal.waishang_zhongtong",
+        "name_key": "SEAL_WAISHANG_ZHONGTONG",
+        "name": {
+          "zh": "外伤肿痛",
+          "en": "Trauma swelling-pain",
+          "ja": "外傷腫痛"
+        },
+        "icon": "ui/seals/waishang_zhongtong.png"
+      }
+    ],
+    "flash_lines": {
+      "yinxu_zaoke": {
+        "zh": "证印亮起：阴虚燥咳。",
+        "en": "Seal lit: Yin vacuity dry cough.",
+        "ja": "証印が点く：陰虚燥咳。"
+      },
+      "shire_xiazhu": {
+        "zh": "证印亮起：湿热下注。",
+        "en": "Seal lit: Damp-heat pouring downward.",
+        "ja": "証印が点く：湿熱下注。"
+      },
+      "waishang_zhongtong": {
+        "zh": "证印亮起：外伤肿痛。",
+        "en": "Seal lit: Trauma swelling-pain.",
+        "ja": "証印が点く：外傷腫痛。"
+      }
+    },
+    "old_four_also": [
+      "fenghan_biao",
+      "ganyu_qizhi",
+      "yinxu_neire",
+      "xuexu_ganyu"
+    ]
+  },
+  "case_hints": {
+    "yinxu_zaoke": {
+      "hint": {
+        "zh": "干咳咽干。与阴虚内热分印。",
+        "en": "Dry cough, dry throat. Separate seal from yin-vacuity inner heat.",
+        "ja": "乾咳・咽乾。陰虚内熱とは別印。"
+      },
+      "mis_bitter": {
+        "zh": "苦寒过剂。咽更干。",
+        "en": "Bitter-cold overdone. Throat drier.",
+        "ja": "苦寒が過ぎた。咽がより乾く。"
+      }
+    },
+    "shire_xiazhu": {
+      "hint": {
+        "zh": "困热下重。清利宜轻。文案克制，不谈暴露。",
+        "en": "Heavy muggy discomfort downward. Clear-drain lightly. Keep copy restrained — no exposure talk.",
+        "ja": "下が重く蒸れる。清利は軽く。文案は控えめ。暴露は語らない。"
+      },
+      "mis_warm": {
+        "zh": "温补太腻。困热更缠。",
+        "en": "Warm tonify too rich. The muggy heaviness sticks worse.",
+        "ja": "温補が膩すぎた。困熱がさらに纏う。"
+      }
+    },
+    "waishang_zhongtong": {
+      "hint": {
+        "zh": "局部肿痛轻证。活血消肿宜轻。无血腥描写。",
+        "en": "Local swelling-pain, mild. Move blood and reduce swelling lightly. No bloody wording.",
+        "ja": "局所の腫れ痛みの軽証。活血消腫は軽く。血腥い描写なし。"
+      },
+      "mis_break": {
+        "zh": "破得太猛。人空、处更不适。",
+        "en": "Broke too hard. Feels empty; the spot hurts worse.",
+        "ja": "破が強すぎた。空になり、その箇所がさらにつらい。"
+      }
+    }
+  }
+}
