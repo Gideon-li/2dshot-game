@@ -1,5 +1,22 @@
 extends Node
-## V139 proof (visual fix): boot + idle aisle composition + clear open-consult pair.
+## V139.1 proof: boot + idle right-aisle feet + clear open-consult pair (隔桌对坐).
+
+func _grab_png(path: String) -> bool:
+	RenderingServer.force_draw()
+	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+	var tex := get_viewport().get_texture()
+	if tex == null:
+		printerr("grab_fail tex null path=", path)
+		return false
+	var img: Image = tex.get_image()
+	if img == null:
+		printerr("grab_fail img null path=", path)
+		return false
+	var ok := img.save_png(path) == OK
+	print("saved=", ok, " path=", path, " wh=", img.get_width(), "x", img.get_height())
+	return ok
+
 
 func _ready() -> void:
 	TranslationServer.set_locale("zh")
@@ -12,8 +29,8 @@ func _ready() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	await get_tree().create_timer(0.4).timeout
-	var img_boot: Image = get_viewport().get_texture().get_image()
-	print("boot_saved=", img_boot.save_png("res://ui/boot/v139_boot.png") == OK)
+	var boot_ok := await _grab_png("res://ui/boot/v139_boot.png")
+	print("boot_saved=", boot_ok)
 	boot.queue_free()
 	await get_tree().process_frame
 
@@ -32,6 +49,12 @@ func _ready() -> void:
 			clinic.call(m)
 	var cam := clinic.get_node_or_null("CAM_HERO") as Camera2D
 	_pin_hero(cam, clinic)
+	for dn in ["L3_desk_front", "L3_desk_front_apron"]:
+		var desk_n := clinic.get_node_or_null("L5_characters/%s" % dn) as Sprite2D
+		if desk_n:
+			print(dn, "_pos=", desk_n.position, " offset=", desk_n.offset, " tex=", desk_n.texture != null, " parent=", desk_n.get_parent().name)
+		else:
+			print(dn, "_MISSING")
 	if clinic.has_method("set_process"):
 		clinic.set_process(false)
 	await get_tree().process_frame
@@ -41,12 +64,12 @@ func _ready() -> void:
 	_pin_hero(cam, clinic)
 	await get_tree().process_frame
 	await get_tree().create_timer(0.25).timeout
-	var img_idle: Image = get_viewport().get_texture().get_image()
-	print("idle_saved=", img_idle.save_png("res://ui/waiting/v139_idle.png") == OK)
+	var idle_ok := await _grab_png("res://ui/waiting/v139_idle.png")
+	print("idle_saved=", idle_ok)
 
 	var chars := clinic.get_node_or_null("L5_characters")
 	var vis := 0
-	var work := Rect2(880, 520, 440, 300)
+	var work := Rect2(900, 960, 600, 240)
 	var clear_n := 0
 	if chars:
 		for i in 4:
@@ -80,7 +103,7 @@ func _ready() -> void:
 				if pn3 == null:
 					continue
 				if str(pn3.get_meta("pid", "")) == pick_pid:
-					pn3.position = Vector2(1280, 1240)
+					pn3.position = Vector2(1280, 1280)
 					pn3.visible = true
 				else:
 					# Keep away / hide so pair reads clearly in accept shot
@@ -96,11 +119,15 @@ func _ready() -> void:
 			if pn4 and str(pn4.get_meta("pid", "")) != pick_pid:
 				pn4.visible = false
 			elif pn4 and str(pn4.get_meta("pid", "")) == pick_pid:
-				pn4.position = Vector2(1280, 1240)
+				pn4.position = Vector2(1280, 1280)
 				pn4.visible = true
 	if clinic.has_method("_rebuild_dock"):
 		clinic.call("_rebuild_dock")
-	# Consult accept: CAM_ASK midshot so patient@590 + JW@670 behind desk read as a pair
+	# Clear bulky HUD for accept shot (pair readability); keep world props/characters.
+	var ui := clinic.get_node_or_null("UI")
+	if ui:
+		ui.visible = false
+	# Consult accept: optional CAM_ASK push-in — pair at (1220,1080)/(1280,1280)
 	var ask := clinic.get_node_or_null("CAM_ASK") as Camera2D
 	for n in ["CAM_HERO", "CAM_PULSE", "CAM_FORMULA", "CAM_NEEDLE", "CAM_RESULT", "CAM_LOFT"]:
 		var o := clinic.get_node_or_null(n) as Camera2D
@@ -121,8 +148,8 @@ func _ready() -> void:
 		clinic.set("_cam_name", "CAM_ASK")
 	await get_tree().process_frame
 	await get_tree().create_timer(0.4).timeout
-	var img_consult: Image = get_viewport().get_texture().get_image()
-	print("consult_saved=", img_consult.save_png("res://ui/consult/v139_consult.png") == OK)
+	var consult_ok := await _grab_png("res://ui/consult/v139_consult.png")
+	print("consult_saved=", consult_ok)
 	if chars:
 		var ap2 := chars.get_node_or_null("Apprentice") as Node2D
 		print("consult_apprentice=", ap2.position if ap2 else Vector2.ZERO)
@@ -131,14 +158,15 @@ func _ready() -> void:
 			if pn2 and pn2.visible:
 				print("consult_seat", i2, " pos=", pn2.position, " pid=", pn2.get_meta("pid", ""))
 	print("cam_pos=", cam.position if cam else Vector2.ZERO, " zoom=", cam.zoom if cam else Vector2.ZERO)
-	get_tree().quit(0 if vis >= 3 and clear_n >= 3 else 1)
+	get_tree().quit(0 if vis >= 3 and clear_n >= 3 and boot_ok and idle_ok and consult_ok else 1)
 
 
 func _pin_hero(cam: Camera2D, clinic: Node) -> void:
 	if cam == null:
 		return
-	cam.position = Vector2(1280, 820)
-	cam.zoom = Vector2(0.48, 0.48)  ## show right-aisle floor + chair + cabinet
+	# V139.1 idle default: CAM_HERO (1280,780) zoom≈0.67
+	cam.position = Vector2(1280, 780)
+	cam.zoom = Vector2(0.666667, 0.666667)
 	cam.position_smoothing_enabled = false
 	cam.drag_horizontal_enabled = false
 	cam.drag_vertical_enabled = false

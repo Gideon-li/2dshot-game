@@ -3086,11 +3086,11 @@ func run_slice_smoke() -> int:
 		layout_host.add_child(node_l)
 	var ap_l := Node2D.new()
 	ap_l.name = "Apprentice"
-	ap_l.position = Vector2(1220, 1000)  ## V139 L3: under-desk / chair-leg floor band
+	ap_l.position = Vector2(1220, 1080)  ## V139.1: chair-leg / under-desk floor band
 	var ap_spr := Sprite2D.new()
 	ap_spr.name = "Art"
 	var ap_tex: Texture2D = CharacterArt.load_portrait("apprentice_jiang")
-	var ap_h := 260.0
+	var ap_h := 310.0
 	if ap_tex != null:
 		var ath := float(ap_tex.get_height())
 		var atw := float(ap_tex.get_width())
@@ -3136,40 +3136,57 @@ func run_slice_smoke() -> int:
 	if fails.size() == layout_fails_before:
 		print("ui_layout_ok")
 
-	# V139: consult composition — Jiang Wan at PhysicianChair, waiting clear of desk work zone, boot rounded
+	# V139.1: consult feet lock — Jiang Wan (1220,1080), seat (1280,1280), A–D right aisle, work zone clear
 	var consult_fails_before := fails.size()
 	var clinic_gd3 := FileAccess.get_file_as_string("res://scenes/clinic.gd")
-	if clinic_gd3.find("CLINIC-CONSULT-V139") < 0 and clinic_gd3.find("1035, 770") < 0:
-		fails.append("ui_consult_layout_ok: APPRENTICE_HOME should be PhysicianChair (1035,770)")
+	if clinic_gd3.find("CLINIC-CONSULT-V139") < 0 and clinic_gd3.find("1220, 1080") < 0:
+		fails.append("ui_consult_layout_ok: APPRENTICE_HOME should be V139.1 feet (1220,1080)")
+	if clinic_gd3.find("Vector2(1220, 1080)") < 0:
+		fails.append("ui_consult_layout_ok: missing APPRENTICE_HOME (1220,1080)")
+	if clinic_gd3.find("Vector2(1280, 1280)") < 0:
+		fails.append("ui_consult_layout_ok: missing SEAT_PATIENT (1280,1280)")
 	if clinic_gd3.find("jiang_wan_sit") < 0 and clinic_gd3.find("load_portrait_sit") < 0:
 		fails.append("ui_consult_layout_ok: Jiang Wan should use sit pose loader")
 	if clinic_gd3.find("Prop_yaohu") < 0 or clinic_gd3.find("_apply_clinic_props_v139") < 0:
 		fails.append("ui_consult_layout_ok: small desk props (yaohu/maizhen/xianglu) not wired")
-	if clinic_gd3.find("Vector2(0, -40)") >= 0 and clinic_gd3.find("CAM_HERO_IDLE := Vector2(1280, 740)") >= 0:
-		fails.append("ui_consult_layout_ok: idle (0,-40) lift must be abolished")
+	if clinic_gd3.find("L3_desk_front") < 0 or clinic_gd3.find("_try_wire_desk_front") < 0:
+		fails.append("ui_consult_layout_ok: L3_desk_front must be wired into L5 YSort")
+	if clinic_gd3.find("Vector2(-732.0, -824.8889)") < 0 and clinic_gd3.find("offset = Vector2(-732") < 0:
+		fails.append("ui_consult_layout_ok: L3_desk_front offset must match L3_DESK_FRONT.md")
+	if not FileAccess.file_exists("res://ui/layers/L3_desk_front.png") and not FileAccess.file_exists("res://scene-slice/layers/L3_desk_front.png"):
+		fails.append("ui_consult_layout_ok: L3_desk_front.png missing")
+	# Forbid old look offsets / wrong left-cabinet band / desk-node feet
+	if clinic_gd3.find("APPRENTICE_HOME := Vector2(1035, 770)") >= 0 or clinic_gd3.find("APPRENTICE_HOME := Vector2(1220, 1000)") >= 0:
+		fails.append("ui_consult_layout_ok: stale Jiang Wan feet (must be 1220,1080)")
+	if clinic_gd3.find("SEAT_PATIENT := Vector2(1040, 590)") >= 0 or clinic_gd3.find("SEAT_PATIENT := Vector2(1280, 1240)") >= 0:
+		fails.append("ui_consult_layout_ok: stale seat feet (must be 1280,1280)")
+	if clinic_gd3.find("WAIT_HOMES := [Vector2(400, 400)") >= 0:
+		fails.append("ui_consult_layout_ok: A–D must not return to left Y~400 cabinet band")
+	if clinic_gd3.find("CAM_HERO_ZOOM_IDLE := Vector2(0.48") >= 0:
+		fails.append("ui_consult_layout_ok: idle zoom must stay ≈0.67 (no 0.48 look)")
 	var main_src2 := FileAccess.get_file_as_string("res://scenes/main.gd")
 	if main_src2.find("boot_rounded") < 0 and main_src2.find("_boot_panel_style") < 0:
 		fails.append("ui_consult_layout_ok: boot rounded/warm plate style missing")
-	# Idle composition host
 	var homes_c: Array = [Vector2(1920, 1280), Vector2(2060, 1270), Vector2(1800, 1300), Vector2(2180, 1260)]
-	var work := Rect2(880, 520, 440, 300)
-	var ap_home := Vector2(1220, 1000)  ## L3 chair-leg floor band (lock 1035,770 reads on-desk)
-	var seat := Vector2(1280, 1240)  ## front floor south of JW
-	# Jiang Wan grounded under chair/desk, not mid-air / V138 desk-center
-	if ap_home.distance_to(Vector2(1220, 1000)) > 24.0:
-		fails.append("ui_consult_layout_ok: Jiang Wan not in consult seat zone")
-	if ap_home.distance_to(Vector2(1100, 720)) < 48.0:
-		fails.append("ui_consult_layout_ok: Jiang Wan still at V138 desk-center feet")
-	if clinic_gd3.find("WAIT_HOMES_LOCK") < 0 and clinic_gd3.find("APPRENTICE_HOME_LOCK") < 0:
-		fails.append("ui_consult_layout_ok: look offsets should keep LOCK consts documented")
-	# Work-zone avoidance for A–D
+	var work := Rect2(900, 960, 600, 240)  ## x∈[900,1500] ∩ y∈[960,1200]
+	var ap_home := Vector2(1220, 1080)
+	var seat := Vector2(1280, 1280)
+	if ap_home.distance_to(Vector2(1220, 1080)) > 24.0:
+		fails.append("ui_consult_layout_ok: Jiang Wan not in V139.1 chair-leg floor band")
+	if ap_home.distance_to(Vector2(1035, 770)) < 48.0 or ap_home.distance_to(Vector2(1100, 720)) < 48.0:
+		fails.append("ui_consult_layout_ok: Jiang Wan still on Desk/PhysicianChair node feet")
+	# A–D: right aisle x≥1800, outside work zone, not left Y~400
 	var clear_n := 0
+	var aisle_n := 0
 	for h in homes_c:
 		if not work.has_point(h):
 			clear_n += 1
+		if h.x >= 1800.0 and h.y >= 1200.0:
+			aisle_n += 1
 	if clear_n < 3:
 		fails.append("ui_consult_layout_ok: need ≥3 waiting feet outside desk work zone (got %d)" % clear_n)
-	# Spacing still OK
+	if aisle_n < 3:
+		fails.append("ui_consult_layout_ok: need ≥3 waiting on right-aisle floor (got %d)" % aisle_n)
 	var spaced_c := 0
 	for i in homes_c.size():
 		for j in range(i + 1, homes_c.size()):
@@ -3177,17 +3194,14 @@ func run_slice_smoke() -> int:
 				spaced_c += 1
 	if spaced_c < 3:
 		fails.append("ui_consult_layout_ok: waiting x-spacing pairs <3")
-	# Open-consult pair facing: seat south of / above physician in world? PatientChair Y < PhysicianChair Y
-	# Relative: patient at seat, Jiang Wan at ap_home — both near desk, facing pair
-	if seat.distance_to(ap_home) < 40.0 or seat.distance_to(ap_home) > 320.0:
+	# ΔY ≥120 for 隔桌对坐; pair distance within readable midshot
+	if seat.distance_to(ap_home) < 80.0 or seat.distance_to(ap_home) > 400.0:
 		fails.append("ui_consult_layout_ok: consult pair distance odd (%.1f)" % seat.distance_to(ap_home))
 	if seat.y - ap_home.y < 120.0:
 		fails.append("ui_consult_layout_ok: patient should sit south/front of Jiang Wan (ΔY<%.1f)" % (seat.y - ap_home.y))
-	# Sit art present
 	var sit_tex: Texture2D = CharacterArt.load_portrait_sit("apprentice_jiang")
 	if sit_tex == null and not FileAccess.file_exists("res://ui/characters/jiang_wan_sit.png"):
 		fails.append("ui_consult_layout_ok: jiang_wan_sit.png missing")
-	# Prop files
 	for prop_p in ["res://ui/clinic/props/yaohu_128.png", "res://ui/clinic/props/maizhen_128.png", "res://ui/clinic/props/xianglu_128.png"]:
 		if not FileAccess.file_exists(prop_p) and not ResourceLoader.exists(prop_p):
 			fails.append("ui_consult_layout_ok: missing prop %s" % prop_p)

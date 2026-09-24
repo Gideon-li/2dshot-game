@@ -2,27 +2,23 @@ extends Node2D
 ## SCENE-SLICE hung on this one room. No second map. GameFlow play loop overlays.
 
 const WORLD := Vector2(2560, 1440)
-## V139 idle/consult: CAM_HERO midshot (CLINIC-CONSULT-V139).
+## V139.1 idle/consult: CAM_HERO midshot (CLINIC-CONSULT-V139 / V139.1 feet lock).
 const CAM_HERO_HOME := Vector2(1280, 780)
 const CAM_HERO_ZOOM := Vector2(0.666667, 0.666667)
-## Idle: HERO center; zoom nearer 0.67 (0.62 keeps C@280 in-frame). No V138 (0,-40) Y-lift.
-const CAM_HERO_IDLE := Vector2(1280, 820)  ## +40 nudge: show right-aisle floor
-const CAM_HERO_ZOOM_IDLE := Vector2(0.48, 0.48)  ## floor aisle + chair + cabinet midshot
-## Lock table (CLINIC-CONSULT-V139) — kept for smoke / docs:
-const WAIT_HOMES_LOCK := [Vector2(400, 400), Vector2(540, 400), Vector2(280, 430), Vector2(680, 410)]
-const APPRENTICE_HOME_LOCK := Vector2(1035, 770)
-const SEAT_PATIENT_LOCK := Vector2(1040, 590)
-## Look offsets vs L3 paint (lock Desk/Chair/Bench nodes land on desktop/chair-back/drawers):
-##   desk top≈Y720; front-bench seat≈Y1100–1130; right-aisle floor≈Y1260–1360 at X≥1800.
-##   Flat L3 has NO desk-apron occlusion — true "behind desk" needs scene L3.5 overlay (see PORTRAIT).
+## Idle default = HERO home; single-axis nudge ≤40 allowed. Zoom ≈0.67 (no wide 0.48 look).
+const CAM_HERO_IDLE := Vector2(1280, 780)
+const CAM_HERO_ZOOM_IDLE := Vector2(0.666667, 0.666667)
+## V139.1 lock feet (world px = position). Do NOT use Desk/PhysicianChair/PatientChair/Bench* as feet.
+## A–D right-aisle floor; Jiang Wan chair-leg/under-desk ground; patient desk-south ground.
 const WAIT_HOMES := [Vector2(1920, 1280), Vector2(2060, 1270), Vector2(1800, 1300), Vector2(2180, 1260)]
 const WAIT_HOT_CENTERS := [Vector2(1920, 1245), Vector2(2060, 1235), Vector2(1800, 1265), Vector2(2180, 1225)]
-## Jiang Wan: stool toward chair-leg / under-desk floor band (not mid-air 655 / desk-top 860).
-const APPRENTICE_HOME := Vector2(1220, 1000)
-## Patient: south/front floor — ΔY vs JW reads 对坐 (lock 590 was on painted desktop).
-const SEAT_PATIENT := Vector2(1280, 1240)
-## Desk work zone — waiting must not enter (smoke ui_consult_layout_ok)
-const WORK_ZONE := Rect2(880, 520, 440, 300)  ## x∈[880,1320] ∩ y∈[520,820]
+const APPRENTICE_HOME := Vector2(1220, 1080)  ## sit pose; display h 300–320
+const SEAT_PATIENT := Vector2(1280, 1280)
+const SEAT_PATIENT_HOT := Vector2(1280, 1245)  ## Area_病人椅 r=70
+## Work zone forbidden for waiting: x∈[900,1500] ∩ y∈[960,1200]
+const WORK_ZONE := Rect2(900, 960, 600, 240)
+## L3_desk_front Y-sort origin (if apron strip present); foot_y < 1160 draws behind desk.
+const DESK_FRONT_SORT_Y := 1160.0
 const HERB_SNAP := 40.0
 const BED_RECT := Rect2(320, 820, 420, 160)
 const FORMULA_RECT := Rect2(1720, 780, 400, 180)
@@ -212,7 +208,7 @@ func _pin_cam_hero_home(cam: Camera2D = null) -> void:
 		cam = get_node_or_null("CAM_HERO") as Camera2D
 	if cam == null:
 		return
-	# V139 idle: HERO home (1280,780) zoom≈0.67; A–D already on walkway (no -40 lift).
+	# V139.1 idle: HERO (1280,780) zoom≈0.67; A–D on right-aisle floor.
 	cam.position = CAM_HERO_IDLE
 	cam.zoom = CAM_HERO_ZOOM_IDLE
 	# Drag margins can leave view off home after prior follow — clear for idle accept.
@@ -234,7 +230,7 @@ func _fix_fg_wash_for_midshot() -> void:
 
 
 func _sync_v139_anchors() -> void:
-	## CLINIC-CONSULT-V139: runtime feet / hot centers (do not edit clinic.tscn).
+	## CLINIC-CONSULT-V139.1: runtime feet / hot centers (cover Desk/Chair node coords).
 	var furn := get_node_or_null("L3_furniture")
 	if furn:
 		var ba := furn.get_node_or_null("BenchA") as Node2D
@@ -250,9 +246,86 @@ func _sync_v139_anchors() -> void:
 			var ar := areas.get_node_or_null(stool_names[i]) as Area2D
 			if ar:
 				ar.position = WAIT_HOT_CENTERS[i]
-		var ap_node := get_node_or_null("L5_characters/Apprentice") as Node2D
-		if ap_node:
-			ap_node.position = APPRENTICE_HOME
+		var chair_ar := areas.get_node_or_null("Area_病人椅") as Area2D
+		if chair_ar:
+			chair_ar.position = SEAT_PATIENT_HOT
+	var ap_node := get_node_or_null("L5_characters/Apprentice") as Node2D
+	if ap_node:
+		ap_node.position = APPRENTICE_HOME
+	# Optional open-consult push-in (does not affect idle accept).
+	var ask := get_node_or_null("CAM_ASK") as Camera2D
+	if ask:
+		ask.position = Vector2(1260, 1140)
+		ask.zoom = Vector2(0.62, 0.62)
+	_try_wire_desk_front()
+
+
+func _try_wire_desk_front() -> void:
+	## V139.1 L3_desk_front (+ optional apron) — same YSort as portraits (L5_characters).
+	## Auth: scene-slice/layers/L3_DESK_FRONT.md ; foot_y 1080 draws behind apron (Y=1160).
+	var chars := get_node_or_null("L5_characters") as Node2D
+	if chars == null:
+		return
+	chars.y_sort_enabled = true
+	_ensure_desk_front_sprite(
+		chars,
+		"L3_desk_front",
+		["res://ui/layers/L3_desk_front.png", "res://scene-slice/layers/L3_desk_front.png", "res://ui/clinic/L3_desk_front.png"]
+	)
+	# Stronger mid occlusion (desk front panel) — same sort key; optional file.
+	_ensure_desk_front_sprite(
+		chars,
+		"L3_desk_front_apron",
+		["res://ui/clinic/L3_desk_front_apron.png", "res://scene-slice/layers/L3_desk_front_apron.png"]
+	)
+
+
+func _ensure_desk_front_sprite(chars: Node2D, node_name: String, paths: Array) -> void:
+	var desk: Sprite2D = chars.get_node_or_null(node_name) as Sprite2D
+	if desk == null:
+		var found := get_node_or_null(node_name)
+		if found == null:
+			found = get_node_or_null("L3_furniture/%s" % node_name)
+		if found is Sprite2D:
+			desk = found as Sprite2D
+	if desk == null:
+		desk = Sprite2D.new()
+		desk.name = node_name
+		chars.add_child(desk)
+	elif desk.get_parent() != chars:
+		var gp := desk.global_position
+		desk.get_parent().remove_child(desk)
+		chars.add_child(desk)
+		desk.global_position = gp
+	var tex: Texture2D = null
+	for p in paths:
+		if not FileAccess.file_exists(str(p)):
+			continue
+		var img := Image.new()
+		if img.load(ProjectSettings.globalize_path(str(p))) == OK:
+			tex = ImageTexture.create_from_image(img)
+			break
+	if tex == null:
+		for p2 in paths:
+			if ResourceLoader.exists(str(p2)):
+				tex = load(str(p2)) as Texture2D
+			if tex != null:
+				break
+	if tex == null:
+		if node_name == "L3_desk_front":
+			push_warning("L3_desk_front texture missing")
+		return
+	desk.texture = tex
+	desk.centered = false
+	desk.scale = Vector2(1.666667, 1.40625)
+	desk.position = Vector2(1220, DESK_FRONT_SORT_Y)
+	desk.offset = Vector2(-732.0, -824.8889)
+	# Same z as Apprentice/Patient hosts so Y-sort compares; parent L5 supplies layer.
+	desk.z_index = 0
+	desk.y_sort_enabled = true
+	desk.visible = true
+	desk.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+
 
 
 func _apply_clinic_props_v139() -> void:
@@ -552,7 +625,7 @@ func _apply_portraits() -> void:
 	if sheet_art:
 		sheet_art.visible = false
 		sheet_art.texture = null
-	# Jiang Wan — PhysicianChair sit pose; feet APPRENTICE_HOME; display ~240–260.
+	# Jiang Wan — sit pose; feet APPRENTICE_HOME (1220,1080); display ~300–320.
 	var ap := chars.get_node_or_null("Apprentice") as Node2D
 	if ap:
 		ap.position = APPRENTICE_HOME
@@ -566,7 +639,7 @@ func _apply_portraits() -> void:
 		if at == null:
 			at = CharacterArt.load_portrait("apprentice_jiang")
 		if at:
-			_fit_portrait_sprite(ap_art, at, 320.0)
+			_fit_portrait_sprite(ap_art, at, 310.0)
 			# Sit art faces viewer-left; flip so she orients toward patient (desk north).
 			ap_art.flip_h = true
 			ap_art.visible = true
@@ -605,7 +678,7 @@ func _apply_portraits() -> void:
 			continue
 		var at_chair := node.position.distance_to(chair) < 48.0
 		# Idle HERO midshot: stools at back wall — slightly shorter so heads stay in frame.
-		var target_h := 360.0 if at_chair else _waiting_portrait_height()
+		var target_h := 300.0 if at_chair else _waiting_portrait_height()
 		spr.material = null
 		_fit_portrait_sprite(spr, tex, target_h)
 		# Visit posture: face Jiang Wan when at chair; waiting keep default.
@@ -624,11 +697,12 @@ func _apply_portraits() -> void:
 			lb.visible = false
 		_ensure_seat_hit(node, i)
 
+	_try_wire_desk_front()
 
 
 func _waiting_portrait_height() -> float:
-	## V139 look: slightly taller so aisle feet read as people in front of cabinet, not drawer-top miniatures.
-	return 320.0
+	## V139.1: waiting display height 240～280 on right-aisle floor.
+	return 260.0
 
 
 func _fit_portrait_sprite(spr: Sprite2D, tex: Texture2D, target_h: float) -> void:
