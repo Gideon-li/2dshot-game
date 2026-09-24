@@ -1,5 +1,5 @@
 extends Node
-## V139 proof: boot rounded + idle consult composition + open-consult pair.
+## V139 proof (visual fix): boot + idle aisle composition + clear open-consult pair.
 
 func _ready() -> void:
 	TranslationServer.set_locale("zh")
@@ -11,15 +11,15 @@ func _ready() -> void:
 	add_child(boot)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	await get_tree().create_timer(0.45).timeout
+	await get_tree().create_timer(0.4).timeout
 	var img_boot: Image = get_viewport().get_texture().get_image()
-	var p_boot := "res://ui/boot/v139_boot.png"
-	print("boot_saved=", img_boot.save_png(p_boot) == OK, " path=", p_boot, " wh=", img_boot.get_width(), "x", img_boot.get_height())
+	print("boot_saved=", img_boot.save_png("res://ui/boot/v139_boot.png") == OK)
 	boot.queue_free()
 	await get_tree().process_frame
 
 	# --- Clinic idle ---
 	GameFlow.fsm_state = "clinic_idle"
+	GameFlow.current_patient_id = ""
 	if GameFlow.has_method("refresh_waiting_seats"):
 		GameFlow.refresh_waiting_seats(true)
 	var clinic_ps: PackedScene = load("res://scenes/clinic.tscn") as PackedScene
@@ -27,40 +27,22 @@ func _ready() -> void:
 	add_child(clinic)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	if clinic.has_method("_sync_v139_anchors"):
-		clinic.call("_sync_v139_anchors")
-	if clinic.has_method("_apply_clinic_props_v139"):
-		clinic.call("_apply_clinic_props_v139")
-	if clinic.has_method("_label_patients"):
-		clinic.call("_label_patients")
-	if clinic.has_method("_pin_cam_hero_home"):
-		clinic.call("_pin_cam_hero_home")
+	for m in ["_sync_v139_anchors", "_apply_clinic_props_v139", "_label_patients", "_pin_cam_hero_home", "_apply_portraits"]:
+		if clinic.has_method(m):
+			clinic.call(m)
 	var cam := clinic.get_node_or_null("CAM_HERO") as Camera2D
-	if cam:
-		cam.position = Vector2(1280, 780)
-		cam.zoom = Vector2(0.52, 0.52)
-		cam.position_smoothing_enabled = false
-		cam.drag_horizontal_enabled = false
-		cam.drag_vertical_enabled = false
-		cam.make_current()
-		cam.enabled = true
-	if clinic.get("_cam_name") != null:
-		clinic.set("_cam_name", "CAM_HERO")
+	_pin_hero(cam, clinic)
 	if clinic.has_method("set_process"):
 		clinic.set_process(false)
 	await get_tree().process_frame
-	await get_tree().create_timer(0.55).timeout
+	await get_tree().create_timer(0.5).timeout
 	if clinic.has_method("_apply_portraits"):
 		clinic.call("_apply_portraits")
-	if cam:
-		cam.position = Vector2(1280, 780)
-		cam.zoom = Vector2(0.52, 0.52)
-		cam.make_current()
+	_pin_hero(cam, clinic)
 	await get_tree().process_frame
 	await get_tree().create_timer(0.25).timeout
 	var img_idle: Image = get_viewport().get_texture().get_image()
-	var p_idle := "res://ui/waiting/v139_idle.png"
-	print("idle_saved=", img_idle.save_png(p_idle) == OK, " path=", p_idle)
+	print("idle_saved=", img_idle.save_png("res://ui/waiting/v139_idle.png") == OK)
 
 	var chars := clinic.get_node_or_null("L5_characters")
 	var vis := 0
@@ -76,7 +58,7 @@ func _ready() -> void:
 				vis += 1
 				if not work.has_point(pn.position):
 					clear_n += 1
-				print("seat", i, " pid=", pn.get_meta("pid", ""), " pos=", pn.position)
+				print("seat", i, " pos=", pn.position, " pid=", pn.get_meta("pid", ""))
 		var ap := chars.get_node_or_null("Apprentice") as Node2D
 		if ap:
 			print("apprentice_pos=", ap.position)
@@ -86,43 +68,61 @@ func _ready() -> void:
 		for c in l4.get_children():
 			print("prop=", c.name, " vis=", c.visible, " pos=", c.get("position") if c is Node2D else "?")
 
-	# --- Open consult pair (manual seat — avoid start_patient scene churn) ---
-	var seats: Array = []
-	if GameFlow.has_method("waiting_patients"):
-		seats = GameFlow.waiting_patients()
-	var pick_pid := ""
-	if seats.size() > 0:
-		pick_pid = str(seats[0].get("id", ""))
+	# --- Open consult: seat ONE patient, hide other waiting for clear pair ---
+	var seats: Array = GameFlow.waiting_patients() if GameFlow.has_method("waiting_patients") else []
+	var pick_pid := str(seats[0].get("id", "")) if seats.size() > 0 else ""
 	if pick_pid != "":
 		GameFlow.current_patient_id = pick_pid
 		GameFlow.fsm_state = "asking"
 		if chars:
 			for i3 in 4:
 				var pn3 := chars.get_node_or_null("Patient%d" % i3) as Node2D
-				if pn3 and str(pn3.get_meta("pid", "")) == pick_pid:
+				if pn3 == null:
+					continue
+				if str(pn3.get_meta("pid", "")) == pick_pid:
 					pn3.position = Vector2(1040, 590)
+					pn3.visible = true
+				else:
+					# Keep away / hide so pair reads clearly in accept shot
+					pn3.visible = false
 	await get_tree().process_frame
-	await get_tree().create_timer(0.35).timeout
+	await get_tree().create_timer(0.3).timeout
 	if clinic.has_method("_apply_portraits"):
 		clinic.call("_apply_portraits")
+	# Re-hide others after portraits (apply may re-show)
+	if chars and pick_pid != "":
+		for i4 in 4:
+			var pn4 := chars.get_node_or_null("Patient%d" % i4) as Node2D
+			if pn4 and str(pn4.get_meta("pid", "")) != pick_pid:
+				pn4.visible = false
+			elif pn4 and str(pn4.get_meta("pid", "")) == pick_pid:
+				pn4.position = Vector2(1040, 590)
+				pn4.visible = true
 	if clinic.has_method("_rebuild_dock"):
 		clinic.call("_rebuild_dock")
-	for n in ["CAM_ASK", "CAM_PULSE", "CAM_FORMULA", "CAM_NEEDLE", "CAM_RESULT", "CAM_LOFT"]:
-		var other := clinic.get_node_or_null(n) as Camera2D
-		if other:
-			other.enabled = false
-	if cam:
-		cam.position = Vector2(1280, 780)
-		cam.zoom = Vector2(0.52, 0.52)
+	# Consult accept: CAM_ASK midshot so patient@590 + JW@670 behind desk read as a pair
+	var ask := clinic.get_node_or_null("CAM_ASK") as Camera2D
+	for n in ["CAM_HERO", "CAM_PULSE", "CAM_FORMULA", "CAM_NEEDLE", "CAM_RESULT", "CAM_LOFT"]:
+		var o := clinic.get_node_or_null(n) as Camera2D
+		if o:
+			o.enabled = false
+	if ask:
+		ask.position = Vector2(1100, 640)
+		ask.zoom = Vector2(0.85, 0.85)
+		ask.enabled = true
+		ask.make_current()
+		cam = ask
+	elif cam:
+		cam.position = Vector2(1100, 640)
+		cam.zoom = Vector2(0.85, 0.85)
 		cam.enabled = true
 		cam.make_current()
 	if clinic.get("_cam_name") != null:
-		clinic.set("_cam_name", "CAM_HERO")
+		clinic.set("_cam_name", "CAM_ASK")
 	await get_tree().process_frame
-	await get_tree().create_timer(0.35).timeout
+	await get_tree().create_timer(0.4).timeout
 	var img_consult: Image = get_viewport().get_texture().get_image()
-	var p_consult := "res://ui/consult/v139_consult.png"
-	print("consult_saved=", img_consult.save_png(p_consult) == OK, " path=", p_consult)
+	print("consult_saved=", img_consult.save_png("res://ui/consult/v139_consult.png") == OK)
 	if chars:
 		var ap2 := chars.get_node_or_null("Apprentice") as Node2D
 		print("consult_apprentice=", ap2.position if ap2 else Vector2.ZERO)
@@ -131,5 +131,26 @@ func _ready() -> void:
 			if pn2 and pn2.visible:
 				print("consult_seat", i2, " pos=", pn2.position, " pid=", pn2.get_meta("pid", ""))
 	print("cam_pos=", cam.position if cam else Vector2.ZERO, " zoom=", cam.zoom if cam else Vector2.ZERO)
-	var ok := vis >= 3 and clear_n >= 3
-	get_tree().quit(0 if ok else 1)
+	get_tree().quit(0 if vis >= 3 and clear_n >= 3 else 1)
+
+
+func _pin_hero(cam: Camera2D, clinic: Node) -> void:
+	if cam == null:
+		return
+	cam.position = Vector2(1280, 780)
+	cam.zoom = Vector2(0.55, 0.55)  ## show floor band + cabinet midshot
+	cam.position_smoothing_enabled = false
+	cam.drag_horizontal_enabled = false
+	cam.drag_vertical_enabled = false
+	cam.enabled = true
+	cam.make_current()
+	if clinic.get("_cam_name") != null:
+		clinic.set("_cam_name", "CAM_HERO")
+	_disable_other_cams(clinic)
+
+
+func _disable_other_cams(clinic: Node) -> void:
+	for n in ["CAM_ASK", "CAM_PULSE", "CAM_FORMULA", "CAM_NEEDLE", "CAM_RESULT", "CAM_LOFT"]:
+		var other := clinic.get_node_or_null(n) as Camera2D
+		if other:
+			other.enabled = false

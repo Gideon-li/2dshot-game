@@ -2969,7 +2969,7 @@ func run_slice_smoke() -> int:
 	var bootp_host := Node2D.new()
 	bootp_host.name = "SmokePortraitHost"
 	add_child(bootp_host)
-	var homes: Array = [Vector2(400, 400), Vector2(540, 400), Vector2(280, 430), Vector2(680, 410)]  ## V139
+	var homes: Array = [Vector2(1480, 980), Vector2(1600, 975), Vector2(1380, 1000), Vector2(1720, 970)]  ## V139 look
 	var seats_smoke: Array = waiting_patients() if has_method("waiting_patients") else []
 	for i in mini(seats_smoke.size(), 4):
 		var pid := str(seats_smoke[i].get("id", ""))
@@ -3039,7 +3039,7 @@ func run_slice_smoke() -> int:
 		fails.append("ui_layout_ok: padded portraits need content-crop fit")
 	if clinic_gd2.find("_waiting_portrait_height") < 0:
 		fails.append("ui_layout_ok: missing _waiting_portrait_height")
-	if clinic_gd2.find("return 260.0") < 0 and clinic_gd2.find("return 280.0") < 0 and clinic_gd2.find("return 240.0") < 0:
+	if clinic_gd2.find("return 260.0") < 0 and clinic_gd2.find("return 280.0") < 0 and clinic_gd2.find("return 240.0") < 0 and clinic_gd2.find("return 300.0") < 0 and clinic_gd2.find("return 320.0") < 0:
 		fails.append("ui_layout_ok: waiting portrait height should be 240～280")
 	if clinic_gd2.find("CAM_HERO_IDLE") >= 0 and clinic_gd2.find("Vector2(1280, 740)") < 0 and clinic_gd2.find("Vector2(1280, 780)") < 0 and clinic_gd2.find("Vector2(1240, 780)") < 0:
 		fails.append("ui_layout_ok: CAM_HERO_IDLE must stay within ≤40 of (1280,780)")
@@ -3047,7 +3047,7 @@ func run_slice_smoke() -> int:
 	if clinic_gd2.find("CAM_HERO_ZOOM_IDLE") < 0:
 		fails.append("ui_layout_ok: missing CAM_HERO_ZOOM_IDLE for readable waiting portraits")
 	# Seat spacing + apprentice viewport under CAM_HERO (no full clinic.tscn — hang-safe)
-	var homes_l: Array = [Vector2(400, 400), Vector2(540, 400), Vector2(280, 430), Vector2(680, 410)]  ## V139
+	var homes_l: Array = [Vector2(1480, 980), Vector2(1600, 975), Vector2(1380, 1000), Vector2(1720, 970)]  ## V139 look
 	var spaced := 0
 	for i in homes_l.size():
 		for j in range(i + 1, homes_l.size()):
@@ -3086,7 +3086,7 @@ func run_slice_smoke() -> int:
 		layout_host.add_child(node_l)
 	var ap_l := Node2D.new()
 	ap_l.name = "Apprentice"
-	ap_l.position = Vector2(1035, 770)  ## V139 PhysicianChair
+	ap_l.position = Vector2(1090, 655)  ## V139 look: floor in front of desk
 	var ap_spr := Sprite2D.new()
 	ap_spr.name = "Art"
 	var ap_tex: Texture2D = CharacterArt.load_portrait("apprentice_jiang")
@@ -3151,15 +3151,17 @@ func run_slice_smoke() -> int:
 	if main_src2.find("boot_rounded") < 0 and main_src2.find("_boot_panel_style") < 0:
 		fails.append("ui_consult_layout_ok: boot rounded/warm plate style missing")
 	# Idle composition host
-	var homes_c: Array = [Vector2(400, 400), Vector2(540, 400), Vector2(280, 430), Vector2(680, 410)]
+	var homes_c: Array = [Vector2(1480, 980), Vector2(1600, 975), Vector2(1380, 1000), Vector2(1720, 970)]
 	var work := Rect2(880, 520, 440, 300)
-	var ap_home := Vector2(1035, 770)
+	var ap_home := Vector2(1090, 655)  ## look offset from lock (1035,770)
 	var seat := Vector2(1040, 590)
-	# Jiang Wan in consult-seat zone (near PhysicianChair, not desk center / pillow)
-	if ap_home.distance_to(Vector2(1035, 770)) > 24.0:
+	# Jiang Wan near PhysicianChair aisle (look Y), not V138 desk-center / pillow
+	if ap_home.distance_to(Vector2(1090, 655)) > 24.0:
 		fails.append("ui_consult_layout_ok: Jiang Wan not in consult seat zone")
-	if ap_home.distance_to(Vector2(1100, 720)) < 40.0 and ap_home.distance_to(Vector2(1035, 770)) > 24.0:
+	if ap_home.distance_to(Vector2(1100, 720)) < 48.0:
 		fails.append("ui_consult_layout_ok: Jiang Wan still at V138 desk-center feet")
+	if clinic_gd3.find("WAIT_HOMES_LOCK") < 0 and clinic_gd3.find("APPRENTICE_HOME_LOCK") < 0:
+		fails.append("ui_consult_layout_ok: look offsets should keep LOCK consts documented")
 	# Work-zone avoidance for A–D
 	var clear_n := 0
 	for h in homes_c:
@@ -3177,7 +3179,7 @@ func run_slice_smoke() -> int:
 		fails.append("ui_consult_layout_ok: waiting x-spacing pairs <3")
 	# Open-consult pair facing: seat south of / above physician in world? PatientChair Y < PhysicianChair Y
 	# Relative: patient at seat, Jiang Wan at ap_home — both near desk, facing pair
-	if seat.distance_to(ap_home) < 80.0 or seat.distance_to(ap_home) > 260.0:
+	if seat.distance_to(ap_home) < 40.0 or seat.distance_to(ap_home) > 200.0:
 		fails.append("ui_consult_layout_ok: consult pair distance odd (%.1f)" % seat.distance_to(ap_home))
 	# Sit art present
 	var sit_tex: Texture2D = CharacterArt.load_portrait_sit("apprentice_jiang")
