@@ -75,7 +75,8 @@ func _build() -> void:
 	card.custom_minimum_size = Vector2(0, 180)
 	# Default size flags: shrink to content; do not expand into the shop-sign band.
 	card.size_flags_vertical = 0
-	card.add_theme_stylebox_override("panel", UiKit.paper_style(UiKit.PAPER_WARM, UiKit.LINE_SOFT, UiKit.RADIUS_CARD))
+	var disc_fallback := UiKit.paper_style(UiKit.PAPER_WARM, UiKit.LINE_SOFT, UiKit.RADIUS_CARD)
+	card.add_theme_stylebox_override("panel", UiKit.panel_or_plate(UiKit.BOOT_PANEL_DISCLAIMER, disc_fallback))
 	col.add_child(card)
 	var inner := VBoxContainer.new()
 	inner.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -108,6 +109,8 @@ func _build() -> void:
 	# 5) Enter CTA below card (outside), then footer.
 	_enter = UiKit.make_button("START_CLINIC", true)
 	_enter.custom_minimum_size = Vector2(220, 44)
+	# Size first so the button plate's nine-patch corners fit 220×44.
+	UiKit.style_button(_enter, true, UiKit.BOOT_BTN_PLATE)
 	_enter.pressed.connect(_on_enter)
 	var enter_wrap := HBoxContainer.new()
 	enter_wrap.alignment = BoxContainer.ALIGNMENT_CENTER

@@ -16,6 +16,10 @@ const LINE_SOFT := Color(0.45, 0.32, 0.18, 0.55)
 ## Shared soft corner. Callers that pass an explicit radius (clinic dock 4, etc.) stay put.
 const RADIUS_SOFT := 14
 const RADIUS_CARD := 16
+## V139 art plates. Nine-patch these when present; flat paper is only the fallback.
+const BOOT_PANEL_DISCLAIMER := "res://ui/boot/boot_panel_disclaimer.png"
+const BOOT_BTN_PLATE := "res://ui/boot/boot_btn_plate.png"
+const BOOT_CHECK_PLATE := "res://ui/boot/boot_check_plate.png"
 
 var font: Font
 
@@ -81,16 +85,85 @@ func paper_style(bg: Color = PAPER, border: Color = LINE, radius: int = RADIUS_S
 	return s
 
 
-func style_button(btn: Button, seal: bool = false) -> void:
+func boot_plate(path: String, tint: Color = Color(1, 1, 1, 1), content_h: int = 16, content_v: int = 8, fit_w: int = 0, fit_h: int = 0) -> StyleBoxTexture:
+	## Nine-patch an art plate. Corners stay (texture margins); the center stretches.
+	## No flat border is drawn under the art. Null if the png is not in the project yet.
+	if path == "" or not ResourceLoader.exists(path):
+		return null
+	var tex := load(path) as Texture2D
+	if tex == null:
+		return null
+	var sb := StyleBoxTexture.new()
+	sb.texture = tex
+	var w := tex.get_width()
+	var h := tex.get_height()
+	var mx := mini(maxi(int(w * 0.18), 8), 40)
+	var my := mini(maxi(int(h * 0.22), 8), 32)
+	mx = mini(mx, maxi(int(w / 2) - 4, 0))
+	my = mini(my, maxi(int(h / 2) - 4, 0))
+	# StyleBoxTexture draws corners at texture-pixel size. Keep them inside the control.
+	if fit_w >= 16:
+		mx = mini(mx, int(fit_w / 2) - 4)
+	if fit_h >= 16:
+		my = mini(my, int(fit_h / 2) - 4)
+	sb.texture_margin_left = maxi(mx, 0)
+	sb.texture_margin_right = maxi(mx, 0)
+	sb.texture_margin_top = maxi(my, 0)
+	sb.texture_margin_bottom = maxi(my, 0)
+	sb.axis_stretch_horizontal = StyleBoxTexture.AXIS_STRETCH_MODE_STRETCH
+	sb.axis_stretch_vertical = StyleBoxTexture.AXIS_STRETCH_MODE_STRETCH
+	sb.draw_center = true
+	sb.modulate_color = tint
+	sb.content_margin_left = content_h
+	sb.content_margin_right = content_h
+	sb.content_margin_top = content_v
+	sb.content_margin_bottom = content_v
+	return sb
+
+
+func panel_or_plate(path: String, fallback: StyleBox) -> StyleBox:
+	var plate := boot_plate(path, Color(1, 1, 1, 1), 18, 12)
+	if plate != null:
+		return plate
+	return fallback
+
+
+func _apply_plate_states(ctrl: Control, path: String, content_h: int, content_v: int, fit_w: int, fit_h: int) -> bool:
+	if boot_plate(path) == null:
+		return false
+	var tints := {
+		"normal": Color(1, 1, 1, 1),
+		"hover": Color(1.03, 0.99, 0.94, 1),
+		"pressed": Color(0.94, 0.88, 0.78, 1),
+		"hover_pressed": Color(0.94, 0.88, 0.78, 1),
+		"focus": Color(1.03, 0.99, 0.94, 1),
+		"disabled": Color(1, 1, 1, 0.55),
+	}
+	for state in tints:
+		ctrl.add_theme_stylebox_override(state, boot_plate(path, tints[state], content_h, content_v, fit_w, fit_h))
+	return true
+
+
+func style_button(btn: Button, seal: bool = false, plate_path: String = "") -> void:
 	apply_font(btn, 16)
-	var normal := paper_style(PAPER_WARM_DEEP if not seal else Color(0.55, 0.22, 0.16, 0.18), LINE_SOFT, RADIUS_SOFT)
-	var hover := paper_style(Color(0.94, 0.85, 0.70, 1), Color(0.42, 0.28, 0.16, 0.75), RADIUS_SOFT)
-	var pressed := paper_style(Color(0.86, 0.74, 0.58, 1), SEAL, RADIUS_SOFT)
-	btn.add_theme_stylebox_override("normal", normal)
-	btn.add_theme_stylebox_override("hover", hover)
-	btn.add_theme_stylebox_override("pressed", pressed)
-	btn.add_theme_stylebox_override("focus", hover)
-	btn.add_theme_stylebox_override("disabled", paper_style(Color(0.90, 0.84, 0.72, 0.7), Color(0.55, 0.42, 0.30, 0.35), RADIUS_SOFT))
+	var fit_w := int(btn.custom_minimum_size.x)
+	var fit_h := int(btn.custom_minimum_size.y)
+	var content_h := 16
+	var content_v := 6
+	if fit_w > 0 and fit_w < 64:
+		content_h = 4
+	if fit_h > 0 and fit_h < 64:
+		content_v = 2
+	var plated := plate_path != "" and _apply_plate_states(btn, plate_path, content_h, content_v, fit_w, fit_h)
+	if not plated:
+		var normal := paper_style(PAPER_WARM_DEEP if not seal else Color(0.55, 0.22, 0.16, 0.18), LINE_SOFT, RADIUS_SOFT)
+		var hover := paper_style(Color(0.94, 0.85, 0.70, 1), Color(0.42, 0.28, 0.16, 0.75), RADIUS_SOFT)
+		var pressed := paper_style(Color(0.86, 0.74, 0.58, 1), SEAL, RADIUS_SOFT)
+		btn.add_theme_stylebox_override("normal", normal)
+		btn.add_theme_stylebox_override("hover", hover)
+		btn.add_theme_stylebox_override("pressed", pressed)
+		btn.add_theme_stylebox_override("focus", hover)
+		btn.add_theme_stylebox_override("disabled", paper_style(Color(0.90, 0.84, 0.72, 0.7), Color(0.55, 0.42, 0.30, 0.35), RADIUS_SOFT))
 	btn.add_theme_color_override("font_color", SEAL if seal else INK)
 	btn.add_theme_color_override("font_hover_color", SEAL)
 	btn.add_theme_color_override("font_pressed_color", INK)
@@ -98,7 +171,7 @@ func style_button(btn: Button, seal: bool = false) -> void:
 
 
 func style_check(box: CheckBox, size: int = 15) -> void:
-	## Warm rounded chip behind a CheckBox. Does not touch the label string.
+	## Warm plate or rounded chip behind a CheckBox. Does not touch the label string.
 	apply_font(box, size)
 	box.add_theme_color_override("font_color", INK)
 	box.add_theme_color_override("font_hover_color", Color(0.32, 0.20, 0.14, 1))
@@ -112,6 +185,8 @@ func style_check(box: CheckBox, size: int = 15) -> void:
 	box.add_theme_color_override("icon_focus_color", warm_icon)
 	box.add_theme_color_override("icon_disabled_color", INK_MUTED)
 	box.add_theme_constant_override("h_separation", 8)
+	if _apply_plate_states(box, BOOT_CHECK_PLATE, 8, 2, 0, 32):
+		return
 	var fills := {
 		"normal": Color(0.96, 0.90, 0.78, 0.72),
 		"hover": Color(0.95, 0.86, 0.70, 0.92),
@@ -207,10 +282,11 @@ func make_settings_gear_button() -> Button:
 		b.expand_icon = true
 		b.custom_minimum_size = Vector2(40, 40)
 		b.add_theme_constant_override("icon_max_width", 32)
-		style_button(b, false)
+		# Button plate if its sliced corners fit a 40px gear; otherwise warm flat.
+		style_button(b, false, BOOT_BTN_PLATE)
 	else:
 		b.text = tr_or("SETTINGS_TITLE", "设置")
-		style_button(b, true)
+		style_button(b, true, BOOT_BTN_PLATE)
 	return b
 
 

@@ -9,16 +9,31 @@
 
 声明卡、勾选、「进入医馆」、设置齿轮偏硬直角，纸边偏冷、偏黑。Haopeng：温馨，少菱角。
 
-## 圆角与颜色
+## 画片（优先于纯 StyleBox）
+
+美工板已核，用九宫格 `StyleBoxTexture` 当底，不再在画片下再铺一层直角纸盒。角用贴图边距留住，中间拉伸。
+
+| 控件 | 贴图 | 挂法 |
+| --- | --- | --- |
+| `DisclaimerCard` | `ui/boot/boot_panel_disclaimer.png` | `UiKit.panel_or_plate` → Panel `panel` |
+| 「进入医馆」 | `ui/boot/boot_btn_plate.png` | `style_button(..., BOOT_BTN_PLATE)`，先设 220×44 再切片，角不撑出按钮 |
+| 设置齿轮 | 同一张按钮板 | `make_settings_gear_button`。40×40 时把切片边距收到控件内；贴图缺失才退回暖纸 |
+| 「我已阅读」 | `ui/boot/boot_check_plate.png` | `style_check` 的各状态底。文案键不动 |
+
+贴图缺失时才退回下面的暖纸 `StyleBoxFlat`（声明卡半径 16，按钮/设置面板 14，勾选芯片 12，边 `LINE_SOFT`）。有画片时以画片为准，不再用扁平面的半径去压角。
+
+查过 `origin/main` 与本分支：这三张 png **尚未入库**（`173f354` 之后也没有）。代码已按上述路径绑定；文件一落地就会吃到九宫格，不必再改分区。
+
+## 圆角与颜色（无画片时的退路）
 
 | 控件 | 半径 | 填充 | 边 |
 | --- | --- | --- | --- |
 | `DisclaimerCard` | `RADIUS_CARD` **16** | `PAPER_WARM` `(0.95, 0.88, 0.74)` | `LINE_SOFT` 暖赭、半透明，不是硬黑 |
-| 「进入医馆」/ 设置齿轮 / `style_button` | `RADIUS_SOFT` **14** | 非印：`PAPER_WARM_DEEP` `(0.92, 0.84, 0.70)`；印钮（进入医馆）仍是朱红薄罩，略提高不透明度以便圆角可读 | `LINE_SOFT`；悬停边为暖褐，不再用近黑 `INK` |
-| 「我已阅读」`UiKit.style_check` | 芯片 **12** | 暖纸半透明底（勾选/悬停略深） | `LINE_SOFT`；图标调制暖墨 / 悬停 `SEAL` |
-| 设置 overlay `SettingsPanel` | **14** | `PAPER_WARM` | `LINE_SOFT` |
+| 「进入医馆」/ 设置齿轮 / `style_button` | `RADIUS_SOFT` **14** | 非印：`PAPER_WARM_DEEP` `(0.92, 0.84, 0.70)`；印钮（进入医馆）仍是朱红薄罩 | `LINE_SOFT`；悬停边为暖褐，不再用近黑 `INK` |
+| 「我已阅读」`UiKit.style_check` | 芯片 **12** | 暖纸半透明底 | `LINE_SOFT`；图标调制暖墨 / 悬停 `SEAL` |
+| 设置 overlay `SettingsPanel` | **14** | `PAPER_WARM` | `LINE_SOFT`（没有单独的设置画片） |
 
-`paper_style` 默认半径从 4 提到 `RADIUS_SOFT`（14），并打开抗锯齿、`corner_detail = 12`，角更软。内容边距未改，不推动分区。
+`paper_style` 默认半径 `RADIUS_SOFT`（14），抗锯齿、`corner_detail = 12`。内容边距不推动 V138 分区。
 
 对照：方盘 / 药碗早已用半径 16（`formula.gd` / `food.gd`）。启动壳向那一档靠，而不是新画风。
 
@@ -43,9 +58,9 @@
 
 ## 交图
 
-`ui/boot/v139_boot.png` **本切片未交**。仓库里没有 `tools/godot43`。另起的 Godot 4.3 + OpenGL3（llvmpipe）在创建上下文后卡住，没有写出 png。角色侧在立绘合入后，沿 `_cap_boot_only.gd` 的 OpenGL3 + 显示路径，把输出改到 `res://ui/boot/v139_boot.png` 再拍（1280×720，locale `zh`，设置关）。
+`ui/boot/v139_boot.png` **留给角色侧在立绘合入后拍**，本切片不挡。沿 `_cap_boot_only.gd` 的 OpenGL3 + 显示路径，输出改到 `res://ui/boot/v139_boot.png`（1280×720，locale `zh`，设置关）。画片若当时已在 `ui/boot/`，截图里应看到声明卡 / 进馆钮 / 勾选的圆角板，而不是纯扁平方盒。
 
-建议合入说明：启动壳只动圆角与暖纸；V138 分区与免责文案保持；截图在角色帧齐了之后打 `ui/boot/v139_boot.png`。
+建议合入说明：启动壳优先挂三张九宫格画片，没有文件才退回暖纸圆角；V138 分区与免责文案保持；`v139_boot.png` 等角色帧齐了再拍。
 
 ## 不做
 
