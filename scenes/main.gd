@@ -27,64 +27,85 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _build() -> void:
+	## V138 §A boot zones (1280×720): top bar → sign clearance → subtitle → disclaimer → CTA → footer.
+	## Hero wood plaque IS the shop sign; no second large「墨问岐黄」Label over it.
 	_setup_boot_bg()
 	var col := VBoxContainer.new()
 	col.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	col.offset_left = 80
 	col.offset_right = -80
-	col.offset_top = 48
-	col.offset_bottom = -36
-	col.add_theme_constant_override("separation", 16)
+	col.offset_top = 36
+	col.offset_bottom = -28
+	col.add_theme_constant_override("separation", 10)
 	add_child(col)
-	# Top row: spacer + settings gear (language lives inside settings; no locale_bar).
+	# 1) Top bar: small muted title (left) + settings gear (right). No 48pt duplicate title.
 	var top := HBoxContainer.new()
-	top.alignment = BoxContainer.ALIGNMENT_END
-	var sp := Control.new()
-	sp.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	sp.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	top.add_child(sp)
+	top.alignment = BoxContainer.ALIGNMENT_BEGIN
+	top.add_theme_constant_override("separation", 12)
+	_title = UiKit.ink_label("", 17, UiKit.INK_MUTED, false)
+	_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	top.add_child(_title)
 	var gear := UiKit.make_settings_gear_button()
 	gear.pressed.connect(func() -> void:
 		_set_settings_open(not GameFlow.settings_open)
 	)
 	top.add_child(gear)
 	col.add_child(top)
-	_title = UiKit.ink_label("", 48)
-	_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	col.add_child(_title)
-	_sub = UiKit.ink_label("", 22, UiKit.SEAL)
+	# 2) Shop-sign clearance: leave wood plaque on boot_hero fully visible.
+	var sign_clear := Control.new()
+	sign_clear.name = "SignClearance"
+	sign_clear.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	sign_clear.custom_minimum_size = Vector2(0, 300)  ## plaque ~y137–366; keep 牌下
+	col.add_child(sign_clear)
+	# Accessibility: keep title text on top bar only; never draw a second huge label over the plaque.
+	# (If hero missing, top-bar title still names the store.)
+	# 3) Subtitle under the sign (牌下), SEAL — never overlaid on plaque center.
+	_sub = UiKit.ink_label("", 19, UiKit.SEAL, false)
 	_sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	col.add_child(_sub)
-	var spacer := Control.new()
-	spacer.custom_minimum_size = Vector2(0, 12)
-	col.add_child(spacer)
+	var sub_gap := Control.new()
+	sub_gap.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	sub_gap.custom_minimum_size = Vector2(0, 10)
+	col.add_child(sub_gap)
+	# 4) Disclaimer card — shrink/fixed band; do NOT SIZE_EXPAND_FILL (that ate the shop sign).
 	var card := Panel.new()
-	card.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	card.name = "DisclaimerCard"
+	card.custom_minimum_size = Vector2(0, 180)
+	# Default size flags: shrink to content; do not expand into the shop-sign band.
+	card.size_flags_vertical = 0
 	card.add_theme_stylebox_override("panel", UiKit.paper_style(UiKit.PAPER_DARK, UiKit.LINE, 6))
 	col.add_child(card)
 	var inner := VBoxContainer.new()
 	inner.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	inner.offset_left = 24
-	inner.offset_right = -24
-	inner.offset_top = 20
-	inner.offset_bottom = -20
-	inner.add_theme_constant_override("separation", 12)
+	inner.offset_left = 20
+	inner.offset_right = -20
+	inner.offset_top = 14
+	inner.offset_bottom = -14
+	inner.add_theme_constant_override("separation", 8)
 	card.add_child(inner)
-	var dt := UiKit.ink_label("", 20, UiKit.SEAL)
+	var dt := UiKit.ink_label("", 18, UiKit.SEAL, false)
 	dt.name = "DiscTitle"
 	inner.add_child(dt)
-	_body = UiKit.ink_label("", 16, UiKit.INK)
-	_body.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	inner.add_child(_body)
+	var body_scroll := ScrollContainer.new()
+	body_scroll.name = "DiscBodyScroll"
+	body_scroll.custom_minimum_size = Vector2(0, 72)
+	body_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	body_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	inner.add_child(body_scroll)
+	_body = UiKit.ink_label("", 15, UiKit.INK)
+	_body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	body_scroll.add_child(_body)
 	_check = CheckBox.new()
-	UiKit.apply_font(_check, 16)
+	UiKit.apply_font(_check, 15)
 	_check.add_theme_color_override("font_color", UiKit.INK)
 	if GameFlow.disclaimer_accepted():
 		_check.button_pressed = true
 	inner.add_child(_check)
-	_need = UiKit.ink_label("", 14, UiKit.SEAL)
+	_need = UiKit.ink_label("", 13, UiKit.SEAL, false)
 	_need.visible = false
 	inner.add_child(_need)
+	# 5) Enter CTA below card (outside), then footer.
 	_enter = UiKit.make_button("START_CLINIC", true)
 	_enter.custom_minimum_size = Vector2(220, 44)
 	_enter.pressed.connect(_on_enter)
@@ -92,7 +113,7 @@ func _build() -> void:
 	enter_wrap.alignment = BoxContainer.ALIGNMENT_CENTER
 	enter_wrap.add_child(_enter)
 	col.add_child(enter_wrap)
-	_footer = UiKit.ink_label("", 13, UiKit.INK_MUTED)
+	_footer = UiKit.ink_label("", 13, UiKit.INK_MUTED, false)
 	_footer.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	col.add_child(_footer)
 	if has_node("Title"):
@@ -205,7 +226,7 @@ func _refresh() -> void:
 	var dt := find_child("DiscTitle", true, false) as Label
 	if dt:
 		dt.text = tr("BOOT_DISCLAIMER_TITLE")
-		UiKit.apply_font(dt, 20)
+		UiKit.apply_font(dt, 18)
 	_body.text = tr("BOOT_DISCLAIMER_BODY")
 	_check.text = tr("BOOT_DISCLAIMER_CHECK")
 	_enter.text = tr("START_CLINIC")

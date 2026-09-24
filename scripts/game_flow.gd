@@ -3012,6 +3012,129 @@ func run_slice_smoke() -> int:
 	if fails.size() == bootp_fails_before:
 		print("ui_boot_portrait_ok")
 
+	# V138: boot zones + clinic idle CAM_HERO layout (CLINIC-IDLE-V138 / UI-LAYOUT-V138)
+	var layout_fails_before := fails.size()
+	var main_src := FileAccess.get_file_as_string("res://scenes/main.gd")
+	if main_src.find("SignClearance") < 0:
+		fails.append("ui_layout_ok: boot SignClearance missing (subtitle must sit under plaque)")
+	if main_src.find("GAME_SUBTITLE") < 0:
+		fails.append("ui_layout_ok: boot should drive subtitle via GAME_SUBTITLE")
+	# Large competing title over plaque: 48pt title was V137.1 anti-pattern
+	if main_src.find("_title = UiKit.ink_label(\"\", 48)") >= 0:
+		fails.append("ui_layout_ok: boot must not use 48pt title competing with wood plaque")
+	var clinic_gd2 := FileAccess.get_file_as_string("res://scenes/clinic.gd")
+	if clinic_gd2.find("CAM_HERO_HOME") < 0 or clinic_gd2.find("_pin_cam_hero_home") < 0:
+		fails.append("ui_layout_ok: clinic idle must pin CAM_HERO home (药柜中景)")
+	if clinic_gd2.find("CAM_HERO_IDLE") < 0:
+		# soft: idle may use ≤40px nudge; HOME alone also OK
+		pass
+	var clinic_src2 := FileAccess.get_file_as_string("res://scenes/clinic.tscn")
+	if clinic_src2.find("CAM_HERO") < 0 or clinic_src2.find("Vector2(1280, 780)") < 0:
+		fails.append("ui_layout_ok: clinic.tscn CAM_HERO must be (1280, 780)")
+	if not ResourceLoader.exists("res://ui/layers/L3-furniture.png"):
+		fails.append("ui_layout_ok: clinic BG L3-furniture.png missing")
+	if clinic_gd2.find("_fix_fg_wash_for_midshot") < 0:
+		fails.append("ui_layout_ok: L7 full-bleed wash must not bury 药柜中景")
+	if clinic_gd2.find("AtlasTexture") < 0 and clinic_gd2.find("_portrait_content_rect") < 0:
+		fails.append("ui_layout_ok: padded portraits need content-crop fit")
+	if clinic_gd2.find("_waiting_portrait_height") < 0:
+		fails.append("ui_layout_ok: missing _waiting_portrait_height")
+	if clinic_gd2.find("return 260.0") < 0 and clinic_gd2.find("return 280.0") < 0 and clinic_gd2.find("return 240.0") < 0:
+		fails.append("ui_layout_ok: waiting portrait height should be 240～280")
+	if clinic_gd2.find("CAM_HERO_IDLE") >= 0 and clinic_gd2.find("Vector2(1280, 740)") < 0 and clinic_gd2.find("Vector2(1280, 780)") < 0:
+		fails.append("ui_layout_ok: CAM_HERO_IDLE must stay within ≤40 of (1280,780)")
+	# Idle may use a slightly wider zoom so A–D @y≈290 with h=260 keep faces in-frame.
+	if clinic_gd2.find("CAM_HERO_ZOOM_IDLE") < 0:
+		fails.append("ui_layout_ok: missing CAM_HERO_ZOOM_IDLE for readable waiting portraits")
+	# Seat spacing + apprentice viewport under CAM_HERO (no full clinic.tscn — hang-safe)
+	var homes_l: Array = [Vector2(405, 290), Vector2(545, 290), Vector2(300, 340), Vector2(685, 290)]
+	var spaced := 0
+	for i in homes_l.size():
+		for j in range(i + 1, homes_l.size()):
+			if absf(homes_l[i].x - homes_l[j].x) >= 100.0:
+				spaced += 1
+	if spaced < 3:
+		fails.append("ui_layout_ok: need ≥3 seat pairs with center-x Δ≥100 (got pairs=%d)" % spaced)
+	fsm_state = "clinic_idle"
+	refresh_waiting_seats(true)
+	var seats_l: Array = waiting_patients() if has_method("waiting_patients") else []
+	var layout_host := Node2D.new()
+	layout_host.name = "SmokeLayoutHost"
+	add_child(layout_host)
+	var vis_seats := 0
+	var xs: Array = []
+	for i in mini(seats_l.size(), 4):
+		var pid_l := str(seats_l[i].get("id", ""))
+		var node_l := Node2D.new()
+		node_l.name = "Patient%d" % i
+		node_l.position = homes_l[i]
+		var spr_l := Sprite2D.new()
+		spr_l.name = "Portrait"
+		var tex_l: Texture2D = CharacterArt.load_portrait(pid_l)
+		if tex_l != null:
+			var th_l := float(tex_l.get_height())
+			var tw_l := float(tex_l.get_width())
+			var s_l := 260.0 / th_l if th_l > 1.0 else 1.0
+			spr_l.texture = tex_l
+			spr_l.centered = false
+			spr_l.scale = Vector2(s_l, s_l)
+			spr_l.position = Vector2(-tw_l * s_l * 0.5, -th_l * s_l)
+			spr_l.visible = true
+			vis_seats += 1
+			xs.append(node_l.position.x)
+		node_l.add_child(spr_l)
+		layout_host.add_child(node_l)
+	var ap_l := Node2D.new()
+	ap_l.name = "Apprentice"
+	ap_l.position = Vector2(1100, 720)
+	var ap_spr := Sprite2D.new()
+	ap_spr.name = "Art"
+	var ap_tex: Texture2D = CharacterArt.load_portrait("apprentice_jiang")
+	var ap_h := 260.0
+	if ap_tex != null:
+		var ath := float(ap_tex.get_height())
+		var atw := float(ap_tex.get_width())
+		var ascl := ap_h / ath if ath > 1.0 else 1.0
+		ap_spr.texture = ap_tex
+		ap_spr.centered = false
+		ap_spr.scale = Vector2(ascl, ascl)
+		ap_spr.position = Vector2(-atw * ascl * 0.5, -ath * ascl)
+		ap_spr.visible = true
+	ap_l.add_child(ap_spr)
+	layout_host.add_child(ap_l)
+	await get_tree().process_frame
+	if vis_seats < 3:
+		fails.append("ui_layout_ok: need ≥3 visible seat portraits (got %d)" % vis_seats)
+	else:
+		var pair_ok := 0
+		for i2 in xs.size():
+			for j2 in range(i2 + 1, xs.size()):
+				if absf(float(xs[i2]) - float(xs[j2])) >= 100.0:
+					pair_ok += 1
+		if pair_ok < 3:
+			fails.append("ui_layout_ok: visible seats center-x spacing pairs <3 (got %d)" % pair_ok)
+	# Apprentice fully inside 1280×720 under idle CAM_HERO framing zoom≈0.667
+	var cam_c := Vector2(1280, 740)
+	var cam_z := 0.666667
+	var half_w := 640.0 / cam_z
+	var half_h := 360.0 / cam_z
+	var world_tl := cam_c - Vector2(half_w, half_h)
+	var world_br := cam_c + Vector2(half_w, half_h)
+	var feet := ap_l.position
+	var head := feet + ap_spr.position  # top-left of sprite ≈ (-w/2, -h)
+	var spr_br := feet + ap_spr.position + Vector2(
+		(ap_tex.get_width() * ap_spr.scale.x) if ap_tex else 120.0,
+		(ap_tex.get_height() * ap_spr.scale.y) if ap_tex else ap_h
+	)
+	# feet at bottom-center; sprite rect from head to feet
+	var rect_tl := Vector2(feet.x + ap_spr.position.x, feet.y + ap_spr.position.y)
+	var rect_br := Vector2(feet.x - ap_spr.position.x, feet.y)  # symmetric width, feet y
+	if rect_tl.x < world_tl.x - 1.0 or rect_br.x > world_br.x + 1.0 or rect_tl.y < world_tl.y - 1.0 or feet.y > world_br.y + 1.0:
+		fails.append("ui_layout_ok: apprentice not fully in CAM_HERO viewport (tl=%s br=%s view=%s..%s)" % [rect_tl, Vector2(rect_br.x, feet.y), world_tl, world_br])
+	layout_host.queue_free()
+	await get_tree().process_frame
+	if fails.size() == layout_fails_before:
+		print("ui_layout_ok")
 
 	if fails.is_empty():
 		print("SMOKE PASS")

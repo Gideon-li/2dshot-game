@@ -2,6 +2,14 @@ extends Node2D
 ## SCENE-SLICE hung on this one room. No second map. GameFlow play loop overlays.
 
 const WORLD := Vector2(2560, 1440)
+## V138 idle accept: medicine-cabinet midshot (CLINIC-IDLE-V138). Feet A–D / 江晚 locked.
+const CAM_HERO_HOME := Vector2(1280, 780)
+const CAM_HERO_ZOOM := Vector2(0.666667, 0.666667)
+## Idle: position home+(0,-40) only. Slightly wider zoom so A–D @y≈290 (h=260) faces clear the top clip.
+const CAM_HERO_IDLE := Vector2(1280, 740)
+const CAM_HERO_ZOOM_IDLE := Vector2(0.50, 0.50)
+const WAIT_HOMES := [Vector2(405, 290), Vector2(545, 290), Vector2(300, 340), Vector2(685, 290)]
+const APPRENTICE_HOME := Vector2(1100, 720)
 const HERB_SNAP := 40.0
 const BED_RECT := Rect2(320, 820, 420, 160)
 const FORMULA_RECT := Rect2(1720, 780, 400, 180)
@@ -81,6 +89,8 @@ func _ready() -> void:
 	_label_patients()
 	_build_hud()
 	_switch_camera("CAM_HERO")
+	_pin_cam_hero_home()
+	_fix_fg_wash_for_midshot()
 	_qwen = QwenClient.new()
 	add_child(_qwen)
 	_qwen.replied.connect(_on_qwen)
@@ -146,6 +156,12 @@ func _follow_hero() -> void:
 	var ap := get_node_or_null("L5_characters/Apprentice") as Node2D
 	if cam == null or ap == null or not cam.enabled:
 		return
+	# V138 idle accept: hold CAM_HERO_IDLE midshot while apprentice stays near home
+	# (otherwise follow pulls framing off the waiting stool band).
+	if str(GameFlow.fsm_state) == "clinic_idle" and ap.position.distance_to(APPRENTICE_HOME) <= 96.0:
+		cam.position = CAM_HERO_IDLE
+		cam.zoom = CAM_HERO_ZOOM_IDLE
+		return
 	if ap.position.distance_to(cam.position) <= HERO_DEADZONE:
 		return
 	var half := Vector2(960, 540)
@@ -166,10 +182,40 @@ func _switch_camera(cam_name: String) -> void:
 			cam.rotation = 0.0
 			cam.ignore_rotation = true
 		if n == cam_name:
+			# V138: idle accept frame = CAM_HERO home (药柜中景). Do not leave ask/pulse framing.
+			if n == "CAM_HERO" and str(GameFlow.fsm_state) == "clinic_idle":
+				_pin_cam_hero_home(cam)
 			cam.enabled = true
 			cam.make_current()
 		else:
 			cam.enabled = false
+
+
+func _pin_cam_hero_home(cam: Camera2D = null) -> void:
+	## Lock medicine-cabinet midshot for clinic_idle (CLINIC-IDLE-V138).
+	if cam == null:
+		cam = get_node_or_null("CAM_HERO") as Camera2D
+	if cam == null:
+		return
+	# Idle accept: HERO midshot + ≤40px nudge so A–D heads clear the top clip.
+	cam.position = CAM_HERO_IDLE
+	cam.zoom = CAM_HERO_ZOOM_IDLE
+	# Drag margins can leave view off home after prior follow — clear for idle accept.
+	cam.drag_horizontal_enabled = false
+	cam.drag_vertical_enabled = false
+	cam.position_smoothing_enabled = false
+
+
+func _fix_fg_wash_for_midshot() -> void:
+	## L7 art is currently full-bleed opaque wood (not edge wash). At z> L5 it buries
+	## 药柜中景 + waiting portraits. SCENE-SLICE wants translucent desk-edge wash only.
+	## Hide until art is a true alpha wash; keep L0–L4 + L6.
+	var l7 := get_node_or_null("L7_fg_wash") as Node2D
+	if l7:
+		l7.visible = false
+	var l7art := get_node_or_null("L7_fg_wash/Art") as CanvasItem
+	if l7art:
+		l7art.visible = false
 
 
 func _wire_areas() -> void:
@@ -303,7 +349,7 @@ func _label_patients() -> void:
 	var chars := get_node_or_null("L5_characters")
 	if chars == null:
 		return
-	var wait_homes := [Vector2(405, 290), Vector2(545, 290), Vector2(300, 340), Vector2(685, 290)]
+	var wait_homes := WAIT_HOMES
 	var seats: Array = _waiting_list()
 	var max_seats := mini(seats.size(), wait_homes.size())
 	# Hide any leftover PatientN beyond max 4 (never expand hall)
@@ -356,19 +402,19 @@ func _rebuild_waiting_hud() -> void:
 		var pid := str(p.get("id", ""))
 		var card := Button.new()
 		card.name = pid
-		card.custom_minimum_size = Vector2(170, 56) if seats_hud.size() >= 4 else Vector2(200, 56)
+		card.custom_minimum_size = Vector2(150, 48) if seats_hud.size() >= 4 else Vector2(180, 48)
 		card.set_meta("pid", pid)
 		UiKit.style_button(card, false)
 		card.pressed.connect(_on_pick.bind(pid))
 		var inner := VBoxContainer.new()
 		inner.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		inner.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		inner.offset_left = 8
-		inner.offset_right = -8
-		inner.offset_top = 4
-		inner.offset_bottom = -4
+		inner.offset_left = 6
+		inner.offset_right = -6
+		inner.offset_top = 3
+		inner.offset_bottom = -3
 		card.add_child(inner)
-		var nm := UiKit.ink_label(UiKit.loc_text(p.get("name", {}), pid), 15)
+		var nm := UiKit.ink_label(UiKit.loc_text(p.get("name", {}), pid), 14)
 		nm.set_meta("name_label", true)
 		inner.add_child(nm)
 		var idn := UiKit.ink_label(UiKit.loc_text(p.get("identity", {}), ""), 12, UiKit.INK_MUTED)
@@ -382,6 +428,7 @@ func _apply_portraits() -> void:
 	var chars := get_node_or_null("L5_characters")
 	if chars == null:
 		return
+	chars.z_index = maxi(chars.z_index, 6)  # above L4 props / residual fg
 	# Always hide composite three-sheet (singles replace it).
 	var sheet_root := chars.get_node_or_null("Patients") as Node2D
 	if sheet_root:
@@ -393,11 +440,13 @@ func _apply_portraits() -> void:
 	# Jiang Wan apprentice — feet (1100, 720), display ~260.
 	var ap := chars.get_node_or_null("Apprentice") as Node2D
 	if ap:
-		ap.position = Vector2(1100, 720)
+		ap.position = APPRENTICE_HOME
 		ap.y_sort_enabled = true
 		ap.visible = true
 	var ap_art := chars.get_node_or_null("Apprentice/Art") as Sprite2D
 	if ap_art:
+		# Portraits are authored on transparent/light ground — paper knockout would erase them.
+		ap_art.material = null
 		var at: Texture2D = CharacterArt.load_portrait("apprentice_jiang")
 		if at:
 			_fit_portrait_sprite(ap_art, at, 260.0)
@@ -435,31 +484,74 @@ func _apply_portraits() -> void:
 			spr.visible = false
 			continue
 		var at_chair := node.position.distance_to(chair) < 48.0
-		var target_h := 300.0 if at_chair else 260.0
+		# Idle HERO midshot: stools at back wall — slightly shorter so heads stay in frame.
+		var target_h := 300.0 if at_chair else _waiting_portrait_height()
+		spr.material = null
 		_fit_portrait_sprite(spr, tex, target_h)
 		spr.visible = true
 		spr.z_index = 5
 		# Name card above head (text OK but not a substitute for portrait).
 		var lb := node.get_node_or_null("Name") as Label
 		if lb:
-			lb.position = Vector2(-48, -target_h - 8)
-			lb.size = Vector2(96, 22)
+			# HUD waiting cards carry names; hide world labels so they don't cover faces.
+			lb.visible = false
 		_ensure_seat_hit(node, i)
 
 
+
+func _waiting_portrait_height() -> float:
+	## PORTRAIT-LAYOUT / 负责人: 240～280 一眼可认. Same under HERO (no shrink-to-invisible).
+	return 260.0
+
+
 func _fit_portrait_sprite(spr: Sprite2D, tex: Texture2D, target_h: float) -> void:
-	## Feet at parent origin: centered=false, position=(-w/2,-h) in local pre-scale.
-	spr.texture = tex
+	## Feet at parent origin. Crop padded expand portraits to alpha AABB (AtlasTexture)
+	## so display height == real character height (many sheets are ~50% empty).
 	spr.centered = false
 	spr.offset = Vector2.ZERO
-	var th := float(tex.get_height())
-	var tw := float(tex.get_width())
+	spr.material = null
+	var region := _portrait_content_rect(tex)
+	var atlas := AtlasTexture.new()
+	atlas.atlas = tex
+	atlas.region = region
+	atlas.filter_clip = true
+	spr.texture = atlas
+	var tw := float(region.size.x)
+	var th := float(region.size.y)
 	if th <= 1.0:
-		return
+		tw = float(tex.get_width())
+		th = float(tex.get_height())
+		spr.texture = tex
 	var s := target_h / th
 	spr.scale = Vector2(s, s)
-	# position is in parent space (not pre-multiplied by scale)
 	spr.position = Vector2(-tw * s * 0.5, -th * s)
+	spr.z_index = 8
+
+
+func _portrait_content_rect(tex: Texture2D) -> Rect2:
+	## Opaque AABB. Prefer decoding the source PNG (CompressedTexture2D.get_image can be null).
+	var full := Rect2(0, 0, tex.get_width(), tex.get_height())
+	var img: Image = null
+	var path := str(tex.resource_path)
+	if path.begins_with("res://") and (path.ends_with(".png") or path.ends_with(".webp")):
+		img = Image.new()
+		if img.load(path) != OK:
+			img = null
+	if img == null:
+		img = tex.get_image()
+		if img != null and img.is_compressed():
+			img = img.duplicate()
+			img.decompress()
+	if img == null:
+		return full
+	var used: Rect2i = img.get_used_rect()
+	if used.size.x <= 2 or used.size.y <= 2:
+		return full
+	# If "content" is nearly full sheet, keep full (feet authored at canvas bottom).
+	var fill := float(used.size.y) / float(maxi(1, img.get_height()))
+	if fill >= 0.92:
+		return full
+	return Rect2(used.position.x, used.position.y, used.size.x, used.size.y)
 
 
 func _ensure_seat_hit(node: Node2D, seat_index: int) -> void:
@@ -695,6 +787,7 @@ func _on_fsm(state: String) -> void:
 	match state:
 		"clinic_idle":
 			_switch_camera("CAM_HERO")
+			_pin_cam_hero_home()
 		"patient_selected", "examining", "treatment_choice", "revisit_consult":
 			if GameFlow.exam_focus == "qie":
 				_switch_camera("CAM_PULSE")
@@ -747,13 +840,26 @@ func _rebuild_dock() -> void:
 		_dock.anchor_bottom = 1.0
 		_dock.anchor_left = 0.0
 		_dock.anchor_right = 0.0
+		# V138: keep clear of mid-stools + NavStrip (BR). Left guide band only.
 		_dock.offset_left = 16
-		_dock.offset_top = -260
-		_dock.offset_right = 640
+		_dock.offset_top = -200
+		_dock.offset_right = 520
 		_dock.offset_bottom = -36
 		_dock.mouse_filter = Control.MOUSE_FILTER_STOP
 		_dock.add_theme_stylebox_override("panel", UiKit.paper_style(UiKit.PAPER, UiKit.LINE, 4))
 		hud.add_child(_dock)
+	# V138: idle = compact left guide (clear stools + NavStrip); consult = taller dialog band.
+	var st_sz := str(GameFlow.fsm_state)
+	if st_sz == "clinic_idle":
+		_dock.offset_left = 16
+		_dock.offset_top = -200
+		_dock.offset_right = 520
+		_dock.offset_bottom = -36
+	else:
+		_dock.offset_left = 16
+		_dock.offset_top = -260
+		_dock.offset_right = 640
+		_dock.offset_bottom = -36
 	for c in _dock.get_children():
 		c.queue_free()
 	_chat = null
@@ -807,7 +913,7 @@ func _rebuild_dock() -> void:
 			var sname := tr(lab_key)
 			slot_row.add_child(UiKit.ink_label("%s%s" % [sname, ("·" if rem > 0 else "×")], 12, UiKit.SEAL if rem > 0 else UiKit.INK_MUTED))
 		col.add_child(slot_row)
-		col.add_child(UiKit.ink_label(tr("CLINIC_HINT"), 14, UiKit.INK_MUTED))
+		# V138: narration lives on chrome ClinicHint (below waiting cards); dock keeps guide/actions.
 		if DemoDay and DemoDay.guide_enabled():
 			var guide_box := VBoxContainer.new()
 			guide_box.add_theme_constant_override("separation", 2)
@@ -853,30 +959,7 @@ func _rebuild_dock() -> void:
 			next_b.text = "次日开馆"
 		next_b.pressed.connect(func() -> void: _do_next_day())
 		col.add_child(next_b)
-		var garden_b := UiKit.make_button("GARDEN_OPEN", true)
-		var g_act: Dictionary = DemoDay.can_act("go_garden") if DemoDay else {"ok": true}
-		garden_b.disabled = not bool(g_act.get("ok", true))
-		if garden_b.disabled:
-			garden_b.tooltip_text = tr(str(g_act.get("reason_key", "SLOT_EXHAUSTED_AFTERNOON")))
-		garden_b.pressed.connect(func() -> void:
-			if DemoDay and not bool(DemoDay.can_act("go_garden").get("ok", false)):
-				return
-			GameFlow.go_garden()
-		)
-		col.add_child(garden_b)
-		var process_b := UiKit.make_button("PROCESS_OPEN", true)
-		if process_b.text == "PROCESS_OPEN" or process_b.text == "":
-			process_b.text = "去炮制院"
-		var p_act: Dictionary = DemoDay.can_act("go_process") if DemoDay else {"ok": true}
-		process_b.disabled = not bool(p_act.get("ok", true))
-		if process_b.disabled:
-			process_b.tooltip_text = tr(str(p_act.get("reason_key", "SLOT_EXHAUSTED_DUSK")))
-		process_b.pressed.connect(func() -> void:
-			if DemoDay and not bool(DemoDay.can_act("go_process").get("ok", false)):
-				return
-			GameFlow.go_process()
-		)
-		col.add_child(process_b)
+		# V138: garden/process live on NavStrip only (no dock duplicate).
 		var loft_b := UiKit.make_button("NIGHT_READ_ENTER", true)
 		if loft_b.text == "NIGHT_READ_ENTER" or loft_b.text == "":
 			loft_b.text = "上阁楼"
@@ -1612,15 +1695,27 @@ func _build_hud() -> void:
 	bar.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hud.add_child(bar)
-	# Top bar: title + day — waiting cards sit below so they never cover title/narration.
+	# Top bar RIGHT side only — left upper band (stool A–D under CAM_HERO) must stay clear.
+	# Order still: 游戏名 + 日牌 + 齿轮 → 其下候诊文字牌.
+	var top_chip := Panel.new()
+	top_chip.name = "TopBarChip"
+	top_chip.position = Vector2(520, 4)
+	top_chip.size = Vector2(680, 34)
+	top_chip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	top_chip.z_index = 2
+	top_chip.add_theme_stylebox_override("panel", UiKit.paper_style(UiKit.PAPER, UiKit.LINE, 4))
+	bar.add_child(top_chip)
 	var top := HBoxContainer.new()
 	top.name = "TopBar"
-	top.position = Vector2(24, 8)
-	top.size = Vector2(1232, 40)
+	top.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	top.offset_left = 10
+	top.offset_right = -8
+	top.offset_top = 3
+	top.offset_bottom = -3
 	top.mouse_filter = Control.MOUSE_FILTER_STOP
-	top.add_theme_constant_override("separation", 12)
-	bar.add_child(top)
-	_title = UiKit.ink_label(UiKit.store_title_text(), 20, UiKit.INK, false)
+	top.add_theme_constant_override("separation", 10)
+	top_chip.add_child(top)
+	_title = UiKit.ink_label(UiKit.store_title_text(), 17, UiKit.INK, false)
 	_title.name = "GameTitle"
 	top.add_child(_title)
 	var day_n := GameFlow.play_day() if GameFlow.has_method("play_day") else 1
@@ -1636,17 +1731,16 @@ func _build_hud() -> void:
 	sp.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	sp.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	top.add_child(sp)
-	# Single settings gear (language / save / load live inside the panel).
 	var gear := UiKit.make_settings_gear_button()
 	gear.pressed.connect(func() -> void:
 		_set_settings_open(not GameFlow.settings_open)
 	)
 	top.add_child(gear)
-	# Waiting A–D cards: dedicated strip under title (no overlap with title or bottom dock).
+	# Waiting cards under title chip (right). Never cover left cabinet-top stool band.
 	var row := HBoxContainer.new()
 	row.name = "Patients"
-	row.position = Vector2(24, 56)
-	row.size = Vector2(900, 64)
+	row.position = Vector2(520, 42)
+	row.size = Vector2(680, 50)
 	row.add_theme_constant_override("separation", 8)
 	row.mouse_filter = Control.MOUSE_FILTER_STOP
 	bar.add_child(row)
@@ -1656,7 +1750,7 @@ func _build_hud() -> void:
 		var pid := str(p.get("id", ""))
 		var card := Button.new()
 		card.name = pid
-		card.custom_minimum_size = Vector2(170, 56) if seats_hud.size() >= 4 else Vector2(200, 56)
+		card.custom_minimum_size = Vector2(150, 48) if seats_hud.size() >= 4 else Vector2(180, 48)
 		card.set_meta("pid", pid)
 		UiKit.style_button(card, false)
 		card.pressed.connect(_on_pick.bind(pid))
@@ -1677,8 +1771,8 @@ func _build_hud() -> void:
 		row.add_child(card)
 	_hint = UiKit.ink_label(tr("CLINIC_HINT"), 14, UiKit.INK_MUTED)
 	_hint.name = "ClinicHint"
-	_hint.position = Vector2(24, 128)
-	_hint.size = Vector2(900, 24)
+	_hint.position = Vector2(520, 96)
+	_hint.size = Vector2(680, 22)
 	_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bar.add_child(_hint)
 	# Unified nav strip (decoupled from language): garden + process.

@@ -15,3 +15,10 @@
 复用 `ui/characters/*.png`（含 V126–V136 全池 + 江晚）；本档不缺图。脚底对齐 `scene-slice/PORTRAIT-LAYOUT.md`。
 
 引擎约定路径：`res://ui/chrome/boot_hero.png`（见 `other-systems/BOOT-HERO-V137.md`）；本目录为美工投递位。
+
+## V138 版式注
+
+- 副标题（`GAME_SUBTITLE`）放在 **店招木牌下方**，勿压牌心书法。
+- **勿**再叠第二套大号「墨问岐黄」Label；`boot_hero` 木牌即店招。顶栏仅小字标题 + 设置齿轮。
+- 声明卡与店招纵向分区，勿 EXPAND 吞牌。详见 `other-systems/BOOT-LAYOUT-V138.md`。
+- 交图：`v138_boot.png`（对照 `v137_1_boot.png`）。
