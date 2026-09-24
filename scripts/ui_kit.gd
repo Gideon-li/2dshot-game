@@ -45,12 +45,15 @@ func apply_font(ctrl: Control, size: int = 16) -> void:
 	ctrl.add_theme_font_size_override("font_size", size)
 
 
-func ink_label(text: String, size: int = 16, color: Color = INK) -> Label:
+func ink_label(text: String, size: int = 16, color: Color = INK, wrap: bool = true) -> Label:
 	var l := Label.new()
 	l.text = text
 	l.add_theme_color_override("font_color", color)
 	apply_font(l, size)
-	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	if wrap:
+		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	else:
+		l.autowrap_mode = TextServer.AUTOWRAP_OFF
 	return l
 
 
@@ -131,3 +134,138 @@ func nature_ink(nature: String) -> Color:
 			return Color(0.2, 0.28, 0.4, 1)
 		_:
 			return INK
+
+
+## V137 settings chrome helpers (keys: SETTINGS-SAVE-KEYS.md)
+
+func tr_or(key: String, fallback: String = "") -> String:
+	var t := tr(key)
+	if t == key or t == "":
+		return fallback if fallback != "" else key
+	return t
+
+
+func store_title_text() -> String:
+	return tr_or("STORE_TITLE", tr_or("GAME_TITLE", "墨问岐黄"))
+
+
+func make_settings_gear_button() -> Button:
+	var b := Button.new()
+	b.name = "SettingsGear"
+	b.set_meta("i18n_key", "SETTINGS_TITLE")
+	b.tooltip_text = tr_or("SETTINGS_TITLE", "设置")
+	b.focus_mode = Control.FOCUS_NONE
+	var gear_path := "res://ui/chrome/settings_gear_64.png"
+	if not ResourceLoader.exists(gear_path):
+		gear_path = "res://ui/chrome/settings_gear.png"
+	if ResourceLoader.exists(gear_path):
+		b.text = ""
+		b.icon = load(gear_path) as Texture2D
+		b.expand_icon = true
+		b.custom_minimum_size = Vector2(40, 40)
+		b.add_theme_constant_override("icon_max_width", 32)
+		style_button(b, false)
+	else:
+		b.text = tr_or("SETTINGS_TITLE", "设置")
+		style_button(b, true)
+	return b
+
+
+func force_scroll_bottom(scroll: ScrollContainer) -> void:
+	if scroll == null or not is_instance_valid(scroll):
+		return
+	var bar := scroll.get_v_scroll_bar()
+	if bar:
+		# Godot Range: usable top is max_value - page.
+		var limit := int(maxf(0.0, bar.max_value - bar.page))
+		scroll.scroll_vertical = limit
+	else:
+		scroll.scroll_vertical = 1 << 30
+
+
+func build_settings_body(on_saved: Callable = Callable(), on_loaded: Callable = Callable(), on_close: Callable = Callable()) -> Control:
+	## Returns a paper panel with language + 3 slots save/load. Session chrome only.
+	var root := Panel.new()
+	root.name = "SettingsPanel"
+	root.custom_minimum_size = Vector2(360, 320)
+	root.mouse_filter = Control.MOUSE_FILTER_STOP
+	root.add_theme_stylebox_override("panel", paper_style(PAPER, LINE, 6))
+	# settings_panel.png is a text mock — do not layer under live controls (double glyphs).
+	var col := VBoxContainer.new()
+	col.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	col.offset_left = 16
+	col.offset_right = -16
+	col.offset_top = 12
+	col.offset_bottom = -12
+	col.add_theme_constant_override("separation", 8)
+	root.add_child(col)
+	var head := HBoxContainer.new()
+	head.add_child(ink_label(tr_or("SETTINGS_TITLE", "设置"), 18, SEAL, false))
+	var sp := Control.new()
+	sp.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	head.add_child(sp)
+	var close_b := make_button("SETTINGS_CLOSE", false)
+	if close_b.text == "SETTINGS_CLOSE":
+		close_b.text = tr_or("SETTINGS_CLOSE", "关闭")
+	close_b.pressed.connect(func() -> void:
+		if on_close.is_valid():
+			on_close.call()
+	)
+	head.add_child(close_b)
+	col.add_child(head)
+	col.add_child(ink_label(tr_or("SETTINGS_HINT", ""), 12, INK_MUTED))
+	col.add_child(ink_label(tr_or("SETTINGS_LANGUAGE", "语言"), 14, INK_MUTED))
+	var lang_row := HBoxContainer.new()
+	lang_row.add_theme_constant_override("separation", 8)
+	col.add_child(lang_row)
+	for pair in [["zh", "LANG_ZH"], ["en", "LANG_EN"], ["ja", "LANG_JA"]]:
+		var lb := make_button(pair[1], false)
+		lb.pressed.connect(func() -> void:
+			GameFlow.set_locale(pair[0])
+		)
+		lang_row.add_child(lb)
+	col.add_child(ink_label(tr_or("SETTINGS_SECTION_SAVE", "存读档"), 14, INK_MUTED))
+	col.add_child(ink_label(tr_or("SAVE_SLOT_HINT", ""), 12, INK_MUTED))
+	var slot_state := {"n": Save.active_slot}
+	var slot_row := HBoxContainer.new()
+	slot_row.add_theme_constant_override("separation", 6)
+	col.add_child(slot_row)
+	var slot_btns: Array = []
+	var pick_slot := func(n: int) -> void:
+		slot_state["n"] = n
+		for x in slot_btns:
+			style_button(x as Button, int((x as Button).get_meta("slot_i")) == int(slot_state["n"]))
+	for i in Save.SLOT_COUNT:
+		var lab := tr_or("SAVE_SLOT", "档位 {n}").replace("{n}", str(i + 1))
+		var sb := Button.new()
+		sb.text = lab
+		sb.set_meta("slot_i", i)
+		style_button(sb, i == Save.active_slot)
+		sb.pressed.connect(pick_slot.bind(i))
+		slot_btns.append(sb)
+		slot_row.add_child(sb)
+	var io_row := HBoxContainer.new()
+	io_row.add_theme_constant_override("separation", 8)
+	col.add_child(io_row)
+	var save_b := make_button("SAVE_SAVE", true)
+	if save_b.text == "SAVE_SAVE":
+		save_b.text = tr_or("SAVE_SAVE", "存档")
+	save_b.pressed.connect(func() -> void:
+		var n: int = int(slot_state["n"])
+		Save.save_to_slot(n)
+		if on_saved.is_valid():
+			on_saved.call(tr_or("SAVE_SAVED", "已记下。"))
+	)
+	io_row.add_child(save_b)
+	var load_b := make_button("SAVE_LOAD", false)
+	if load_b.text == "SAVE_LOAD":
+		load_b.text = tr_or("SAVE_LOAD", "读档")
+	load_b.pressed.connect(func() -> void:
+		var n: int = int(slot_state["n"])
+		Save.apply_slot(n)
+		GameFlow.locale_changed.emit()
+		if on_loaded.is_valid():
+			on_loaded.call(tr_or("SAVE_LOADED", "已读入。"))
+	)
+	io_row.add_child(load_b)
+	return root

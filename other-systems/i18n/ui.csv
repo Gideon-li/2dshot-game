@@ -765,3 +765,11 @@ MENTOR_EXPAND3_1,燥咳和内热，别穿一件衣。,Dry cough and internal hea
 MENTOR_EXPAND3_2,下边的困热，话说满就失礼。,"For muggy heaviness below, saying too much is rude.",下の困熱は、言い過ぎると失礼だ。
 MENTOR_EXPAND3_3,碰伤看青肿，不看热闹。,"For a bump, watch the bruise — not the spectacle.",打撲は青腫れを見よ。騒ぎを見るな。
 DEMO_HINT_EXPAND3,青石证印可亮到九枚。小儿格不做。,Qingshi seals can light up to nine. No child slot.,青石証印は九枚まで。小児枠は作らない。
+SETTINGS_CLOSE,关闭,Close,閉じる
+SETTINGS_SECTION_SAVE,存读档,Save & Load,セーブ／ロード
+SETTINGS_HINT,再点设置或 Esc 可关。,Tap Settings or Esc to close.,設定をもう一度、または Esc で閉じる。
+SAVE_LOADED,已读入。,Loaded.,読み込んだ。
+SAVE_SLOT_HINT,选档后保存或读档。,"Pick a slot, then save or load.",スロットを選んでセーブ／ロード。
+SAVE_SLOT_DAY,第 {n} 日,Day {n},第 {n} 日
+CHAT_NEW_MSG,有新消息,New messages,新しいメッセージ
+DEBUG_PANEL,调试,Debug,デバッグ

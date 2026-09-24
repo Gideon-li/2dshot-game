@@ -62,6 +62,12 @@ var _xiaohe_idle_line: String = ""
 var _revisit_idle_line: String = ""
 var _revisit_taken: bool = false
 var _last_mentor_shown: String = ""
+## V137 UI chrome
+var _chat_scroll: ScrollContainer
+var _settings_root: Control
+var _settings_toast: Label
+var _day_top: Label
+var _nav_strip: HBoxContainer
 
 
 func _ready() -> void:
@@ -94,6 +100,11 @@ func _process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel") or (event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE):
+		if GameFlow.settings_open:
+			_set_settings_open(false)
+			get_viewport().set_input_as_handled()
+			return
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		if _drag_herb == "":
 			_nudge_apprentice(get_global_mouse_position())
@@ -671,6 +682,7 @@ func _rebuild_dock() -> void:
 	for c in _dock.get_children():
 		c.queue_free()
 	_chat = null
+	_chat_scroll = null
 	_ask_edit = null
 	var col := VBoxContainer.new()
 	col.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -1231,9 +1243,11 @@ func _fill_exam_dock(col: VBoxContainer) -> void:
 
 func _fill_ask_dock(col: VBoxContainer) -> void:
 	var scroll := ScrollContainer.new()
+	scroll.name = "ChatScroll"
 	scroll.custom_minimum_size = Vector2(0, 70)
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	col.add_child(scroll)
+	_chat_scroll = scroll
 	_chat = VBoxContainer.new()
 	_chat.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.add_child(_chat)
@@ -1242,6 +1256,7 @@ func _fill_ask_dock(col: VBoxContainer) -> void:
 			continue
 		var d: Dictionary = turn
 		_append_chat(str(d.get("q", "")), str(d.get("a", "")))
+	_scroll_chat_to_bottom()
 	# 「十问」shortcut bar — song labels from ten_questions.json; no encyclopedia.
 	col.add_child(UiKit.ink_label(tr("TENQ_BAR_TITLE"), 12, UiKit.INK_MUTED))
 	if Codex and Codex.has_theory("theory.tenq_song"):
@@ -1295,6 +1310,23 @@ func _append_chat(q: String, a: String) -> void:
 		_chat.add_child(UiKit.ink_label("▸ " + q, 13, UiKit.SEAL))
 	if a != "":
 		_chat.add_child(UiKit.ink_label(a, 14, UiKit.INK))
+	_scroll_chat_to_bottom()
+
+
+func _scroll_chat_to_bottom() -> void:
+	## Haopeng: always stick to latest line (force).
+	if _chat_scroll == null or not is_instance_valid(_chat_scroll):
+		return
+	var scroll := _chat_scroll
+	# Defer one frame so content min-size is known.
+	scroll.set_deferred("scroll_vertical", 1 << 30)
+	call_deferred("_force_chat_scroll_now")
+
+
+func _force_chat_scroll_now() -> void:
+	if _chat_scroll == null or not is_instance_valid(_chat_scroll):
+		return
+	UiKit.force_scroll_bottom(_chat_scroll)
 
 
 func _send_ask(text: String) -> void:
@@ -1505,38 +1537,41 @@ func _build_hud() -> void:
 	bar.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hud.add_child(bar)
+	# Top bar: title + day — waiting cards sit below so they never cover title/narration.
 	var top := HBoxContainer.new()
-	top.position = Vector2(24, 10)
-	top.size = Vector2(1232, 36)
+	top.name = "TopBar"
+	top.position = Vector2(24, 8)
+	top.size = Vector2(1232, 40)
 	top.mouse_filter = Control.MOUSE_FILTER_STOP
+	top.add_theme_constant_override("separation", 12)
 	bar.add_child(top)
-	_title = UiKit.ink_label(tr("GAME_TITLE"), 20)
+	_title = UiKit.ink_label(UiKit.store_title_text(), 20, UiKit.INK, false)
+	_title.name = "GameTitle"
 	top.add_child(_title)
+	var day_n := GameFlow.play_day() if GameFlow.has_method("play_day") else 1
+	var day_lab := tr("DAY_PLAQUE")
+	if day_lab == "DAY_PLAQUE" or day_lab == "":
+		day_lab = UiKit.tr_or("SAVE_SLOT_DAY", "第 {n} 日").replace("{n}", str(day_n))
+	else:
+		day_lab = day_lab.replace("{n}", str(day_n))
+	_day_top = UiKit.ink_label(day_lab, 14, UiKit.SEAL, false)
+	_day_top.name = "DayTop"
+	top.add_child(_day_top)
 	var sp := Control.new()
 	sp.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	sp.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	top.add_child(sp)
-	top.add_child(UiKit.locale_bar())
-	var garden_hud := UiKit.make_button("GARDEN_OPEN", false)
-	garden_hud.name = "GardenOpen"
-	garden_hud.pressed.connect(func() -> void:
-		if str(GameFlow.fsm_state) == "clinic_idle":
-			GameFlow.go_garden()
+	# Single settings gear (language / save / load live inside the panel).
+	var gear := UiKit.make_settings_gear_button()
+	gear.pressed.connect(func() -> void:
+		_set_settings_open(not GameFlow.settings_open)
 	)
-	top.add_child(garden_hud)
-	var process_hud := UiKit.make_button("PROCESS_OPEN", false)
-	if process_hud.text == "PROCESS_OPEN" or process_hud.text == "":
-		process_hud.text = "去炮制院"
-	process_hud.name = "ProcessOpen"
-	process_hud.pressed.connect(func() -> void:
-		if str(GameFlow.fsm_state) == "clinic_idle":
-			GameFlow.go_process()
-	)
-	top.add_child(process_hud)
+	top.add_child(gear)
+	# Waiting A–D cards: dedicated strip under title (no overlap with title or bottom dock).
 	var row := HBoxContainer.new()
 	row.name = "Patients"
-	row.position = Vector2(24, 50)
-	row.size = Vector2(1100, 64)
+	row.position = Vector2(24, 56)
+	row.size = Vector2(900, 64)
 	row.add_theme_constant_override("separation", 8)
 	row.mouse_filter = Control.MOUSE_FILTER_STOP
 	bar.add_child(row)
@@ -1567,10 +1602,42 @@ func _build_hud() -> void:
 		row.add_child(card)
 	_hint = UiKit.ink_label(tr("CLINIC_HINT"), 14, UiKit.INK_MUTED)
 	_hint.name = "ClinicHint"
-	_hint.position = Vector2(24, 118)
+	_hint.position = Vector2(24, 128)
 	_hint.size = Vector2(900, 24)
 	_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bar.add_child(_hint)
+	# Unified nav strip (decoupled from language): garden + process.
+	_nav_strip = HBoxContainer.new()
+	_nav_strip.name = "NavStrip"
+	_nav_strip.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	_nav_strip.anchor_left = 1.0
+	_nav_strip.anchor_top = 1.0
+	_nav_strip.anchor_right = 1.0
+	_nav_strip.anchor_bottom = 1.0
+	_nav_strip.offset_left = -320
+	_nav_strip.offset_top = -70
+	_nav_strip.offset_right = -24
+	_nav_strip.offset_bottom = -28
+	_nav_strip.add_theme_constant_override("separation", 8)
+	_nav_strip.mouse_filter = Control.MOUSE_FILTER_STOP
+	bar.add_child(_nav_strip)
+	var garden_hud := UiKit.make_button("GARDEN_OPEN", false)
+	garden_hud.name = "GardenOpen"
+	garden_hud.pressed.connect(func() -> void:
+		if str(GameFlow.fsm_state) == "clinic_idle":
+			GameFlow.go_garden()
+	)
+	_nav_strip.add_child(garden_hud)
+	var process_hud := UiKit.make_button("PROCESS_ENTER", false)
+	if process_hud.text == "PROCESS_ENTER" or process_hud.text == "":
+		process_hud.text = UiKit.tr_or("PROCESS_OPEN", UiKit.tr_or("PROCESS_ENTER", "去炮制院"))
+		process_hud.set_meta("i18n_key", "PROCESS_ENTER")
+	process_hud.name = "ProcessOpen"
+	process_hud.pressed.connect(func() -> void:
+		if str(GameFlow.fsm_state) == "clinic_idle":
+			GameFlow.go_process()
+	)
+	_nav_strip.add_child(process_hud)
 	_foot = UiKit.ink_label(tr("BOOT_DISCLAIMER_FOOTER"), 13, UiKit.INK_MUTED)
 	_foot.name = "ClinicFoot"
 	_foot.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
@@ -1583,6 +1650,70 @@ func _build_hud() -> void:
 	_foot.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_foot.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bar.add_child(_foot)
+	_ensure_settings_overlay(hud)
+
+
+func _ensure_settings_overlay(hud: Control) -> void:
+	if _settings_root != null and is_instance_valid(_settings_root):
+		return
+	_settings_root = Control.new()
+	_settings_root.name = "SettingsOverlay"
+	_settings_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_settings_root.mouse_filter = Control.MOUSE_FILTER_STOP
+	_settings_root.visible = false
+	_settings_root.z_index = 80
+	hud.add_child(_settings_root)
+	var dim := ColorRect.new()
+	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	dim.color = Color(0.12, 0.1, 0.08, 0.35)
+	dim.gui_input.connect(func(ev: InputEvent) -> void:
+		if ev is InputEventMouseButton and ev.pressed:
+			_set_settings_open(false)
+	)
+	_settings_root.add_child(dim)
+	var on_saved := func(msg: String) -> void:
+		_flash_settings_toast(msg)
+	var on_loaded := func(msg: String) -> void:
+		_flash_settings_toast(msg)
+		_refresh()
+		_rebuild_dock()
+	var on_close := func() -> void:
+		_set_settings_open(false)
+	var body := UiKit.build_settings_body(on_saved, on_loaded, on_close)
+	body.set_anchors_preset(Control.PRESET_CENTER)
+	body.anchor_left = 0.5
+	body.anchor_top = 0.5
+	body.anchor_right = 0.5
+	body.anchor_bottom = 0.5
+	body.offset_left = -180
+	body.offset_top = -160
+	body.offset_right = 180
+	body.offset_bottom = 160
+	_settings_root.add_child(body)
+	_settings_toast = UiKit.ink_label("", 14, UiKit.SEAL)
+	_settings_toast.name = "SettingsToast"
+	_settings_toast.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_settings_toast.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
+	_settings_toast.anchor_top = 1.0
+	_settings_toast.anchor_bottom = 1.0
+	_settings_toast.offset_top = -36
+	_settings_toast.offset_bottom = -12
+	_settings_toast.offset_left = -160
+	_settings_toast.offset_right = 160
+	_settings_root.add_child(_settings_toast)
+
+
+func _set_settings_open(open: bool) -> void:
+	GameFlow.settings_open = open
+	if _settings_root and is_instance_valid(_settings_root):
+		_settings_root.visible = open
+
+
+func _flash_settings_toast(msg: String) -> void:
+	if _settings_toast == null:
+		return
+	_settings_toast.text = msg
+
 
 
 func _paint_hint() -> void:
@@ -1628,7 +1759,17 @@ func _refresh() -> void:
 		# Keep seats; only force rebuild labels/portraits from current waiting_seat_ids
 		pass
 	if _title:
-		_title.text = tr("GAME_TITLE")
+		_title.text = UiKit.store_title_text()
+	if _day_top:
+		var day_n2 := GameFlow.play_day() if GameFlow.has_method("play_day") else 1
+		var day_lab2 := tr("DAY_PLAQUE")
+		if day_lab2 == "DAY_PLAQUE" or day_lab2 == "":
+			day_lab2 = UiKit.tr_or("SAVE_SLOT_DAY", "第 {n} 日").replace("{n}", str(day_n2))
+		else:
+			day_lab2 = day_lab2.replace("{n}", str(day_n2))
+		_day_top.text = day_lab2
+	if _settings_root and is_instance_valid(_settings_root):
+		_settings_root.visible = GameFlow.settings_open
 	if _foot:
 		_foot.text = tr("BOOT_DISCLAIMER_FOOTER")
 	_paint_hint()

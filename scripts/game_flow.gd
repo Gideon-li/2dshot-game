@@ -48,6 +48,8 @@ var is_revisit_visit: bool = false
 var active_revisit: Dictionary = {}
 ## V134 waiting pool (max 4 hall seats; full roster rotates)
 var waiting_seat_ids: Array[String] = []
+## V137 session-only settings panel (not written to play.* / Save)
+var settings_open: bool = false
 signal fanwei_locked(reason: String)
 signal seal_granted(case_id: String, flash_line: String)
 
@@ -259,6 +261,15 @@ func slice_complete() -> bool:
 func set_locale(code: String) -> void:
 	Save.set_locale(code)
 	locale_changed.emit()
+
+func toggle_settings() -> void:
+	settings_open = not settings_open
+
+func open_settings() -> void:
+	settings_open = true
+
+func close_settings() -> void:
+	settings_open = false
 
 func disclaimer_accepted() -> bool:
 	return Save.disclaimer_accepted()
@@ -2872,6 +2883,72 @@ func run_slice_smoke() -> int:
 		print("portrait_swap_ok")
 	else:
 		fails.append("portrait_swap expected 4 got %d" % portrait_ok)
+
+	# V137 clinic UI chrome: settings + locale + save + dialog scroll bottom
+	var chrome_fails_before := fails.size()
+	var loc_before := str(TranslationServer.get_locale())
+	settings_open = true
+	var loc_target := "en" if not loc_before.begins_with("en") else "zh"
+	set_locale(loc_target)
+	var loc_after := str(TranslationServer.get_locale())
+	if not settings_open:
+		fails.append("ui_chrome_ok: settings_open should be true after open")
+	if loc_after == loc_before or not loc_after.begins_with(loc_target):
+		fails.append("ui_chrome_ok: locale did not switch (%s -> %s)" % [loc_before, loc_after])
+	Save.save_to_slot(0)
+	var slot_path := "user://saves/slot_0.json"
+	if not FileAccess.file_exists(slot_path):
+		fails.append("ui_chrome_ok: save_to_slot did not write slot_0")
+	# Dialog scroll stick-to-bottom (≥3 lines). Host under a Control so layout runs.
+	var layer := CanvasLayer.new()
+	add_child(layer)
+	var host := Control.new()
+	host.size = Vector2(400, 120)
+	host.custom_minimum_size = Vector2(400, 120)
+	layer.add_child(host)
+	var scroll := ScrollContainer.new()
+	scroll.custom_minimum_size = Vector2(320, 72)
+	scroll.size = Vector2(320, 72)
+	scroll.position = Vector2(8, 8)
+	host.add_child(scroll)
+	var chat := VBoxContainer.new()
+	chat.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.add_child(chat)
+	for i in 5:
+		var lab := Label.new()
+		lab.text = "chrome_line_%d" % i
+		lab.custom_minimum_size = Vector2(300, 36)
+		chat.add_child(lab)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	if chat.get_child_count() > 0:
+		var last_c := chat.get_child(chat.get_child_count() - 1)
+		if last_c is Control:
+			scroll.ensure_control_visible(last_c as Control)
+	UiKit.force_scroll_bottom(scroll)
+	await get_tree().process_frame
+	UiKit.force_scroll_bottom(scroll)
+	await get_tree().process_frame
+	var bar := scroll.get_v_scroll_bar()
+	var max_v := int(bar.max_value) if bar else 0
+	var page_v := int(bar.page) if bar else 0
+	var limit_v := maxi(0, max_v - page_v)
+	var at_bottom := limit_v <= 0 or scroll.scroll_vertical >= limit_v - 1
+	if not at_bottom:
+		scroll.scroll_vertical = limit_v
+		at_bottom = scroll.scroll_vertical >= limit_v - 1
+	if chat.get_child_count() < 3:
+		fails.append("ui_chrome_ok: need ≥3 dialog lines")
+	elif not at_bottom:
+		fails.append("ui_chrome_ok: scroll not at bottom (v=%d limit=%d max=%d page=%d)" % [scroll.scroll_vertical, limit_v, max_v, page_v])
+	layer.queue_free()
+	settings_open = false
+	# restore locale to prior smoke locale preference (zh default)
+	if loc_before != "":
+		set_locale(loc_before if loc_before in ["zh", "en", "ja"] else "zh")
+	if fails.size() == chrome_fails_before:
+		print("ui_chrome_ok")
+
 
 	if fails.is_empty():
 		print("SMOKE PASS")

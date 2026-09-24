@@ -75,3 +75,16 @@
 
 - `play.demo_guide`：`{ enabled, steps_done[], dismissed }`，默认引导开。
 - `time_slots` 四格与 HUD/入口按钮同一真相；次日开馆可 refill。
+
+
+## V137 设置面板接线
+
+设置面板（角色侧挂 UI；本目录只定存档侧约定）：
+
+- **开闭**：会话态 `settings_open`（clinic / GameFlow 本地 bool）；**不**写入 `play.*`。Esc 或再点设置关。
+- **语言**：`GameFlow.set_locale(code)` 或 `Save.set_locale(code)`（写当前槽；进度保留）→ `GameFlow.locale_changed`。
+- **保存**：`Save.save_to_slot(n)` / `Save.write_slot()` → toast `SAVE_SAVED`。
+- **读档**：`Save.apply_slot(n)`（clamp、设 `active_slot`、`data = load_slot(n)`、按 `data.locale` 调 `TranslationServer.set_locale`；**不** `write_slot`）→ 刷新 HUD / 发 `GameFlow.locale_changed`（角色接线）→ toast `SAVE_LOADED`。
+- **路径**：`user://saves/slot_{n}.json`，`SLOT_COUNT = 3`。
+- **键**：见 `../i18n/SETTINGS-SAVE-KEYS.md`。
+- **冒烟** `ui_chrome_ok`（角色 / prototype 挂）：开设置 → 切 locale 一次 → 写档一次；追加 ≥3 行对话后 scroll 在底。

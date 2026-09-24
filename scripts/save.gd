@@ -62,3 +62,20 @@ func _merge(dst: Dictionary, src: Dictionary) -> void:
 			_merge(dst[k], src[k])
 		else:
 			dst[k] = src[k]
+
+func apply_slot(n: int) -> void:
+	n = clampi(n, 0, SLOT_COUNT - 1)
+	active_slot = n
+	data = load_slot(n)
+	var loc := str(data.get("locale", "zh"))
+	if loc.is_empty():
+		loc = "zh"
+	TranslationServer.set_locale(loc)
+	# Do not write_slot here — load only.
+
+func save_to_slot(n: int = -1) -> void:
+	if n >= 0:
+		active_slot = clampi(n, 0, SLOT_COUNT - 1)
+		write_slot(active_slot)
+	else:
+		write_slot()

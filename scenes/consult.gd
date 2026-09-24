@@ -12,6 +12,8 @@ var _ask_edit: LineEdit
 var _pulse_panel: Control
 var _mentor_l: Label
 var _mentor_panel: Panel
+var _chat_scroll: ScrollContainer
+var _settings_root: Control
 
 
 func _ready() -> void:
@@ -95,8 +97,13 @@ func _build() -> void:
 	var sp := Control.new()
 	sp.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	top.add_child(sp)
-	top.add_child(UiKit.locale_bar())
+	var gear := UiKit.make_settings_gear_button()
+	gear.pressed.connect(func() -> void:
+		_set_settings_open(not GameFlow.settings_open)
+	)
+	top.add_child(gear)
 	root.add_child(top)
+	_ensure_settings_overlay()
 	_persona_l = UiKit.ink_label("", 14, UiKit.INK_MUTED)
 	root.add_child(_persona_l)
 	var exams := HBoxContainer.new()
@@ -345,13 +352,16 @@ func _fill_ask() -> void:
 	col.add_theme_constant_override("separation", 8)
 	_stage.add_child(col)
 	var scroll := ScrollContainer.new()
+	scroll.name = "ChatScroll"
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	col.add_child(scroll)
+	_chat_scroll = scroll
 	_chat = VBoxContainer.new()
 	_chat.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.add_child(_chat)
 	for turn in GameFlow.conversation:
 		_append_chat(str(turn.get("q", "")), str(turn.get("a", "")))
+	_scroll_chat_to_bottom()
 	col.add_child(UiKit.ink_label(tr("TENQ_BAR_TITLE"), 13, UiKit.INK_MUTED))
 	var tenq := HFlowContainer.new()
 	tenq.add_theme_constant_override("h_separation", 6)
@@ -401,6 +411,69 @@ func _append_chat(q: String, a: String) -> void:
 	if a != "":
 		var al := UiKit.ink_label(a, 16, UiKit.INK)
 		_chat.add_child(al)
+	_scroll_chat_to_bottom()
+
+
+func _scroll_chat_to_bottom() -> void:
+	if _chat_scroll == null or not is_instance_valid(_chat_scroll):
+		return
+	_chat_scroll.set_deferred("scroll_vertical", 1 << 30)
+	call_deferred("_force_chat_scroll_now")
+
+
+func _force_chat_scroll_now() -> void:
+	if _chat_scroll == null or not is_instance_valid(_chat_scroll):
+		return
+	UiKit.force_scroll_bottom(_chat_scroll)
+
+
+func _ensure_settings_overlay() -> void:
+	if _settings_root != null and is_instance_valid(_settings_root):
+		_settings_root.visible = GameFlow.settings_open
+		return
+	_settings_root = Control.new()
+	_settings_root.name = "SettingsOverlay"
+	_settings_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_settings_root.mouse_filter = Control.MOUSE_FILTER_STOP
+	_settings_root.visible = GameFlow.settings_open
+	_settings_root.z_index = 80
+	add_child(_settings_root)
+	var dim := ColorRect.new()
+	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	dim.color = Color(0.12, 0.1, 0.08, 0.35)
+	dim.gui_input.connect(func(ev: InputEvent) -> void:
+		if ev is InputEventMouseButton and ev.pressed:
+			_set_settings_open(false)
+	)
+	_settings_root.add_child(dim)
+	var body := UiKit.build_settings_body(
+		func(msg: String) -> void: pass,
+		func(msg: String) -> void: _refresh(),
+		func() -> void: _set_settings_open(false)
+	)
+	body.set_anchors_preset(Control.PRESET_CENTER)
+	body.anchor_left = 0.5
+	body.anchor_top = 0.5
+	body.anchor_right = 0.5
+	body.anchor_bottom = 0.5
+	body.offset_left = -180
+	body.offset_top = -160
+	body.offset_right = 180
+	body.offset_bottom = 160
+	_settings_root.add_child(body)
+
+
+func _set_settings_open(open: bool) -> void:
+	GameFlow.settings_open = open
+	if _settings_root and is_instance_valid(_settings_root):
+		_settings_root.visible = open
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel") or (event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE):
+		if GameFlow.settings_open:
+			_set_settings_open(false)
+			get_viewport().set_input_as_handled()
 
 
 func _send_ask(text: String) -> void:

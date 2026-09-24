@@ -18,3 +18,5 @@ Godot 工程翻译源：`locale/xinglin.csv`（与本目录 `ui.csv` 同步）�
 - v1.33：周绣娘 `XIUNIANG_*` / `TRUST_*` / `TOWN_PERMIT_*`（见 `XIUNIANG-KEYS.md`）
 - v1.34：青石扩容三新人/三证/证印（见 `QINGSHI-EXPAND-KEYS.md`）
 - v1.35：青石再扩三新人/三证印（见 `QINGSHI-EXPAND2-KEYS.md`）
+- v1.36：青石再扩燥咳/湿热/外伤（见 `QINGSHI-EXPAND3-KEYS.md`）
+- v1.37：设置/存读档壳 `SETTINGS_CLOSE|SECTION_SAVE|HINT` / `SAVE_LOADED|SLOT_HINT|SLOT_DAY` / `CHAT_NEW_MSG` / `DEBUG_PANEL`（见 `SETTINGS-SAVE-KEYS.md`）

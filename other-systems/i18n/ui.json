@@ -765,7 +765,15 @@
     "MENTOR_EXPAND3_1": "燥咳和内热，别穿一件衣。",
     "MENTOR_EXPAND3_2": "下边的困热，话说满就失礼。",
     "MENTOR_EXPAND3_3": "碰伤看青肿，不看热闹。",
-    "DEMO_HINT_EXPAND3": "青石证印可亮到九枚。小儿格不做。"
+    "DEMO_HINT_EXPAND3": "青石证印可亮到九枚。小儿格不做。",
+    "SETTINGS_CLOSE": "关闭",
+    "SETTINGS_SECTION_SAVE": "存读档",
+    "SETTINGS_HINT": "再点设置或 Esc 可关。",
+    "SAVE_LOADED": "已读入。",
+    "SAVE_SLOT_HINT": "选档后保存或读档。",
+    "SAVE_SLOT_DAY": "第 {n} 日",
+    "CHAT_NEW_MSG": "有新消息",
+    "DEBUG_PANEL": "调试"
   },
   "en": {
     "GAME_TITLE": "Xinglin Mowen",
@@ -1533,7 +1541,15 @@
     "MENTOR_EXPAND3_1": "Dry cough and internal heat do not wear the same coat.",
     "MENTOR_EXPAND3_2": "For muggy heaviness below, saying too much is rude.",
     "MENTOR_EXPAND3_3": "For a bump, watch the bruise — not the spectacle.",
-    "DEMO_HINT_EXPAND3": "Qingshi seals can light up to nine. No child slot."
+    "DEMO_HINT_EXPAND3": "Qingshi seals can light up to nine. No child slot.",
+    "SETTINGS_CLOSE": "Close",
+    "SETTINGS_SECTION_SAVE": "Save & Load",
+    "SETTINGS_HINT": "Tap Settings or Esc to close.",
+    "SAVE_LOADED": "Loaded.",
+    "SAVE_SLOT_HINT": "Pick a slot, then save or load.",
+    "SAVE_SLOT_DAY": "Day {n}",
+    "CHAT_NEW_MSG": "New messages",
+    "DEBUG_PANEL": "Debug"
   },
   "ja": {
     "GAME_TITLE": "杏林墨問",
@@ -2301,6 +2317,14 @@
     "MENTOR_EXPAND3_1": "燥咳と内熱は、同じ衣を着るな。",
     "MENTOR_EXPAND3_2": "下の困熱は、言い過ぎると失礼だ。",
     "MENTOR_EXPAND3_3": "打撲は青腫れを見よ。騒ぎを見るな。",
-    "DEMO_HINT_EXPAND3": "青石証印は九枚まで。小児枠は作らない。"
+    "DEMO_HINT_EXPAND3": "青石証印は九枚まで。小児枠は作らない。",
+    "SETTINGS_CLOSE": "閉じる",
+    "SETTINGS_SECTION_SAVE": "セーブ／ロード",
+    "SETTINGS_HINT": "設定をもう一度、または Esc で閉じる。",
+    "SAVE_LOADED": "読み込んだ。",
+    "SAVE_SLOT_HINT": "スロットを選んでセーブ／ロード。",
+    "SAVE_SLOT_DAY": "第 {n} 日",
+    "CHAT_NEW_MSG": "新しいメッセージ",
+    "DEBUG_PANEL": "デバッグ"
   }
 }
