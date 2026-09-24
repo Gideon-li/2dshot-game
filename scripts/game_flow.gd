@@ -2950,6 +2950,69 @@ func run_slice_smoke() -> int:
 		print("ui_chrome_ok")
 
 
+	# V137.1: boot title keys + waiting portraits visible (no full clinic.tscn — avoids hang)
+	var bootp_fails_before := fails.size()
+	var loc_boot := str(TranslationServer.get_locale())
+	set_locale("zh")
+	var store_t := tr("STORE_TITLE")
+	var game_t := tr("GAME_TITLE")
+	if store_t.find("墨问岐黄") < 0 and game_t.find("墨问岐黄") < 0:
+		fails.append("ui_boot_portrait_ok: title not 墨问岐黄 (STORE=%s GAME=%s)" % [store_t, game_t])
+	var clinic_src := FileAccess.get_file_as_string("res://scenes/clinic.tscn")
+	if clinic_src.find("Area_候诊凳C") < 0:
+		fails.append("ui_boot_portrait_ok: Area_候诊凳C missing in clinic.tscn")
+	var clinic_gd := FileAccess.get_file_as_string("res://scenes/clinic.gd")
+	if clinic_gd.find("sheet_root.visible = false") < 0 and clinic_gd.find("Patients composite") < 0:
+		fails.append("ui_boot_portrait_ok: _apply_portraits should hide Patients composite")
+	fsm_state = "clinic_idle"
+	refresh_waiting_seats(true)
+	var bootp_host := Node2D.new()
+	bootp_host.name = "SmokePortraitHost"
+	add_child(bootp_host)
+	var homes: Array = [Vector2(405, 290), Vector2(545, 290), Vector2(300, 340), Vector2(685, 290)]
+	var seats_smoke: Array = waiting_patients() if has_method("waiting_patients") else []
+	for i in mini(seats_smoke.size(), 4):
+		var pid := str(seats_smoke[i].get("id", ""))
+		var node := Node2D.new()
+		node.name = "Patient%d" % i
+		node.position = homes[i]
+		node.visible = true
+		var spr := Sprite2D.new()
+		spr.name = "Portrait"
+		var tex: Texture2D = CharacterArt.load_portrait(pid)
+		if tex != null:
+			var th := float(tex.get_height())
+			var tw := float(tex.get_width())
+			var target_h := 260.0
+			var s := target_h / th if th > 1.0 else 1.0
+			spr.texture = tex
+			spr.centered = false
+			spr.scale = Vector2(s, s)
+			spr.position = Vector2(-tw * s * 0.5, -th * s)
+			spr.visible = true
+		else:
+			spr.visible = false
+		node.add_child(spr)
+		bootp_host.add_child(node)
+	await get_tree().process_frame
+	var counted := 0
+	for i in 4:
+		var pn := bootp_host.get_node_or_null("Patient%d" % i) as Node2D
+		if pn == null or not pn.visible:
+			continue
+		var spr2 := pn.get_node_or_null("Portrait") as Sprite2D
+		if spr2 and spr2.visible and spr2.texture != null:
+			counted += 1
+	if counted < 1:
+		fails.append("ui_boot_portrait_ok: idle need ≥1 Portrait.visible with texture (got %d)" % counted)
+	bootp_host.queue_free()
+	await get_tree().process_frame
+	if loc_boot != "":
+		set_locale(loc_boot if loc_boot in ["zh", "en", "ja"] else "zh")
+	if fails.size() == bootp_fails_before:
+		print("ui_boot_portrait_ok")
+
+
 	if fails.is_empty():
 		print("SMOKE PASS")
 		return 0

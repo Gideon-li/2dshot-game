@@ -124,3 +124,9 @@ CAM_ASK 构图：病人上半身可读即可；单人立绘在问诊里用半身
 - 坐诊仍 **(1040, 590)**；四人共用同一 PortraitFrame，按 id 换贴图。
 - 案 id：`xuexu_ganyu`；冒烟：`xiuniang_case_ok`。
 - 全表、避让、参考图：见 **`scene-slice/WAITING-SLOT4-V133.md`** 与 `scene-slice/waiting/WAITING_SLOT4.png`（镜像 `ui/waiting/`）。
+
+---
+
+## 8. V137 addendum · 候诊立绘可见
+
+顶 HUD 名单牌不替代凳上立绘。A–D 脚底与热区**不改**；缺 C Area 与合图停用见 **`WAITING-VISIBLE-V137.md`**。

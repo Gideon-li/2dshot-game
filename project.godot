@@ -1,13 +1,13 @@
 ; Engine configuration file.
-; Godot 4.x project for 杏林墨问 / Xinglin Mowen
+; Godot 4.x project for 墨问岐黄 / Mo Wen Qi Huang
 config_version=5
 
 [application]
 
-config/name="杏林墨问"
+config/name="墨问岐黄"
 config/name_localized={
-"en": "Xinglin Mowen",
-"ja": "杏林墨問"
+"en": "Mo Wen Qi Huang",
+"ja": "墨問岐黄"
 }
 config/description="Ink-wash TCM clinic sim. Cultural learning, not medical advice."
 config/version="0.1.0-slice"

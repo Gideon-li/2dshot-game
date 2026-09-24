@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/_capture_boot_portrait_v137_1.gd" id="1"]
+
+[node name="CaptureBootPortraitV1371" type="Node"]
+script = ExtResource("1")

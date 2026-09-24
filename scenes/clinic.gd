@@ -14,6 +14,8 @@ const HOTSPOTS := {
 	"Area_南门": "door",
 	"Area_候诊凳A": "stool_a",
 	"Area_候诊凳B": "stool_b",
+	"Area_候诊凳C": "stool_c",
+	"Area_候诊凳D": "stool_d",
 	"Area_病人椅": "chair",
 	"Area_脉枕": "pulse",
 	"Area_香炉": "incense",
@@ -221,6 +223,9 @@ func _handle_hotspot(kind: String) -> void:
 		"stool_b":
 			_switch_camera("CAM_ASK")
 			_pick_at(1)
+		"stool_c":
+			_switch_camera("CAM_ASK")
+			_pick_at(2)
 		"stool_d":
 			_switch_camera("CAM_ASK")
 			_pick_at(3)
@@ -372,28 +377,38 @@ func _rebuild_waiting_hud() -> void:
 		row.add_child(card)
 
 func _apply_portraits() -> void:
-	## V126: prefer ui/characters/<id>.png; fallback sheet/apprentice.
+	## V137.1: per-seat single portraits; stop Patients composite sheet.
+	## Feet at parent origin; waiting display height ~240–280; seated ~280–320.
 	var chars := get_node_or_null("L5_characters")
 	if chars == null:
 		return
+	# Always hide composite three-sheet (singles replace it).
+	var sheet_root := chars.get_node_or_null("Patients") as Node2D
+	if sheet_root:
+		sheet_root.visible = false
+	var sheet_art := chars.get_node_or_null("Patients/Art") as Sprite2D
+	if sheet_art:
+		sheet_art.visible = false
+		sheet_art.texture = null
+	# Jiang Wan apprentice — feet (1100, 720), display ~260.
+	var ap := chars.get_node_or_null("Apprentice") as Node2D
+	if ap:
+		ap.position = Vector2(1100, 720)
+		ap.y_sort_enabled = true
+		ap.visible = true
 	var ap_art := chars.get_node_or_null("Apprentice/Art") as Sprite2D
 	if ap_art:
 		var at: Texture2D = CharacterArt.load_portrait("apprentice_jiang")
 		if at:
-			ap_art.texture = at
-			ap_art.centered = true
-			ap_art.position = Vector2.ZERO
-			ap_art.scale = Vector2(0.55, 0.55)
-	# Hide shared three-sheet when singles exist; show per-patient sprites (≤4 seats).
-	var sheet := chars.get_node_or_null("Patients/Art") as Sprite2D
-	var any_single := false
+			_fit_portrait_sprite(ap_art, at, 260.0)
+			ap_art.visible = true
+		else:
+			ap_art.texture = null
+			ap_art.visible = false
 	var seats_art: Array = _waiting_list()
-	var max_art := mini(seats_art.size(), 4)
+	var chair := Vector2(1040, 590)
+	var max_art := 4
 	for i in max_art:
-		var p: Dictionary = seats_art[i]
-		var pid := str(p.get("id", ""))
-		if CharacterArt.has_single_file(pid):
-			any_single = true
 		var node := chars.get_node_or_null("Patient%d" % i) as Node2D
 		if node == null:
 			continue
@@ -402,16 +417,76 @@ func _apply_portraits() -> void:
 			spr = Sprite2D.new()
 			spr.name = "Portrait"
 			spr.z_index = 5
-			spr.centered = true
-			spr.position = Vector2(0, -20)
-			spr.scale = Vector2(0.45, 0.45)
 			node.add_child(spr)
+		var occupied := i < seats_art.size()
+		if not occupied:
+			spr.texture = null
+			spr.visible = false
+			node.visible = false
+			continue
+		var p: Dictionary = seats_art[i]
+		var pid := str(p.get("id", ""))
+		node.visible = true
+		node.y_sort_enabled = true
+		node.set_meta("pid", pid)
 		var tex: Texture2D = CharacterArt.load_portrait(pid)
-		if tex:
-			spr.texture = tex
-			spr.visible = true
-	if sheet:
-		sheet.visible = not any_single
+		if tex == null:
+			spr.texture = null
+			spr.visible = false
+			continue
+		var at_chair := node.position.distance_to(chair) < 48.0
+		var target_h := 300.0 if at_chair else 260.0
+		_fit_portrait_sprite(spr, tex, target_h)
+		spr.visible = true
+		spr.z_index = 5
+		# Name card above head (text OK but not a substitute for portrait).
+		var lb := node.get_node_or_null("Name") as Label
+		if lb:
+			lb.position = Vector2(-48, -target_h - 8)
+			lb.size = Vector2(96, 22)
+		_ensure_seat_hit(node, i)
+
+
+func _fit_portrait_sprite(spr: Sprite2D, tex: Texture2D, target_h: float) -> void:
+	## Feet at parent origin: centered=false, position=(-w/2,-h) in local pre-scale.
+	spr.texture = tex
+	spr.centered = false
+	spr.offset = Vector2.ZERO
+	var th := float(tex.get_height())
+	var tw := float(tex.get_width())
+	if th <= 1.0:
+		return
+	var s := target_h / th
+	spr.scale = Vector2(s, s)
+	# position is in parent space (not pre-multiplied by scale)
+	spr.position = Vector2(-tw * s * 0.5, -th * s)
+
+
+func _ensure_seat_hit(node: Node2D, seat_index: int) -> void:
+	## Click portrait / stool proxy → same open-consult path as Area stool.
+	var hit := node.get_node_or_null("Hit") as Area2D
+	if hit == null:
+		hit = Area2D.new()
+		hit.name = "Hit"
+		hit.input_pickable = true
+		hit.monitoring = true
+		hit.monitorable = true
+		hit.position = Vector2(0, -90)
+		var cs := CollisionShape2D.new()
+		cs.name = "Collision"
+		var circ := CircleShape2D.new()
+		circ.radius = 90.0
+		cs.shape = circ
+		hit.add_child(cs)
+		node.add_child(hit)
+		hit.input_event.connect(_on_seat_hit_input.bind(seat_index))
+	hit.set_meta("seat_index", seat_index)
+
+
+func _on_seat_hit_input(_vp: Node, event: InputEvent, _shape: int, seat_index: int) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		_switch_camera("CAM_ASK")
+		_pick_at(seat_index)
 
 
 func _build_drawers() -> void:

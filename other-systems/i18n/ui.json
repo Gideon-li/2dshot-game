@@ -1,6 +1,6 @@
 {
   "zh": {
-    "GAME_TITLE": "杏林墨问",
+    "GAME_TITLE": "墨问岐黄",
     "GAME_SUBTITLE": "病人不交全症状",
     "STORE_TAGLINE": "病人不交全症状。望、闻、问、切，都要你亲手做。",
     "STORE_NOT_MEDICAL": "文化体验，不能替代就医。",
@@ -776,7 +776,7 @@
     "DEBUG_PANEL": "调试"
   },
   "en": {
-    "GAME_TITLE": "Xinglin Mowen",
+    "GAME_TITLE": "Mo Wen Qi Huang",
     "GAME_SUBTITLE": "The chart is never complete.",
     "STORE_TAGLINE": "The patient never hands you a complete chart. Look, listen, ask, then feel the pulse.",
     "STORE_NOT_MEDICAL": "A cultural experience. Not a substitute for medical care.",
@@ -1552,7 +1552,7 @@
     "DEBUG_PANEL": "Debug"
   },
   "ja": {
-    "GAME_TITLE": "杏林墨問",
+    "GAME_TITLE": "墨問岐黄",
     "GAME_SUBTITLE": "望聞問切は、あなたがやる。",
     "STORE_TAGLINE": "患者は症状をすべて話さない。望・聞・問・切は、あなたがやる動詞だ。",
     "STORE_NOT_MEDICAL": "文化体験です。受診の代わりにはなりません。",

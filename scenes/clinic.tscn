@@ -261,6 +261,16 @@ metadata/hotspot = "stool_b"
 [node name="Collision" type="CollisionShape2D" parent="Areas/Area_候诊凳B"]
 shape = SubResource("Circ_bench")
 
+[node name="Area_候诊凳C" type="Area2D" parent="Areas"]
+position = Vector2(300, 305)
+input_pickable = true
+monitoring = true
+monitorable = true
+metadata/hotspot = "stool_c"
+
+[node name="Collision" type="CollisionShape2D" parent="Areas/Area_候诊凳C"]
+shape = SubResource("Circ_bench")
+
 [node name="Area_候诊凳D" type="Area2D" parent="Areas"]
 position = Vector2(685, 255)
 input_pickable = true
