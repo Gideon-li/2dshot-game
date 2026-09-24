@@ -68,13 +68,14 @@ func _build() -> void:
 	sub_gap.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	sub_gap.custom_minimum_size = Vector2(0, 10)
 	col.add_child(sub_gap)
-	# 4) Disclaimer card — shrink/fixed band; do NOT SIZE_EXPAND_FILL (that ate the shop sign).
+	# 4) Disclaimer card — V139 warm rounded paper (boot_panel_disclaimer if present).
 	var card := Panel.new()
 	card.name = "DisclaimerCard"
 	card.custom_minimum_size = Vector2(0, 180)
 	# Default size flags: shrink to content; do not expand into the shop-sign band.
 	card.size_flags_vertical = 0
-	card.add_theme_stylebox_override("panel", UiKit.paper_style(UiKit.PAPER_DARK, UiKit.LINE, 6))
+	card.add_theme_stylebox_override("panel", _boot_panel_style())
+	card.set_meta("boot_rounded", true)
 	col.add_child(card)
 	var inner := VBoxContainer.new()
 	inner.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -101,13 +102,20 @@ func _build() -> void:
 	_check.add_theme_color_override("font_color", UiKit.INK)
 	if GameFlow.disclaimer_accepted():
 		_check.button_pressed = true
-	inner.add_child(_check)
+	var check_wrap := PanelContainer.new()
+	check_wrap.name = "CheckPlate"
+	check_wrap.add_theme_stylebox_override("panel", _boot_check_style())
+	check_wrap.set_meta("boot_rounded", true)
+	check_wrap.add_child(_check)
+	inner.add_child(check_wrap)
 	_need = UiKit.ink_label("", 13, UiKit.SEAL, false)
 	_need.visible = false
 	inner.add_child(_need)
 	# 5) Enter CTA below card (outside), then footer.
 	_enter = UiKit.make_button("START_CLINIC", true)
-	_enter.custom_minimum_size = Vector2(220, 44)
+	_enter.custom_minimum_size = Vector2(220, 48)
+	_apply_boot_btn_plate(_enter)
+	_enter.set_meta("boot_rounded", true)
 	_enter.pressed.connect(_on_enter)
 	var enter_wrap := HBoxContainer.new()
 	enter_wrap.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -121,6 +129,84 @@ func _build() -> void:
 	if has_node("Disclaimer"):
 		$Disclaimer.visible = false
 	_ensure_settings_overlay()
+
+
+
+func _boot_tex(path: String) -> Texture2D:
+	if ResourceLoader.exists(path):
+		return load(path) as Texture2D
+	if FileAccess.file_exists(path):
+		var img := Image.new()
+		if img.load(ProjectSettings.globalize_path(path)) == OK:
+			return ImageTexture.create_from_image(img)
+	return null
+
+
+func _boot_panel_style() -> StyleBox:
+	## V139: warm rounded disclaimer — prefer art plate, else soft StyleBoxFlat.
+	var tex := _boot_tex("res://ui/boot/boot_panel_disclaimer.png")
+	if tex != null:
+		var st := StyleBoxTexture.new()
+		st.texture = tex
+		st.texture_margin_left = 28
+		st.texture_margin_right = 28
+		st.texture_margin_top = 24
+		st.texture_margin_bottom = 24
+		st.content_margin_left = 20
+		st.content_margin_right = 20
+		st.content_margin_top = 14
+		st.content_margin_bottom = 14
+		return st
+	return UiKit.paper_style(UiKit.PAPER_DARK, UiKit.LINE, 16)
+
+
+func _boot_check_style() -> StyleBox:
+	var tex := _boot_tex("res://ui/boot/boot_check_plate.png")
+	if tex != null:
+		var st := StyleBoxTexture.new()
+		st.texture = tex
+		st.texture_margin_left = 18
+		st.texture_margin_right = 18
+		st.texture_margin_top = 18
+		st.texture_margin_bottom = 18
+		st.content_margin_left = 10
+		st.content_margin_right = 12
+		st.content_margin_top = 6
+		st.content_margin_bottom = 6
+		return st
+	return UiKit.paper_style(UiKit.PAPER, UiKit.LINE, 12)
+
+
+func _boot_btn_style(tex: Texture2D, mod: Color) -> StyleBoxTexture:
+	var st := StyleBoxTexture.new()
+	st.texture = tex
+	st.modulate_color = mod
+	st.texture_margin_left = 36
+	st.texture_margin_right = 36
+	st.texture_margin_top = 20
+	st.texture_margin_bottom = 20
+	st.content_margin_left = 18
+	st.content_margin_right = 18
+	st.content_margin_top = 10
+	st.content_margin_bottom = 10
+	return st
+
+
+func _apply_boot_btn_plate(btn: Button) -> void:
+	var tex := _boot_tex("res://ui/boot/boot_btn_plate.png")
+	if tex != null:
+		btn.add_theme_stylebox_override("normal", _boot_btn_style(tex, Color(1, 1, 1, 1)))
+		btn.add_theme_stylebox_override("hover", _boot_btn_style(tex, Color(1.05, 1.02, 0.96, 1)))
+		btn.add_theme_stylebox_override("pressed", _boot_btn_style(tex, Color(0.92, 0.88, 0.8, 1)))
+		btn.add_theme_stylebox_override("focus", _boot_btn_style(tex, Color(1.05, 1.02, 0.96, 1)))
+	else:
+		var normal := UiKit.paper_style(UiKit.PAPER_DARK, UiKit.LINE, 14)
+		var hover := UiKit.paper_style(Color(0.84, 0.8, 0.7, 1), UiKit.INK, 14)
+		var pressed := UiKit.paper_style(Color(0.78, 0.72, 0.62, 1), UiKit.SEAL, 14)
+		btn.add_theme_stylebox_override("normal", normal)
+		btn.add_theme_stylebox_override("hover", hover)
+		btn.add_theme_stylebox_override("pressed", pressed)
+		btn.add_theme_stylebox_override("focus", hover)
 
 
 func _setup_boot_bg() -> void:

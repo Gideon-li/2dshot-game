@@ -22,3 +22,16 @@
 - **勿**再叠第二套大号「墨问岐黄」Label；`boot_hero` 木牌即店招。顶栏仅小字标题 + 设置齿轮。
 - 声明卡与店招纵向分区，勿 EXPAND 吞牌。详见 `other-systems/BOOT-LAYOUT-V138.md`。
 - 交图：`v138_boot.png`（对照 `v137_1_boot.png`）。
+
+## V139 暖纸圆角片
+
+对照问题：`v138_boot.png`（声明卡/按钮直角过硬）。不做新 CG，只补暖纸圆角底图。
+
+| 文件 | 用途 |
+| --- | --- |
+| `boot_panel_disclaimer.png` | 声明卡底（圆角暖纸，可叠文案） |
+| `boot_btn_plate.png` | 「进入医馆」等按钮底 |
+| `boot_check_plate.png` | 勾选区小圆角片 |
+| `boot_paper_rounds_sheet.png` | 参考合图（可选） |
+
+文案仍由角色/其他要素挂字；美工只供底。

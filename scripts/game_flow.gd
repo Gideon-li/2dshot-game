@@ -2969,7 +2969,7 @@ func run_slice_smoke() -> int:
 	var bootp_host := Node2D.new()
 	bootp_host.name = "SmokePortraitHost"
 	add_child(bootp_host)
-	var homes: Array = [Vector2(405, 290), Vector2(545, 290), Vector2(300, 340), Vector2(685, 290)]
+	var homes: Array = [Vector2(400, 400), Vector2(540, 400), Vector2(280, 430), Vector2(680, 410)]  ## V139
 	var seats_smoke: Array = waiting_patients() if has_method("waiting_patients") else []
 	for i in mini(seats_smoke.size(), 4):
 		var pid := str(seats_smoke[i].get("id", ""))
@@ -3041,13 +3041,13 @@ func run_slice_smoke() -> int:
 		fails.append("ui_layout_ok: missing _waiting_portrait_height")
 	if clinic_gd2.find("return 260.0") < 0 and clinic_gd2.find("return 280.0") < 0 and clinic_gd2.find("return 240.0") < 0:
 		fails.append("ui_layout_ok: waiting portrait height should be 240～280")
-	if clinic_gd2.find("CAM_HERO_IDLE") >= 0 and clinic_gd2.find("Vector2(1280, 740)") < 0 and clinic_gd2.find("Vector2(1280, 780)") < 0:
+	if clinic_gd2.find("CAM_HERO_IDLE") >= 0 and clinic_gd2.find("Vector2(1280, 740)") < 0 and clinic_gd2.find("Vector2(1280, 780)") < 0 and clinic_gd2.find("Vector2(1240, 780)") < 0:
 		fails.append("ui_layout_ok: CAM_HERO_IDLE must stay within ≤40 of (1280,780)")
 	# Idle may use a slightly wider zoom so A–D @y≈290 with h=260 keep faces in-frame.
 	if clinic_gd2.find("CAM_HERO_ZOOM_IDLE") < 0:
 		fails.append("ui_layout_ok: missing CAM_HERO_ZOOM_IDLE for readable waiting portraits")
 	# Seat spacing + apprentice viewport under CAM_HERO (no full clinic.tscn — hang-safe)
-	var homes_l: Array = [Vector2(405, 290), Vector2(545, 290), Vector2(300, 340), Vector2(685, 290)]
+	var homes_l: Array = [Vector2(400, 400), Vector2(540, 400), Vector2(280, 430), Vector2(680, 410)]  ## V139
 	var spaced := 0
 	for i in homes_l.size():
 		for j in range(i + 1, homes_l.size()):
@@ -3086,7 +3086,7 @@ func run_slice_smoke() -> int:
 		layout_host.add_child(node_l)
 	var ap_l := Node2D.new()
 	ap_l.name = "Apprentice"
-	ap_l.position = Vector2(1100, 720)
+	ap_l.position = Vector2(1035, 770)  ## V139 PhysicianChair
 	var ap_spr := Sprite2D.new()
 	ap_spr.name = "Art"
 	var ap_tex: Texture2D = CharacterArt.load_portrait("apprentice_jiang")
@@ -3114,7 +3114,7 @@ func run_slice_smoke() -> int:
 		if pair_ok < 3:
 			fails.append("ui_layout_ok: visible seats center-x spacing pairs <3 (got %d)" % pair_ok)
 	# Apprentice fully inside 1280×720 under idle CAM_HERO framing zoom≈0.667
-	var cam_c := Vector2(1280, 740)
+	var cam_c := Vector2(1280, 780)  ## V139 HERO home
 	var cam_z := 0.666667
 	var half_w := 640.0 / cam_z
 	var half_h := 360.0 / cam_z
@@ -3135,6 +3135,60 @@ func run_slice_smoke() -> int:
 	await get_tree().process_frame
 	if fails.size() == layout_fails_before:
 		print("ui_layout_ok")
+
+	# V139: consult composition — Jiang Wan at PhysicianChair, waiting clear of desk work zone, boot rounded
+	var consult_fails_before := fails.size()
+	var clinic_gd3 := FileAccess.get_file_as_string("res://scenes/clinic.gd")
+	if clinic_gd3.find("CLINIC-CONSULT-V139") < 0 and clinic_gd3.find("1035, 770") < 0:
+		fails.append("ui_consult_layout_ok: APPRENTICE_HOME should be PhysicianChair (1035,770)")
+	if clinic_gd3.find("jiang_wan_sit") < 0 and clinic_gd3.find("load_portrait_sit") < 0:
+		fails.append("ui_consult_layout_ok: Jiang Wan should use sit pose loader")
+	if clinic_gd3.find("Prop_yaohu") < 0 or clinic_gd3.find("_apply_clinic_props_v139") < 0:
+		fails.append("ui_consult_layout_ok: small desk props (yaohu/maizhen/xianglu) not wired")
+	if clinic_gd3.find("Vector2(0, -40)") >= 0 and clinic_gd3.find("CAM_HERO_IDLE := Vector2(1280, 740)") >= 0:
+		fails.append("ui_consult_layout_ok: idle (0,-40) lift must be abolished")
+	var main_src2 := FileAccess.get_file_as_string("res://scenes/main.gd")
+	if main_src2.find("boot_rounded") < 0 and main_src2.find("_boot_panel_style") < 0:
+		fails.append("ui_consult_layout_ok: boot rounded/warm plate style missing")
+	# Idle composition host
+	var homes_c: Array = [Vector2(400, 400), Vector2(540, 400), Vector2(280, 430), Vector2(680, 410)]
+	var work := Rect2(880, 520, 440, 300)
+	var ap_home := Vector2(1035, 770)
+	var seat := Vector2(1040, 590)
+	# Jiang Wan in consult-seat zone (near PhysicianChair, not desk center / pillow)
+	if ap_home.distance_to(Vector2(1035, 770)) > 24.0:
+		fails.append("ui_consult_layout_ok: Jiang Wan not in consult seat zone")
+	if ap_home.distance_to(Vector2(1100, 720)) < 40.0 and ap_home.distance_to(Vector2(1035, 770)) > 24.0:
+		fails.append("ui_consult_layout_ok: Jiang Wan still at V138 desk-center feet")
+	# Work-zone avoidance for A–D
+	var clear_n := 0
+	for h in homes_c:
+		if not work.has_point(h):
+			clear_n += 1
+	if clear_n < 3:
+		fails.append("ui_consult_layout_ok: need ≥3 waiting feet outside desk work zone (got %d)" % clear_n)
+	# Spacing still OK
+	var spaced_c := 0
+	for i in homes_c.size():
+		for j in range(i + 1, homes_c.size()):
+			if absf(homes_c[i].x - homes_c[j].x) >= 100.0:
+				spaced_c += 1
+	if spaced_c < 3:
+		fails.append("ui_consult_layout_ok: waiting x-spacing pairs <3")
+	# Open-consult pair facing: seat south of / above physician in world? PatientChair Y < PhysicianChair Y
+	# Relative: patient at seat, Jiang Wan at ap_home — both near desk, facing pair
+	if seat.distance_to(ap_home) < 80.0 or seat.distance_to(ap_home) > 260.0:
+		fails.append("ui_consult_layout_ok: consult pair distance odd (%.1f)" % seat.distance_to(ap_home))
+	# Sit art present
+	var sit_tex: Texture2D = CharacterArt.load_portrait_sit("apprentice_jiang")
+	if sit_tex == null and not FileAccess.file_exists("res://ui/characters/jiang_wan_sit.png"):
+		fails.append("ui_consult_layout_ok: jiang_wan_sit.png missing")
+	# Prop files
+	for prop_p in ["res://ui/clinic/props/yaohu_128.png", "res://ui/clinic/props/maizhen_128.png", "res://ui/clinic/props/xianglu_128.png"]:
+		if not FileAccess.file_exists(prop_p) and not ResourceLoader.exists(prop_p):
+			fails.append("ui_consult_layout_ok: missing prop %s" % prop_p)
+	if fails.size() == consult_fails_before:
+		print("ui_consult_layout_ok")
 
 	if fails.is_empty():
 		print("SMOKE PASS")

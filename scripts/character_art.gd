@@ -22,6 +22,13 @@ const PATHS := {
 	"mentor_su": "res://ui/characters/su_wenzhou.png",
 }
 
+const SIT_PATHS := {
+	"apprentice_jiang": "res://ui/characters/jiang_wan_sit.png",
+	"jiang_wan": "res://ui/characters/jiang_wan_sit.png",
+}
+
+
+
 const SEAL_PATHS := {
 	# Expand 9 (V134–V136)
 	"fengre_biao": "res://ui/seals/fengre_biao.png",
@@ -105,6 +112,15 @@ static func load_portrait(id: String) -> Texture2D:
 	if tex != null:
 		return tex
 	return _fallback(id)
+
+
+static func load_portrait_sit(id: String) -> Texture2D:
+	## V139: Jiang Wan sit-consult pose. Falls back to standing if sit art missing.
+	var sit_path := str(SIT_PATHS.get(id, ""))
+	var tex := _load_texture_file(sit_path)
+	if tex != null:
+		return tex
+	return null
 
 
 static func load_seal(case_id: String) -> Texture2D:

@@ -69,3 +69,25 @@ V126.1 画风统一：四立绘同套 2D 明快 Q 平涂（婆婆去 3D；江晚
 ## V135 青石再扩
 
 立绘 han_danfu / ma_bashi / xia_jiaoli；证印 yangxu_weihan / xueyu_qing / shushi。
+
+## V136 青石再扩3
+
+立绘 qiu_tanfu / he_tianhan / lu_mujiang（alias tanfu/tianhan/mujiang）；
+证印 yinxu_zaoke / shire_xiazhu / waishang_zhongtong；
+旧四案印 fenghan_biao / ganyu_qizhi / yinxu_neire / xuexu_ganyu；
+九宫印墙 seal_wall_9.png + seal_wall_frame.png。
+湿热克制、外伤无血腥。
+
+## V137 诊室 UI 壳
+
+`chrome/settings_gear.png`（+64）+ `chrome/settings_panel.png`；见 `chrome/SETTINGS.md`。少新大图，不抢 V136 立绘/证印。
+
+## V137.1 启动页 · 候诊立绘
+
+`boot/boot_hero.png` + `boot/boot_sign.png`（墨问岐黄店招）；候诊立绘复用 `characters/` 现有池，见 `boot/BOOT.md`。
+
+## V139 布局对照补图
+
+诊室清晰小件：`clinic/props/`（yaohu / maizhen / xianglu，256+128）；见 `clinic/props/README.md`。
+江晚坐姿：`characters/jiang_wan_sit.png`（520×700；病患先复用站姿）。
+启动暖纸圆角片：`boot/boot_panel_disclaimer.png` + `boot_btn_plate.png` + `boot_check_plate.png`（不做新 CG）；见 `boot/BOOT.md`。

@@ -43,3 +43,12 @@ V126.1：画风统一为 2D 明快 Q 平涂；见 `_proof_v126_1.png`。旧版�
 | 陆木匠 | char_mujiang | lu_mujiang.png (alias mujiang.png) |
 
 证印新增：yinxu_zaoke / shire_xiazhu / waishang_zhongtong（expand 共 9）；旧四案印：fenghan_biao / ganyu_qizhi / yinxu_neire / xuexu_ganyu；印墙 ui/seals/seal_wall_9.png
+
+## V139 坐姿（可选）
+
+| 角色 | 文件 | 注 |
+| --- | --- | --- |
+| 江晚 | `jiang_wan_sit.png` | 520×700；脚底贴底；诊桌后坐姿 |
+| 病患 | （暂无） | 先复用站姿；站姿挂不下再补坐姿 |
+
+参考构图（带桌）：`ui/clinic/jiang_wan_sit_desk_ref.png`（非运行时挂载）。

@@ -2,14 +2,19 @@ extends Node2D
 ## SCENE-SLICE hung on this one room. No second map. GameFlow play loop overlays.
 
 const WORLD := Vector2(2560, 1440)
-## V138 idle accept: medicine-cabinet midshot (CLINIC-IDLE-V138). Feet A–D / 江晚 locked.
+## V139 idle/consult: CAM_HERO midshot (CLINIC-CONSULT-V139). Feet A–D / 江晚 / 坐诊 locked.
 const CAM_HERO_HOME := Vector2(1280, 780)
 const CAM_HERO_ZOOM := Vector2(0.666667, 0.666667)
-## Idle: position home+(0,-40) only. Slightly wider zoom so A–D @y≈290 (h=260) faces clear the top clip.
-const CAM_HERO_IDLE := Vector2(1280, 740)
-const CAM_HERO_ZOOM_IDLE := Vector2(0.50, 0.50)
-const WAIT_HOMES := [Vector2(405, 290), Vector2(545, 290), Vector2(300, 340), Vector2(685, 290)]
-const APPRENTICE_HOME := Vector2(1100, 720)
+## V139: abolish V138 idle (0,-40) Y-lift. Soft wider zoom so A–D @y≈400 read as walkway (not drawer-top).
+const CAM_HERO_IDLE := Vector2(1280, 780)
+const CAM_HERO_ZOOM_IDLE := Vector2(0.52, 0.52)
+## A–D stool feet (away from desk work zone); hot centers = feet + (0,-35)
+const WAIT_HOMES := [Vector2(400, 400), Vector2(540, 400), Vector2(280, 430), Vector2(680, 410)]
+const WAIT_HOT_CENTERS := [Vector2(400, 365), Vector2(540, 365), Vector2(280, 395), Vector2(680, 375)]
+const APPRENTICE_HOME := Vector2(1035, 770)  ## PhysicianChair / 诊桌后坐诊
+const SEAT_PATIENT := Vector2(1040, 590)
+## Desk work zone — waiting must not enter (smoke ui_consult_layout_ok)
+const WORK_ZONE := Rect2(880, 520, 440, 300)  ## x∈[880,1320] ∩ y∈[520,820]
 const HERB_SNAP := 40.0
 const BED_RECT := Rect2(320, 820, 420, 160)
 const FORMULA_RECT := Rect2(1720, 780, 400, 180)
@@ -83,9 +88,11 @@ var _nav_strip: HBoxContainer
 func _ready() -> void:
 	AudioHub.enter_clinic()
 	_ensure_loft_nodes()
+	_sync_v139_anchors()
 	_wire_areas()
 	_build_drawers()
 	_build_acupoints()
+	_apply_clinic_props_v139()
 	_label_patients()
 	_build_hud()
 	_switch_camera("CAM_HERO")
@@ -192,12 +199,12 @@ func _switch_camera(cam_name: String) -> void:
 
 
 func _pin_cam_hero_home(cam: Camera2D = null) -> void:
-	## Lock medicine-cabinet midshot for clinic_idle (CLINIC-IDLE-V138).
+	## Lock medicine-cabinet midshot for clinic_idle (CLINIC-CONSULT-V139 / HERO home).
 	if cam == null:
 		cam = get_node_or_null("CAM_HERO") as Camera2D
 	if cam == null:
 		return
-	# Idle accept: HERO midshot + ≤40px nudge so A–D heads clear the top clip.
+	# V139 idle: HERO home (1280,780) zoom≈0.67; A–D already on walkway (no -40 lift).
 	cam.position = CAM_HERO_IDLE
 	cam.zoom = CAM_HERO_ZOOM_IDLE
 	# Drag margins can leave view off home after prior follow — clear for idle accept.
@@ -216,6 +223,79 @@ func _fix_fg_wash_for_midshot() -> void:
 	var l7art := get_node_or_null("L7_fg_wash/Art") as CanvasItem
 	if l7art:
 		l7art.visible = false
+
+
+func _sync_v139_anchors() -> void:
+	## CLINIC-CONSULT-V139: runtime feet / hot centers (do not edit clinic.tscn).
+	var furn := get_node_or_null("L3_furniture")
+	if furn:
+		var ba := furn.get_node_or_null("BenchA") as Node2D
+		if ba:
+			ba.position = WAIT_HOMES[0]
+		var bb := furn.get_node_or_null("BenchB") as Node2D
+		if bb:
+			bb.position = WAIT_HOMES[1]
+	var areas := get_node_or_null("Areas")
+	if areas:
+		var stool_names := ["Area_候诊凳A", "Area_候诊凳B", "Area_候诊凳C", "Area_候诊凳D"]
+		for i in stool_names.size():
+			var ar := areas.get_node_or_null(stool_names[i]) as Area2D
+			if ar:
+				ar.position = WAIT_HOT_CENTERS[i]
+		var ap_node := get_node_or_null("L5_characters/Apprentice") as Node2D
+		if ap_node:
+			ap_node.position = APPRENTICE_HOME
+
+
+func _apply_clinic_props_v139() -> void:
+	## Replace huge blurry L4 props sheet with clear small desk-side pieces.
+	var l4 := get_node_or_null("L4_props_interact") as Node2D
+	if l4 == null:
+		return
+	var sheet := l4.get_node_or_null("Art") as Sprite2D
+	if sheet:
+		sheet.visible = false
+		sheet.texture = null
+	# Clear prior V139 prop sprites if re-entered (free now — avoid name clash with queue_free).
+	for child in l4.get_children():
+		if str(child.name).begins_with("Prop_"):
+			l4.remove_child(child)
+			child.free()
+	# Prefer _128 clear tiles; shrink to lock-table display caps.
+	var specs := [
+		{"name": "Prop_maizhen", "paths": ["res://ui/clinic/props/maizhen_128.png", "res://ui/clinic/props/maizhen.png"],
+		 "pos": Vector2(990, 620), "max_w": 160.0, "max_h": 48.0, "z": 3},
+		{"name": "Prop_xianglu", "paths": ["res://ui/clinic/props/xianglu_128.png", "res://ui/clinic/props/xianglu.png"],
+		 "pos": Vector2(1290, 580), "max_w": 56.0, "max_h": 56.0, "z": 3},
+		{"name": "Prop_yaohu", "paths": ["res://ui/clinic/props/yaohu_128.png", "res://ui/clinic/props/yaohu.png"],
+		 "pos": Vector2(1480, 900), "max_w": 140.0, "max_h": 160.0, "z": 2},
+	]
+	for spec in specs:
+		var tex: Texture2D = null
+		for p in spec["paths"]:
+			if ResourceLoader.exists(str(p)):
+				tex = load(str(p)) as Texture2D
+			if tex == null and FileAccess.file_exists(str(p)):
+				var img := Image.new()
+				if img.load(ProjectSettings.globalize_path(str(p))) == OK:
+					tex = ImageTexture.create_from_image(img)
+			if tex != null:
+				break
+		if tex == null:
+			continue
+		var spr := Sprite2D.new()
+		spr.name = str(spec["name"])
+		spr.texture = tex
+		spr.centered = true
+		spr.position = spec["pos"]
+		spr.z_index = int(spec["z"])
+		var tw := float(tex.get_width())
+		var th := float(tex.get_height())
+		var s := minf(float(spec["max_w"]) / maxf(tw, 1.0), float(spec["max_h"]) / maxf(th, 1.0))
+		spr.scale = Vector2(s, s)
+		spr.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+		l4.add_child(spr)
+
 
 
 func _wire_areas() -> void:
@@ -335,7 +415,7 @@ func _on_pick(pid: String) -> void:
 
 
 func _seat_patient(pid: String) -> void:
-	var chair := Vector2(1040, 590)
+	var chair := SEAT_PATIENT
 	var chars := get_node_or_null("L5_characters")
 	if chars == null:
 		return
@@ -437,25 +517,30 @@ func _apply_portraits() -> void:
 	if sheet_art:
 		sheet_art.visible = false
 		sheet_art.texture = null
-	# Jiang Wan apprentice — feet (1100, 720), display ~260.
+	# Jiang Wan — PhysicianChair sit pose; feet APPRENTICE_HOME; display ~240–260.
 	var ap := chars.get_node_or_null("Apprentice") as Node2D
 	if ap:
-		ap.position = APPRENTICE_HOME
+		# ≤20 Y from PhysicianChair so sit feet clear painted desk apron (CLINIC-CONSULT §1.1).
+		ap.position = APPRENTICE_HOME + Vector2(0, 18)
 		ap.y_sort_enabled = true
 		ap.visible = true
 	var ap_art := chars.get_node_or_null("Apprentice/Art") as Sprite2D
 	if ap_art:
 		# Portraits are authored on transparent/light ground — paper knockout would erase them.
 		ap_art.material = null
-		var at: Texture2D = CharacterArt.load_portrait("apprentice_jiang")
+		var at: Texture2D = CharacterArt.load_portrait_sit("apprentice_jiang")
+		if at == null:
+			at = CharacterArt.load_portrait("apprentice_jiang")
 		if at:
-			_fit_portrait_sprite(ap_art, at, 260.0)
+			_fit_portrait_sprite(ap_art, at, 250.0)
+			# Face patient chair (north / smaller Y); sit art faces left by default → flip toward seat.
+			ap_art.flip_h = SEAT_PATIENT.x >= APPRENTICE_HOME.x
 			ap_art.visible = true
 		else:
 			ap_art.texture = null
 			ap_art.visible = false
 	var seats_art: Array = _waiting_list()
-	var chair := Vector2(1040, 590)
+	var chair := SEAT_PATIENT
 	var max_art := 4
 	for i in max_art:
 		var node := chars.get_node_or_null("Patient%d" % i) as Node2D
@@ -488,6 +573,11 @@ func _apply_portraits() -> void:
 		var target_h := 300.0 if at_chair else _waiting_portrait_height()
 		spr.material = null
 		_fit_portrait_sprite(spr, tex, target_h)
+		# Visit posture: face Jiang Wan when at chair; waiting keep default.
+		if at_chair:
+			spr.flip_h = APPRENTICE_HOME.x < chair.x
+		else:
+			spr.flip_h = false
 		spr.visible = true
 		spr.z_index = 5
 		# Name card above head (text OK but not a substitute for portrait).
