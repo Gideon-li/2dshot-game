@@ -6,19 +6,21 @@ const WORLD := Vector2(2560, 1440)
 const CAM_HERO_HOME := Vector2(1280, 780)
 const CAM_HERO_ZOOM := Vector2(0.666667, 0.666667)
 ## Idle: HERO center; zoom nearer 0.67 (0.62 keeps C@280 in-frame). No V138 (0,-40) Y-lift.
-const CAM_HERO_IDLE := Vector2(1280, 780)
-const CAM_HERO_ZOOM_IDLE := Vector2(0.55, 0.55)  ## chair behind desk + right aisle + cabinet midshot
+const CAM_HERO_IDLE := Vector2(1280, 820)  ## +40 nudge: show right-aisle floor
+const CAM_HERO_ZOOM_IDLE := Vector2(0.48, 0.48)  ## floor aisle + chair + cabinet midshot
 ## Lock table (CLINIC-CONSULT-V139) — kept for smoke / docs:
 const WAIT_HOMES_LOCK := [Vector2(400, 400), Vector2(540, 400), Vector2(280, 430), Vector2(680, 410)]
 const APPRENTICE_HOME_LOCK := Vector2(1035, 770)
-## Look offsets (L3): lock Y→drawer; y≈1000→bench-top. Floor is south of painted benches.
-## A–D on true floor band (y≈1150); x≪880 outside work zone.
-## A–D on RIGHT aisle (window/bench), east of work zone — left cabinet made lock-left read as drawers.
-const WAIT_HOMES := [Vector2(1480, 980), Vector2(1600, 975), Vector2(1380, 1000), Vector2(1720, 970)]
-const WAIT_HOT_CENTERS := [Vector2(1480, 945), Vector2(1600, 940), Vector2(1380, 965), Vector2(1720, 935)]
-## Jiang Wan in painted chair behind desk (L3 chair ~Y640–680; node 770 reads as on-desk).
-const APPRENTICE_HOME := Vector2(1090, 655)  ## painted chair center behind desk
-const SEAT_PATIENT := Vector2(1040, 590)
+const SEAT_PATIENT_LOCK := Vector2(1040, 590)
+## Look offsets vs L3 paint (lock Desk/Chair/Bench nodes land on desktop/chair-back/drawers):
+##   desk top≈Y720; front-bench seat≈Y1100–1130; right-aisle floor≈Y1260–1360 at X≥1800.
+##   Flat L3 has NO desk-apron occlusion — true "behind desk" needs scene L3.5 overlay (see PORTRAIT).
+const WAIT_HOMES := [Vector2(1920, 1280), Vector2(2060, 1270), Vector2(1800, 1300), Vector2(2180, 1260)]
+const WAIT_HOT_CENTERS := [Vector2(1920, 1245), Vector2(2060, 1235), Vector2(1800, 1265), Vector2(2180, 1225)]
+## Jiang Wan: stool toward chair-leg / under-desk floor band (not mid-air 655 / desk-top 860).
+const APPRENTICE_HOME := Vector2(1220, 1000)
+## Patient: south/front floor — ΔY vs JW reads 对坐 (lock 590 was on painted desktop).
+const SEAT_PATIENT := Vector2(1280, 1240)
 ## Desk work zone — waiting must not enter (smoke ui_consult_layout_ok)
 const WORK_ZONE := Rect2(880, 520, 440, 300)  ## x∈[880,1320] ∩ y∈[520,820]
 const HERB_SNAP := 40.0
@@ -275,7 +277,7 @@ func _apply_clinic_props_v139() -> void:
 		 "pos": Vector2(1320, 710), "max_w": 44.0, "max_h": 44.0, "z": 3},
 		# Desk-east near edge — feet on desk plane (not floating above chair rail).
 		{"name": "Prop_yaohu", "paths": ["res://ui/clinic/props/yaohu_128.png", "res://ui/clinic/props/yaohu.png"],
-		 "pos": Vector2(1420, 740), "max_w": 90.0, "max_h": 100.0, "z": 2},
+		 "pos": Vector2(1480, 780), "max_w": 90.0, "max_h": 100.0, "z": 2},
 	]
 	for spec in specs:
 		var tex: Texture2D = null
@@ -564,7 +566,7 @@ func _apply_portraits() -> void:
 		if at == null:
 			at = CharacterArt.load_portrait("apprentice_jiang")
 		if at:
-			_fit_portrait_sprite(ap_art, at, 270.0)
+			_fit_portrait_sprite(ap_art, at, 320.0)
 			# Sit art faces viewer-left; flip so she orients toward patient (desk north).
 			ap_art.flip_h = true
 			ap_art.visible = true
@@ -603,7 +605,7 @@ func _apply_portraits() -> void:
 			continue
 		var at_chair := node.position.distance_to(chair) < 48.0
 		# Idle HERO midshot: stools at back wall — slightly shorter so heads stay in frame.
-		var target_h := 340.0 if at_chair else _waiting_portrait_height()
+		var target_h := 360.0 if at_chair else _waiting_portrait_height()
 		spr.material = null
 		_fit_portrait_sprite(spr, tex, target_h)
 		# Visit posture: face Jiang Wan when at chair; waiting keep default.
@@ -626,7 +628,7 @@ func _apply_portraits() -> void:
 
 func _waiting_portrait_height() -> float:
 	## V139 look: slightly taller so aisle feet read as people in front of cabinet, not drawer-top miniatures.
-	return 300.0
+	return 320.0
 
 
 func _fit_portrait_sprite(spr: Sprite2D, tex: Texture2D, target_h: float) -> void:

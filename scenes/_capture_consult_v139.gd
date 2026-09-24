@@ -80,7 +80,7 @@ func _ready() -> void:
 				if pn3 == null:
 					continue
 				if str(pn3.get_meta("pid", "")) == pick_pid:
-					pn3.position = Vector2(1040, 590)
+					pn3.position = Vector2(1280, 1240)
 					pn3.visible = true
 				else:
 					# Keep away / hide so pair reads clearly in accept shot
@@ -96,7 +96,7 @@ func _ready() -> void:
 			if pn4 and str(pn4.get_meta("pid", "")) != pick_pid:
 				pn4.visible = false
 			elif pn4 and str(pn4.get_meta("pid", "")) == pick_pid:
-				pn4.position = Vector2(1040, 590)
+				pn4.position = Vector2(1280, 1240)
 				pn4.visible = true
 	if clinic.has_method("_rebuild_dock"):
 		clinic.call("_rebuild_dock")
@@ -107,14 +107,14 @@ func _ready() -> void:
 		if o:
 			o.enabled = false
 	if ask:
-		ask.position = Vector2(1100, 640)
-		ask.zoom = Vector2(0.85, 0.85)
+		ask.position = Vector2(1260, 1140)
+		ask.zoom = Vector2(0.62, 0.62)
 		ask.enabled = true
 		ask.make_current()
 		cam = ask
 	elif cam:
-		cam.position = Vector2(1100, 640)
-		cam.zoom = Vector2(0.85, 0.85)
+		cam.position = Vector2(1260, 1140)
+		cam.zoom = Vector2(0.62, 0.62)
 		cam.enabled = true
 		cam.make_current()
 	if clinic.get("_cam_name") != null:
@@ -137,8 +137,8 @@ func _ready() -> void:
 func _pin_hero(cam: Camera2D, clinic: Node) -> void:
 	if cam == null:
 		return
-	cam.position = Vector2(1280, 780)
-	cam.zoom = Vector2(0.55, 0.55)  ## show floor band + cabinet midshot
+	cam.position = Vector2(1280, 820)
+	cam.zoom = Vector2(0.48, 0.48)  ## show right-aisle floor + chair + cabinet
 	cam.position_smoothing_enabled = false
 	cam.drag_horizontal_enabled = false
 	cam.drag_vertical_enabled = false
