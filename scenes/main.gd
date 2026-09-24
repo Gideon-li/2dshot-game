@@ -28,6 +28,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _build() -> void:
 	## V138 §A boot zones (1280×720): top bar → sign clearance → subtitle → disclaimer → CTA → footer.
+	## V139 §C warms the chrome only (radii / paper / soft edge). Zone sizes stay. See BOOT-WARM-V139.md.
 	## Hero wood plaque IS the shop sign; no second large「墨问岐黄」Label over it.
 	_setup_boot_bg()
 	var col := VBoxContainer.new()
@@ -74,7 +75,7 @@ func _build() -> void:
 	card.custom_minimum_size = Vector2(0, 180)
 	# Default size flags: shrink to content; do not expand into the shop-sign band.
 	card.size_flags_vertical = 0
-	card.add_theme_stylebox_override("panel", UiKit.paper_style(UiKit.PAPER_DARK, UiKit.LINE, 6))
+	card.add_theme_stylebox_override("panel", UiKit.paper_style(UiKit.PAPER_WARM, UiKit.LINE_SOFT, UiKit.RADIUS_CARD))
 	col.add_child(card)
 	var inner := VBoxContainer.new()
 	inner.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -97,8 +98,7 @@ func _build() -> void:
 	_body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	body_scroll.add_child(_body)
 	_check = CheckBox.new()
-	UiKit.apply_font(_check, 15)
-	_check.add_theme_color_override("font_color", UiKit.INK)
+	UiKit.style_check(_check, 15)
 	if GameFlow.disclaimer_accepted():
 		_check.button_pressed = true
 	inner.add_child(_check)
